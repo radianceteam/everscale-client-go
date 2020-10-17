@@ -3,19 +3,23 @@
 ## Preparations
 
 One need to install
-- [Golang](https://golang.org/doc/install)
-- [Taskfile](https://taskfile.dev/)
-- [TON-SDK](https://github.com/tonlabs/TON-SDK) 
+- [Rust](https://www.rust-lang.org/tools/install)
+- [TON-SDK](https://github.com/tonlabs/TON-SDK) - *important* version 1.0.0-rc and compile it via `cargo build --release`
 
 ## Run 
 
 One need to specify compiled DLL directory path:
 ```shell script
-export CGO_LDFLAGS="-L/Users/risentveber/Projects/TON-SDK/target/release/deps/ -lton_client"
+export CGO_LDFLAGS="-L/path-to-installation/TON-SDK/target/release/deps/ -lton_client"
 go build ./cmd/cli
 go run ./cmd/cli
 # or
 task run
+```
+
+On Linux one need also provide search path for DLL loader:
+```shell script
+export LD_LIBRARY_PATH=/path-to-installation/TON-SDK/target/release/deps/
 ```
 ## Tests
 
@@ -27,7 +31,9 @@ task test
 ## Development
 
 See available task commands via `task` without arguments.
-You need to install [golangci-lint](https://github.com/golangci/golangci-lint).
+You need to install:
+- [golangci-lint](https://github.com/golangci/golangci-lint).
+- [Taskfile](https://taskfile.dev/) (optional)
 To attach git hooks run `task attach_hooks`
 
 ## Useful reading
