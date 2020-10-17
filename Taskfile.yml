@@ -1,0 +1,30 @@
+version: '2'
+
+tasks:
+  coverage:
+    desc: 'Run tests with coverage and open report in default browser'
+    cmds:
+      - go test -coverprofile=./tmp/cover.out ./...
+      - go tool cover -html=./tmp/cover.out -o ./tmp/cover.html
+      - open ./tmp/cover.html
+  attach_hooks:
+    desc: "Attaches git hooks"
+    cmds:
+      - cp ./tools/prepare-commit-msg.sh ./.git/hooks/prepare-commit-msg
+      - cp ./tools/pre-commit.sh ./.git/hooks/pre-commit
+      - cp ./tools/pre-push.sh ./.git/hooks/pre-push
+      - chmod 777 ./.git/hooks/prepare-commit-msg
+      - chmod 777 ./.git/hooks/pre-commit
+      - chmod 777 ./.git/hooks/pre-push
+  lint:
+    desc: "Run linter"
+    cmds:
+      - golangci-lint run --tests=0 ./...
+  run:
+    desc: "Run in host system without container"
+    cmds:
+      - go run ./cmd/cli
+  test:
+    desc: "Run tests"
+    cmds:
+      - go test ./...

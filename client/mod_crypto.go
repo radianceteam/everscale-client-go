@@ -8,13 +8,16 @@ type CryptoKeyPair struct {
 }
 
 func (c *tonClient) CryptoGenerateRandomSignKeys() (*CryptoKeyPair, error) {
-	rawData, err := c.dllClient.Request("crypto.generate_random_sign_keys", nil)
+	responses := c.dllClient.Request("crypto.generate_random_sign_keys", nil)
+	rawData, err := getFirstErrorOrResult(responses)
 	if err != nil {
 		return nil, err
 	}
-	var result CryptoKeyPair
-	if err := json.Unmarshal(rawData, &result); err != nil {
+
+	var keyPair CryptoKeyPair
+	if err := json.Unmarshal(rawData, &keyPair); err != nil {
 		return nil, err
 	}
-	return &result, nil
+
+	return &keyPair, nil
 }

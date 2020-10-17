@@ -4,8 +4,9 @@ import (
 	"crypto/ed25519"
 	"encoding/hex"
 	"fmt"
-	"github.com/radianceteam/ton-client-go/client"
 	"time"
+
+	"github.com/radianceteam/ton-client-go/client"
 )
 
 func main() {
@@ -15,9 +16,14 @@ func main() {
 	})
 	if err != nil {
 		fmt.Println("err", err)
+
 		return
 	}
 	defer c.Close()
+
+	version, err := c.ClientVersion()
+	fmt.Println("version", version, err)
+
 	pair, err := c.CryptoGenerateRandomSignKeys()
 	if err != nil {
 		fmt.Println("error", err.Error())
@@ -29,13 +35,12 @@ func main() {
 		fmt.Println("public", private.Public())
 		fmt.Println("public", publicBytes)
 		fmt.Println("success", pair)
-
 	}
 
 	res, err := c.NetQueryCollection(client.NetQueryCollectionParams{
 		Collection: "accounts",
-		Limit: 20,
-		Result: "id balance(format:DEC)",
+		Limit:      20,
+		Result:     "id balance(format:DEC)",
 	})
 
 	if err != nil {
@@ -43,7 +48,7 @@ func main() {
 	} else {
 		fmt.Println("success", len(res))
 	}
-	time.Sleep(10*time.Second)
+	time.Sleep(10 * time.Second)
 
 	fmt.Println("after")
 }

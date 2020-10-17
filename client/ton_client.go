@@ -10,11 +10,11 @@ import (
 // #cgo CFLAGS: -I${SRCDIR}
 // #include "tonclient.h"
 //
-//void cb_proxy(
-//uint32_t request_id,
-//tc_string_data_t params_json,
-//uint32_t response_type,
-//bool finished);
+// void cb_proxy(
+// 		uint32_t request_id,
+//		tc_string_data_t params_json,
+//		uint32_t response_type,
+//		bool finished);
 //
 // static void call_tc_request(
 //		uint32_t context,
@@ -24,31 +24,41 @@ import (
 // ) {
 // 		tc_request(context, name, params_json, request_id, cb_proxy);
 // }
+//
 import "C"
 
-func NewTcStr(str []byte) C.tc_string_data_t {
+func newTcStr(str []byte) C.tc_string_data_t {
 	return C.tc_string_data_t{
 		len:     C.uint32_t(len(str)),
 		content: C.CString(string(str)),
 	}
 }
 
-func NewBytesFromTcStr(data C.tc_string_data_t) []byte {
+func newBytesFromTcStr(data C.tc_string_data_t) []byte {
 	if data.len == 0 {
 		return nil
 	}
 
-	return C.GoBytes(unsafe.Pointer(data.content), C.int(data.len))
+	return C.GoBytes(unsafe.Pointer(data.content), C.int(data.len)) // nolint nlreturn
 }
 
 //export cb_proxy
 func cb_proxy(id C.uint32_t, data C.tc_string_data_t, responseType C.uint32_t, finished C.bool) {
 	lock.Lock()
-	result := callbacks[id]
-	delete(callbacks, id)
+	result, isFound := callbacks[id]
+	if bool(finished) && isFound {
+		fmt.Println("cb_proxy", finished)
+		delete(callbacks, id)
+		defer close(result)
+	}
 	lock.Unlock()
-	rawBytes := NewBytesFromTcStr(data)
-	res := &response{
+	if !isFound {
+		fmt.Println("cb_proxy no channel to send", id)
+
+		return
+	}
+	rawBytes := newBytesFromTcStr(data)
+	res := &dllResponse{
 		Code: int(responseType),
 	}
 	if responseType == C.tc_response_error {
@@ -65,23 +75,31 @@ func cb_proxy(id C.uint32_t, data C.tc_string_data_t, responseType C.uint32_t, f
 	result <- res
 }
 
-type response struct {
+type dllResponse struct {
 	Data  []byte
 	Code  int
 	Error error
 }
 
-var lock sync.Mutex
-var requestIdCounter uint32
-var callbacks map[C.uint32_t]chan *response
+var (
+	lock             sync.Locker = &sync.Mutex{}
+	requestIDCounter uint32
+	callbacks        = make(map[C.uint32_t]chan *dllResponse)
+)
 
-func init() {
-	callbacks = make(map[C.uint32_t]chan *response)
+type dllClient interface {
+	Request(method string, body []byte) <-chan *dllResponse
+	Close()
+}
+
+func newDLLClient(rawConfig []byte) (dllClient, error) {
+	c := &dllClientCtx{}
+
+	return c, c.createContext(rawConfig)
 }
 
 type dllClientCtx struct {
-	ctx     C.uint32_t
-	counter C.uint
+	ctx C.uint32_t
 }
 
 type contextCreateResponse struct {
@@ -90,7 +108,9 @@ type contextCreateResponse struct {
 }
 
 func (c *dllClientCtx) createContext(data []byte) error {
-	rawResponse := NewBytesFromTcStr(C.tc_read_string(C.tc_create_context(NewTcStr(data))))
+	rawHandler := C.tc_create_context(newTcStr(data))
+	defer C.tc_destroy_string(rawHandler)
+	rawResponse := newBytesFromTcStr(C.tc_read_string(rawHandler))
 	var response contextCreateResponse
 	err := json.Unmarshal(rawResponse, &response)
 	if err != nil {
@@ -100,39 +120,39 @@ func (c *dllClientCtx) createContext(data []byte) error {
 		return response.Error
 	}
 	c.ctx = C.uint32_t(response.Result)
+
 	return nil
 }
 
-func (c *dllClientCtx) Request(method string, body []byte) ([]byte, error) {
-	result := make(chan *response, 1) // need 1 because of deadlock when async implemented in sync way
+func (c *dllClientCtx) Request(method string, body []byte) <-chan *dllResponse {
+	responses := make(chan *dllResponse, 1) // need 1 because of deadlock when async implemented in sync way
 
 	lock.Lock()
-	requestIdCounter++
-	id := C.uint32_t(requestIdCounter)
-	callbacks[id] = result
+	requestIDCounter++
+	id := C.uint32_t(requestIDCounter)
+	callbacks[id] = responses
 	lock.Unlock()
 
-	C.call_tc_request(c.ctx, NewTcStr([]byte(method)), NewTcStr(body), id)
+	C.call_tc_request(c.ctx, newTcStr([]byte(method)), newTcStr(body), id)
 
-	response := <-result
-	if response.Error != nil {
-		return nil, response.Error
-	}
-	fmt.Println(method, string(response.Data))
-	return response.Data, nil
+	return responses
 }
 
 func (c *dllClientCtx) Close() {
 	C.tc_destroy_context(c.ctx)
 }
 
-type dllClient interface {
-	Request(method string, body []byte) ([]byte, error)
-	Close()
-}
+func getFirstErrorOrResult(responses <-chan *dllResponse) ([]byte, error) {
+	var err error
+	var data []byte
+	for response := range responses {
+		if response.Error != nil && err == nil {
+			err = response.Error
+		}
+		if response.Data != nil && data == nil {
+			data = response.Data
+		}
+	}
 
-func NewDLLClient(rawConfig []byte) (dllClient, error) {
-	c := &dllClientCtx{}
-	err := c.createContext(rawConfig)
-	return c, err
+	return data, err
 }

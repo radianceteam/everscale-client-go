@@ -1,0 +1,14 @@
+linters:
+  disable:
+    - gochecknoglobals
+    - lll
+    - unused
+    - wsl
+    - gomnd
+    - testpackage
+    - nolintlint
+  enable-all: true
+linters-settings:
+  goimports:
+    local-prefixes: github.com/radianceteam/ton-client-go
+
