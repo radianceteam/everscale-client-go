@@ -6,10 +6,10 @@
 //  import "github.com/radianceteam/ton-client-go/client"
 //      ...
 //		c, err := client.NewClient(client.Config{
-//		Network: client.ConfigNetwork{ServerAddress: "net.ton.dev"},
+//			Network: client.ConfigNetwork{ServerAddress: "net.ton.dev"},
 //		})
 //		if err != nil {
-//			return
+//			return err
 //		}
 //		defer c.Close()
 //

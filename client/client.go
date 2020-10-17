@@ -30,7 +30,7 @@ func (c *tonClient) Close() {
 	if c == nil {
 		return
 	}
-	c.dllClient.Close()
+	c.dllClient.close()
 }
 
 // ConfigNetwork TON network config.

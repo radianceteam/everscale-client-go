@@ -1,7 +1,5 @@
 package client
 
-import "encoding/json"
-
 type NetQueryCollectionParams struct {
 	Collection string `json:"collection"`
 	Result     string `json:"result"`
@@ -10,11 +8,5 @@ type NetQueryCollectionParams struct {
 }
 
 func (c *tonClient) NetQueryCollection(p NetQueryCollectionParams) ([]byte, error) {
-	rawParams, err := json.Marshal(p)
-	if err != nil {
-		return nil, err
-	}
-	responses := c.dllClient.Request("net.query_collection", rawParams)
-
-	return getFirstErrorOrResult(responses)
+	return c.dllClient.waitErrorOrResult("net.query_collection", p)
 }

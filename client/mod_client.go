@@ -1,28 +1,16 @@
 package client
 
-import "encoding/json"
-
 type versionResponse struct {
 	Version string `json:"version"`
 }
 
 func (c *tonClient) ClientVersion() (string, error) {
-	responses := c.dllClient.Request("client.version", nil)
-	rawData, err := getFirstErrorOrResult(responses)
-	if err != nil {
-		return "", err
-	}
-
 	var version versionResponse
-	if err := json.Unmarshal(rawData, &version); err != nil {
-		return "", err
-	}
+	err := c.dllClient.waitErrorOrResultUnmarshal("client.version", nil, &version)
 
-	return version.Version, nil
+	return version.Version, err
 }
 
 func (c *tonClient) ClientGetAPIReference() ([]byte, error) {
-	responses := c.dllClient.Request("client.get_api_reference", nil)
-
-	return getFirstErrorOrResult(responses)
+	return c.dllClient.waitErrorOrResult("client.get_api_reference", nil)
 }

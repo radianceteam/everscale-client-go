@@ -4,7 +4,6 @@ import (
 	"crypto/ed25519"
 	"encoding/hex"
 	"fmt"
-	"time"
 
 	"github.com/radianceteam/ton-client-go/client"
 )
@@ -48,7 +47,7 @@ func main() {
 	} else {
 		fmt.Println("success", len(res))
 	}
-	time.Sleep(10 * time.Second)
+	// time.Sleep(10 * time.Second)
 
 	fmt.Println("after")
 }
