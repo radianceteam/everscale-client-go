@@ -9,7 +9,7 @@ import (
 // #cgo CFLAGS: -I${SRCDIR}
 // #include "tonclient.h"
 //
-// void cb_proxy(
+// void callbackProxy(
 // 		uint32_t request_id,
 //		tc_string_data_t params_json,
 //		uint32_t response_type,
@@ -21,7 +21,7 @@ import (
 //		tc_string_data_t params_json,
 //		uint32_t request_id
 // ) {
-// 		tc_request(context, name, params_json, request_id, cb_proxy);
+// 		tc_request(context, name, params_json, request_id, callbackProxy);
 // }
 //
 import "C"
@@ -63,8 +63,8 @@ func newDLLResponse(data C.tc_string_data_t, responseType C.uint32_t) *dllRespon
 	return res
 }
 
-//export cb_proxy
-func cb_proxy(requestID C.uint32_t, data C.tc_string_data_t, responseType C.uint32_t, finished C.bool) {
+//export callbackProxy
+func callbackProxy(requestID C.uint32_t, data C.tc_string_data_t, responseType C.uint32_t, finished C.bool) {
 	responses, closeSignal, isFound := globalMultiplexer.GetChannels(uint32(requestID), bool(finished))
 	if !isFound {
 		// ignore not found maybe some will be send after close
