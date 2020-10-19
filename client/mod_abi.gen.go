@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 10:44:28.806706 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-19 10:49:51.495444 +0000 UTC
 // Mod abi
 // Provides message encoding and decoding according to the ABI
 // Provides message encoding and decoding according to the ABI

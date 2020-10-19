@@ -61,6 +61,8 @@ func prepareMultiline(data string) string {
 func toGoName(name string) string {
 	if name == "id" {
 		return "ID"
+	} else if name == "xprv" {
+		return "XPrv"
 	}
 	cameled := strcase.ToCamel(name)
 	if strings.Contains(name, "id") {

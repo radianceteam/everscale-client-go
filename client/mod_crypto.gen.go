@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 10:44:28.806207 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-19 10:49:51.495013 +0000 UTC
 // Mod crypto
 // Crypto functions.
 // Crypto functions.
@@ -276,12 +276,12 @@ type ParamsOfHDKeyXPrvFromMnemonic struct {
 
 type ResultOfHDKeyXPrvFromMnemonic struct {
 	// serialized extended master private key
-	Xprv string `json:"xprv"`
+	XPrv string `json:"xprv"`
 }
 
 type ParamsOfHDKeyDeriveFromXPrv struct {
 	// serialized extended private key
-	Xprv string `json:"xprv"`
+	XPrv string `json:"xprv"`
 	// child index (see BIP-0032)
 	ChildIndex int `json:"child_index"`
 	// indicates the derivation of hardened/not-hardened key (see BIP-0032)
@@ -290,24 +290,24 @@ type ParamsOfHDKeyDeriveFromXPrv struct {
 
 type ResultOfHDKeyDeriveFromXPrv struct {
 	// serialized extended private key
-	Xprv string `json:"xprv"`
+	XPrv string `json:"xprv"`
 }
 
 type ParamsOfHDKeyDeriveFromXPrvPath struct {
 	// serialized extended private key
-	Xprv string `json:"xprv"`
+	XPrv string `json:"xprv"`
 	// derivation path, for instance "m/44'/396'/0'/0/0"
 	Path string `json:"path"`
 }
 
 type ResultOfHDKeyDeriveFromXPrvPath struct {
 	// derived serialized extended private key
-	Xprv string `json:"xprv"`
+	XPrv string `json:"xprv"`
 }
 
 type ParamsOfHDKeySecretFromXPrv struct {
 	// serialized extended private key
-	Xprv string `json:"xprv"`
+	XPrv string `json:"xprv"`
 }
 
 type ResultOfHDKeySecretFromXPrv struct {
@@ -317,7 +317,7 @@ type ResultOfHDKeySecretFromXPrv struct {
 
 type ParamsOfHDKeyPublicFromXPrv struct {
 	// serialized extended private key
-	Xprv string `json:"xprv"`
+	XPrv string `json:"xprv"`
 }
 
 type ResultOfHDKeyPublicFromXPrv struct {
