@@ -2,31 +2,11 @@ package client
 
 import "encoding/json"
 
-// Client - go client for TON-SDK dll.
-type Client interface {
-	// mod_client
-	// ClientVersion returns version of TON-SDK dll.
-	ClientVersion() (string, error)
-	// ClientGetAPIReference returns bytes representing json docs.
-	ClientGetAPIReference() ([]byte, error)
-
-	// mod_net
-	// NetQueryCollection queries net and returns json bytes response.
-	NetQueryCollection(NetQueryCollectionParams) ([]byte, error)
-
-	// mod_crypto
-	// CryptoGenerateRandomSignKeys generates random ed25519 key pair.
-	CryptoGenerateRandomSignKeys() (*CryptoKeyPair, error)
-
-	// Close freeze resources.
-	Close()
-}
-
-type tonClient struct {
+type Client struct {
 	dllClient
 }
 
-func (c *tonClient) Close() {
+func (c *Client) Close() {
 	if c == nil {
 		return
 	}
@@ -39,7 +19,7 @@ type Config struct {
 	Network NetworkConfig `json:"network"`
 }
 
-func NewClient(config Config) (Client, error) {
+func NewClient(config Config) (*Client, error) {
 	rawConfig, err := json.Marshal(config)
 	if err != nil {
 		return nil, err
@@ -49,5 +29,5 @@ func NewClient(config Config) (Client, error) {
 		return nil, err
 	}
 
-	return &tonClient{dllClient: dllClient}, nil
+	return &Client{dllClient: dllClient}, nil
 }

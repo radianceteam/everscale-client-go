@@ -3,7 +3,6 @@ package spec
 import (
 	"bytes"
 	"os"
-	"regexp"
 	"strings"
 	"text/template"
 	"time"
@@ -15,14 +14,13 @@ var funcMap = template.FuncMap{
 	"now": time.Now,
 }
 
-var NewLiner = regexp.MustCompile("(?m)^.*$")
-
 var headerTmpl = template.Must(template.New("header").Funcs(funcMap).Parse(
 	`package client
 // DON'T EDIT THIS FILE is generated {{now.UTC}}
+//
 // Mod {{.Name}}
-// {{.Summary}}
-// {{.Description.Description}}
+//
+{{.GoComment}}
 
 import (
 	"github.com/shopspring/decimal"
@@ -72,21 +70,33 @@ func toGoName(name string) string {
 	return cameled
 }
 
+func genFunc(f Function) string {
+	return f.ToComment() + "func (c *Client) " + strcase.ToCamel(f.Name) + "() {}\n"
+}
+
 func GenModule(dir string, m Module) error {
-	f, err := os.Create(dir + "/mod_" + m.Name + ".gen.go")
+	file, err := os.Create(dir + "/mod_" + m.Name + ".gen.go")
 	if err != nil {
 		return err
 	}
-	m.Description.Description = prepareMultiline(m.Description.Description)
-	m.Description.Summary = prepareMultiline(m.Description.Summary)
-	if err = headerTmpl.Execute(f, m); err != nil {
+	m.Description.GoComment = m.Description.ToComment()
+	if err = headerTmpl.Execute(file, m); err != nil {
 		return err
 	}
 	for _, t := range m.Types {
 		if ignoredTypesByName[t.Name] {
 			continue
 		}
-		_, err = f.WriteString(GenerateType(t))
+		_, err = file.WriteString(GenerateType(t))
+		if err != nil {
+			return err
+		}
+	}
+	for _, f := range m.Functions {
+		if ignoredFunctionsByName[f.Name] {
+			continue
+		}
+		_, err = file.WriteString(genFunc(f))
 		if err != nil {
 			return err
 		}
@@ -98,13 +108,7 @@ func GenModule(dir string, m Module) error {
 func genStruct(t Type) string {
 	r := "type " + t.Name + " struct {\n"
 	for _, f := range t.StructFields {
-		if !strings.Contains(f.Description.Description, f.Description.Summary) {
-			r += "// " + prepareMultiline(f.Description.Summary) + "\n"
-		}
-		if f.Description.Description != "" {
-			r += "// " + prepareMultiline(f.Description.Description) + "\n"
-		}
-		r += "	" + toGoName(f.Name) + " " + GenerateType(f)
+		r += f.ToComment() + "	" + toGoName(f.Name) + " " + GenerateType(f)
 		if f.Type == Optional {
 			r += " `json:\"" + f.Name + ",omitempty\"`\n"
 		} else {

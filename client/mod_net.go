@@ -7,6 +7,6 @@ type NetQueryCollectionParams struct {
 	Limit      uint   `json:"limit,omitempty"`
 }
 
-func (c *tonClient) NetQueryCollection(p NetQueryCollectionParams) ([]byte, error) {
+func (c *Client) NetQueryCollection(p NetQueryCollectionParams) ([]byte, error) {
 	return c.dllClient.waitErrorOrResult("net.query_collection", p)
 }

@@ -1,8 +1,9 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 10:49:51.496093 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-19 11:18:28.294682 +0000 UTC
+//
 // Mod utils
-// Misc utility Functions.
+//
 // Misc utility Functions.
 
 type AddressStringFormat interface{}
@@ -15,6 +16,10 @@ type ParamsOfConvertAddress struct {
 }
 
 type ResultOfConvertAddress struct {
-	// address in the specified format
+	// address in the specified format.
 	Address string `json:"address"`
 }
+
+// Sends message to the network and monitors network for a result of
+// message processing.
+func (c *Client) ConvertAddress() {}

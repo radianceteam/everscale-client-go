@@ -5,7 +5,7 @@ type CryptoKeyPair struct {
 	Secret string `json:"secret"`
 }
 
-func (c *tonClient) CryptoGenerateRandomSignKeys() (*CryptoKeyPair, error) {
+func (c *Client) CryptoGenerateRandomSignKeys() (*CryptoKeyPair, error) {
 	var keyPair CryptoKeyPair
 
 	return &keyPair, c.dllClient.waitErrorOrResultUnmarshal("crypto.generate_random_sign_keys", nil, &keyPair)

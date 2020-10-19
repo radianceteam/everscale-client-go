@@ -1,8 +1,9 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 10:49:51.494789 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-19 11:18:28.293188 +0000 UTC
+//
 // Mod client
-// Provides information about library.
+//
 // Provides information about library.
 
 import (
@@ -28,6 +29,8 @@ type AbiConfig struct {
 }
 
 type ResultOfVersion struct {
-	// core version
+	// core version.
 	Version string `json:"version"`
 }
+
+func (c *Client) Version() {}

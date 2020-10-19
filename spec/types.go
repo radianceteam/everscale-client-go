@@ -23,3 +23,7 @@ var ignoredTypesByName = map[string]bool{
 	"ClientError":             true,
 	"ClientConfig":            true,
 }
+
+var ignoredFunctionsByName = map[string]bool{
+	"get_api_reference": true,
+}

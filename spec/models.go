@@ -1,10 +1,34 @@
 package spec
 
+import "strings"
+
 type Description struct {
 	Name        string `json:"name"`
 	Summary     string `json:"summary"`
 	Description string `json:"description"`
+	GoComment   string // populated manually
 	ConstName   string // name for enum consts
+}
+
+func (d *Description) ToComment() string {
+	r := ""
+	if !strings.Contains(d.Description, d.Summary) {
+		r += "// " + prepareMultiline(d.Summary)
+		if !strings.HasSuffix(r, ".") {
+			r += "."
+		}
+		r += "\n"
+	}
+
+	if d.Description != "" {
+		r += "// " + prepareMultiline(d.Description)
+		if !strings.HasSuffix(r, ".") {
+			r += "."
+		}
+		r += "\n"
+	}
+
+	return r
 }
 
 type Type struct {

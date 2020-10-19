@@ -1,8 +1,8 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 10:49:51.496215 +0000 UTC
-// Mod tvm
+// DON'T EDIT THIS FILE is generated 2020-10-19 11:18:28.294797 +0000 UTC
 //
+// Mod tvm
 //
 
 import (
@@ -17,13 +17,13 @@ const (
 )
 
 type ExecutionOptions struct {
-	// boc with config
+	// boc with config.
 	BlockchainConfig *string `json:"blockchain_config,omitempty"`
-	// time that is used as transaction time
+	// time that is used as transaction time.
 	BlockTime *int `json:"block_time,omitempty"`
-	// block logical time
+	// block logical time.
 	BlockLt *decimal.Decimal `json:"block_lt,omitempty"`
-	// transaction logical time
+	// transaction logical time.
 	TransactionLt *decimal.Decimal `json:"transaction_lt,omitempty"`
 }
 
@@ -68,3 +68,6 @@ type ParamsOfExecuteGet struct {
 type ResultOfExecuteGet struct {
 	Output interface{} `json:"output"`
 }
+
+func (c *Client) ExecuteMessage() {}
+func (c *Client) ExecuteGet()     {}

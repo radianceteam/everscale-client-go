@@ -139,7 +139,7 @@ func (c *dllClientCtx) waitErrorOrResultUnmarshal(method string, body interface{
 	if err != nil {
 		return err
 	}
-
+	// fmt.Println(string(rawData))
 	return json.Unmarshal(rawData, dst)
 }
 

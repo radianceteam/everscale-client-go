@@ -1,8 +1,9 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 10:49:51.495444 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-19 11:18:28.294023 +0000 UTC
+//
 // Mod abi
-// Provides message encoding and decoding according to the ABI
+//
 // Provides message encoding and decoding according to the ABI
 // specification.
 
@@ -105,7 +106,7 @@ type ResultOfEncodeMessageBody struct {
 }
 
 type ParamsOfAttachSignatureToMessageBody struct {
-	// Contract ABI
+	// Contract ABI.
 	Abi Abi `json:"abi"`
 	// Public key. Must be encoded with `hex`.
 	PublicKey string `json:"public_key"`
@@ -167,7 +168,7 @@ type ResultOfEncodeMessage struct {
 }
 
 type ParamsOfAttachSignature struct {
-	// Contract ABI
+	// Contract ABI.
 	Abi Abi `json:"abi"`
 	// Public key. Must be encoded with `hex`.
 	PublicKey string `json:"public_key"`
@@ -183,9 +184,9 @@ type ResultOfAttachSignature struct {
 }
 
 type ParamsOfDecodeMessage struct {
-	// contract ABI
+	// contract ABI.
 	Abi Abi `json:"abi"`
-	// Message BOC
+	// Message BOC.
 	Message string `json:"message"`
 }
 
@@ -226,3 +227,18 @@ type ResultOfEncodeAccount struct {
 	// Account id. Encoded with `hex`.
 	ID string `json:"id"`
 }
+
+// Encodes message body according to ABI function call.
+func (c *Client) EncodeMessageBody()            {}
+func (c *Client) AttachSignatureToMessageBody() {}
+func (c *Client) EncodeMessage()                {}
+func (c *Client) AttachSignature()              {}
+
+// Decodes message body using provided message BOC and ABI.
+func (c *Client) DecodeMessage() {}
+
+// Decodes message body using provided body BOC and ABI.
+func (c *Client) DecodeMessageBody() {}
+
+// Encodes account state as it will be.
+func (c *Client) EncodeAccount() {}

@@ -1,8 +1,9 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 10:49:51.495916 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-19 11:18:28.294501 +0000 UTC
+//
 // Mod processing
-// Message processing module.
+//
 // Message processing module.
 //
 // This module incorporates functions related to complex message
@@ -53,7 +54,7 @@ type ParamsOfSendMessage struct {
 	// strongly recommended due to choosing proper processing
 	// strategy.
 	Abi *Abi `json:"abi,omitempty"`
-	// Flag for requesting events sending
+	// Flag for requesting events sending.
 	SendEvents bool `json:"send_events"`
 }
 
@@ -81,13 +82,43 @@ type ParamsOfWaitForTransaction struct {
 	// You must provide the same value as the `send_message` has
 	// returned.
 	ShardBlockID string `json:"shard_block_id"`
-	// Flag for requesting events sending
+	// Flag for requesting events sending.
 	SendEvents bool `json:"send_events"`
 }
 
 type ParamsOfProcessMessage struct {
 	// Message source.
 	Message MessageSource `json:"message"`
-	// Flag for requesting events sending
+	// Flag for requesting events sending.
 	SendEvents bool `json:"send_events"`
 }
+
+func (c *Client) SendMessage() {}
+
+// Performs monitoring of the network for a results of the external
+// inbound message processing.
+//
+// Note that presence of the `abi` parameter is critical for ABI
+// compliant contracts. Message processing uses drastically
+// different strategy for processing message with an ABI expiration
+// replay protection.
+//
+// When the ABI header `expire` is present, the processing uses
+// `message expiration` strategy:
+// - The maximum block gen time is set to
+// `message_expiration_time + transaction_wait_timeout`.
+// - When maximum block gen time is reached the processing will
+// be finished with `MessageExpired` error.
+//
+// When the ABI header `expire` isn't present or `abi` parameter
+// isn't specified, the processing uses `transaction waiting`
+// strategy:
+// - The maximum block gen time is set to
+// `now() + transaction_wait_timeout`.
+// - When maximum block gen time is reached the processing will
+// be finished with `Incomplete` result.
+func (c *Client) WaitForTransaction() {}
+
+// Sends message to the network and monitors network for a result of
+// message processing.
+func (c *Client) ProcessMessage() {}

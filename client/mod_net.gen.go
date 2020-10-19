@@ -1,8 +1,9 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 10:49:51.496381 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-19 11:18:28.29496 +0000 UTC
+//
 // Mod net
-// Network access.
+//
 // Network access.
 
 type OrderBy struct {
@@ -18,50 +19,55 @@ const (
 )
 
 type ParamsOfQueryCollection struct {
-	// collection name (accounts, blocks, transactions, messages, block_signatures)
+	// collection name (accounts, blocks, transactions, messages, block_signatures).
 	Collection string `json:"collection"`
-	// collection filter
+	// collection filter.
 	Filter interface{} `json:"filter,omitempty"`
-	// projection (result) string
+	// projection (result) string.
 	Result string `json:"result"`
-	// sorting order
+	// sorting order.
 	Order *[]OrderBy `json:"order,omitempty"`
-	// number of documents to return
+	// number of documents to return.
 	Limit *int `json:"limit,omitempty"`
 }
 
 type ResultOfQueryCollection struct {
-	// objects that match provided criteria
+	// objects that match provided criteria.
 	Result []interface{} `json:"result"`
 }
 
 type ParamsOfWaitForCollection struct {
-	// collection name (accounts, blocks, transactions, messages, block_signatures)
+	// collection name (accounts, blocks, transactions, messages, block_signatures).
 	Collection string `json:"collection"`
-	// collection filter
+	// collection filter.
 	Filter interface{} `json:"filter,omitempty"`
-	// projection (result) string
+	// projection (result) string.
 	Result string `json:"result"`
-	// query timeout
+	// query timeout.
 	Timeout *int `json:"timeout,omitempty"`
 }
 
 type ResultOfWaitForCollection struct {
-	// first found object that match provided criteria
+	// first found object that match provided criteria.
 	Result interface{} `json:"result"`
 }
 
 type ResultOfSubscribeCollection struct {
 	// handle to subscription. It then can be used in `get_next_subscription_data` function
-	// and must be closed with `unsubscribe`
+	// and must be closed with `unsubscribe`.
 	Handle int `json:"handle"`
 }
 
 type ParamsOfSubscribeCollection struct {
-	// collection name (accounts, blocks, transactions, messages, block_signatures)
+	// collection name (accounts, blocks, transactions, messages, block_signatures).
 	Collection string `json:"collection"`
-	// collection filter
+	// collection filter.
 	Filter interface{} `json:"filter,omitempty"`
-	// projection (result) string
+	// projection (result) string.
 	Result string `json:"result"`
 }
+
+func (c *Client) QueryCollection()     {}
+func (c *Client) WaitForCollection()   {}
+func (c *Client) Unsubscribe()         {}
+func (c *Client) SubscribeCollection() {}

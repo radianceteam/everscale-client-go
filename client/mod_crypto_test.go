@@ -14,9 +14,9 @@ func TestModCrypto(t *testing.T) {
 	if err == nil {
 		defer c.Close()
 	}
-	a.NoError(err, "client created")
+	a.NoError(err, "Client created")
 	keys, err := c.CryptoGenerateRandomSignKeys()
-	a.NoError(err, "call client.version")
+	a.NoError(err, "call Client.version")
 	a.Len(keys.Public, 64, "hex len")
 	a.Len(keys.Secret, 64, "hex len")
 }

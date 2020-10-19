@@ -1,8 +1,9 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 10:49:51.495013 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-19 11:18:28.293405 +0000 UTC
+//
 // Mod crypto
-// Crypto functions.
+//
 // Crypto functions.
 
 type SigningBoxHandle struct {
@@ -29,7 +30,7 @@ type ParamsOfModularPower struct {
 }
 
 type ResultOfModularPower struct {
-	// result of modular exponentiation
+	// result of modular exponentiation.
 	ModularPower string `json:"modular_power"`
 }
 
@@ -117,10 +118,10 @@ type ParamsOfScrypt struct {
 	// A salt bytes that modifies the hash to protect against Rainbow table attacks.
 	// Must be encoded with `base64`.
 	Salt string `json:"salt"`
-	// CPU/memory cost parameter
+	// CPU/memory cost parameter.
 	LogN int `json:"log_n"`
 	// The block size parameter, which fine-tunes sequential memory read size and performance.
-	// 8 is commonly used
+	// 8 is commonly used.
 	R int `json:"r"`
 	// Parallelization parameter.
 	P int `json:"p"`
@@ -134,7 +135,7 @@ type ResultOfScrypt struct {
 }
 
 type ParamsOfNaclSignKeyPairFromSecret struct {
-	// secret key
+	// secret key.
 	Secret string `json:"secret"`
 }
 
@@ -213,24 +214,24 @@ type ParamsOfNaclSecretBoxOpen struct {
 }
 
 type ParamsOfMnemonicWords struct {
-	// dictionary identifier
+	// dictionary identifier.
 	Dictionary *int `json:"dictionary,omitempty"`
 }
 
 type ResultOfMnemonicWords struct {
-	// the list of mnemonic words
+	// the list of mnemonic words.
 	Words string `json:"words"`
 }
 
 type ParamsOfMnemonicFromRandom struct {
-	// dictionary identifier
+	// dictionary identifier.
 	Dictionary *int `json:"dictionary,omitempty"`
-	// mnemonic word count
+	// mnemonic word count.
 	WordCount *int `json:"word_count,omitempty"`
 }
 
 type ResultOfMnemonicFromRandom struct {
-	// string of mnemonic words
+	// string of mnemonic words.
 	Phrase string `json:"phrase"`
 }
 
@@ -245,82 +246,174 @@ type ResultOfMnemonicFromEntropy struct {
 }
 
 type ParamsOfMnemonicVerify struct {
-	// phrase
+	// phrase.
 	Phrase string `json:"phrase"`
-	// dictionary identifier
+	// dictionary identifier.
 	Dictionary *int `json:"dictionary,omitempty"`
-	// word count
+	// word count.
 	WordCount *int `json:"word_count,omitempty"`
 }
 
 type ResultOfMnemonicVerify struct {
-	// flag indicating the mnemonic is valid or not
+	// flag indicating the mnemonic is valid or not.
 	Valid bool `json:"valid"`
 }
 
 type ParamsOfMnemonicDeriveSignKeys struct {
-	// phrase
+	// phrase.
 	Phrase string `json:"phrase"`
-	// derivation path, for instance "m/44'/396'/0'/0/0"
+	// derivation path, for instance "m/44'/396'/0'/0/0".
 	Path *string `json:"path,omitempty"`
-	// dictionary identifier
+	// dictionary identifier.
 	Dictionary *int `json:"dictionary,omitempty"`
-	// word count
+	// word count.
 	WordCount *int `json:"word_count,omitempty"`
 }
 
 type ParamsOfHDKeyXPrvFromMnemonic struct {
-	// string with seed phrase
+	// string with seed phrase.
 	Phrase string `json:"phrase"`
 }
 
 type ResultOfHDKeyXPrvFromMnemonic struct {
-	// serialized extended master private key
+	// serialized extended master private key.
 	XPrv string `json:"xprv"`
 }
 
 type ParamsOfHDKeyDeriveFromXPrv struct {
-	// serialized extended private key
+	// serialized extended private key.
 	XPrv string `json:"xprv"`
-	// child index (see BIP-0032)
+	// child index (see BIP-0032).
 	ChildIndex int `json:"child_index"`
-	// indicates the derivation of hardened/not-hardened key (see BIP-0032)
+	// indicates the derivation of hardened/not-hardened key (see BIP-0032).
 	Hardened bool `json:"hardened"`
 }
 
 type ResultOfHDKeyDeriveFromXPrv struct {
-	// serialized extended private key
+	// serialized extended private key.
 	XPrv string `json:"xprv"`
 }
 
 type ParamsOfHDKeyDeriveFromXPrvPath struct {
-	// serialized extended private key
+	// serialized extended private key.
 	XPrv string `json:"xprv"`
-	// derivation path, for instance "m/44'/396'/0'/0/0"
+	// derivation path, for instance "m/44'/396'/0'/0/0".
 	Path string `json:"path"`
 }
 
 type ResultOfHDKeyDeriveFromXPrvPath struct {
-	// derived serialized extended private key
+	// derived serialized extended private key.
 	XPrv string `json:"xprv"`
 }
 
 type ParamsOfHDKeySecretFromXPrv struct {
-	// serialized extended private key
+	// serialized extended private key.
 	XPrv string `json:"xprv"`
 }
 
 type ResultOfHDKeySecretFromXPrv struct {
-	// private key
+	// private key.
 	Secret string `json:"secret"`
 }
 
 type ParamsOfHDKeyPublicFromXPrv struct {
-	// serialized extended private key
+	// serialized extended private key.
 	XPrv string `json:"xprv"`
 }
 
 type ResultOfHDKeyPublicFromXPrv struct {
-	// public key
+	// public key.
 	Public string `json:"public"`
 }
+
+// Integer factorization.
+// Performs prime factorization – decomposition of a composite number
+// into a product of smaller prime integers (factors).
+// See [https://en.wikipedia.org/wiki/Integer_factorization].
+func (c *Client) Factorize() {}
+
+// Modular exponentiation.
+// Performs modular exponentiation for big integers (`base`^`exponent` mod `modulus`).
+// See [https://en.wikipedia.org/wiki/Modular_exponentiation].
+func (c *Client) ModularPower() {}
+
+// Calculates CRC16 using TON algorithm.
+func (c *Client) TonCrc16() {}
+
+// Generates random byte array of the specified length in the spesified encoding.
+func (c *Client) GenerateRandomBytes() {}
+
+// Converts public key to ton safe_format.
+func (c *Client) ConvertPublicKeyToTonSafeFormat() {}
+
+// Generates random ed25519 key pair.
+func (c *Client) GenerateRandomSignKeys() {}
+
+// Signs a data using the provided keys.
+func (c *Client) Sign() {}
+
+// Verifies signed data using the provided public key.
+// Raises error in case when verification is failed.
+func (c *Client) VerifySignature() {}
+
+// Calculates SHA256 hash of the specified data.
+func (c *Client) Sha256() {}
+
+// Calculates SHA512 hash of the specified data.
+func (c *Client) Sha512() {}
+
+// Perform `scrypt` encryption.
+// Derives key from `password` and `key` using `scrypt` algorithm.
+// See [https://en.wikipedia.org/wiki/Scrypt].
+func (c *Client) Scrypt() {}
+
+// Generates a key pair for signing from the secret key.
+func (c *Client) NaclSignKeypairFromSecretKey() {}
+
+// Signs data using the signer's secret key.
+func (c *Client) NaclSign()                    {}
+func (c *Client) NaclSignOpen()                {}
+func (c *Client) NaclSignDetached()            {}
+func (c *Client) NaclBoxKeypair()              {}
+func (c *Client) NaclBoxKeypairFromSecretKey() {}
+func (c *Client) NaclBox()                     {}
+func (c *Client) NaclBoxOpen()                 {}
+func (c *Client) NaclSecretBox()               {}
+func (c *Client) NaclSecretBoxOpen()           {}
+
+// Prints the list of words from the specified dictionary.
+func (c *Client) MnemonicWords() {}
+
+// Generates a random mnemonic.
+// Generates a random mnemnonic from the specified dictionary and word count.
+func (c *Client) MnemonicFromRandom() {}
+
+// Generates mnemonic from the specified entropy.
+// Generates mnemonic from pre-generated entropy.
+func (c *Client) MnemonicFromEntropy() {}
+
+// Validates a mnemonic phrase.
+// The phrase supplied will be checked for word length and validated according to the checksum
+// specified in BIP0039.
+func (c *Client) MnemonicVerify() {}
+
+// Derives a key pair for signing from the seed phrase.
+// Validates the seed phrase, generates master key and then derives
+// the key pair from the master key and the specified path.
+func (c *Client) MnemonicDeriveSignKeys() {}
+
+// Generate the extended master private key that will be the root for all the derived keys.
+func (c *Client) HdkeyXprvFromMnemonic() {}
+
+// Derives the next child extended private key.
+// Returns derived extended private key derived from the specified extended private key and child index.
+func (c *Client) HdkeyDeriveFromXprv() {}
+
+// Derives the exented private key from the specified key and path.
+func (c *Client) HdkeyDeriveFromXprvPath() {}
+
+// Extracts the private key from the serialized extended private key.
+func (c *Client) HdkeySecretFromXprv() {}
+
+// Extracts the public key from the serialized extended private key.
+func (c *Client) HdkeyPublicFromXprv() {}
