@@ -3,6 +3,7 @@ package spec
 import (
 	"bytes"
 	"os"
+	"regexp"
 	"strings"
 	"text/template"
 	"time"
@@ -13,6 +14,8 @@ import (
 var funcMap = template.FuncMap{
 	"now": time.Now,
 }
+
+var NewLiner = regexp.MustCompile("(?m)^.*$")
 
 var headerTmpl = template.Must(template.New("header").Funcs(funcMap).Parse(
 	`package client
@@ -46,7 +49,13 @@ func genEnum(t Type) string {
 }
 
 func prepareMultiline(data string) string {
-	return strings.Join(strings.Split(data, "\n"), "\n// ")
+	parts := strings.Split(data, "\n")
+
+	for i := range parts {
+		parts[i] = strings.Trim(parts[i], " ")
+	}
+
+	return strings.Join(parts, "\n// ")
 }
 
 func toGoName(name string) string {
@@ -67,6 +76,7 @@ func GenModule(dir string, m Module) error {
 		return err
 	}
 	m.Description.Description = prepareMultiline(m.Description.Description)
+	m.Description.Summary = prepareMultiline(m.Description.Summary)
 	if err = headerTmpl.Execute(f, m); err != nil {
 		return err
 	}
@@ -74,7 +84,7 @@ func GenModule(dir string, m Module) error {
 		if ignoredTypesByName[t.Name] {
 			continue
 		}
-		_, err = f.WriteString(GenerateType("", t))
+		_, err = f.WriteString(GenerateType(t))
 		if err != nil {
 			return err
 		}
@@ -83,7 +93,28 @@ func GenModule(dir string, m Module) error {
 	return nil
 }
 
-func GenerateType(prefix string, t Type) string {
+func genStruct(t Type) string {
+	r := "type " + t.Name + " struct {\n"
+	for _, f := range t.StructFields {
+		if !strings.Contains(f.Description.Description, f.Description.Summary) {
+			r += "// " + prepareMultiline(f.Description.Summary) + "\n"
+		}
+		if f.Description.Description != "" {
+			r += "// " + prepareMultiline(f.Description.Description) + "\n"
+		}
+		r += "	" + toGoName(f.Name) + " " + GenerateType(f)
+		if f.Type == Optional {
+			r += " `json:\"" + f.Name + ",omitempty\"`\n"
+		} else {
+			r += " `json:\"" + f.Name + "\"`\n"
+		}
+	}
+	r += "}\n\n"
+
+	return r
+}
+
+func GenerateType(t Type) string {
 	r := "NotFound::" + string(t.Type) + "::"
 	switch t.Type {
 	case Ref:
@@ -94,9 +125,9 @@ func GenerateType(prefix string, t Type) string {
 		}
 	case Optional:
 		if t.OptionalInner.Type != Ref || t.OptionalInner.RefName != "Value" {
-			r = "* " + GenerateType(prefix+"	", *t.OptionalInner)
+			r = "* " + GenerateType(*t.OptionalInner)
 		} else {
-			r = GenerateType(prefix+"	", *t.OptionalInner)
+			r = GenerateType(*t.OptionalInner)
 		}
 	case String:
 		r = "string"
@@ -107,20 +138,11 @@ func GenerateType(prefix string, t Type) string {
 	case None:
 		r = ""
 	case Struct:
-		r = "type " + t.Name + " struct {\n"
-		for _, f := range t.StructFields {
-			r += "	" + toGoName(f.Name) + " " + GenerateType("", f)
-			if f.Type == Optional {
-				r += " `json:\"" + f.Name + ",omitempty\"`\n"
-			} else {
-				r += " `json:\"" + f.Name + "\"`\n"
-			}
-		}
-		r += "}\n\n"
+		r = genStruct(t)
 	case BigInt:
 		r = "decimal.Decimal"
 	case Array:
-		r = "[]" + GenerateType("", *t.ArrayItem)
+		r = "[]" + GenerateType(*t.ArrayItem)
 	case Boolean:
 		r = "bool"
 	case Generic:

@@ -1,9 +1,9 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 10:03:07.681693 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-19 10:44:28.805577 +0000 UTC
 // Mod client
-//  Provides information about library.
-//  Provides information about library.
+// Provides information about library.
+// Provides information about library.
 
 import (
 	"github.com/shopspring/decimal"
@@ -28,5 +28,6 @@ type AbiConfig struct {
 }
 
 type ResultOfVersion struct {
+	// core version
 	Version string `json:"version"`
 }
