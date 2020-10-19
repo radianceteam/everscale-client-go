@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 11:18:28.29496 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-19 13:51:06.680153 +0000 UTC
 //
 // Mod net
 //
@@ -67,7 +67,16 @@ type ParamsOfSubscribeCollection struct {
 	Result string `json:"result"`
 }
 
-func (c *Client) QueryCollection()     {}
-func (c *Client) WaitForCollection()   {}
-func (c *Client) Unsubscribe()         {}
-func (c *Client) SubscribeCollection() {}
+func (c *Client) NetQueryCollection(p *ParamsOfQueryCollection) (*ResultOfQueryCollection, error) {
+	response := new(ResultOfQueryCollection)
+	err := c.dllClient.waitErrorOrResultUnmarshal("net.query_collection", p, response)
+
+	return response, err
+}
+
+func (c *Client) NetWaitForCollection(p *ParamsOfWaitForCollection) (*ResultOfWaitForCollection, error) {
+	response := new(ResultOfWaitForCollection)
+	err := c.dllClient.waitErrorOrResultUnmarshal("net.wait_for_collection", p, response)
+
+	return response, err
+}

@@ -1,6 +1,24 @@
 package client
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"github.com/radianceteam/ton-client-go/spec"
+)
+
+func I(v int) *int {
+	r := new(int)
+	*r = v
+
+	return r
+}
+
+func S(v string) *string {
+	r := new(string)
+	*r = v
+
+	return r
+}
 
 type Client struct {
 	dllClient
@@ -30,4 +48,11 @@ func NewClient(config Config) (*Client, error) {
 	}
 
 	return &Client{dllClient: dllClient}, nil
+}
+
+func (c *Client) ClientGetAPIReference() (*spec.APIReference, error) {
+	response := new(spec.APIReference)
+	err := c.dllClient.waitErrorOrResultUnmarshal("client.get_api_reference", nil, response)
+
+	return response, err
 }

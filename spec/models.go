@@ -3,11 +3,11 @@ package spec
 import "strings"
 
 type Description struct {
-	Name        string `json:"name"`
-	Summary     string `json:"summary"`
-	Description string `json:"description"`
-	GoComment   string // populated manually
-	ConstName   string // name for enum consts
+	Name        string `json:"name,omitempty"`
+	Summary     string `json:"summary,omitempty"`
+	Description string `json:"description,omitempty"`
+	GoComment   string `json:"-"` // populated manually
+	ConstName   string `json:"-"` // name for enum const
 }
 
 func (d *Description) ToComment() string {
@@ -33,14 +33,14 @@ func (d *Description) ToComment() string {
 
 type Type struct {
 	Description
-	Type          TypeName      `json:"type"`
-	RefName       string        `json:"ref_name"`
-	GenericName   string        `json:"generic_name"`
-	GenericArgs   []Type        `json:"generic_args"`
-	OptionalInner *Type         `json:"optional_inner"`
-	ArrayItem     *Type         `json:"array_item"`
-	StructFields  []Type        `json:"struct_fields"`
-	EnumConsts    []Description `json:"enum_consts"`
+	Type          TypeName      `json:"type,omitempty"`
+	RefName       string        `json:"ref_name,omitempty"`
+	GenericName   string        `json:"generic_name,omitempty"`
+	GenericArgs   []Type        `json:"generic_args,omitempty"`
+	OptionalInner *Type         `json:"optional_inner,omitempty"`
+	ArrayItem     *Type         `json:"array_item,omitempty"`
+	StructFields  []Type        `json:"struct_fields,omitempty"`
+	EnumConsts    []Description `json:"enum_consts,omitempty"`
 }
 
 type Function struct {

@@ -4,7 +4,6 @@ import (
 	"crypto/ed25519"
 	"encoding/hex"
 	"fmt"
-	"time"
 
 	"github.com/radianceteam/ton-client-go/client"
 )
@@ -37,26 +36,17 @@ func main() {
 		fmt.Println("success", pair)
 	}
 
-	res, err := c.NetQueryCollection(client.NetQueryCollectionParams{
+	res, err := c.NetQueryCollection(&client.ParamsOfQueryCollection{
 		Collection: "accounts",
-		Limit:      20,
+		Limit:      client.I(20),
 		Result:     "id balance(format:DEC)",
 	})
 
 	if err != nil {
 		fmt.Println("error", err.Error())
 	} else {
-		fmt.Println("success", len(res))
+		fmt.Println("success", res)
 	}
-	for i := 0; i < 1000000; i++ {
-		r, err := c.NetQueryCollection(client.NetQueryCollectionParams{
-			Collection: "accounts",
-			Limit:      20,
-			Result:     "id balance(format:DEC)",
-		})
-		fmt.Println(len(r), err, i)
-	}
-	time.Sleep(60 * time.Second)
 
 	fmt.Println("after")
 }

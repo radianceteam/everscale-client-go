@@ -1,7 +1,6 @@
 package client
 
 import (
-	"encoding/json"
 	"fmt"
 	"testing"
 
@@ -20,11 +19,11 @@ func TestModClient(t *testing.T) {
 	a.NoError(err, "Client created")
 	version, err := c.ClientVersion()
 	a.NoError(err, "call Client.version")
-	a.Equal("1.0.0", version, "dll with specified version")
-	rawReference, err := c.ClientGetAPIReference()
+	if !a.NotNil(version, "version response") {
+		return
+	}
+	a.Equal("1.0.0", version.Version, "dll with specified version")
+	ref, err := c.ClientGetAPIReference()
 	a.NoError(err, "call Client.get_api_version")
-	var jsonDocs interface{}
-	err = json.Unmarshal(rawReference, &jsonDocs)
-	a.NoError(err, "get_api_version reference unmarshal")
-	a.NotNil(jsonDocs, "successfully unmarshalled")
+	a.NotNil(ref, "ref not nil")
 }

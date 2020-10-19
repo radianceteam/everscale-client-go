@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 11:18:28.293188 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-19 13:51:06.67803 +0000 UTC
 //
 // Mod client
 //
@@ -33,4 +33,9 @@ type ResultOfVersion struct {
 	Version string `json:"version"`
 }
 
-func (c *Client) Version() {}
+func (c *Client) ClientVersion() (*ResultOfVersion, error) {
+	response := new(ResultOfVersion)
+	err := c.dllClient.waitErrorOrResultUnmarshal("client.version", nil, response)
+
+	return response, err
+}

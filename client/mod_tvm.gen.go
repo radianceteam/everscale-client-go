@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 11:18:28.294797 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-19 13:51:06.679966 +0000 UTC
 //
 // Mod tvm
 //
@@ -69,5 +69,16 @@ type ResultOfExecuteGet struct {
 	Output interface{} `json:"output"`
 }
 
-func (c *Client) ExecuteMessage() {}
-func (c *Client) ExecuteGet()     {}
+func (c *Client) TvmExecuteMessage(p *ParamsOfExecuteMessage) (*ResultOfExecuteMessage, error) {
+	response := new(ResultOfExecuteMessage)
+	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.execute_message", p, response)
+
+	return response, err
+}
+
+func (c *Client) TvmExecuteGet(p *ParamsOfExecuteGet) (*ResultOfExecuteGet, error) {
+	response := new(ResultOfExecuteGet)
+	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.execute_get", p, response)
+
+	return response, err
+}

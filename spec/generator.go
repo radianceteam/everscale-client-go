@@ -2,6 +2,7 @@ package spec
 
 import (
 	"bytes"
+	"fmt"
 	"os"
 	"strings"
 	"text/template"
@@ -37,6 +38,31 @@ const (
 )
 `))
 
+type funcContent struct {
+	ResultType string
+	ParamType  string
+	Name       string
+	MethodName string
+}
+
+var withoutParamFunc = template.Must(template.New("withoutParamFunc").Parse(
+	`func (c *Client) {{.Name}} () (*{{.ResultType}}, error) {
+	response := new({{.ResultType}})
+	err := c.dllClient.waitErrorOrResultUnmarshal("{{.MethodName}}", nil, response)
+
+	return response, err
+}
+`))
+
+var singleParamFunc = template.Must(template.New("singleParamFunc").Parse(
+	`func (c *Client) {{.Name}} (p *{{.ParamType}}) (*{{.ResultType}}, error) {
+	response := new({{.ResultType}})
+	err := c.dllClient.waitErrorOrResultUnmarshal("{{.MethodName}}", p, response)
+
+	return response, err
+}
+`))
+
 func genEnum(t Type) string {
 	var tpl bytes.Buffer
 	if err := enumTmpl.Execute(&tpl, t); err != nil {
@@ -70,8 +96,38 @@ func toGoName(name string) string {
 	return cameled
 }
 
-func genFunc(f Function) string {
-	return f.ToComment() + "func (c *Client) " + strcase.ToCamel(f.Name) + "() {}\n"
+func genFunc(m Module, f Function) string {
+	params := make([]Type, 0, 2)
+	for _, p := range f.Params {
+		if p.Name == "context" || p.Name == "_context" {
+			continue
+		}
+		params = append(params, p)
+	}
+	if len(params) > 1 {
+		fmt.Println("WARNING: ignored function", len(params), f.Name)
+
+		return ""
+	}
+
+	var b bytes.Buffer
+	content := funcContent{
+		ResultType: f.Result.GenericArgs[0].RefName,
+		Name:       strcase.ToCamel(m.Name + "_" + f.Name),
+		MethodName: m.Name + "." + f.Name,
+	}
+	if len(params) == 0 {
+		if err := withoutParamFunc.Execute(&b, content); err != nil {
+			panic(err)
+		}
+	} else if len(params) == 1 {
+		content.ParamType = params[0].RefName
+		if err := singleParamFunc.Execute(&b, content); err != nil {
+			panic(err)
+		}
+	}
+
+	return "\n" + f.ToComment() + b.String()
 }
 
 func GenModule(dir string, m Module) error {
@@ -96,7 +152,7 @@ func GenModule(dir string, m Module) error {
 		if ignoredFunctionsByName[f.Name] {
 			continue
 		}
-		_, err = file.WriteString(genFunc(f))
+		_, err = file.WriteString(genFunc(m, f))
 		if err != nil {
 			return err
 		}

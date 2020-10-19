@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 11:18:28.294682 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-19 13:51:06.679823 +0000 UTC
 //
 // Mod utils
 //
@@ -22,4 +22,9 @@ type ResultOfConvertAddress struct {
 
 // Sends message to the network and monitors network for a result of
 // message processing.
-func (c *Client) ConvertAddress() {}
+func (c *Client) UtilsConvertAddress(p *ParamsOfConvertAddress) (*ResultOfConvertAddress, error) {
+	response := new(ResultOfConvertAddress)
+	err := c.dllClient.waitErrorOrResultUnmarshal("utils.convert_address", p, response)
+
+	return response, err
+}

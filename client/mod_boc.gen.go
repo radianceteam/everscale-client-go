@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 11:18:28.294357 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-19 13:51:06.679439 +0000 UTC
 //
 // Mod boc
 //
@@ -26,8 +26,37 @@ type ResultOfGetBlockchainConfig struct {
 	ConfigBoc string `json:"config_boc"`
 }
 
-func (c *Client) ParseMessage()        {}
-func (c *Client) ParseTransaction()    {}
-func (c *Client) ParseAccount()        {}
-func (c *Client) ParseBlock()          {}
-func (c *Client) GetBlockchainConfig() {}
+func (c *Client) BocParseMessage(p *ParamsOfParse) (*ResultOfParse, error) {
+	response := new(ResultOfParse)
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.parse_message", p, response)
+
+	return response, err
+}
+
+func (c *Client) BocParseTransaction(p *ParamsOfParse) (*ResultOfParse, error) {
+	response := new(ResultOfParse)
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.parse_transaction", p, response)
+
+	return response, err
+}
+
+func (c *Client) BocParseAccount(p *ParamsOfParse) (*ResultOfParse, error) {
+	response := new(ResultOfParse)
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.parse_account", p, response)
+
+	return response, err
+}
+
+func (c *Client) BocParseBlock(p *ParamsOfParse) (*ResultOfParse, error) {
+	response := new(ResultOfParse)
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.parse_block", p, response)
+
+	return response, err
+}
+
+func (c *Client) BocGetBlockchainConfig(p *ParamsOfGetBlockchainConfig) (*ResultOfGetBlockchainConfig, error) {
+	response := new(ResultOfGetBlockchainConfig)
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.get_blockchain_config", p, response)
+
+	return response, err
+}

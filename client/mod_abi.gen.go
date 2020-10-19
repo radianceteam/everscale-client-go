@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 11:18:28.294023 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-19 13:51:06.679007 +0000 UTC
 //
 // Mod abi
 //
@@ -229,16 +229,54 @@ type ResultOfEncodeAccount struct {
 }
 
 // Encodes message body according to ABI function call.
-func (c *Client) EncodeMessageBody()            {}
-func (c *Client) AttachSignatureToMessageBody() {}
-func (c *Client) EncodeMessage()                {}
-func (c *Client) AttachSignature()              {}
+func (c *Client) AbiEncodeMessageBody(p *ParamsOfEncodeMessageBody) (*ResultOfEncodeMessageBody, error) {
+	response := new(ResultOfEncodeMessageBody)
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_message_body", p, response)
+
+	return response, err
+}
+
+func (c *Client) AbiAttachSignatureToMessageBody(p *ParamsOfAttachSignatureToMessageBody) (*ResultOfAttachSignatureToMessageBody, error) {
+	response := new(ResultOfAttachSignatureToMessageBody)
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.attach_signature_to_message_body", p, response)
+
+	return response, err
+}
+
+func (c *Client) AbiEncodeMessage(p *ParamsOfEncodeMessage) (*ResultOfEncodeMessage, error) {
+	response := new(ResultOfEncodeMessage)
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_message", p, response)
+
+	return response, err
+}
+
+func (c *Client) AbiAttachSignature(p *ParamsOfAttachSignature) (*ResultOfAttachSignature, error) {
+	response := new(ResultOfAttachSignature)
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.attach_signature", p, response)
+
+	return response, err
+}
 
 // Decodes message body using provided message BOC and ABI.
-func (c *Client) DecodeMessage() {}
+func (c *Client) AbiDecodeMessage(p *ParamsOfDecodeMessage) (*DecodedMessageBody, error) {
+	response := new(DecodedMessageBody)
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.decode_message", p, response)
+
+	return response, err
+}
 
 // Decodes message body using provided body BOC and ABI.
-func (c *Client) DecodeMessageBody() {}
+func (c *Client) AbiDecodeMessageBody(p *ParamsOfDecodeMessageBody) (*DecodedMessageBody, error) {
+	response := new(DecodedMessageBody)
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.decode_message_body", p, response)
+
+	return response, err
+}
 
 // Encodes account state as it will be.
-func (c *Client) EncodeAccount() {}
+func (c *Client) AbiEncodeAccount(p *ParamsOfEncodeAccount) (*ResultOfEncodeAccount, error) {
+	response := new(ResultOfEncodeAccount)
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_account", p, response)
+
+	return response, err
+}
