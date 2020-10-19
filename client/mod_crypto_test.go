@@ -9,7 +9,7 @@ import (
 func TestModCrypto(t *testing.T) {
 	a := assert.New(t)
 	c, err := NewClient(Config{
-		Network: ConfigNetwork{ServerAddress: "net.ton.dev"},
+		Network: NetworkConfig{ServerAddress: "net.ton.dev"},
 	})
 	if err == nil {
 		defer c.Close()

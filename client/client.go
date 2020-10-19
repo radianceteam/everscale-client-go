@@ -33,21 +33,10 @@ func (c *tonClient) Close() {
 	c.dllClient.close()
 }
 
-// ConfigNetwork TON network config.
-type ConfigNetwork struct {
-	ServerAddress string `json:"server_address"`
-}
-
-// ConfigCrypto config for crypto.
-type ConfigCrypto struct{}
-
-// ConfigABI config for application binary interface.
-type ConfigABI struct{}
-
 type Config struct {
-	Crypto  ConfigCrypto  `json:"crypto"`
-	ABI     ConfigABI     `json:"abi"`
-	Network ConfigNetwork `json:"network"`
+	Crypto  CryptoConfig  `json:"crypto"`
+	ABI     AbiConfig     `json:"abi"`
+	Network NetworkConfig `json:"network"`
 }
 
 func NewClient(config Config) (Client, error) {

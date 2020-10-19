@@ -12,7 +12,7 @@ import (
 func main() {
 	fmt.Println("before")
 	c, err := client.NewClient(client.Config{
-		Network: client.ConfigNetwork{ServerAddress: "net.ton.dev"},
+		Network: client.NetworkConfig{ServerAddress: "net.ton.dev"},
 	})
 	if err != nil {
 		fmt.Println("err", err)

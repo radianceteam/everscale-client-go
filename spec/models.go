@@ -32,8 +32,6 @@ type Module struct {
 }
 
 type APIReference struct {
-	API struct {
-		Version string   `json:"version"`
-		Modules []Module `json:"modules"`
-	} `json:"api"`
+	Version string   `json:"version"`
+	Modules []Module `json:"modules"`
 }

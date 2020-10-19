@@ -14,6 +14,12 @@ const (
 	Boolean      TypeName = "Boolean"
 	Array        TypeName = "Array"
 	Generic      TypeName = "Generic"
-	EnumOfType   TypeName = "EnumOfType"
-	EnumOfConsts TypeName = "EnymOfConsts"
+	EnumOfTypes  TypeName = "EnumOfTypes"
+	EnumOfConsts TypeName = "EnumOfConsts"
 )
+
+var ignoredTypesByName = map[string]bool{
+	"ResultOfGetApiReference": true,
+	"ClientError":             true,
+	"ClientConfig":            true,
+}

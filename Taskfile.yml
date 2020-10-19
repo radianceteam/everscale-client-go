@@ -20,6 +20,12 @@ tasks:
     desc: "Run linter"
     cmds:
       - golangci-lint run --tests=0 ./...
+  generate:
+    desc: "Generates code by json spec"
+    cmds:
+      - go run ./cmd/gen
+      - go fmt ./client/*.gen.go
+      - goimports -w ./client/*.gen.go
   run:
     desc: "Run in host system without container"
     cmds:

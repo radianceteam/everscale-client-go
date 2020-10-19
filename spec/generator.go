@@ -5,12 +5,18 @@ import (
 	"os"
 	"strings"
 	"text/template"
+	"time"
 
 	"github.com/iancoleman/strcase"
 )
 
-var headerTmpl = template.Must(template.New("header").Parse(
+var funcMap = template.FuncMap{
+	"now": time.Now,
+}
+
+var headerTmpl = template.Must(template.New("header").Funcs(funcMap).Parse(
 	`package client
+// DON'T EDIT THIS FILE is generated {{now.UTC}}
 // Mod {{.Name}}
 // {{.Summary}}
 // {{.Description.Description}}
@@ -23,7 +29,6 @@ import (
 
 var enumTmpl = template.Must(template.New("enum").Parse(
 	`
-// ENUM =========================
 type {{.Name}} string
 const (
 {{range $e := .EnumConsts}} 
@@ -44,6 +49,18 @@ func prepareMultiline(data string) string {
 	return strings.Join(strings.Split(data, "\n"), "\n// ")
 }
 
+func toGoName(name string) string {
+	if name == "id" {
+		return "ID"
+	}
+	cameled := strcase.ToCamel(name)
+	if strings.Contains(name, "id") {
+		cameled = strings.ReplaceAll(cameled, "Id", "ID")
+	}
+
+	return cameled
+}
+
 func GenModule(dir string, m Module) error {
 	f, err := os.Create(dir + "/mod_" + m.Name + ".gen.go")
 	if err != nil {
@@ -54,6 +71,9 @@ func GenModule(dir string, m Module) error {
 		return err
 	}
 	for _, t := range m.Types {
+		if ignoredTypesByName[t.Name] {
+			continue
+		}
 		_, err = f.WriteString(GenerateType("", t))
 		if err != nil {
 			return err
@@ -89,7 +109,12 @@ func GenerateType(prefix string, t Type) string {
 	case Struct:
 		r = "type " + t.Name + " struct {\n"
 		for _, f := range t.StructFields {
-			r += "	" + strcase.ToCamel(f.Name) + " " + GenerateType("", f) + " `json:\"" + f.Name + "\"`\n"
+			r += "	" + toGoName(f.Name) + " " + GenerateType("", f)
+			if f.Type == Optional {
+				r += " `json:\"" + f.Name + ",omitempty\"`\n"
+			} else {
+				r += " `json:\"" + f.Name + "\"`\n"
+			}
 		}
 		r += "}\n\n"
 	case BigInt:
@@ -100,11 +125,11 @@ func GenerateType(prefix string, t Type) string {
 		r = "bool"
 	case Generic:
 		r = "GENERIC"
-	case EnumOfType:
+	case EnumOfTypes:
 		r = "type " + t.Name + " interface{}\n\n"
 	case EnumOfConsts:
 		for i := range t.EnumConsts {
-			t.EnumConsts[i].ConstName = strcase.ToScreamingSnake(t.EnumConsts[i].Name)
+			t.EnumConsts[i].ConstName = strcase.ToCamel(t.EnumConsts[i].Name)
 		}
 		r = genEnum(t)
 	}
