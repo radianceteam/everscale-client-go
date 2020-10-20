@@ -26,5 +26,4 @@ var ignoredTypesByName = map[string]bool{
 
 var ignoredFunctionsByName = map[string]bool{
 	"get_api_reference": true,
-	"unsubscribe":       true,
 }

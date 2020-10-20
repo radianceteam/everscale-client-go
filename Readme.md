@@ -36,6 +36,11 @@ You need to install:
 - [Taskfile](https://taskfile.dev/) (optional)
 To attach git hooks run `task attach_hooks`
 
+### Code generation
+
+Most of the code is generated via script in `./cmd/gen/gen.go` from spec `api-spec.json` 
+one can regenerate it via `task generate`.
+
 ## Useful reading
 
 - https://eli.thegreenplace.net/2019/passing-callbacks-and-pointers-to-cgo/

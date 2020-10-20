@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-20 09:37:55.816892 +0000 UTC
+// DON'T EDIT THIS FILE is generated 20 Oct 20 13:40 UTC
 //
 // Mod abi
 //

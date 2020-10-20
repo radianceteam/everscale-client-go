@@ -6,65 +6,9 @@ import (
 	"os"
 	"strings"
 	"text/template"
-	"time"
 
 	"github.com/iancoleman/strcase"
 )
-
-var funcMap = template.FuncMap{
-	"now": time.Now,
-}
-
-const emptyInterface = "interface{}"
-
-var headerTmpl = template.Must(template.New("header").Funcs(funcMap).Parse(
-	`package client
-// DON'T EDIT THIS FILE is generated {{now.UTC}}
-//
-// Mod {{.Name}}
-//
-{{.GoComment}}
-
-import (
-	"github.com/shopspring/decimal"
-	"gopkg.in/guregu/null.v4"
-)
-
-`))
-
-var enumTmpl = template.Must(template.New("enum").Parse(
-	`
-type {{.Name}} string
-const (
-{{range $e := .EnumConsts}} 
-	{{$e.ConstName}} {{$.Name}} = "{{$e.Name}}"{{end}}
-)
-`))
-
-type funcContent struct {
-	ResultType string
-	ParamType  string
-	Name       string
-	MethodName string
-}
-
-var withoutParamFunc = template.Must(template.New("withoutParamFunc").Parse(
-	`func (c *Client) {{.Name}} () (*{{.ResultType}}, error) {
-	response := new({{.ResultType}})
-	err := c.dllClient.waitErrorOrResultUnmarshal("{{.MethodName}}", nil, response)
-
-	return response, err
-}
-`))
-
-var singleParamFunc = template.Must(template.New("singleParamFunc").Parse(
-	`func (c *Client) {{.Name}} (p *{{.ParamType}}) (*{{.ResultType}}, error) {
-	response := new({{.ResultType}})
-	err := c.dllClient.waitErrorOrResultUnmarshal("{{.MethodName}}", p, response)
-
-	return response, err
-}
-`))
 
 func genEnum(t Type) string {
 	var tpl bytes.Buffer
@@ -108,26 +52,32 @@ func genFunc(m Module, f Function) string {
 		params = append(params, p)
 	}
 	if len(params) > 1 {
-		fmt.Println("WARNING: ignored function", len(params), f.Name)
+		fmt.Println("WARNING: ignored function", len(params), m.Name, f.Name)
 
 		return ""
 	}
 
 	var b bytes.Buffer
 	content := funcContent{
-		ResultType: f.Result.GenericArgs[0].RefName,
 		Name:       strcase.ToCamel(m.Name + "_" + f.Name),
 		MethodName: m.Name + "." + f.Name,
+		ResultType: f.Result.GenericArgs[0].RefName,
 	}
+
+	var tmpl *template.Template
 	if len(params) == 0 {
-		if err := withoutParamFunc.Execute(&b, content); err != nil {
-			panic(err)
-		}
+		tmpl = withoutParamFunc
 	} else if len(params) == 1 {
 		content.ParamType = params[0].RefName
-		if err := singleParamFunc.Execute(&b, content); err != nil {
-			panic(err)
+		if content.ResultType != "" {
+			tmpl = singleParamFunc
+		} else {
+			tmpl = singleParamWithoutResultFunc
 		}
+	}
+
+	if err := tmpl.Execute(&b, content); err != nil {
+		panic(err)
 	}
 
 	return "\n" + f.ToComment() + b.String()
@@ -167,7 +117,7 @@ func GenModule(dir string, m Module) error {
 func genStruct(t Type) string {
 	r := "type " + t.Name + " struct {\n"
 	for _, f := range t.StructFields {
-		r += f.ToComment() + "	" + toGoName(f.Name) + " " + GenerateType(f)
+		r += "\t" + f.ToComment() + "	" + toGoName(f.Name) + " " + GenerateType(f)
 		if f.Type == Optional {
 			r += " `json:\"" + f.Name + "\"` // optional \n"
 		} else {
@@ -211,7 +161,7 @@ func GenerateType(t Type) string {
 	switch t.Type {
 	case Ref:
 		if t.RefName == "Value" {
-			r = "interface{}"
+			r = emptyInterface
 		} else {
 			r = t.RefName + ""
 		}

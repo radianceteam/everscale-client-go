@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-20 09:37:55.817915 +0000 UTC
+// DON'T EDIT THIS FILE is generated 20 Oct 20 13:40 UTC
 //
 // Mod net
 //
@@ -83,4 +83,10 @@ func (c *Client) NetWaitForCollection(p *ParamsOfWaitForCollection) (*ResultOfWa
 	err := c.dllClient.waitErrorOrResultUnmarshal("net.wait_for_collection", p, response)
 
 	return response, err
+}
+
+func (c *Client) NetUnsubscribe(p *ResultOfSubscribeCollection) error {
+	_, err := c.dllClient.waitErrorOrResult("net.unsubscribe", p)
+
+	return err
 }
