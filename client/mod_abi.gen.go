@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 13:51:06.679007 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-20 09:37:55.816892 +0000 UTC
 //
 // Mod abi
 //
@@ -9,6 +9,7 @@ package client
 
 import (
 	"github.com/shopspring/decimal"
+	"gopkg.in/guregu/null.v4"
 )
 
 type Abi interface{}
@@ -19,11 +20,11 @@ type AbiHandle struct {
 
 type FunctionHeader struct {
 	// Message expiration time in seconds.
-	Expire *int `json:"expire,omitempty"`
+	Expire null.Int `json:"expire"` // optional
 	// Message creation time in milliseconds.
-	Time *decimal.Decimal `json:"time,omitempty"`
+	Time decimal.NullDecimal `json:"time"` // optional
 	// Public key used to sign message. Encoded with `hex`.
-	Pubkey *string `json:"pubkey,omitempty"`
+	Pubkey null.String `json:"pubkey"` // optional
 }
 
 type CallSet struct {
@@ -34,18 +35,18 @@ type CallSet struct {
 	// If an application omit some parameters required by the
 	// contract's ABI, the library will set the default values for
 	// it.
-	Header *FunctionHeader `json:"header,omitempty"`
+	Header *FunctionHeader `json:"header"` // optional
 	// Function input according to ABI.
-	Input interface{} `json:"input,omitempty"`
+	Input interface{} `json:"input"` // optional
 }
 
 type DeploySet struct {
 	// Content of TVC file. Must be encoded with `base64`.
 	Tvc string `json:"tvc"`
 	// Target workchain for destination address. Default is `0`.
-	WorkchainID *int `json:"workchain_id,omitempty"`
+	WorkchainID null.Int `json:"workchain_id"` // optional
 	// List of initial values for contract's public variables.
-	InitialData interface{} `json:"initial_data,omitempty"`
+	InitialData interface{} `json:"initial_data"` // optional
 }
 
 type Signer interface{}
@@ -91,7 +92,7 @@ type ParamsOfEncodeMessageBody struct {
 	// Expiration timeouts will grow with every retry.
 	//
 	// Default value is 0.
-	ProcessingTryIndex *int `json:"processing_try_index,omitempty"`
+	ProcessingTryIndex null.Int `json:"processing_try_index"` // optional
 }
 
 type ResultOfEncodeMessageBody struct {
@@ -102,7 +103,7 @@ type ResultOfEncodeMessageBody struct {
 	// Presents when `message` is unsigned. Can be used for external
 	// message signing. Is this case you need to sing this data and
 	// produce signed message using `abi.attach_signature`.
-	DataToSign *string `json:"data_to_sign,omitempty"`
+	DataToSign null.String `json:"data_to_sign"` // optional
 }
 
 type ParamsOfAttachSignatureToMessageBody struct {
@@ -126,17 +127,17 @@ type ParamsOfEncodeMessage struct {
 	// Contract address.
 	//
 	// Must be specified in case of non deploy message.
-	Address *string `json:"address,omitempty"`
+	Address null.String `json:"address"` // optional
 	// Deploy parameters.
 	//
 	// Must be specified in case of deploy message.
-	DeploySet *DeploySet `json:"deploy_set,omitempty"`
+	DeploySet *DeploySet `json:"deploy_set"` // optional
 	// Function call parameters.
 	//
 	// Must be specified in non deploy message.
 	//
 	// In case of deploy message contains parameters of constructor.
-	CallSet *CallSet `json:"call_set,omitempty"`
+	CallSet *CallSet `json:"call_set"` // optional
 	// Signing parameters.
 	Signer Signer `json:"signer"`
 	// Processing try index.
@@ -149,7 +150,7 @@ type ParamsOfEncodeMessage struct {
 	// Expiration timeouts will grow with every retry.
 	//
 	// Default value is 0.
-	ProcessingTryIndex *int `json:"processing_try_index,omitempty"`
+	ProcessingTryIndex null.Int `json:"processing_try_index"` // optional
 }
 
 type ResultOfEncodeMessage struct {
@@ -160,7 +161,7 @@ type ResultOfEncodeMessage struct {
 	// Presents when `message` is unsigned. Can be used for external
 	// message signing. Is this case you need to sing this data and
 	// produce signed message using `abi.attach_signature`.
-	DataToSign *string `json:"data_to_sign,omitempty"`
+	DataToSign null.String `json:"data_to_sign"` // optional
 	// Destination address.
 	Address string `json:"address"`
 	// Message id.
@@ -196,9 +197,9 @@ type DecodedMessageBody struct {
 	// Function or event name.
 	Name string `json:"name"`
 	// Parameters or result value.
-	Value interface{} `json:"value,omitempty"`
+	Value interface{} `json:"value"` // optional
 	// Function header.
-	Header *FunctionHeader `json:"header,omitempty"`
+	Header *FunctionHeader `json:"header"` // optional
 }
 
 type ParamsOfDecodeMessageBody struct {
@@ -214,11 +215,11 @@ type ParamsOfEncodeAccount struct {
 	// Source of the account state init.
 	StateInit StateInitSource `json:"state_init"`
 	// Initial balance.
-	Balance *decimal.Decimal `json:"balance,omitempty"`
+	Balance decimal.NullDecimal `json:"balance"` // optional
 	// Initial value for the `last_trans_lt`.
-	LastTransLt *decimal.Decimal `json:"last_trans_lt,omitempty"`
+	LastTransLt decimal.NullDecimal `json:"last_trans_lt"` // optional
 	// Initial value for the `last_paid`.
-	LastPaid *int `json:"last_paid,omitempty"`
+	LastPaid null.Int `json:"last_paid"` // optional
 }
 
 type ResultOfEncodeAccount struct {

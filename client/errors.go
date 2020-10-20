@@ -1,6 +1,8 @@
 package client
 
-import "strconv"
+import (
+	"fmt"
+)
 
 type ErrorSDK struct {
 	Code    int         `json:"code"`
@@ -13,5 +15,5 @@ func (e *ErrorSDK) Error() string {
 		return ""
 	}
 
-	return strconv.Itoa(e.Code) + " " + e.Message
+	return fmt.Sprintf("%s, sdk_error_code=%d", e.Message, e.Code)
 }

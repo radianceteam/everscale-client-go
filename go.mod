@@ -10,4 +10,5 @@ require (
 	github.com/shopspring/decimal v1.2.0
 	github.com/stretchr/testify v1.6.1
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
+	gopkg.in/guregu/null.v4 v4.0.0
 )

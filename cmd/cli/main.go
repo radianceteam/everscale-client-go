@@ -5,6 +5,8 @@ import (
 	"encoding/hex"
 	"fmt"
 
+	"gopkg.in/guregu/null.v4"
+
 	"github.com/radianceteam/ton-client-go/client"
 )
 
@@ -38,7 +40,7 @@ func main() {
 
 	res, err := c.NetQueryCollection(&client.ParamsOfQueryCollection{
 		Collection: "accounts",
-		Limit:      client.I(20),
+		Limit:      null.IntFrom(20),
 		Result:     "id balance(format:DEC)",
 	})
 

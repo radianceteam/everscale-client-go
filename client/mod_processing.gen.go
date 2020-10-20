@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 13:51:06.679617 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-20 09:37:55.817415 +0000 UTC
 //
 // Mod processing
 //
@@ -25,7 +25,7 @@ type ResultOfProcessMessage struct {
 	OutMessages []interface{} `json:"out_messages"`
 	// Optional decoded message bodies according to the optional
 	// `abi` parameter.
-	Decoded *DecodedOutput `json:"decoded,omitempty"`
+	Decoded *DecodedOutput `json:"decoded"` // optional
 }
 
 type DecodedOutput struct {
@@ -35,7 +35,7 @@ type DecodedOutput struct {
 	// the appropriate position.
 	OutMessages []*DecodedMessageBody `json:"out_messages"`
 	// Decoded body of the function output message.
-	Output interface{} `json:"output,omitempty"`
+	Output interface{} `json:"output"` // optional
 }
 
 type ParamsOfSendMessage struct {
@@ -53,7 +53,7 @@ type ParamsOfSendMessage struct {
 	// Note that specifying `abi` for ABI compliant contracts is
 	// strongly recommended due to choosing proper processing
 	// strategy.
-	Abi *Abi `json:"abi,omitempty"`
+	Abi *Abi `json:"abi"` // optional
 	// Flag for requesting events sending.
 	SendEvents bool `json:"send_events"`
 }
@@ -74,7 +74,7 @@ type ParamsOfWaitForTransaction struct {
 	// decoded according to this ABI.
 	//
 	// The `abi_decoded` result field will be filled out.
-	Abi *Abi `json:"abi,omitempty"`
+	Abi *Abi `json:"abi"` // optional
 	// Message BOC. Encoded with `base64`.
 	Message string `json:"message"`
 	// Dst account shard block id before the message had been sent.

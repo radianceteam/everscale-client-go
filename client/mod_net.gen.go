@@ -1,10 +1,14 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 13:51:06.680153 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-20 09:37:55.817915 +0000 UTC
 //
 // Mod net
 //
 // Network access.
+
+import (
+	"gopkg.in/guregu/null.v4"
+)
 
 type OrderBy struct {
 	Path      string        `json:"path"`
@@ -22,13 +26,13 @@ type ParamsOfQueryCollection struct {
 	// collection name (accounts, blocks, transactions, messages, block_signatures).
 	Collection string `json:"collection"`
 	// collection filter.
-	Filter interface{} `json:"filter,omitempty"`
+	Filter interface{} `json:"filter"` // optional
 	// projection (result) string.
 	Result string `json:"result"`
 	// sorting order.
-	Order *[]OrderBy `json:"order,omitempty"`
+	Order []OrderBy `json:"order"` // optional
 	// number of documents to return.
-	Limit *int `json:"limit,omitempty"`
+	Limit null.Int `json:"limit"` // optional
 }
 
 type ResultOfQueryCollection struct {
@@ -40,11 +44,11 @@ type ParamsOfWaitForCollection struct {
 	// collection name (accounts, blocks, transactions, messages, block_signatures).
 	Collection string `json:"collection"`
 	// collection filter.
-	Filter interface{} `json:"filter,omitempty"`
+	Filter interface{} `json:"filter"` // optional
 	// projection (result) string.
 	Result string `json:"result"`
 	// query timeout.
-	Timeout *int `json:"timeout,omitempty"`
+	Timeout null.Int `json:"timeout"` // optional
 }
 
 type ResultOfWaitForCollection struct {
@@ -62,7 +66,7 @@ type ParamsOfSubscribeCollection struct {
 	// collection name (accounts, blocks, transactions, messages, block_signatures).
 	Collection string `json:"collection"`
 	// collection filter.
-	Filter interface{} `json:"filter,omitempty"`
+	Filter interface{} `json:"filter"` // optional
 	// projection (result) string.
 	Result string `json:"result"`
 }

@@ -15,6 +15,8 @@ var funcMap = template.FuncMap{
 	"now": time.Now,
 }
 
+const emptyInterface = "interface{}"
+
 var headerTmpl = template.Must(template.New("header").Funcs(funcMap).Parse(
 	`package client
 // DON'T EDIT THIS FILE is generated {{now.UTC}}
@@ -25,6 +27,7 @@ var headerTmpl = template.Must(template.New("header").Funcs(funcMap).Parse(
 
 import (
 	"github.com/shopspring/decimal"
+	"gopkg.in/guregu/null.v4"
 )
 
 `))
@@ -166,7 +169,7 @@ func genStruct(t Type) string {
 	for _, f := range t.StructFields {
 		r += f.ToComment() + "	" + toGoName(f.Name) + " " + GenerateType(f)
 		if f.Type == Optional {
-			r += " `json:\"" + f.Name + ",omitempty\"`\n"
+			r += " `json:\"" + f.Name + "\"` // optional \n"
 		} else {
 			r += " `json:\"" + f.Name + "\"`\n"
 		}
@@ -174,6 +177,33 @@ func genStruct(t Type) string {
 	r += "}\n\n"
 
 	return r
+}
+
+func GenerateOptionalType(t Type) string {
+	switch t.Type { // nolint exhaustive
+	case Ref:
+		if t.RefName == "Value" {
+			return emptyInterface
+		}
+
+		return "*" + t.RefName
+	case String:
+		return "null.String"
+	case Value:
+		return emptyInterface
+	case Number:
+		return "null.Int"
+	case BigInt:
+		return "decimal.NullDecimal"
+	case None:
+		return ""
+	case Array:
+		return "[]" + GenerateType(*t.ArrayItem)
+	case Boolean:
+		return "null.Bool"
+	default:
+		return "* " + GenerateType(t)
+	}
 }
 
 func GenerateType(t Type) string {
@@ -186,15 +216,11 @@ func GenerateType(t Type) string {
 			r = t.RefName + ""
 		}
 	case Optional:
-		if t.OptionalInner.Type != Ref || t.OptionalInner.RefName != "Value" {
-			r = "* " + GenerateType(*t.OptionalInner)
-		} else {
-			r = GenerateType(*t.OptionalInner)
-		}
+		r = GenerateOptionalType(*t.OptionalInner)
 	case String:
 		r = "string"
 	case Value:
-		r = "interface{}"
+		r = emptyInterface
 	case Number:
 		r = "int"
 	case None:

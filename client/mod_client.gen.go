@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 13:51:06.67803 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-20 09:37:55.815973 +0000 UTC
 //
 // Mod client
 //
@@ -8,24 +8,25 @@ package client
 
 import (
 	"github.com/shopspring/decimal"
+	"gopkg.in/guregu/null.v4"
 )
 
 type NetworkConfig struct {
-	ServerAddress            string           `json:"server_address"`
-	MessageRetriesCount      *int             `json:"message_retries_count,omitempty"`
-	MessageProcessingTimeout *int             `json:"message_processing_timeout,omitempty"`
-	WaitForTimeout           *int             `json:"wait_for_timeout,omitempty"`
-	OutOfSyncThreshold       *decimal.Decimal `json:"out_of_sync_threshold,omitempty"`
-	AccessKey                *string          `json:"access_key,omitempty"`
+	ServerAddress            string              `json:"server_address"`
+	MessageRetriesCount      null.Int            `json:"message_retries_count"`      // optional
+	MessageProcessingTimeout null.Int            `json:"message_processing_timeout"` // optional
+	WaitForTimeout           null.Int            `json:"wait_for_timeout"`           // optional
+	OutOfSyncThreshold       decimal.NullDecimal `json:"out_of_sync_threshold"`      // optional
+	AccessKey                null.String         `json:"access_key"`                 // optional
 }
 
 type CryptoConfig struct {
-	FishParam *string `json:"fish_param,omitempty"`
+	FishParam null.String `json:"fish_param"` // optional
 }
 
 type AbiConfig struct {
-	MessageExpirationTimeout           *int `json:"message_expiration_timeout,omitempty"`
-	MessageExpirationTimeoutGrowFactor *int `json:"message_expiration_timeout_grow_factor,omitempty"`
+	MessageExpirationTimeout           null.Int `json:"message_expiration_timeout"`             // optional
+	MessageExpirationTimeoutGrowFactor null.Int `json:"message_expiration_timeout_grow_factor"` // optional
 }
 
 type ResultOfVersion struct {

@@ -1,10 +1,14 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 13:51:06.67824 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-20 09:37:55.816179 +0000 UTC
 //
 // Mod crypto
 //
 // Crypto functions.
+
+import (
+	"gopkg.in/guregu/null.v4"
+)
 
 type SigningBoxHandle struct {
 	int `json:""`
@@ -215,7 +219,7 @@ type ParamsOfNaclSecretBoxOpen struct {
 
 type ParamsOfMnemonicWords struct {
 	// dictionary identifier.
-	Dictionary *int `json:"dictionary,omitempty"`
+	Dictionary null.Int `json:"dictionary"` // optional
 }
 
 type ResultOfMnemonicWords struct {
@@ -225,9 +229,9 @@ type ResultOfMnemonicWords struct {
 
 type ParamsOfMnemonicFromRandom struct {
 	// dictionary identifier.
-	Dictionary *int `json:"dictionary,omitempty"`
+	Dictionary null.Int `json:"dictionary"` // optional
 	// mnemonic word count.
-	WordCount *int `json:"word_count,omitempty"`
+	WordCount null.Int `json:"word_count"` // optional
 }
 
 type ResultOfMnemonicFromRandom struct {
@@ -236,9 +240,9 @@ type ResultOfMnemonicFromRandom struct {
 }
 
 type ParamsOfMnemonicFromEntropy struct {
-	Entropy    string `json:"entropy"`
-	Dictionary *int   `json:"dictionary,omitempty"`
-	WordCount  *int   `json:"word_count,omitempty"`
+	Entropy    string   `json:"entropy"`
+	Dictionary null.Int `json:"dictionary"` // optional
+	WordCount  null.Int `json:"word_count"` // optional
 }
 
 type ResultOfMnemonicFromEntropy struct {
@@ -249,9 +253,9 @@ type ParamsOfMnemonicVerify struct {
 	// phrase.
 	Phrase string `json:"phrase"`
 	// dictionary identifier.
-	Dictionary *int `json:"dictionary,omitempty"`
+	Dictionary null.Int `json:"dictionary"` // optional
 	// word count.
-	WordCount *int `json:"word_count,omitempty"`
+	WordCount null.Int `json:"word_count"` // optional
 }
 
 type ResultOfMnemonicVerify struct {
@@ -263,11 +267,11 @@ type ParamsOfMnemonicDeriveSignKeys struct {
 	// phrase.
 	Phrase string `json:"phrase"`
 	// derivation path, for instance "m/44'/396'/0'/0/0".
-	Path *string `json:"path,omitempty"`
+	Path null.String `json:"path"` // optional
 	// dictionary identifier.
-	Dictionary *int `json:"dictionary,omitempty"`
+	Dictionary null.Int `json:"dictionary"` // optional
 	// word count.
-	WordCount *int `json:"word_count,omitempty"`
+	WordCount null.Int `json:"word_count"` // optional
 }
 
 type ParamsOfHDKeyXPrvFromMnemonic struct {

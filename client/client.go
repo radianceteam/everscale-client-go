@@ -6,20 +6,6 @@ import (
 	"github.com/radianceteam/ton-client-go/spec"
 )
 
-func I(v int) *int {
-	r := new(int)
-	*r = v
-
-	return r
-}
-
-func S(v string) *string {
-	r := new(string)
-	*r = v
-
-	return r
-}
-
 type Client struct {
 	dllClient
 }

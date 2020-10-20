@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 13:51:06.679439 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-20 09:37:55.817259 +0000 UTC
 //
 // Mod boc
 //

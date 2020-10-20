@@ -1,12 +1,13 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 2020-10-19 13:51:06.679966 +0000 UTC
+// DON'T EDIT THIS FILE is generated 2020-10-20 09:37:55.817726 +0000 UTC
 //
 // Mod tvm
 //
 
 import (
 	"github.com/shopspring/decimal"
+	"gopkg.in/guregu/null.v4"
 )
 
 type ExecutionMode string
@@ -18,13 +19,13 @@ const (
 
 type ExecutionOptions struct {
 	// boc with config.
-	BlockchainConfig *string `json:"blockchain_config,omitempty"`
+	BlockchainConfig null.String `json:"blockchain_config"` // optional
 	// time that is used as transaction time.
-	BlockTime *int `json:"block_time,omitempty"`
+	BlockTime null.Int `json:"block_time"` // optional
 	// block logical time.
-	BlockLt *decimal.Decimal `json:"block_lt,omitempty"`
+	BlockLt decimal.NullDecimal `json:"block_lt"` // optional
 	// transaction logical time.
-	TransactionLt *decimal.Decimal `json:"transaction_lt,omitempty"`
+	TransactionLt decimal.NullDecimal `json:"transaction_lt"` // optional
 }
 
 type ParamsOfExecuteMessage struct {
@@ -35,7 +36,7 @@ type ParamsOfExecuteMessage struct {
 	// Execution mode.
 	Mode ExecutionMode `json:"mode"`
 	// Execution options.
-	ExecutionOptions *ExecutionOptions `json:"execution_options,omitempty"`
+	ExecutionOptions *ExecutionOptions `json:"execution_options"` // optional
 }
 
 type ResultOfExecuteMessage struct {
@@ -44,7 +45,7 @@ type ResultOfExecuteMessage struct {
 	// In addition to the regular transaction fields there is a
 	// `boc` field encoded with `base64` which contains source
 	// transaction BOC.
-	Transaction interface{} `json:"transaction,omitempty"`
+	Transaction interface{} `json:"transaction"` // optional
 	// List of parsed output messages.
 	//
 	// Similar to the `transaction` each message contains the `boc`
@@ -52,17 +53,17 @@ type ResultOfExecuteMessage struct {
 	OutMessages []interface{} `json:"out_messages"`
 	// Optional decoded message bodies according to the optional
 	// `abi` parameter.
-	Decoded *DecodedOutput `json:"decoded,omitempty"`
+	Decoded *DecodedOutput `json:"decoded"` // optional
 	// JSON with parsed updated account state. Attention! When used in
 	// `TvmOnly` mode only data in account state is updated.
-	Account interface{} `json:"account,omitempty"`
+	Account interface{} `json:"account"` // optional
 }
 
 type ParamsOfExecuteGet struct {
 	Account          string            `json:"account"`
 	FunctionName     string            `json:"function_name"`
-	Input            interface{}       `json:"input,omitempty"`
-	ExecutionOptions *ExecutionOptions `json:"execution_options,omitempty"`
+	Input            interface{}       `json:"input"`             // optional
+	ExecutionOptions *ExecutionOptions `json:"execution_options"` // optional
 }
 
 type ResultOfExecuteGet struct {
