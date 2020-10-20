@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"unsafe"
+
+	"go.uber.org/zap"
 )
 
 // #cgo CFLAGS: -I${SRCDIR}
@@ -64,8 +66,13 @@ func newDLLResponse(data C.tc_string_data_t, responseType C.uint32_t) *dllRespon
 }
 
 //export callbackProxy
-func callbackProxy(requestID C.uint32_t, data C.tc_string_data_t, responseType C.uint32_t, finished C.bool) {
-	responses, closeSignal, isFound := globalMultiplexer.GetChannels(uint32(requestID), bool(finished))
+func callbackProxy(requestIDRaw C.uint32_t, data C.tc_string_data_t, responseType C.uint32_t, finishedRaw C.bool) {
+	requestID := uint32(requestIDRaw)
+	finished := bool(finishedRaw)
+	zap.L().Debug("new message",
+		zap.Uint32("request_id", requestID),
+		zap.Bool("finished", finished))
+	responses, closeSignal, isFound := globalMultiplexer.GetChannels(requestID, finished)
 	if !isFound {
 		// ignore not found maybe some will be send after close
 		return
@@ -73,12 +80,12 @@ func callbackProxy(requestID C.uint32_t, data C.tc_string_data_t, responseType C
 
 	select {
 	case responses <- newDLLResponse(data, responseType):
-		if bool(finished) {
+		if finished {
 			close(responses)
 		}
 	case <-closeSignal:
 		close(responses)
-		globalMultiplexer.DeleteByRequestID(uint32(requestID))
+		globalMultiplexer.DeleteByRequestID(requestID)
 	}
 }
 
