@@ -21,6 +21,10 @@ On Linux one need also provide search path for DLL loader:
 ```shell script
 export LD_LIBRARY_PATH=/path-to-installation/TON-SDK/target/release/deps/
 ```
+## Wrapper usage 
+
+For examples see `cmd/cli/main.go` and run it via `go run ./cmd/cli`
+
 ## Tests
 
 ```shell script
@@ -45,3 +49,4 @@ one can regenerate it via `task generate`.
 
 - https://eli.thegreenplace.net/2019/passing-callbacks-and-pointers-to-cgo/
 - https://dev.to/mattn/call-go-function-from-c-function-1n3
+- https://docs.ton.dev/86757ecb2/p/71d7a8-samples/t/35f373 - example how to use GraphQL

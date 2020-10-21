@@ -36,9 +36,15 @@ func NewClient(config Config) (*Client, error) {
 	return &Client{dllClient: dllClient}, nil
 }
 
+// ClientGetAPIReference loads and parses JSON API spec.
 func (c *Client) ClientGetAPIReference() (*spec.APIReference, error) {
 	response := new(spec.APIReference)
 	err := c.dllClient.waitErrorOrResultUnmarshal("client.get_api_reference", nil, response)
 
 	return response, err
+}
+
+// NetQueryCollectionRaw gives ability to unmarshall raw data yourself.
+func (c *Client) NetQueryCollectionRaw(p *ParamsOfQueryCollection) ([]byte, error) {
+	return c.dllClient.waitErrorOrResult("net.query_collection", p)
 }
