@@ -23,7 +23,9 @@ export LD_LIBRARY_PATH=/path-to-installation/TON-SDK/target/release/deps/
 ```
 ## Wrapper usage 
 
-For examples see `cmd/cli/main.go` and run it via `go run ./cmd/cli`
+For examples see `cmd/cli/main.go` and run it via `go run ./cmd/cli`. 
+This wrapper covers 100% of functionality for TON-SDK.
+All non-generated code has test coverage at least of 70% - one can see it via `task coverage`.
 
 ## Tests
 
