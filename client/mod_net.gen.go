@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 20 Oct 20 13:40 UTC
+// DON'T EDIT THIS FILE is generated 24 Oct 20 12:36 UTC
 //
 // Mod net
 //
@@ -23,54 +23,58 @@ const (
 )
 
 type ParamsOfQueryCollection struct {
-	// collection name (accounts, blocks, transactions, messages, block_signatures).
+	// Collection name (accounts, blocks, transactions, messages, block_signatures).
 	Collection string `json:"collection"`
-	// collection filter.
+	// Collection filter.
 	Filter interface{} `json:"filter"` // optional
-	// projection (result) string.
+	// Projection (result) string.
 	Result string `json:"result"`
-	// sorting order.
+	// Sorting order.
 	Order []OrderBy `json:"order"` // optional
-	// number of documents to return.
+	// Number of documents to return.
 	Limit null.Int `json:"limit"` // optional
 }
 
 type ResultOfQueryCollection struct {
-	// objects that match provided criteria.
+	// Objects that match the provided criteria.
 	Result []interface{} `json:"result"`
 }
 
 type ParamsOfWaitForCollection struct {
-	// collection name (accounts, blocks, transactions, messages, block_signatures).
+	// Collection name (accounts, blocks, transactions, messages, block_signatures).
 	Collection string `json:"collection"`
-	// collection filter.
+	// Collection filter.
 	Filter interface{} `json:"filter"` // optional
-	// projection (result) string.
+	// Projection (result) string.
 	Result string `json:"result"`
-	// query timeout.
+	// Query timeout.
 	Timeout null.Int `json:"timeout"` // optional
 }
 
 type ResultOfWaitForCollection struct {
-	// first found object that match provided criteria.
+	// First found object that matches the provided criteria.
 	Result interface{} `json:"result"`
 }
 
 type ResultOfSubscribeCollection struct {
-	// handle to subscription. It then can be used in `get_next_subscription_data` function
-	// and must be closed with `unsubscribe`.
+	// Subscription handle. Must be closed with `unsubscribe`.
 	Handle int `json:"handle"`
 }
 
 type ParamsOfSubscribeCollection struct {
-	// collection name (accounts, blocks, transactions, messages, block_signatures).
+	// Collection name (accounts, blocks, transactions, messages, block_signatures).
 	Collection string `json:"collection"`
-	// collection filter.
+	// Collection filter.
 	Filter interface{} `json:"filter"` // optional
-	// projection (result) string.
+	// Projection (result) string.
 	Result string `json:"result"`
 }
 
+// Queries collection data
+//
+// Queries data that satisfies the `filter` conditions,
+// limits the number of returned records and orders them.
+// The projection fields are limited to  `result` fields.
 func (c *Client) NetQueryCollection(p *ParamsOfQueryCollection) (*ResultOfQueryCollection, error) {
 	response := new(ResultOfQueryCollection)
 	err := c.dllClient.waitErrorOrResultUnmarshal("net.query_collection", p, response)
@@ -78,6 +82,14 @@ func (c *Client) NetQueryCollection(p *ParamsOfQueryCollection) (*ResultOfQueryC
 	return response, err
 }
 
+// Returns an object that fulfills the conditions or waits for its appearance
+//
+// Triggers only once.
+// If object that satisfies the `filter` conditions
+// already exists - returns it immediately.
+// If not - waits for insert/update of data withing the specified `timeout`,
+// and returns it.
+// The projection fields are limited to  `result` fields.
 func (c *Client) NetWaitForCollection(p *ParamsOfWaitForCollection) (*ResultOfWaitForCollection, error) {
 	response := new(ResultOfWaitForCollection)
 	err := c.dllClient.waitErrorOrResultUnmarshal("net.wait_for_collection", p, response)
@@ -85,6 +97,9 @@ func (c *Client) NetWaitForCollection(p *ParamsOfWaitForCollection) (*ResultOfWa
 	return response, err
 }
 
+// Cancels a subscription
+//
+// Cancels a subscription specified by its handle.
 func (c *Client) NetUnsubscribe(p *ResultOfSubscribeCollection) error {
 	_, err := c.dllClient.waitErrorOrResult("net.unsubscribe", p)
 

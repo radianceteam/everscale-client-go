@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 20 Oct 20 13:40 UTC
+// DON'T EDIT THIS FILE is generated 24 Oct 20 12:36 UTC
 //
 // Mod boc
 //
@@ -26,6 +26,9 @@ type ResultOfGetBlockchainConfig struct {
 	ConfigBoc string `json:"config_boc"`
 }
 
+// Parses message boc into a JSON
+//
+// JSON structure is compatible with GraphQL API message object.
 func (c *Client) BocParseMessage(p *ParamsOfParse) (*ResultOfParse, error) {
 	response := new(ResultOfParse)
 	err := c.dllClient.waitErrorOrResultUnmarshal("boc.parse_message", p, response)
@@ -33,6 +36,9 @@ func (c *Client) BocParseMessage(p *ParamsOfParse) (*ResultOfParse, error) {
 	return response, err
 }
 
+// Parses transaction boc into a JSON
+//
+// JSON structure is compatible with GraphQL API transaction object.
 func (c *Client) BocParseTransaction(p *ParamsOfParse) (*ResultOfParse, error) {
 	response := new(ResultOfParse)
 	err := c.dllClient.waitErrorOrResultUnmarshal("boc.parse_transaction", p, response)
@@ -40,6 +46,9 @@ func (c *Client) BocParseTransaction(p *ParamsOfParse) (*ResultOfParse, error) {
 	return response, err
 }
 
+// Parses account boc into a JSON
+//
+// JSON structure is compatible with GraphQL API account object.
 func (c *Client) BocParseAccount(p *ParamsOfParse) (*ResultOfParse, error) {
 	response := new(ResultOfParse)
 	err := c.dllClient.waitErrorOrResultUnmarshal("boc.parse_account", p, response)
@@ -47,6 +56,9 @@ func (c *Client) BocParseAccount(p *ParamsOfParse) (*ResultOfParse, error) {
 	return response, err
 }
 
+// Parses block boc into a JSON
+//
+// JSON structure is compatible with GraphQL API block object.
 func (c *Client) BocParseBlock(p *ParamsOfParse) (*ResultOfParse, error) {
 	response := new(ResultOfParse)
 	err := c.dllClient.waitErrorOrResultUnmarshal("boc.parse_block", p, response)

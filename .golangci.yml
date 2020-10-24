@@ -8,6 +8,7 @@ linters:
     - testpackage
     - nolintlint
     - godox
+    - misspell
   enable-all: true
 linters-settings:
   goimports:

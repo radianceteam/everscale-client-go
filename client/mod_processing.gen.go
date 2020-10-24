@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 20 Oct 20 13:40 UTC
+// DON'T EDIT THIS FILE is generated 24 Oct 20 12:36 UTC
 //
 // Mod processing
 //
@@ -18,14 +18,13 @@ type ResultOfProcessMessage struct {
 	// `boc` field encoded with `base64` which contains source
 	// transaction BOC.
 	Transaction interface{} `json:"transaction"`
-	// List of parsed output messages.
-	//
-	// Similar to the `transaction` each message contains the `boc`
-	// field.
-	OutMessages []interface{} `json:"out_messages"`
+	// List of output messages' BOCs. Encoded as `base64`.
+	OutMessages []string `json:"out_messages"`
 	// Optional decoded message bodies according to the optional
 	// `abi` parameter.
 	Decoded *DecodedOutput `json:"decoded"` // optional
+	// Transaction fees.
+	Fees TransactionFees `json:"fees"`
 }
 
 type DecodedOutput struct {
@@ -45,7 +44,7 @@ type ParamsOfSendMessage struct {
 	//
 	// If this parameter is specified and the message has the
 	// `expire` header then expiration time will be checked against
-	// the current time to prevent an unnecessary sending.
+	// the current time to prevent an unnecessary sending of already expired message.
 	//
 	// The `message already expired` error will be returned in this
 	// case.
@@ -59,8 +58,8 @@ type ParamsOfSendMessage struct {
 }
 
 type ResultOfSendMessage struct {
-	// Shard block related to the message dst account before the
-	// message had been sent.
+	// The last generated shard block of the message destination account before the
+	// message was sent.
 	//
 	// This block id must be used as a parameter of the
 	// `wait_for_transaction`.
@@ -68,27 +67,26 @@ type ResultOfSendMessage struct {
 }
 
 type ParamsOfWaitForTransaction struct {
-	// Optional ABI for decoding transaction results.
+	// Optional ABI for decoding the transaction result.
 	//
-	// If it is specified then the output messages bodies will be
+	// If it is specified then the output messages' bodies will be
 	// decoded according to this ABI.
 	//
 	// The `abi_decoded` result field will be filled out.
 	Abi *Abi `json:"abi"` // optional
 	// Message BOC. Encoded with `base64`.
 	Message string `json:"message"`
-	// Dst account shard block id before the message had been sent.
+	// The last generated block id of the destination account shard before the message was sent.
 	//
-	// You must provide the same value as the `send_message` has
-	// returned.
+	// You must provide the same value as the `send_message` has returned.
 	ShardBlockID string `json:"shard_block_id"`
-	// Flag for requesting events sending.
+	// Flag that enables/disables intermediate events.
 	SendEvents bool `json:"send_events"`
 }
 
 type ParamsOfProcessMessage struct {
-	// Message source.
-	Message MessageSource `json:"message"`
+	// Message encode parameters.
+	MessageEncodeParams ParamsOfEncodeMessage `json:"message_encode_params"`
 	// Flag for requesting events sending.
 	SendEvents bool `json:"send_events"`
 }

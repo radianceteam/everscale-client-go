@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"gopkg.in/guregu/null.v4"
 )
 
 func init() {
@@ -20,7 +21,7 @@ func init() {
 func TestModClient(t *testing.T) {
 	a := assert.New(t)
 	c, err := NewClient(Config{
-		Network: NetworkConfig{ServerAddress: "net.ton.dev"},
+		Network: NetworkConfig{ServerAddress: null.StringFrom("net.ton.dev")},
 	})
 	if err == nil {
 		defer c.Close()

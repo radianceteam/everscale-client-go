@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 20 Oct 20 13:40 UTC
+// DON'T EDIT THIS FILE is generated 24 Oct 20 12:36 UTC
 //
 // Mod abi
 //
@@ -28,20 +28,20 @@ type FunctionHeader struct {
 }
 
 type CallSet struct {
-	// Function name.
+	// Function name that is being called.
 	FunctionName string `json:"function_name"`
 	// Function header.
 	//
-	// If an application omit some parameters required by the
+	// If an application omits some header parameters required by the
 	// contract's ABI, the library will set the default values for
-	// it.
+	// them.
 	Header *FunctionHeader `json:"header"` // optional
-	// Function input according to ABI.
+	// Function input parameters according to ABI.
 	Input interface{} `json:"input"` // optional
 }
 
 type DeploySet struct {
-	// Content of TVC file. Must be encoded with `base64`.
+	// Content of TVC file encoded in `base64`.
 	Tvc string `json:"tvc"`
 	// Target workchain for destination address. Default is `0`.
 	WorkchainID null.Int `json:"workchain_id"` // optional
@@ -124,9 +124,9 @@ type ResultOfAttachSignatureToMessageBody struct {
 type ParamsOfEncodeMessage struct {
 	// Contract ABI.
 	Abi Abi `json:"abi"`
-	// Contract address.
+	// Target address the message will be sent to.
 	//
-	// Must be specified in case of non deploy message.
+	// Must be specified in case of non-deploy message.
 	Address null.String `json:"address"` // optional
 	// Deploy parameters.
 	//
@@ -134,20 +134,24 @@ type ParamsOfEncodeMessage struct {
 	DeploySet *DeploySet `json:"deploy_set"` // optional
 	// Function call parameters.
 	//
-	// Must be specified in non deploy message.
+	// Must be specified in case of non-deploy message.
 	//
-	// In case of deploy message contains parameters of constructor.
+	// In case of deploy message it is optional and contains parameters
+	// of the functions that will to be called upon deploy transaction.
 	CallSet *CallSet `json:"call_set"` // optional
 	// Signing parameters.
 	Signer Signer `json:"signer"`
 	// Processing try index.
 	//
-	// Used in message processing with retries.
+	// Used in message processing with retries (if contract's ABI includes "expire" header).
 	//
 	// Encoder uses the provided try index to calculate message
-	// expiration time.
+	// expiration time. The 1st message expiration time is specified in
+	// Client config.
 	//
 	// Expiration timeouts will grow with every retry.
+	// Retry grow factor is set in Client config:
+	// <.....add config parameter with default value here>
 	//
 	// Default value is 0.
 	ProcessingTryIndex null.Int `json:"processing_try_index"` // optional
@@ -156,11 +160,11 @@ type ParamsOfEncodeMessage struct {
 type ResultOfEncodeMessage struct {
 	// Message BOC encoded with `base64`.
 	Message string `json:"message"`
-	// Optional data to sign. Encoded with `base64`.
+	// Optional data to be signed encoded in `base64`.
 	//
-	// Presents when `message` is unsigned. Can be used for external
-	// message signing. Is this case you need to sing this data and
-	// produce signed message using `abi.attach_signature`.
+	// Returned in case of `Signer::External`. Can be used for external
+	// message signing. Is this case you need to use this data to create signature and
+	// then produce signed message using `abi.attach_signature`.
 	DataToSign null.String `json:"data_to_sign"` // optional
 	// Destination address.
 	Address string `json:"address"`
@@ -171,16 +175,18 @@ type ResultOfEncodeMessage struct {
 type ParamsOfAttachSignature struct {
 	// Contract ABI.
 	Abi Abi `json:"abi"`
-	// Public key. Must be encoded with `hex`.
+	// Public key encoded in `hex`.
 	PublicKey string `json:"public_key"`
-	// Unsigned message BOC. Must be encoded with `base64`.
+	// Unsigned message BOC encoded in `base64`.
 	Message string `json:"message"`
-	// Signature. Must be encoded with `hex`.
+	// Signature encoded in `hex`.
 	Signature string `json:"signature"`
 }
 
 type ResultOfAttachSignature struct {
-	Message   string `json:"message"`
+	// Signed message BOC.
+	Message string `json:"message"`
+	// Message ID.
 	MessageID string `json:"message_id"`
 }
 
@@ -205,7 +211,7 @@ type DecodedMessageBody struct {
 type ParamsOfDecodeMessageBody struct {
 	// Contract ABI used to decode.
 	Abi Abi `json:"abi"`
-	// Message body BOC. Must be encoded with `base64`.
+	// Message body BOC encoded in `base64`.
 	Body string `json:"body"`
 	// True if the body belongs to the internal message.
 	IsInternal bool `json:"is_internal"`
@@ -223,9 +229,9 @@ type ParamsOfEncodeAccount struct {
 }
 
 type ResultOfEncodeAccount struct {
-	// Account BOC. Encoded with `base64`.
+	// Account BOC encoded in `base64`.
 	Account string `json:"account"`
-	// Account id. Encoded with `hex`.
+	// Account ID  encoded in `hex`.
 	ID string `json:"id"`
 }
 
@@ -244,6 +250,30 @@ func (c *Client) AbiAttachSignatureToMessageBody(p *ParamsOfAttachSignatureToMes
 	return response, err
 }
 
+// Encodes an ABI-compatible message
+//
+// Allows to encode deploy and function call messages,
+// both signed and unsigned.
+//
+// Use cases include messages of any possible type:
+// - deploy with initial function call (i.e. `constructor` or any other function that is used for some kind
+// of initialization);
+// - deploy without initial function call;
+// - signed/unsigned + data for signing.
+//
+// `Signer` defines how the message should or shouldn't be signed:
+//
+// `Signer::None` creates an unsigned message. This may be needed in case of some public methods,
+// that do not require authorization by pubkey.
+//
+// `Signer::External` takes public key and returns `data_to_sign` for later signing.
+// Use `attach_signature` method with the result signature to get the signed message.
+//
+// `Signer::Keys` creates a signed message with provided key pair.
+//
+// [SOON] `Signer::SigningBox` Allows using a special interface to imlepement signing
+// without private key disclosure to SDK. For instance, in case of using a cold wallet or HSM,
+// when application calls some API to sign data.
 func (c *Client) AbiEncodeMessage(p *ParamsOfEncodeMessage) (*ResultOfEncodeMessage, error) {
 	response := new(ResultOfEncodeMessage)
 	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_message", p, response)
@@ -251,6 +281,8 @@ func (c *Client) AbiEncodeMessage(p *ParamsOfEncodeMessage) (*ResultOfEncodeMess
 	return response, err
 }
 
+// Combines `hex`-encoded `signature` with `base64`-encoded `unsigned_message`.
+// Returns signed message encoded in `base64`.
 func (c *Client) AbiAttachSignature(p *ParamsOfAttachSignature) (*ResultOfAttachSignature, error) {
 	response := new(ResultOfAttachSignature)
 	err := c.dllClient.waitErrorOrResultUnmarshal("abi.attach_signature", p, response)
@@ -274,7 +306,11 @@ func (c *Client) AbiDecodeMessageBody(p *ParamsOfDecodeMessageBody) (*DecodedMes
 	return response, err
 }
 
-// Encodes account state as it will be.
+// Creates account state BOC
+//
+// Creates account state provided with one of these sets of data :
+// 1. BOC of code, BOC of data, BOC of library
+// 2. TVC (string in `base64`), keys, init params.
 func (c *Client) AbiEncodeAccount(p *ParamsOfEncodeAccount) (*ResultOfEncodeAccount, error) {
 	response := new(ResultOfEncodeAccount)
 	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_account", p, response)

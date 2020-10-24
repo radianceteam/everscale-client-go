@@ -14,7 +14,7 @@ import (
 
 func newClient() (*client.Client, error) {
 	return client.NewClient(client.Config{
-		Network: client.NetworkConfig{ServerAddress: "net.ton.dev"},
+		Network: client.NetworkConfig{ServerAddress: null.StringFrom("net.ton.dev")},
 	})
 }
 
