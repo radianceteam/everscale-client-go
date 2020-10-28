@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 24 Oct 20 12:36 UTC
+// DON'T EDIT THIS FILE is generated 28 Oct 20 08:23 UTC
 //
 // Mod crypto
 //
@@ -285,6 +285,10 @@ type ParamsOfMnemonicDeriveSignKeys struct {
 type ParamsOfHDKeyXPrvFromMnemonic struct {
 	// String with seed phrase.
 	Phrase string `json:"phrase"`
+	// Dictionary identifier.
+	Dictionary null.Int `json:"dictionary"` // optional
+	// Mnemonic word count.
+	WordCount null.Int `json:"word_count"` // optional
 }
 
 type ResultOfHDKeyXPrvFromMnemonic struct {

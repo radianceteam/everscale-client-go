@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 24 Oct 20 12:36 UTC
+// DON'T EDIT THIS FILE is generated 28 Oct 20 08:23 UTC
 //
 // Mod tvm
 //
@@ -21,15 +21,19 @@ type ExecutionOptions struct {
 	TransactionLt decimal.NullDecimal `json:"transaction_lt"` // optional
 }
 
+type AccountForExecutor interface{}
+
 type ParamsOfRunExecutor struct {
 	// Input message BOC. Must be encoded as base64.
 	Message string `json:"message"`
-	// Account BOC. Must be encoded as base64.
-	Account null.String `json:"account"` // optional
+	// Account to run on executor.
+	Account AccountForExecutor `json:"account"`
 	// Execution options.
 	ExecutionOptions *ExecutionOptions `json:"execution_options"` // optional
-	// Contract ABI for dedcoding output messages.
+	// Contract ABI for decoding output messages.
 	Abi *Abi `json:"abi"` // optional
+	// Skip transaction check flag.
+	SkipTransactionCheck null.Bool `json:"skip_transaction_check"` // optional
 }
 
 type ResultOfRunExecutor struct {

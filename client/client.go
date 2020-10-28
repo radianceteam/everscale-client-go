@@ -18,9 +18,9 @@ func (c *Client) Close() {
 }
 
 type Config struct {
-	Crypto  CryptoConfig  `json:"crypto"`
-	ABI     AbiConfig     `json:"abi"`
-	Network NetworkConfig `json:"network"`
+	Crypto  *CryptoConfig  `json:"crypto,omitempty"`
+	ABI     *AbiConfig     `json:"abi,omitempty"`
+	Network *NetworkConfig `json:"network,omitempty"`
 }
 
 func NewClient(config Config) (*Client, error) {

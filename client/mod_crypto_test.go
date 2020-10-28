@@ -10,7 +10,7 @@ import (
 
 func newTestClient() *Client {
 	c, err := NewClient(Config{
-		Network: NetworkConfig{ServerAddress: null.StringFrom("net.ton.dev")},
+		Network: &NetworkConfig{ServerAddress: null.StringFrom("net.ton.dev")},
 	})
 	if err != nil {
 		panic(err)
