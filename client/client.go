@@ -56,16 +56,39 @@ func (c *Client) NetQueryCollectionRaw(p *ParamsOfQueryCollection) ([]byte, erro
 // Triggers for each insert/update of data
 // that satisfies the `filter` conditions.
 // The projection fields are limited to `result` fields.
-func (c *Client) NetSubscribeCollection(p *ParamsOfSubscribeCollection) (*ResultOfSubscribeCollection, error) {
-	return nil, nil
+func (c *Client) NetSubscribeCollection(p *ParamsOfSubscribeCollection) (<-chan *RawResponse, *ResultOfSubscribeCollection, error) {
+	responses, err := c.dllClient.resultsChannel("net.subscribe_collection", p)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	data := <-responses
+	if data.Error != nil {
+		return nil, nil, data.Error
+	}
+	result := &ResultOfSubscribeCollection{}
+	if err := json.Unmarshal(data.Data, result); err != nil {
+		return nil, nil, err
+	}
+
+	return NewDynamicallyBufferedResponses(responses), result, nil
 }
 
 // ProcessingSendMessage Sends message to the network
 //
-// Sends message to the network and returns the last generated shard block of the destination account
+// Sends message to the network and returns the last generated shard block
+// (unmarshall to ResultOfSendMessage) of the destination account
 // before the message was sent. It will be required later for message processing.
-func (c *Client) ProcessingSendMessage(p *ParamsOfSendMessage) error {
-	return nil
+func (c *Client) ProcessingSendMessage(p *ParamsOfSendMessage) (<-chan *RawResponse, error) {
+	responses, err := c.dllClient.resultsChannel("processing.send_message", p)
+	if err != nil {
+		return nil, err
+	}
+	if p.SendEvents {
+		responses = NewDynamicallyBufferedResponses(responses)
+	}
+
+	return responses, err
 }
 
 // ProcessingWaitForTransaction Performs monitoring of the network for the result transaction
@@ -95,8 +118,16 @@ func (c *Client) ProcessingSendMessage(p *ParamsOfSendMessage) error {
 //
 // - If maximum block gen time is reached and no result transaction is found
 // the processing will exit with an error.
-func (c *Client) ProcessingWaitForTransaction(p *ParamsOfWaitForTransaction) error {
-	return nil
+func (c *Client) ProcessingWaitForTransaction(p *ParamsOfWaitForTransaction) (<-chan *RawResponse, error) {
+	responses, err := c.dllClient.resultsChannel("processing.wait_for_transaction", p)
+	if err != nil {
+		return nil, err
+	}
+	if p.SendEvents {
+		responses = NewDynamicallyBufferedResponses(responses)
+	}
+
+	return responses, err
 }
 
 // ProcessingProcessMessage Creates message, sends it to the network and monitors its processing.
@@ -120,6 +151,14 @@ func (c *Client) ProcessingWaitForTransaction(p *ParamsOfWaitForTransaction) err
 //
 // If contract's ABI does not include "expire" header
 // then if no transaction is found within the network timeout (see config parameter ), exits with error.
-func (c *Client) ProcessingProcessMessage(p *ParamsOfProcessMessage) error {
-	return nil
+func (c *Client) ProcessingProcessMessage(p *ParamsOfProcessMessage) (<-chan *RawResponse, error) {
+	responses, err := c.dllClient.resultsChannel("processing.process_message", p)
+	if err != nil {
+		return nil, err
+	}
+	if p.SendEvents {
+		responses = NewDynamicallyBufferedResponses(responses)
+	}
+
+	return responses, err
 }

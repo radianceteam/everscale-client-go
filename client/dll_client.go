@@ -45,9 +45,9 @@ func newBytesFromTcStr(data C.tc_string_data_t) []byte {
 	return C.GoBytes(unsafe.Pointer(data.content), C.int(data.len)) // nolint nlreturn
 }
 
-func newDLLResponse(data C.tc_string_data_t, responseType C.uint32_t) *dllResponse {
+func newDLLResponse(data C.tc_string_data_t, responseType C.uint32_t) *RawResponse {
 	rawBytes := newBytesFromTcStr(data)
-	res := &dllResponse{
+	res := &RawResponse{
 		Code: int(responseType),
 	}
 	if responseType == C.tc_response_error {
@@ -89,7 +89,7 @@ func callbackProxy(requestIDRaw C.uint32_t, data C.tc_string_data_t, responseTyp
 	}
 }
 
-type dllResponse struct {
+type RawResponse struct {
 	Data  []byte
 	Code  int
 	Error error
@@ -98,6 +98,7 @@ type dllResponse struct {
 type dllClient interface {
 	waitErrorOrResult(method string, body interface{}) ([]byte, error)
 	waitErrorOrResultUnmarshal(method string, body interface{}, dst interface{}) error
+	resultsChannel(method string, body interface{}) (<-chan *RawResponse, error)
 	close()
 }
 
@@ -150,7 +151,7 @@ func (c *dllClientCtx) waitErrorOrResultUnmarshal(method string, body interface{
 	return json.Unmarshal(rawData, dst)
 }
 
-func (c *dllClientCtx) waitErrorOrResult(method string, body interface{}) ([]byte, error) {
+func (c *dllClientCtx) resultsChannel(method string, body interface{}) (<-chan *RawResponse, error) {
 	var rawBody []byte
 	if body != nil {
 		var err error
@@ -160,14 +161,20 @@ func (c *dllClientCtx) waitErrorOrResult(method string, body interface{}) ([]byt
 		}
 	}
 
-	responses := make(chan *dllResponse, 1) // need 1 because of deadlock when async implemented in sync way
+	responses := make(chan *RawResponse, 1) // need 1 because of deadlock when async implemented in sync way
 	requestID := globalMultiplexer.SetChannels(responses, c.closeSignal)
 	// TODO maybe add global worker pool later for CGO calls
 	C.call_tc_request(c.ctx, newTcStr([]byte(method)), newTcStr(rawBody), C.uint32_t(requestID))
-	var (
-		err  error
-		data []byte
-	)
+
+	return responses, nil
+}
+
+func (c *dllClientCtx) waitErrorOrResult(method string, body interface{}) ([]byte, error) {
+	responses, err := c.resultsChannel(method, body)
+	if err != nil {
+		return nil, err
+	}
+	var data []byte
 
 	for {
 		select {

@@ -6,7 +6,7 @@ import "sync"
 var globalMultiplexer = NewMultiplexer()
 
 type channelPair struct {
-	responses chan<- *dllResponse
+	responses chan<- *RawResponse
 	close     <-chan struct{}
 }
 
@@ -22,7 +22,7 @@ func (m *multiplexer) DeleteByRequestID(requestID uint32) {
 	delete(m.callbacks, requestID)
 }
 
-func (m *multiplexer) SetChannels(responses chan<- *dllResponse, close <-chan struct{}) uint32 {
+func (m *multiplexer) SetChannels(responses chan<- *RawResponse, close <-chan struct{}) uint32 {
 	m.Lock()
 	defer m.Unlock()
 	m.requestIDCounter++
@@ -35,7 +35,7 @@ func (m *multiplexer) SetChannels(responses chan<- *dllResponse, close <-chan st
 	return requestID
 }
 
-func (m *multiplexer) GetChannels(requestID uint32, toDelete bool) (chan<- *dllResponse, <-chan struct{}, bool) {
+func (m *multiplexer) GetChannels(requestID uint32, toDelete bool) (chan<- *RawResponse, <-chan struct{}, bool) {
 	m.Lock()
 	defer m.Unlock()
 	pair, isFound := m.callbacks[requestID]
@@ -47,9 +47,9 @@ func (m *multiplexer) GetChannels(requestID uint32, toDelete bool) (chan<- *dllR
 }
 
 type Multiplexer interface {
-	SetChannels(chan<- *dllResponse, <-chan struct{}) uint32
+	SetChannels(chan<- *RawResponse, <-chan struct{}) uint32
 	DeleteByRequestID(uint32)
-	GetChannels(requestID uint32, delete bool) (chan<- *dllResponse, <-chan struct{}, bool)
+	GetChannels(requestID uint32, delete bool) (chan<- *RawResponse, <-chan struct{}, bool)
 }
 
 func NewMultiplexer() Multiplexer {
