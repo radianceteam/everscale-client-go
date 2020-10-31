@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 28 Oct 20 08:23 UTC
+// DON'T EDIT THIS FILE is generated 31 Oct 20 20:13 UTC
 //
 // Mod tvm
 //
@@ -21,7 +21,14 @@ type ExecutionOptions struct {
 	TransactionLt decimal.NullDecimal `json:"transaction_lt"` // optional
 }
 
-type AccountForExecutor interface{}
+type AccountForExecutor struct {
+	Type string `json:"type"`
+	// Account BOC. Encoded as base64.
+	Boc string `json:"boc"`
+	// Flag for running account with the unlimited balance. Can be used to calculate
+	// transaction fees without balance check.
+	UnlimitedBalance null.Bool `json:"unlimited_balance"` // optional
+}
 
 type ParamsOfRunExecutor struct {
 	// Input message BOC. Must be encoded as base64.

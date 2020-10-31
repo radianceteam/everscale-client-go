@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 28 Oct 20 08:23 UTC
+// DON'T EDIT THIS FILE is generated 31 Oct 20 20:13 UTC
 //
 // Mod processing
 //
@@ -9,7 +9,13 @@ package client
 // This module incorporates functions related to complex message
 // processing scenarios.
 
-type ProcessingEvent interface{}
+type ProcessingEvent struct {
+	Type         string      `json:"type"`
+	Error        ClientError `json:"error"`
+	ShardBlockID string      `json:"shard_block_id"`
+	MessageID    string      `json:"message_id"`
+	Message      string      `json:"message"`
+}
 
 type ResultOfProcessMessage struct {
 	// Parsed transaction.

@@ -9,6 +9,7 @@ linters:
     - nolintlint
     - godox
     - misspell
+    - maligned
   enable-all: true
 linters-settings:
   goimports:

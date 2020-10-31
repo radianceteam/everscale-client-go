@@ -4,13 +4,13 @@ import (
 	"fmt"
 )
 
-type ErrorSDK struct {
+type ClientError struct { // nolint golint
 	Code    int         `json:"code"`
 	Message string      `json:"message"`
 	Data    interface{} `json:"data"`
 }
 
-func (e *ErrorSDK) Error() string {
+func (e *ClientError) Error() string {
 	if e == nil {
 		return ""
 	}

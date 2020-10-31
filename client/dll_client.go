@@ -51,7 +51,7 @@ func newDLLResponse(data C.tc_string_data_t, responseType C.uint32_t) *RawRespon
 		Code: int(responseType),
 	}
 	if responseType == C.tc_response_error {
-		var sdkErr ErrorSDK
+		var sdkErr ClientError
 		err := json.Unmarshal(rawBytes, &sdkErr)
 		if err != nil {
 			res.Error = err
@@ -116,8 +116,8 @@ type dllClientCtx struct {
 }
 
 type contextCreateResponse struct {
-	Result uint32    `json:"result"`
-	Error  *ErrorSDK `json:"error"`
+	Result uint32       `json:"result"`
+	Error  *ClientError `json:"error"`
 }
 
 func (c *dllClientCtx) createContext(data []byte) error {

@@ -41,6 +41,7 @@ type Type struct {
 	ArrayItem     *Type         `json:"array_item,omitempty"`
 	StructFields  []Type        `json:"struct_fields,omitempty"`
 	EnumConsts    []Description `json:"enum_consts,omitempty"`
+	EnumTypes     []Type        `json:"enum_types"`
 }
 
 type Function struct {

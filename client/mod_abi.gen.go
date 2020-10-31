@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 28 Oct 20 08:23 UTC
+// DON'T EDIT THIS FILE is generated 31 Oct 20 20:13 UTC
 //
 // Mod abi
 //
@@ -12,10 +12,11 @@ import (
 	"gopkg.in/guregu/null.v4"
 )
 
-type Abi interface{}
+type Abi struct {
+	Type string `json:"type"`
+}
 
 type AbiHandle struct {
-	int `json:""`
 }
 
 type FunctionHeader struct {
@@ -49,7 +50,12 @@ type DeploySet struct {
 	InitialData interface{} `json:"initial_data"` // optional
 }
 
-type Signer interface{}
+type Signer struct {
+	Type      string           `json:"type"`
+	PublicKey string           `json:"public_key"`
+	Keys      KeyPair          `json:"keys"`
+	Handle    SigningBoxHandle `json:"handle"`
+}
 
 type MessageBodyType string
 
@@ -60,14 +66,30 @@ const (
 	Event          MessageBodyType = "Event"
 )
 
-type StateInitSource interface{}
+type StateInitSource struct {
+	Type   string        `json:"type"`
+	Source MessageSource `json:"source"`
+	// Code BOC. Encoded in `base64`.
+	Code string `json:"code"`
+	// Data BOC. Encoded in `base64`.
+	Data string `json:"data"`
+	// Library BOC. Encoded in `base64`.
+	Library    null.String      `json:"library"` // optional
+	Tvc        string           `json:"tvc"`
+	PublicKey  null.String      `json:"public_key"`  // optional
+	InitParams *StateInitParams `json:"init_params"` // optional
+}
 
 type StateInitParams struct {
 	Abi   Abi         `json:"abi"`
 	Value interface{} `json:"value"`
 }
 
-type MessageSource interface{}
+type MessageSource struct {
+	Type    string `json:"type"`
+	Message string `json:"message"`
+	Abi     *Abi   `json:"abi"` // optional
+}
 
 type ParamsOfEncodeMessageBody struct {
 	// Contract ABI.

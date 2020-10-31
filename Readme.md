@@ -55,8 +55,8 @@ one can regenerate it via `task generate`.
 - https://dev.to/mattn/call-go-function-from-c-function-1n3
 - https://docs.ton.dev/86757ecb2/p/71d7a8-samples/t/35f373 - example how to use GraphQL
 
-## Methods with manual implementation
-
+## Methods and types with manual implementation
+See more at `spec/types.go`
 - processing.send_message
 - processing.wait_for_transaction
 - processing.process_message

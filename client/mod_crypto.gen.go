@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 28 Oct 20 08:23 UTC
+// DON'T EDIT THIS FILE is generated 31 Oct 20 20:13 UTC
 //
 // Mod crypto
 //
@@ -11,7 +11,6 @@ import (
 )
 
 type SigningBoxHandle struct {
-	int `json:""`
 }
 
 type ParamsOfFactorize struct {

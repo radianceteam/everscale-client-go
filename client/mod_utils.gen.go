@@ -1,12 +1,17 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 28 Oct 20 08:23 UTC
+// DON'T EDIT THIS FILE is generated 31 Oct 20 20:13 UTC
 //
 // Mod utils
 //
 // Misc utility Functions.
 
-type AddressStringFormat interface{}
+type AddressStringFormat struct {
+	Type   string `json:"type"`
+	URL    bool   `json:"url"`
+	Test   bool   `json:"test"`
+	Bounce bool   `json:"bounce"`
+}
 
 type ParamsOfConvertAddress struct {
 	// Account address in any TON format.
