@@ -30,6 +30,15 @@ import "C"
 
 var ErrContextIsClosed = errors.New("context is closed")
 
+type ResponseCode uint32
+
+const (
+	ResponseCodeSuccess = ResponseCode(C.tc_response_success)
+	ResponseCodeError   = ResponseCode(C.tc_response_error)
+	ResponseCodeNop     = ResponseCode(C.tc_response_nop)
+	ResponseCodeCustom  = ResponseCode(C.tc_response_custom)
+)
+
 func newTcStr(str []byte) C.tc_string_data_t {
 	return C.tc_string_data_t{
 		len:     C.uint32_t(len(str)),
@@ -48,7 +57,7 @@ func newBytesFromTcStr(data C.tc_string_data_t) []byte {
 func newDLLResponse(data C.tc_string_data_t, responseType C.uint32_t) *RawResponse {
 	rawBytes := newBytesFromTcStr(data)
 	res := &RawResponse{
-		Code: int(responseType),
+		Code: ResponseCode(responseType),
 	}
 	if responseType == C.tc_response_error {
 		var sdkErr ClientError
@@ -58,7 +67,7 @@ func newDLLResponse(data C.tc_string_data_t, responseType C.uint32_t) *RawRespon
 		} else {
 			res.Error = &sdkErr
 		}
-	} else if responseType == C.tc_response_success {
+	} else if responseType == C.tc_response_success || responseType == C.tc_response_custom {
 		res.Data = rawBytes
 	}
 
@@ -71,10 +80,19 @@ func callbackProxy(requestIDRaw C.uint32_t, data C.tc_string_data_t, responseTyp
 	finished := bool(finishedRaw)
 	zap.L().Debug("new message",
 		zap.Uint32("request_id", requestID),
+		zap.Uint32("response_type", uint32(responseType)),
 		zap.Bool("finished", finished))
 	responses, closeSignal, isFound := globalMultiplexer.GetChannels(requestID, finished)
 	if !isFound {
 		// ignore not found maybe some will be send after close
+		return
+	}
+
+	if responseType == C.tc_response_nop {
+		if finished {
+			close(responses)
+		}
+
 		return
 	}
 
@@ -91,7 +109,7 @@ func callbackProxy(requestIDRaw C.uint32_t, data C.tc_string_data_t, responseTyp
 
 type RawResponse struct {
 	Data  []byte
-	Code  int
+	Code  ResponseCode
 	Error error
 }
 

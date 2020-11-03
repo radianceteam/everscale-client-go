@@ -10,6 +10,7 @@ linters:
     - godox
     - misspell
     - maligned
+    - goerr113
   enable-all: true
 linters-settings:
   goimports:
