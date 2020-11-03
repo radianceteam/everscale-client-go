@@ -6,10 +6,11 @@ type Description struct {
 	Name        string `json:"name,omitempty"`
 	Summary     string `json:"summary,omitempty"`
 	Description string `json:"description,omitempty"`
-	GoComment   string `json:"-"` // populated manually
-	ConstName   string `json:"-"` // name for enum const
+	ConstName   string `json:"-"` // populated manually, used in templates only
+	GoComment   string `json:"-"` // populated manually, used in templates only
 }
 
+// ToComment generates comment for generate code from spec.
 func (d *Description) ToComment() string {
 	r := ""
 	if !strings.Contains(d.Description, d.Summary) {
@@ -31,6 +32,7 @@ func (d *Description) ToComment() string {
 	return r
 }
 
+// Type description from JSON spec.
 type Type struct {
 	Description
 	Type          TypeName      `json:"type,omitempty"`

@@ -11,6 +11,10 @@ import (
 )
 
 func genEnum(t Type) string {
+	for i := range t.EnumConsts {
+		t.EnumConsts[i].GoComment = t.EnumConsts[i].ToComment()
+		t.EnumConsts[i].ConstName = toGoName(strcase.ToSnake(t.EnumConsts[i].ConstName)) + t.Name
+	}
 	var tpl bytes.Buffer
 	if err := enumTmpl.Execute(&tpl, t); err != nil {
 		panic(err)
@@ -31,9 +35,10 @@ func prepareMultiline(data string) string {
 
 // ExceptionForCamelCase - camel case names exception.
 var ExceptionForCamelCase = map[string]string{
-	"id":   "ID",
-	"xprv": "XPrv",
-	"url":  "URL",
+	"id":                        "ID",
+	"xprv":                      "XPrv",
+	"url":                       "URL",
+	"account_id_address_string": "AccountIDAddressString",
 }
 
 func toGoName(name string) string {
@@ -120,6 +125,7 @@ func GenModule(dir string, m Module) error {
 	return nil
 }
 
+// genStruct - generates struct with each field specified.
 func genStruct(t Type) string {
 	r := "type " + t.Name + " struct {\n"
 	for _, f := range t.StructFields {
@@ -140,31 +146,44 @@ func genStruct(t Type) string {
 	return r
 }
 
+// genEnumOfTypes - generates enum of types with special enumOfConsts helper type.
 func genEnumOfTypes(t Type) string {
-	fields := make(map[string]TypeName)
+	enumHelperType := Type{Type: EnumOfConsts, Description: Description{Name: t.Name + "Type"}}
+	fields := make(map[string]int)
 	structFields := make([]Type, 1)
-	structFields[0] = Type{Type: String, Description: Description{Name: "type"}}
-	fields["type"] = String
-	for _, t := range t.EnumTypes {
-		if t.Type != Struct {
-			panic("EnumOfTypes only supports structs " + t.Name)
+	structFields[0] = Type{Type: Ref, RefName: enumHelperType.Name, Description: Description{Name: "type"}}
+	fields["type"] = 0
+	for _, et := range t.EnumTypes {
+		enumHelperType.EnumConsts = append(enumHelperType.EnumConsts, Description{
+			Name:        et.Name,
+			Summary:     et.Summary,
+			Description: et.Description.Description,
+			ConstName:   et.Name,
+		})
+		if et.Type != Struct {
+			panic("EnumOfTypes only supports structs " + et.Name)
 		}
-		for _, sf := range t.StructFields {
-			prevName, ok := fields[sf.Name]
-			if ok && prevName != sf.Type {
-				panic("type mismatch for enum " + t.Name + ":" + sf.Name)
+		for _, sf := range et.StructFields {
+			index, ok := fields[sf.Name]
+			if ok && structFields[index].Type != sf.Type {
+				panic("type mismatch for enum " + et.Name + ":" + sf.Name)
 			}
-			fields[sf.Name] = sf.Type
+
 			if !ok {
+				index = len(structFields)
+				fields[sf.Name] = index
 				structFields = append(structFields, sf)
+				structFields[index].Description.Description += " presented in types:"
 			}
+			structFields[index].Description.Description += "\n\"" + et.Name + "\""
 		}
 	}
 	t.StructFields = structFields
 
-	return genStruct(t)
+	return genEnum(enumHelperType) + "\n" + genStruct(t)
 }
 
+// GenerateOptionalType - pointer or null simple type.
 func GenerateOptionalType(t Type) string {
 	switch t.Type { // nolint exhaustive
 	case Ref:
@@ -192,6 +211,7 @@ func GenerateOptionalType(t Type) string {
 	}
 }
 
+// GenerateType - root generator function for type.
 func GenerateType(t Type) string {
 	r := "NotFound::" + string(t.Type) + "::"
 	switch t.Type {

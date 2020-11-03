@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 31 Oct 20 20:13 UTC
+// DON'T EDIT THIS FILE is generated 03 Nov 20 11:41 UTC
 //
 // Mod processing
 //
@@ -9,12 +9,83 @@ package client
 // This module incorporates functions related to complex message
 // processing scenarios.
 
+type ProcessingEventType string
+
+const (
+
+	// Notifies the app that the current shard block will be fetched
+	// from the network.
+	//
+	// Fetched block will be used later in waiting phase.
+	WillFetchFirstBlockProcessingEventType ProcessingEventType = "WillFetchFirstBlock"
+	// Notifies the app that the client has failed to fetch current
+	// shard block.
+	//
+	// Message processing has finished.
+	FetchFirstBlockFailedProcessingEventType ProcessingEventType = "FetchFirstBlockFailed"
+	// Notifies the app that the message will be sent to the
+	// network.
+	WillSendProcessingEventType ProcessingEventType = "WillSend"
+	// Notifies the app that the message was sent to the network.
+	DidSendProcessingEventType ProcessingEventType = "DidSend"
+	// Notifies the app that the sending operation was failed with
+	// network error.
+	//
+	// Nevertheless the processing will be continued at the waiting
+	// phase because the message possibly has been delivered to the
+	// node.
+	SendFailedProcessingEventType ProcessingEventType = "SendFailed"
+	// Notifies the app that the next shard block will be fetched
+	// from the network.
+	//
+	// Event can occurs more than one time due to block walking
+	// procedure.
+	WillFetchNextBlockProcessingEventType ProcessingEventType = "WillFetchNextBlock"
+	// Notifies the app that the next block can't be fetched due to
+	// error.
+	//
+	// Processing will be continued after `network_resume_timeout`.
+	FetchNextBlockFailedProcessingEventType ProcessingEventType = "FetchNextBlockFailed"
+	// Notifies the app that the message was expired.
+	//
+	// Event occurs for contracts which ABI includes header "expire"
+	//
+	// Processing will be continued from encoding phase after
+	// `expiration_retries_timeout`.
+	MessageExpiredProcessingEventType ProcessingEventType = "MessageExpired"
+)
+
 type ProcessingEvent struct {
-	Type         string      `json:"type"`
-	Error        ClientError `json:"error"`
-	ShardBlockID string      `json:"shard_block_id"`
-	MessageID    string      `json:"message_id"`
-	Message      string      `json:"message"`
+	Type ProcessingEventType `json:"type"`
+	// presented in types:
+	// "FetchFirstBlockFailed"
+	// "SendFailed"
+	// "FetchNextBlockFailed"
+	// "MessageExpired".
+	Error ClientError `json:"error"`
+	// presented in types:
+	// "WillSend"
+	// "DidSend"
+	// "SendFailed"
+	// "WillFetchNextBlock"
+	// "FetchNextBlockFailed".
+	ShardBlockID string `json:"shard_block_id"`
+	// presented in types:
+	// "WillSend"
+	// "DidSend"
+	// "SendFailed"
+	// "WillFetchNextBlock"
+	// "FetchNextBlockFailed"
+	// "MessageExpired".
+	MessageID string `json:"message_id"`
+	// presented in types:
+	// "WillSend"
+	// "DidSend"
+	// "SendFailed"
+	// "WillFetchNextBlock"
+	// "FetchNextBlockFailed"
+	// "MessageExpired".
+	Message string `json:"message"`
 }
 
 type ResultOfProcessMessage struct {

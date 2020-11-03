@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 31 Oct 20 20:13 UTC
+// DON'T EDIT THIS FILE is generated 03 Nov 20 11:41 UTC
 //
 // Mod abi
 //
@@ -12,8 +12,15 @@ import (
 	"gopkg.in/guregu/null.v4"
 )
 
+type AbiType string
+
+const (
+	SerializedAbiType AbiType = "Serialized"
+	HandleAbiType     AbiType = "Handle"
+)
+
 type Abi struct {
-	Type string `json:"type"`
+	Type AbiType `json:"type"`
 }
 
 type AbiHandle struct {
@@ -50,33 +57,86 @@ type DeploySet struct {
 	InitialData interface{} `json:"initial_data"` // optional
 }
 
+type SignerType string
+
+const (
+
+	// No keys are provided. Creates an unsigned message.
+	NoneSignerType SignerType = "None"
+	// Only public key is provided to generate unsigned message and `data_to_sign`
+	// which can be signed later.
+	ExternalSignerType SignerType = "External"
+	// Key pair is provided for signing.
+	KeysSignerType SignerType = "Keys"
+	// Signing Box interface is provided for signing, allows Dapps to sign messages using external APIs,
+	// such as HSM, cold wallet, etc.
+	SigningBoxSignerType SignerType = "SigningBox"
+)
+
 type Signer struct {
-	Type      string           `json:"type"`
-	PublicKey string           `json:"public_key"`
-	Keys      KeyPair          `json:"keys"`
-	Handle    SigningBoxHandle `json:"handle"`
+	Type SignerType `json:"type"`
+	// presented in types:
+	// "External".
+	PublicKey string `json:"public_key"`
+	// presented in types:
+	// "Keys".
+	Keys KeyPair `json:"keys"`
+	// presented in types:
+	// "SigningBox".
+	Handle SigningBoxHandle `json:"handle"`
 }
 
 type MessageBodyType string
 
 const (
-	Input          MessageBodyType = "Input"
-	Output         MessageBodyType = "Output"
-	InternalOutput MessageBodyType = "InternalOutput"
-	Event          MessageBodyType = "Event"
+
+	// Message contains the input of the ABI function.
+	InputMessageBodyType MessageBodyType = "Input"
+	// Message contains the output of the ABI function.
+	OutputMessageBodyType MessageBodyType = "Output"
+	// Message contains the input of the imported ABI function.
+	//
+	// Occurs when contract sends an internal message to other
+	// contract.
+	InternalOutputMessageBodyType MessageBodyType = "InternalOutput"
+	// Message contains the input of the ABI event.
+	EventMessageBodyType MessageBodyType = "Event"
+)
+
+type StateInitSourceType string
+
+const (
+
+	// Deploy message.
+	MessageStateInitSourceType StateInitSourceType = "Message"
+	// State init data.
+	StateInitStateInitSourceType StateInitSourceType = "StateInit"
+	// Content of the TVC file. Encoded in `base64`.
+	TvcStateInitSourceType StateInitSourceType = "Tvc"
 )
 
 type StateInitSource struct {
-	Type   string        `json:"type"`
+	Type StateInitSourceType `json:"type"`
+	// presented in types:
+	// "Message".
 	Source MessageSource `json:"source"`
-	// Code BOC. Encoded in `base64`.
+	// Code BOC. Encoded in `base64`. presented in types:
+	// "StateInit".
 	Code string `json:"code"`
-	// Data BOC. Encoded in `base64`.
+	// Data BOC. Encoded in `base64`. presented in types:
+	// "StateInit".
 	Data string `json:"data"`
-	// Library BOC. Encoded in `base64`.
-	Library    null.String      `json:"library"` // optional
-	Tvc        string           `json:"tvc"`
-	PublicKey  null.String      `json:"public_key"`  // optional
+	// Library BOC. Encoded in `base64`. presented in types:
+	// "StateInit".
+	Library null.String `json:"library"` // optional
+	// presented in types:
+	// "Tvc".
+	Tvc string `json:"tvc"`
+	// presented in types:
+	// "Tvc".
+	PublicKey null.String `json:"public_key"` // optional
+	// presented in types:
+	// "Tvc".
 	InitParams *StateInitParams `json:"init_params"` // optional
 }
 
@@ -85,10 +145,21 @@ type StateInitParams struct {
 	Value interface{} `json:"value"`
 }
 
+type MessageSourceType string
+
+const (
+	EncodedMessageSourceType        MessageSourceType = "Encoded"
+	EncodingParamsMessageSourceType MessageSourceType = "EncodingParams"
+)
+
 type MessageSource struct {
-	Type    string `json:"type"`
+	Type MessageSourceType `json:"type"`
+	// presented in types:
+	// "Encoded".
 	Message string `json:"message"`
-	Abi     *Abi   `json:"abi"` // optional
+	// presented in types:
+	// "Encoded".
+	Abi *Abi `json:"abi"` // optional
 }
 
 type ParamsOfEncodeMessageBody struct {

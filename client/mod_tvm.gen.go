@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 31 Oct 20 20:13 UTC
+// DON'T EDIT THIS FILE is generated 03 Nov 20 11:41 UTC
 //
 // Mod tvm
 //
@@ -21,12 +21,28 @@ type ExecutionOptions struct {
 	TransactionLt decimal.NullDecimal `json:"transaction_lt"` // optional
 }
 
+type AccountForExecutorType string
+
+const (
+
+	// Non-existing account to run a creation internal message.
+	// Should be used with `skip_transaction_check = true` if the message has no deploy data
+	// since transaction on the unitialized account are always aborted.
+	NoneAccountForExecutorType AccountForExecutorType = "None"
+	// Emulate unitialized account to run deploy message.
+	UninitAccountForExecutorType AccountForExecutorType = "Uninit"
+	// Account state to run message.
+	AccountAccountForExecutorType AccountForExecutorType = "Account"
+)
+
 type AccountForExecutor struct {
-	Type string `json:"type"`
-	// Account BOC. Encoded as base64.
+	Type AccountForExecutorType `json:"type"`
+	// Account BOC. Encoded as base64. presented in types:
+	// "Account".
 	Boc string `json:"boc"`
 	// Flag for running account with the unlimited balance. Can be used to calculate
-	// transaction fees without balance check.
+	// transaction fees without balance check presented in types:
+	// "Account".
 	UnlimitedBalance null.Bool `json:"unlimited_balance"` // optional
 }
 

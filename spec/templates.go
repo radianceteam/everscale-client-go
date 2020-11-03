@@ -33,7 +33,7 @@ var enumTmpl = template.Must(template.New("enum").Parse(
 type {{.Name}} string
 const (
 {{range $e := .EnumConsts}} 
-	{{$e.ConstName}} {{$.Name}} = "{{$e.Name}}"{{end}}
+	{{$e.GoComment}} {{$e.ConstName}} {{$.Name}} = "{{$e.Name}}"{{end}}
 )
 `))
 

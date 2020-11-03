@@ -1,16 +1,30 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 31 Oct 20 20:13 UTC
+// DON'T EDIT THIS FILE is generated 03 Nov 20 11:41 UTC
 //
 // Mod utils
 //
 // Misc utility Functions.
 
+type AddressStringFormatType string
+
+const (
+	AccountIDAddressStringFormatType AddressStringFormatType = "AccountId"
+	HexAddressStringFormatType       AddressStringFormatType = "Hex"
+	Base64AddressStringFormatType    AddressStringFormatType = "Base64"
+)
+
 type AddressStringFormat struct {
-	Type   string `json:"type"`
-	URL    bool   `json:"url"`
-	Test   bool   `json:"test"`
-	Bounce bool   `json:"bounce"`
+	Type AddressStringFormatType `json:"type"`
+	// presented in types:
+	// "Base64".
+	URL bool `json:"url"`
+	// presented in types:
+	// "Base64".
+	Test bool `json:"test"`
+	// presented in types:
+	// "Base64".
+	Bounce bool `json:"bounce"`
 }
 
 type ParamsOfConvertAddress struct {

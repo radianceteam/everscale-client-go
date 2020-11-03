@@ -2,6 +2,7 @@ package spec
 
 type TypeName string
 
+// TypeName different values.
 const (
 	Ref          TypeName = "Ref"
 	Optional     TypeName = "Optional"

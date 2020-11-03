@@ -81,7 +81,7 @@ func main() { // nolint funlen
 				Limit:      null.IntFrom(1),
 				Order: []client.OrderBy{{
 					Path:      "seq_no",
-					Direction: client.DESC,
+					Direction: client.DescSortDirection,
 				}},
 				Result: `
 id
