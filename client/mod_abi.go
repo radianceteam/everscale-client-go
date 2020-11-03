@@ -5,8 +5,8 @@ package client
 type AbiType string
 
 const (
-	SerializedAbiType AbiType = "Serialized"
-	HandleAbiType     AbiType = "Handle"
+	ContractAbiType AbiType = "Contract"
+	HandleAbiType   AbiType = "Handle"
 )
 
 type Abi struct {

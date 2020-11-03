@@ -17,6 +17,7 @@ func newTestClient() *client.Client {
 	if err != nil {
 		panic(err)
 	}
+
 	return c
 }
 
@@ -39,9 +40,9 @@ func TestModCryptoMnemonicFromRandom(t *testing.T) {
 	r, err := c.CryptoMnemonicFromRandom(&client.ParamsOfMnemonicFromRandom{})
 	a.NoError(err, "call crypto.mnemonic_from_random")
 	a.Len(strings.Split(r.Phrase, " "), 12, "default phrase size")
-	r, err = c.CryptoMnemonicFromRandom(&client.ParamsOfMnemonicFromRandom{WordCount: null.IntFrom(24)})
+	_, err = c.CryptoMnemonicFromRandom(&client.ParamsOfMnemonicFromRandom{WordCount: null.IntFrom(24)})
 	a.NoError(err, "call crypto.mnemonic_from_random")
-	r, err = c.CryptoMnemonicFromRandom(&client.ParamsOfMnemonicFromRandom{WordCount: null.IntFrom(13)})
+	_, err = c.CryptoMnemonicFromRandom(&client.ParamsOfMnemonicFromRandom{WordCount: null.IntFrom(13)})
 	a.Error(err, "bip39 invalid wc")
 }
 

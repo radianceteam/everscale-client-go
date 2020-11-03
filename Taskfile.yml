@@ -4,7 +4,7 @@ tasks:
   coverage:
     desc: 'Run tests with coverage and open report in default browser'
     cmds:
-      - go test -coverprofile=./tmp/cover.out ./...
+      - go test -coverpkg=./... -coverprofile=./tmp/cover.out ./...
       - go tool cover -html=./tmp/cover.out -o ./tmp/cover.html
       - open ./tmp/cover.html
   attach_hooks:
@@ -19,7 +19,7 @@ tasks:
   lint:
     desc: "Run linter"
     cmds:
-      - golangci-lint run --tests=0 ./...
+      - golangci-lint run ./...
   generate:
     desc: "Generates code by json spec"
     cmds:
