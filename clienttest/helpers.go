@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
-	"github.com/shopspring/decimal"
-
 	"github.com/radianceteam/ton-client-go/client"
 )
 
@@ -18,10 +16,6 @@ const (
 	SubscriptionContract = "Subscription"
 	WalletContract       = "Wallet"
 )
-
-func NewNullDecimal(i int64) decimal.NullDecimal {
-	return decimal.NullDecimal{Decimal: decimal.New(i, 0), Valid: true}
-}
 
 func LoadTest(name string) (client.Abi, string) {
 	content, err := ioutil.ReadFile("./contracts/abi_v2/" + name + ".abi.json")

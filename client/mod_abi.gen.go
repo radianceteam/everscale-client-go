@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Nov 20 16:52 UTC
+// DON'T EDIT THIS FILE is generated 03 Nov 20 19:09 UTC
 //
 // Mod abi
 //
@@ -8,7 +8,8 @@ package client
 // specification.
 
 import (
-	"github.com/shopspring/decimal"
+	"math/big"
+
 	"gopkg.in/guregu/null.v4"
 )
 
@@ -16,7 +17,7 @@ type FunctionHeader struct {
 	// Message expiration time in seconds.
 	Expire null.Int `json:"expire"` // optional
 	// Message creation time in milliseconds.
-	Time decimal.NullDecimal `json:"time"` // optional
+	Time *big.Int `json:"time"` // optional
 	// Public key used to sign message. Encoded with `hex`.
 	Pubkey null.String `json:"pubkey"` // optional
 }
@@ -144,10 +145,10 @@ type AbiEvent struct {
 }
 
 type AbiData struct {
-	Key        decimal.Decimal `json:"key"`
-	Name       string          `json:"name"`
-	Type       string          `json:"type"`
-	Components []AbiParam      `json:"components"` // optional
+	Key        big.Int    `json:"key"`
+	Name       string     `json:"name"`
+	Type       string     `json:"type"`
+	Components []AbiParam `json:"components"` // optional
 }
 
 type AbiFunction struct {
@@ -317,9 +318,9 @@ type ParamsOfEncodeAccount struct {
 	// Source of the account state init.
 	StateInit StateInitSource `json:"state_init"`
 	// Initial balance.
-	Balance decimal.NullDecimal `json:"balance"` // optional
+	Balance *big.Int `json:"balance"` // optional
 	// Initial value for the `last_trans_lt`.
-	LastTransLt decimal.NullDecimal `json:"last_trans_lt"` // optional
+	LastTransLt *big.Int `json:"last_trans_lt"` // optional
 	// Initial value for the `last_paid`.
 	LastPaid null.Int `json:"last_paid"` // optional
 }

@@ -1,24 +1,25 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Nov 20 16:52 UTC
+// DON'T EDIT THIS FILE is generated 03 Nov 20 19:09 UTC
 //
 // Mod client
 //
 // Provides information about library.
 
 import (
-	"github.com/shopspring/decimal"
+	"math/big"
+
 	"gopkg.in/guregu/null.v4"
 )
 
 type NetworkConfig struct {
-	ServerAddress            string              `json:"server_address"`
-	NetworkRetriesCount      null.Int            `json:"network_retries_count"`      // optional
-	MessageRetriesCount      null.Int            `json:"message_retries_count"`      // optional
-	MessageProcessingTimeout null.Int            `json:"message_processing_timeout"` // optional
-	WaitForTimeout           null.Int            `json:"wait_for_timeout"`           // optional
-	OutOfSyncThreshold       decimal.NullDecimal `json:"out_of_sync_threshold"`      // optional
-	AccessKey                null.String         `json:"access_key"`                 // optional
+	ServerAddress            string      `json:"server_address"`
+	NetworkRetriesCount      null.Int    `json:"network_retries_count"`      // optional
+	MessageRetriesCount      null.Int    `json:"message_retries_count"`      // optional
+	MessageProcessingTimeout null.Int    `json:"message_processing_timeout"` // optional
+	WaitForTimeout           null.Int    `json:"wait_for_timeout"`           // optional
+	OutOfSyncThreshold       *big.Int    `json:"out_of_sync_threshold"`      // optional
+	AccessKey                null.String `json:"access_key"`                 // optional
 }
 
 type CryptoConfig struct {

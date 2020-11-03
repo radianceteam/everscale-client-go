@@ -3,14 +3,8 @@ package client
 import (
 	"encoding/json"
 
-	"github.com/shopspring/decimal"
-
 	"github.com/radianceteam/ton-client-go/spec"
 )
-
-func init() { // nolint gochecknoinits
-	decimal.MarshalJSONWithoutQuotes = true
-}
 
 type Client struct {
 	dllClient

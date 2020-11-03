@@ -22,7 +22,8 @@ var headerTmpl = template.Must(template.New("header").Funcs(funcMap).Parse(
 {{.GoComment}}
 
 import (
-	"github.com/shopspring/decimal"
+	"math/big"
+
 	"gopkg.in/guregu/null.v4"
 )
 

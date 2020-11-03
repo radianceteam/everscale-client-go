@@ -1,12 +1,13 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Nov 20 16:52 UTC
+// DON'T EDIT THIS FILE is generated 03 Nov 20 19:09 UTC
 //
 // Mod tvm
 //
 
 import (
-	"github.com/shopspring/decimal"
+	"math/big"
+
 	"gopkg.in/guregu/null.v4"
 )
 
@@ -16,9 +17,9 @@ type ExecutionOptions struct {
 	// time that is used as transaction time.
 	BlockTime null.Int `json:"block_time"` // optional
 	// block logical time.
-	BlockLt decimal.NullDecimal `json:"block_lt"` // optional
+	BlockLt *big.Int `json:"block_lt"` // optional
 	// transaction logical time.
-	TransactionLt decimal.NullDecimal `json:"transaction_lt"` // optional
+	TransactionLt *big.Int `json:"transaction_lt"` // optional
 }
 
 type AccountForExecutorType string
@@ -47,12 +48,12 @@ type AccountForExecutor struct {
 }
 
 type TransactionFees struct {
-	InMsgFwdFee      decimal.Decimal `json:"in_msg_fwd_fee"`
-	StorageFee       decimal.Decimal `json:"storage_fee"`
-	GasFee           decimal.Decimal `json:"gas_fee"`
-	OutMsgsFwdFee    decimal.Decimal `json:"out_msgs_fwd_fee"`
-	TotalAccountFees decimal.Decimal `json:"total_account_fees"`
-	TotalOutput      decimal.Decimal `json:"total_output"`
+	InMsgFwdFee      big.Int `json:"in_msg_fwd_fee"`
+	StorageFee       big.Int `json:"storage_fee"`
+	GasFee           big.Int `json:"gas_fee"`
+	OutMsgsFwdFee    big.Int `json:"out_msgs_fwd_fee"`
+	TotalAccountFees big.Int `json:"total_account_fees"`
+	TotalOutput      big.Int `json:"total_output"`
 }
 
 type ParamsOfRunExecutor struct {

@@ -1,6 +1,7 @@
 package clienttest
 
 import (
+	"math/big"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -27,7 +28,7 @@ func TestClient_AbiEncodeMessage(t *testing.T) {
 
 	abi, tvc := LoadTest(EventsContract)
 	newParamsOfEncodeMessage := func(signer client.Signer) *client.ParamsOfEncodeMessage {
-		time := NewNullDecimal(1599458364291)
+		time := big.NewInt(1599458364291)
 		expire := null.IntFrom(1599458404)
 
 		return &client.ParamsOfEncodeMessage{

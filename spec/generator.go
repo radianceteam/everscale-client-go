@@ -198,7 +198,7 @@ func GenerateOptionalType(t Type) string {
 	case Number:
 		return "null.Int"
 	case BigInt:
-		return "decimal.NullDecimal"
+		return "*big.Int"
 	case None:
 		return ""
 	case Array:
@@ -233,7 +233,7 @@ func GenerateType(t Type) string {
 	case Struct:
 		r = genStruct(t)
 	case BigInt:
-		r = "decimal.Decimal"
+		r = "big.Int"
 	case Array:
 		r = "[]" + GenerateType(*t.ArrayItem)
 	case Boolean:
