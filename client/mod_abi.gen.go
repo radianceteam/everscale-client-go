@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Nov 20 11:41 UTC
+// DON'T EDIT THIS FILE is generated 03 Nov 20 15:00 UTC
 //
 // Mod abi
 //
@@ -11,20 +11,6 @@ import (
 	"github.com/shopspring/decimal"
 	"gopkg.in/guregu/null.v4"
 )
-
-type AbiType string
-
-const (
-	SerializedAbiType AbiType = "Serialized"
-	HandleAbiType     AbiType = "Handle"
-)
-
-type Abi struct {
-	Type AbiType `json:"type"`
-}
-
-type AbiHandle struct {
-}
 
 type FunctionHeader struct {
 	// Message expiration time in seconds.
@@ -143,23 +129,6 @@ type StateInitSource struct {
 type StateInitParams struct {
 	Abi   Abi         `json:"abi"`
 	Value interface{} `json:"value"`
-}
-
-type MessageSourceType string
-
-const (
-	EncodedMessageSourceType        MessageSourceType = "Encoded"
-	EncodingParamsMessageSourceType MessageSourceType = "EncodingParams"
-)
-
-type MessageSource struct {
-	Type MessageSourceType `json:"type"`
-	// presented in types:
-	// "Encoded".
-	Message string `json:"message"`
-	// presented in types:
-	// "Encoded".
-	Abi *Abi `json:"abi"` // optional
 }
 
 type ParamsOfEncodeMessageBody struct {

@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Nov 20 11:41 UTC
+// DON'T EDIT THIS FILE is generated 03 Nov 20 15:00 UTC
 //
 // Mod crypto
 //
@@ -9,9 +9,6 @@ package client
 import (
 	"gopkg.in/guregu/null.v4"
 )
-
-type SigningBoxHandle struct {
-}
 
 type ParamsOfFactorize struct {
 	// Hexadecimal representation of u64 composite number.

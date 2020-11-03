@@ -130,9 +130,8 @@ func genStruct(t Type) string {
 	r := "type " + t.Name + " struct {\n"
 	for _, f := range t.StructFields {
 		if f.Name == "" {
-			fmt.Println("WARNING: skip struct field without name", t.Type, t.Name, f)
-
-			continue
+			fmt.Println("WARNING: add struct field with empty name", t.Type, t.Name, f)
+			f.Name = "value"
 		}
 		r += "\t" + f.ToComment() + "	" + toGoName(f.Name) + " " + GenerateType(f)
 		if f.Type == Optional {
