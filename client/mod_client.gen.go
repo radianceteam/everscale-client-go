@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Nov 20 15:00 UTC
+// DON'T EDIT THIS FILE is generated 03 Nov 20 16:52 UTC
 //
 // Mod client
 //
@@ -12,7 +12,7 @@ import (
 )
 
 type NetworkConfig struct {
-	ServerAddress            null.String         `json:"server_address"`             // optional
+	ServerAddress            string              `json:"server_address"`
 	NetworkRetriesCount      null.Int            `json:"network_retries_count"`      // optional
 	MessageRetriesCount      null.Int            `json:"message_retries_count"`      // optional
 	MessageProcessingTimeout null.Int            `json:"message_processing_timeout"` // optional
@@ -34,13 +34,23 @@ type AbiConfig struct {
 	MessageExpirationTimeoutGrowFactor null.Int `json:"message_expiration_timeout_grow_factor"` // optional
 }
 
+type BuildInfoDependency struct {
+	// Dependency name. Usually it is a crate name.
+	Name string `json:"name"`
+	// Git commit hash of the related repository.
+	GitCommit string `json:"git_commit"`
+}
+
 type ResultOfVersion struct {
 	// Core Library version.
 	Version string `json:"version"`
 }
 
 type ResultOfBuildInfo struct {
-	BuildInfo interface{} `json:"build_info"`
+	// Build number assigned to this build by the CI.
+	BuildNumber int `json:"build_number"`
+	// Fingerprint of the most important dependencies.
+	Dependencies []BuildInfoDependency `json:"dependencies"`
 }
 
 // Returns Core Library version.
@@ -51,6 +61,7 @@ func (c *Client) ClientVersion() (*ResultOfVersion, error) {
 	return response, err
 }
 
+// Returns detailed information about this build.
 func (c *Client) ClientBuildInfo() (*ResultOfBuildInfo, error) {
 	response := new(ResultOfBuildInfo)
 	err := c.dllClient.waitErrorOrResultUnmarshal("client.build_info", nil, response)

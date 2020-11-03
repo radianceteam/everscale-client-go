@@ -1,12 +1,12 @@
 # TON SDK client Golang
 
-[![Awesome Badges](https://img.shields.io/badge/SDK%20version-1.0.0-green.svg)](https://github.com/Naereen/badges)
+[![Awesome Badges](https://img.shields.io/badge/SDK_version-1.1.0_rc-green.svg)](https://github.com/Naereen/badges)
 
 ## Preparations
 
 One need to install
 - [Rust](https://www.rust-lang.org/tools/install)
-- [TON-SDK](https://github.com/tonlabs/TON-SDK) - *important* version 1.0.0 and compile it via `cargo build --release`
+- [TON-SDK](https://github.com/tonlabs/TON-SDK) - *important* version `1.1.0-rc` and compile it via `cargo build --release`
 
 ## Run 
 

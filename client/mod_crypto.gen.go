@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Nov 20 15:00 UTC
+// DON'T EDIT THIS FILE is generated 03 Nov 20 16:52 UTC
 //
 // Mod crypto
 //
@@ -338,6 +338,20 @@ type ResultOfHDKeyPublicFromXPrv struct {
 	Public string `json:"public"`
 }
 
+type ParamsOfChaCha20 struct {
+	// Source data to be encrypted or decrypted. Must be encoded with `base64`.
+	Data string `json:"data"`
+	// 256-bit key. Must be encoded with `hex`.
+	Key string `json:"key"`
+	// 96-bit nonce. Must be encoded with `hex`.
+	Nonce string `json:"nonce"`
+}
+
+type ResultOfChaCha20 struct {
+	// Encrypted/decrypted data. Encoded with `base64`.
+	Data string `json:"data"`
+}
+
 // Integer factorization.
 // Performs prime factorization – decomposition of a composite number
 // into a product of smaller prime integers (factors).
@@ -609,6 +623,14 @@ func (c *Client) CryptoHdkeySecretFromXprv(p *ParamsOfHDKeySecretFromXPrv) (*Res
 func (c *Client) CryptoHdkeyPublicFromXprv(p *ParamsOfHDKeyPublicFromXPrv) (*ResultOfHDKeyPublicFromXPrv, error) {
 	response := new(ResultOfHDKeyPublicFromXPrv)
 	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.hdkey_public_from_xprv", p, response)
+
+	return response, err
+}
+
+// Performs symmetric `chacha20` encryption.
+func (c *Client) CryptoChacha20(p *ParamsOfChaCha20) (*ResultOfChaCha20, error) {
+	response := new(ResultOfChaCha20)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.chacha20", p, response)
 
 	return response, err
 }

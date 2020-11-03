@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Nov 20 15:00 UTC
+// DON'T EDIT THIS FILE is generated 03 Nov 20 16:52 UTC
 //
 // Mod abi
 //
@@ -129,6 +129,40 @@ type StateInitSource struct {
 type StateInitParams struct {
 	Abi   Abi         `json:"abi"`
 	Value interface{} `json:"value"`
+}
+
+type AbiParam struct {
+	Name       string     `json:"name"`
+	Type       string     `json:"type"`
+	Components []AbiParam `json:"components"` // optional
+}
+
+type AbiEvent struct {
+	Name   string     `json:"name"`
+	Inputs []AbiParam `json:"inputs"`
+	ID     *null.Int  `json:"id"` // optional
+}
+
+type AbiData struct {
+	Key        decimal.Decimal `json:"key"`
+	Name       string          `json:"name"`
+	Type       string          `json:"type"`
+	Components []AbiParam      `json:"components"` // optional
+}
+
+type AbiFunction struct {
+	Name    string     `json:"name"`
+	Inputs  []AbiParam `json:"inputs"`
+	Outputs []AbiParam `json:"outputs"`
+	ID      *null.Int  `json:"id"` // optional
+}
+
+type AbiContract struct {
+	ABIVersion int           `json:"ABI version"`
+	Header     []string      `json:"header"`    // optional
+	Functions  []AbiFunction `json:"functions"` // optional
+	Events     []AbiEvent    `json:"events"`    // optional
+	Data       []AbiData     `json:"data"`      // optional
 }
 
 type ParamsOfEncodeMessageBody struct {

@@ -36,8 +36,6 @@ func NewClient(config Config) (*Client, error) {
 	return &Client{dllClient: dllClient}, nil
 }
 
-type TransactionFees interface{}
-
 // ClientGetAPIReference loads and parses JSON API spec.
 func (c *Client) ClientGetAPIReference() (*spec.APIReference, error) {
 	response := new(spec.APIReference)

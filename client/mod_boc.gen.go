@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Nov 20 15:00 UTC
+// DON'T EDIT THIS FILE is generated 03 Nov 20 16:52 UTC
 //
 // Mod boc
 //
@@ -14,6 +14,15 @@ type ParamsOfParse struct {
 type ResultOfParse struct {
 	// JSON containing parsed BOC.
 	Parsed interface{} `json:"parsed"`
+}
+
+type ParamsOfParseShardstate struct {
+	// BOC encoded as base64.
+	Boc string `json:"boc"`
+	// Shardstate identificator.
+	ID string `json:"id"`
+	// Workchain shardstate belongs to.
+	WorkchainID int `json:"workchain_id"`
 }
 
 type ParamsOfGetBlockchainConfig struct {
@@ -62,6 +71,16 @@ func (c *Client) BocParseAccount(p *ParamsOfParse) (*ResultOfParse, error) {
 func (c *Client) BocParseBlock(p *ParamsOfParse) (*ResultOfParse, error) {
 	response := new(ResultOfParse)
 	err := c.dllClient.waitErrorOrResultUnmarshal("boc.parse_block", p, response)
+
+	return response, err
+}
+
+// Parses shardstate boc into a JSON
+//
+// JSON structure is compatible with GraphQL API shardstate object.
+func (c *Client) BocParseShardstate(p *ParamsOfParseShardstate) (*ResultOfParse, error) {
+	response := new(ResultOfParse)
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.parse_shardstate", p, response)
 
 	return response, err
 }

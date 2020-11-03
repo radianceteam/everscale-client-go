@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Nov 20 15:00 UTC
+// DON'T EDIT THIS FILE is generated 03 Nov 20 16:52 UTC
 //
 // Mod tvm
 //
@@ -44,6 +44,15 @@ type AccountForExecutor struct {
 	// transaction fees without balance check presented in types:
 	// "Account".
 	UnlimitedBalance null.Bool `json:"unlimited_balance"` // optional
+}
+
+type TransactionFees struct {
+	InMsgFwdFee      decimal.Decimal `json:"in_msg_fwd_fee"`
+	StorageFee       decimal.Decimal `json:"storage_fee"`
+	GasFee           decimal.Decimal `json:"gas_fee"`
+	OutMsgsFwdFee    decimal.Decimal `json:"out_msgs_fwd_fee"`
+	TotalAccountFees decimal.Decimal `json:"total_account_fees"`
+	TotalOutput      decimal.Decimal `json:"total_output"`
 }
 
 type ParamsOfRunExecutor struct {

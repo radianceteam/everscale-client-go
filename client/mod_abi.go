@@ -10,8 +10,8 @@ const (
 )
 
 type Abi struct {
-	Type    AbiType     `json:"type"`
-	Content interface{} `json:"content"`
+	Type  AbiType     `json:"type"`
+	Value interface{} `json:"value"`
 }
 
 type SigningBoxHandle int

@@ -1,4 +1,4 @@
-package client
+package clienttest
 
 import (
 	"sync"
@@ -7,7 +7,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"gopkg.in/guregu/null.v4"
+
+	"github.com/radianceteam/ton-client-go/client"
 )
 
 func init() {
@@ -20,8 +21,8 @@ func init() {
 
 func TestModClient(t *testing.T) {
 	a := assert.New(t)
-	c, err := NewClient(Config{
-		Network: &NetworkConfig{ServerAddress: null.StringFrom("net.ton.dev")},
+	c, err := client.NewClient(client.Config{
+		Network: &client.NetworkConfig{ServerAddress: "net.ton.dev"},
 	})
 	if err == nil {
 		defer c.Close()
@@ -32,7 +33,7 @@ func TestModClient(t *testing.T) {
 	if !a.NotNil(version, "version response") {
 		return
 	}
-	a.Equal("1.0.0", version.Version, "dll with specified version")
+	a.Equal("1.1.0", version.Version, "dll with specified version")
 	ref, err := c.ClientGetAPIReference()
 	a.NoError(err, "call Client.get_api_version")
 	a.NotNil(ref, "ref not nil")
@@ -40,15 +41,15 @@ func TestModClient(t *testing.T) {
 
 func TestClient_NetSubscribeCollection(t *testing.T) {
 	a := assert.New(t)
-	c, err := NewClient(Config{
-		Network: &NetworkConfig{ServerAddress: null.StringFrom("net.ton.dev")},
+	c, err := client.NewClient(client.Config{
+		Network: &client.NetworkConfig{ServerAddress: "net.ton.dev"},
 	})
 	if err == nil {
 		defer c.Close()
 	} else {
 		return
 	}
-	responses, handle, err := c.NetSubscribeCollection(&ParamsOfSubscribeCollection{
+	responses, handle, err := c.NetSubscribeCollection(&client.ParamsOfSubscribeCollection{
 		Collection: "messages",
 	})
 	a.NoError(err, "subscribe_collection")
@@ -63,7 +64,7 @@ func TestClient_NetSubscribeCollection(t *testing.T) {
 			a.Nil(r.Data, "no data when unsubscribe")
 		}
 	}()
-	err = c.NetUnsubscribe(&ResultOfSubscribeCollection{Handle: handle.Handle})
+	err = c.NetUnsubscribe(&client.ResultOfSubscribeCollection{Handle: handle.Handle})
 	a.NoError(err, "unsubscribe")
 	wg.Wait()
 }
