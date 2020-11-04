@@ -17,16 +17,10 @@ var keys = client.KeyPair{
 
 func TestClient_AbiEncodeMessage(t *testing.T) {
 	a := assert.New(t)
-	c, err := client.NewClient(client.Config{
-		Network: &client.NetworkConfig{ServerAddress: "localhost"},
-	})
-	if err == nil {
-		defer c.Close()
-	} else {
-		panic(err)
-	}
+	c := NewTestClient()
+	defer c.Close()
 
-	abi, tvc := LoadTest(EventsContract)
+	abi, tvc := LoadTest(EventsContract, AbiV2)
 	newParamsOfEncodeMessage := func(signer client.Signer) *client.ParamsOfEncodeMessage {
 		time := big.NewInt(1599458364291)
 		expire := null.IntFrom(1599458404)

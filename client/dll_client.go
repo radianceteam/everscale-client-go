@@ -54,12 +54,11 @@ func newBytesFromTcStr(data C.tc_string_data_t) []byte {
 	return C.GoBytes(unsafe.Pointer(data.content), C.int(data.len)) // nolint nlreturn
 }
 
-func newDLLResponse(data C.tc_string_data_t, responseType C.uint32_t) *RawResponse {
-	rawBytes := newBytesFromTcStr(data)
+func newDLLResponse(rawBytes []byte, responseType ResponseCode) *RawResponse {
 	res := &RawResponse{
-		Code: ResponseCode(responseType),
+		Code: responseType,
 	}
-	if responseType == C.tc_response_error {
+	if responseType == ResponseCodeError {
 		var sdkErr ClientError
 		err := json.Unmarshal(rawBytes, &sdkErr)
 		if err != nil {
@@ -67,7 +66,7 @@ func newDLLResponse(data C.tc_string_data_t, responseType C.uint32_t) *RawRespon
 		} else {
 			res.Error = &sdkErr
 		}
-	} else if responseType == C.tc_response_success || responseType == C.tc_response_custom {
+	} else if responseType == ResponseCodeSuccess || responseType == ResponseCodeCustom {
 		res.Data = rawBytes
 	}
 
@@ -75,13 +74,16 @@ func newDLLResponse(data C.tc_string_data_t, responseType C.uint32_t) *RawRespon
 }
 
 //export callbackProxy
-func callbackProxy(requestIDRaw C.uint32_t, data C.tc_string_data_t, responseType C.uint32_t, finishedRaw C.bool) {
+func callbackProxy(requestIDRaw C.uint32_t, data C.tc_string_data_t, responseTypeRaw C.uint32_t, finishedRaw C.bool) {
 	requestID := uint32(requestIDRaw)
 	finished := bool(finishedRaw)
-	zap.L().Debug("new message",
+	responseType := ResponseCode(responseTypeRaw)
+	rawBody := newBytesFromTcStr(data)
+	zap.L().Debug("new response",
 		zap.Uint32("request_id", requestID),
 		zap.Uint32("response_type", uint32(responseType)),
-		zap.Bool("finished", finished))
+		zap.Bool("finished", finished),
+		zap.ByteString("body", rawBody))
 	responses, closeSignal, isFound := globalMultiplexer.GetChannels(requestID, finished)
 	if !isFound {
 		// ignore not found maybe some will be send after close
@@ -97,7 +99,7 @@ func callbackProxy(requestIDRaw C.uint32_t, data C.tc_string_data_t, responseTyp
 	}
 
 	select {
-	case responses <- newDLLResponse(data, responseType):
+	case responses <- newDLLResponse(rawBody, responseType):
 		if finished {
 			close(responses)
 		}
@@ -181,6 +183,10 @@ func (c *dllClientCtx) resultsChannel(method string, body interface{}) (<-chan *
 
 	responses := make(chan *RawResponse, 1) // need 1 because of deadlock when async implemented in sync way
 	requestID := globalMultiplexer.SetChannels(responses, c.closeSignal)
+	zap.L().Debug("new request",
+		zap.Uint32("request_id", requestID),
+		zap.String("method", method),
+		zap.ByteString("body", rawBody))
 	// TODO maybe add global worker pool later for CGO calls
 	C.call_tc_request(c.ctx, newTcStr([]byte(method)), newTcStr(rawBody), C.uint32_t(requestID))
 

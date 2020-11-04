@@ -1,6 +1,7 @@
 # TON SDK client Golang
 
-[![Awesome Badges](https://img.shields.io/badge/SDK_version-1.1.0_rc-green.svg)](https://github.com/Naereen/badges)
+[![Awesome Badges](https://img.shields.io/badge/SDK_version-1.1.0_rc-green.svg)](https://github.com/tonlabs/TON-SDK/tree/1.1.0-rc)
+[![Awesome Badges](https://img.shields.io/badge/TON_version-0.24.8-green.svg)](https://hub.docker.com/layers/tonlabs/local-node/0.24.8/images/sha256-62239cb2b215cbca7e8792812e27fa293727cfd8b17d3e58523c8a15a3673504?context=explore)
 
 ## Preparations
 
@@ -33,7 +34,10 @@ All non-generated code has test coverage at least of 70% - one can see it via `t
 
 ```shell script
 export CGO_LDFLAGS="..."
-task test
+docker run -d --name local-node -p80:80 tonlabs/local-node:0.24.8
+task test # tests without node
+task full_test # tests including with node
+task coverage # full_test with coverage
 ```
 
 ## Development

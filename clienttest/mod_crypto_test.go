@@ -10,20 +10,9 @@ import (
 	"github.com/radianceteam/ton-client-go/client"
 )
 
-func newTestClient() *client.Client {
-	c, err := client.NewClient(client.Config{
-		Network: &client.NetworkConfig{ServerAddress: "net.ton.dev"},
-	})
-	if err != nil {
-		panic(err)
-	}
-
-	return c
-}
-
 func TestModCrypto(t *testing.T) {
 	a := assert.New(t)
-	c := newTestClient()
+	c := NewTestClient()
 	defer c.Close()
 
 	keys, err := c.CryptoGenerateRandomSignKeys()
@@ -34,7 +23,7 @@ func TestModCrypto(t *testing.T) {
 
 func TestModCryptoMnemonicFromRandom(t *testing.T) {
 	a := assert.New(t)
-	c := newTestClient()
+	c := NewTestClient()
 	defer c.Close()
 
 	r, err := c.CryptoMnemonicFromRandom(&client.ParamsOfMnemonicFromRandom{})
@@ -48,7 +37,7 @@ func TestModCryptoMnemonicFromRandom(t *testing.T) {
 
 func TestModCryptoMnemonicWords(t *testing.T) {
 	a := assert.New(t)
-	c := newTestClient()
+	c := NewTestClient()
 	defer c.Close()
 
 	r, err := c.CryptoMnemonicWords(&client.ParamsOfMnemonicWords{})
