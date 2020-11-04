@@ -1,4 +1,4 @@
-// +build with_local_ton_node
+// +build !without_local_ton_node
 
 package clienttest
 

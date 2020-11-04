@@ -5,10 +5,20 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"gopkg.in/guregu/null.v4"
 
 	"github.com/radianceteam/ton-client-go/client"
 )
+
+func init() { // nolint gochecknoinits
+	config := zap.NewDevelopmentConfig()
+	config.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
+	config.EncoderConfig.EncodeTime = zapcore.TimeEncoderOfLayout("02 Jan 15:04:05")
+	l, _ := config.Build()
+	zap.ReplaceGlobals(l)
+}
 
 const (
 	EventsContract       = "Events"

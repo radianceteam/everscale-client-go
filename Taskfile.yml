@@ -4,7 +4,7 @@ tasks:
   coverage:
     desc: 'Run tests with coverage and open report in default browser'
     cmds:
-      - go test -tags with_local_ton_node -coverpkg=./... -coverprofile=./tmp/cover.out ./...
+      - go test -coverpkg=./... -coverprofile=./tmp/cover.out ./...
       - go tool cover -html=./tmp/cover.out -o ./tmp/cover.html
       - open ./tmp/cover.html
   attach_hooks:
@@ -33,8 +33,8 @@ tasks:
   test:
     desc: "Run tests"
     cmds:
-      - go test ./...
+      - go test -tags without_local_ton_node ./...
   full_test:
     desc: "Run tests with local ton node"
     cmds:
-      - go test -tags with_local_ton_node ./...
+      - go test ./...

@@ -14,11 +14,10 @@ var ErrNoCallbackSpecified = errors.New("no callback specified error when send_e
 type EventCallback func(event *ProcessingEvent)
 
 func handleEvents(responses <-chan *RawResponse, callback EventCallback, result interface{}) error {
-	event := &ProcessingEvent{}
-
 	for r := range responses {
 		switch r.Code { // nolint exhaustive
 		case ResponseCodeCustom:
+			event := &ProcessingEvent{}
 			if err := json.Unmarshal(r.Data, event); err != nil {
 				panic(err)
 			}
