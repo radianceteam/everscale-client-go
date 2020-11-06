@@ -7,7 +7,7 @@ import (
 
 	"github.com/TylerBrock/colorjson"
 	"github.com/spf13/cobra"
-	"gopkg.in/guregu/null.v4"
+	"github.com/volatiletech/null"
 
 	"github.com/radianceteam/ton-client-go/client"
 )
@@ -42,7 +42,7 @@ func main() { // nolint funlen
 			res, err := c.NetQueryCollection(&client.ParamsOfQueryCollection{
 				Collection: "accounts",
 				Filter:     json.RawMessage(`{"id":{"eq":"` + id + `"}}`),
-				Limit:      null.IntFrom(20),
+				Limit:      null.Uint32From(20),
 				Result:     "id acc_type balance",
 			})
 			if err != nil {
@@ -78,7 +78,7 @@ func main() { // nolint funlen
 			res, err := c.NetQueryCollection(&client.ParamsOfQueryCollection{
 				Collection: "blocks",
 				Filter:     json.RawMessage(`{"workchain_id":{"eq":-1}, "key_block":{"eq": true}}`),
-				Limit:      null.IntFrom(1),
+				Limit:      null.Uint32From(1),
 				Order: []client.OrderBy{{
 					Path:      "seq_no",
 					Direction: client.DescSortDirection,

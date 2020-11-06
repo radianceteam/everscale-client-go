@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"gopkg.in/guregu/null.v4"
+	"github.com/volatiletech/null"
 
 	"github.com/radianceteam/ton-client-go/client"
 )
@@ -29,9 +29,9 @@ func TestModCryptoMnemonicFromRandom(t *testing.T) {
 	r, err := c.CryptoMnemonicFromRandom(&client.ParamsOfMnemonicFromRandom{})
 	a.NoError(err, "call crypto.mnemonic_from_random")
 	a.Len(strings.Split(r.Phrase, " "), 12, "default phrase size")
-	_, err = c.CryptoMnemonicFromRandom(&client.ParamsOfMnemonicFromRandom{WordCount: null.IntFrom(24)})
+	_, err = c.CryptoMnemonicFromRandom(&client.ParamsOfMnemonicFromRandom{WordCount: null.Uint8From(24)})
 	a.NoError(err, "call crypto.mnemonic_from_random")
-	_, err = c.CryptoMnemonicFromRandom(&client.ParamsOfMnemonicFromRandom{WordCount: null.IntFrom(13)})
+	_, err = c.CryptoMnemonicFromRandom(&client.ParamsOfMnemonicFromRandom{WordCount: null.Uint8From(13)})
 	a.Error(err, "bip39 invalid wc")
 }
 
@@ -43,7 +43,7 @@ func TestModCryptoMnemonicWords(t *testing.T) {
 	r, err := c.CryptoMnemonicWords(&client.ParamsOfMnemonicWords{})
 	a.NoError(err, "call crypto.mnemonic_words")
 	a.Len(strings.Split(r.Words, " "), 2048, "default dictionary size")
-	r, err = c.CryptoMnemonicWords(&client.ParamsOfMnemonicWords{Dictionary: null.IntFrom(1)})
+	r, err = c.CryptoMnemonicWords(&client.ParamsOfMnemonicWords{Dictionary: null.Uint8From(1)})
 	a.NoError(err, "call crypto.mnemonic_words")
 	a.Len(strings.Split(r.Words, " "), 2048, "default dictionary size")
 }

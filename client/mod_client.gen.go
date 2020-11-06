@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 06 Nov 20 19:25 UTC
+// DON'T EDIT THIS FILE is generated 06 Nov 20 19:42 UTC
 //
 // Mod client
 //
@@ -9,30 +9,30 @@ package client
 import (
 	"math/big"
 
-	"gopkg.in/guregu/null.v4"
+	"github.com/volatiletech/null"
 )
 
 type NetworkConfig struct {
 	ServerAddress            string      `json:"server_address"`
-	NetworkRetriesCount      null.Int    `json:"network_retries_count"`      // optional
-	MessageRetriesCount      null.Int    `json:"message_retries_count"`      // optional
-	MessageProcessingTimeout null.Int    `json:"message_processing_timeout"` // optional
-	WaitForTimeout           null.Int    `json:"wait_for_timeout"`           // optional
+	NetworkRetriesCount      null.Int8   `json:"network_retries_count"`      // optional
+	MessageRetriesCount      null.Int8   `json:"message_retries_count"`      // optional
+	MessageProcessingTimeout null.Uint32 `json:"message_processing_timeout"` // optional
+	WaitForTimeout           null.Uint32 `json:"wait_for_timeout"`           // optional
 	OutOfSyncThreshold       *big.Int    `json:"out_of_sync_threshold"`      // optional
 	AccessKey                null.String `json:"access_key"`                 // optional
 }
 
 type CryptoConfig struct {
-	MnemonicDictionary  null.Int    `json:"mnemonic_dictionary"`   // optional
-	MnemonicWordCount   null.Int    `json:"mnemonic_word_count"`   // optional
+	MnemonicDictionary  null.Uint8  `json:"mnemonic_dictionary"`   // optional
+	MnemonicWordCount   null.Uint8  `json:"mnemonic_word_count"`   // optional
 	HdkeyDerivationPath null.String `json:"hdkey_derivation_path"` // optional
 	HdkeyCompliant      null.Bool   `json:"hdkey_compliant"`       // optional
 }
 
 type AbiConfig struct {
-	Workchain                          null.Int `json:"workchain"`                              // optional
-	MessageExpirationTimeout           null.Int `json:"message_expiration_timeout"`             // optional
-	MessageExpirationTimeoutGrowFactor null.Int `json:"message_expiration_timeout_grow_factor"` // optional
+	Workchain                          null.Int32   `json:"workchain"`                              // optional
+	MessageExpirationTimeout           null.Uint32  `json:"message_expiration_timeout"`             // optional
+	MessageExpirationTimeoutGrowFactor null.Float32 `json:"message_expiration_timeout_grow_factor"` // optional
 }
 
 type BuildInfoDependency struct {
@@ -49,7 +49,7 @@ type ResultOfVersion struct {
 
 type ResultOfBuildInfo struct {
 	// Build number assigned to this build by the CI.
-	BuildNumber int `json:"build_number"`
+	BuildNumber uint32 `json:"build_number"`
 	// Fingerprint of the most important dependencies.
 	Dependencies []BuildInfoDependency `json:"dependencies"`
 }

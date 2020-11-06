@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 06 Nov 20 19:25 UTC
+// DON'T EDIT THIS FILE is generated 06 Nov 20 19:42 UTC
 //
 // Mod tvm
 //
@@ -8,14 +8,14 @@ package client
 import (
 	"math/big"
 
-	"gopkg.in/guregu/null.v4"
+	"github.com/volatiletech/null"
 )
 
 type ExecutionOptions struct {
 	// boc with config.
 	BlockchainConfig null.String `json:"blockchain_config"` // optional
 	// time that is used as transaction time.
-	BlockTime null.Int `json:"block_time"` // optional
+	BlockTime null.Uint32 `json:"block_time"` // optional
 	// block logical time.
 	BlockLt *big.Int `json:"block_lt"` // optional
 	// transaction logical time.

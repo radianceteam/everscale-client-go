@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"gopkg.in/guregu/null.v4"
+	"github.com/volatiletech/null"
 
 	"github.com/radianceteam/ton-client-go/client"
 )
@@ -23,7 +23,7 @@ func TestClient_AbiEncodeMessage(t *testing.T) {
 	abi, tvc := LoadTest(EventsContract, AbiV2)
 	newParamsOfEncodeMessage := func(signer client.Signer) *client.ParamsOfEncodeMessage {
 		time := big.NewInt(1599458364291)
-		expire := null.IntFrom(1599458404)
+		expire := null.Uint32From(1599458404)
 
 		return &client.ParamsOfEncodeMessage{
 			Abi:       abi,

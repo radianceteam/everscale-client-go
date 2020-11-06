@@ -1,13 +1,13 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 06 Nov 20 19:25 UTC
+// DON'T EDIT THIS FILE is generated 06 Nov 20 19:42 UTC
 //
 // Mod net
 //
 // Network access.
 
 import (
-	"gopkg.in/guregu/null.v4"
+	"github.com/volatiletech/null"
 )
 
 type OrderBy struct {
@@ -32,7 +32,7 @@ type ParamsOfQueryCollection struct {
 	// Sorting order.
 	Order []OrderBy `json:"order"` // optional
 	// Number of documents to return.
-	Limit null.Int `json:"limit"` // optional
+	Limit null.Uint32 `json:"limit"` // optional
 }
 
 type ResultOfQueryCollection struct {
@@ -48,7 +48,7 @@ type ParamsOfWaitForCollection struct {
 	// Projection (result) string.
 	Result string `json:"result"`
 	// Query timeout.
-	Timeout null.Int `json:"timeout"` // optional
+	Timeout null.Uint32 `json:"timeout"` // optional
 }
 
 type ResultOfWaitForCollection struct {
@@ -58,7 +58,7 @@ type ResultOfWaitForCollection struct {
 
 type ResultOfSubscribeCollection struct {
 	// Subscription handle. Must be closed with `unsubscribe`.
-	Handle int `json:"handle"`
+	Handle uint32 `json:"handle"`
 }
 
 type ParamsOfSubscribeCollection struct {

@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
+	"github.com/volatiletech/null"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"gopkg.in/guregu/null.v4"
 
 	"github.com/radianceteam/ton-client-go/client"
 )

@@ -24,7 +24,7 @@ var headerTmpl = template.Must(template.New("header").Funcs(funcMap).Parse(
 import (
 	"math/big"
 
-	"gopkg.in/guregu/null.v4"
+	"github.com/volatiletech/null"
 )
 
 `))

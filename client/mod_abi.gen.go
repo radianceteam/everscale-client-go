@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 06 Nov 20 19:25 UTC
+// DON'T EDIT THIS FILE is generated 06 Nov 20 19:42 UTC
 //
 // Mod abi
 //
@@ -10,14 +10,14 @@ package client
 import (
 	"math/big"
 
-	"gopkg.in/guregu/null.v4"
+	"github.com/volatiletech/null"
 )
 
 type FunctionHeader struct {
 	// Message expiration time in seconds.
 	// If not specified - calculated automatically from message_expiration_timeout(),
 	// try_index and message_expiration_timeout_grow_factor() (if ABI includes `expire` header).
-	Expire null.Int `json:"expire"` // optional
+	Expire null.Uint32 `json:"expire"` // optional
 	// Message creation time in milliseconds. If not specified, `now` is used
 	// (if ABI includes `time` header).
 	Time *big.Int `json:"time"` // optional
@@ -43,7 +43,7 @@ type DeploySet struct {
 	// Content of TVC file encoded in `base64`.
 	Tvc string `json:"tvc"`
 	// Target workchain for destination address. Default is `0`.
-	WorkchainID null.Int `json:"workchain_id"` // optional
+	WorkchainID null.Int32 `json:"workchain_id"` // optional
 	// List of initial values for contract's public variables.
 	InitialData interface{} `json:"initial_data"` // optional
 }
@@ -143,9 +143,9 @@ type AbiParam struct {
 }
 
 type AbiEvent struct {
-	Name   string     `json:"name"`
-	Inputs []AbiParam `json:"inputs"`
-	ID     *null.Int  `json:"id"` // optional
+	Name   string       `json:"name"`
+	Inputs []AbiParam   `json:"inputs"`
+	ID     *null.Uint32 `json:"id"` // optional
 }
 
 type AbiData struct {
@@ -156,15 +156,15 @@ type AbiData struct {
 }
 
 type AbiFunction struct {
-	Name    string     `json:"name"`
-	Inputs  []AbiParam `json:"inputs"`
-	Outputs []AbiParam `json:"outputs"`
-	ID      *null.Int  `json:"id"` // optional
+	Name    string       `json:"name"`
+	Inputs  []AbiParam   `json:"inputs"`
+	Outputs []AbiParam   `json:"outputs"`
+	ID      *null.Uint32 `json:"id"` // optional
 }
 
 type AbiContract struct {
-	ABIVersion int           `json:"ABI version"`
-	AbiVersion null.Int      `json:"abi_version"` // optional
+	ABIVersion uint32        `json:"ABI version"`
+	AbiVersion null.Uint32   `json:"abi_version"` // optional
 	Header     []string      `json:"header"`      // optional
 	Functions  []AbiFunction `json:"functions"`   // optional
 	Events     []AbiEvent    `json:"events"`      // optional
@@ -194,7 +194,7 @@ type ParamsOfEncodeMessageBody struct {
 	// Expiration timeouts will grow with every retry.
 	//
 	// Default value is 0.
-	ProcessingTryIndex null.Int `json:"processing_try_index"` // optional
+	ProcessingTryIndex null.Uint8 `json:"processing_try_index"` // optional
 }
 
 type ResultOfEncodeMessageBody struct {
@@ -256,7 +256,7 @@ type ParamsOfEncodeMessage struct {
 	// <.....add config parameter with default value here>
 	//
 	// Default value is 0.
-	ProcessingTryIndex null.Int `json:"processing_try_index"` // optional
+	ProcessingTryIndex null.Uint8 `json:"processing_try_index"` // optional
 }
 
 type ResultOfEncodeMessage struct {
@@ -327,7 +327,7 @@ type ParamsOfEncodeAccount struct {
 	// Initial value for the `last_trans_lt`.
 	LastTransLt *big.Int `json:"last_trans_lt"` // optional
 	// Initial value for the `last_paid`.
-	LastPaid null.Int `json:"last_paid"` // optional
+	LastPaid null.Uint32 `json:"last_paid"` // optional
 }
 
 type ResultOfEncodeAccount struct {

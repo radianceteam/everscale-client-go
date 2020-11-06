@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 06 Nov 20 19:25 UTC
+// DON'T EDIT THIS FILE is generated 06 Nov 20 19:42 UTC
 //
 // Mod boc
 //
@@ -22,7 +22,7 @@ type ParamsOfParseShardstate struct {
 	// Shardstate identificator.
 	ID string `json:"id"`
 	// Workchain shardstate belongs to.
-	WorkchainID int `json:"workchain_id"`
+	WorkchainID int32 `json:"workchain_id"`
 }
 
 type ParamsOfGetBlockchainConfig struct {

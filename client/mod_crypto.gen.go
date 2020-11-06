@@ -1,13 +1,13 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 06 Nov 20 19:25 UTC
+// DON'T EDIT THIS FILE is generated 06 Nov 20 19:42 UTC
 //
 // Mod crypto
 //
 // Crypto functions.
 
 import (
-	"gopkg.in/guregu/null.v4"
+	"github.com/volatiletech/null"
 )
 
 type ParamsOfFactorize struct {
@@ -41,12 +41,12 @@ type ParamsOfTonCrc16 struct {
 
 type ResultOfTonCrc16 struct {
 	// Calculated CRC for input data.
-	Crc int `json:"crc"`
+	Crc uint16 `json:"crc"`
 }
 
 type ParamsOfGenerateRandomBytes struct {
 	// Size of random byte array.
-	Length int `json:"length"`
+	Length uint32 `json:"length"`
 }
 
 type ResultOfGenerateRandomBytes struct {
@@ -115,13 +115,13 @@ type ParamsOfScrypt struct {
 	// Must be encoded with `base64`.
 	Salt string `json:"salt"`
 	// CPU/memory cost parameter.
-	LogN int `json:"log_n"`
+	LogN uint8 `json:"log_n"`
 	// The block size parameter, which fine-tunes sequential memory read size and performance.
-	R int `json:"r"`
+	R uint32 `json:"r"`
 	// Parallelization parameter.
-	P int `json:"p"`
+	P uint32 `json:"p"`
 	// Intended output length in octets of the derived key.
-	DkLen int `json:"dk_len"`
+	DkLen uint32 `json:"dk_len"`
 }
 
 type ResultOfScrypt struct {
@@ -219,7 +219,7 @@ type ParamsOfNaclSecretBoxOpen struct {
 
 type ParamsOfMnemonicWords struct {
 	// Dictionary identifier.
-	Dictionary null.Int `json:"dictionary"` // optional
+	Dictionary null.Uint8 `json:"dictionary"` // optional
 }
 
 type ResultOfMnemonicWords struct {
@@ -229,9 +229,9 @@ type ResultOfMnemonicWords struct {
 
 type ParamsOfMnemonicFromRandom struct {
 	// Dictionary identifier.
-	Dictionary null.Int `json:"dictionary"` // optional
+	Dictionary null.Uint8 `json:"dictionary"` // optional
 	// Mnemonic word count.
-	WordCount null.Int `json:"word_count"` // optional
+	WordCount null.Uint8 `json:"word_count"` // optional
 }
 
 type ResultOfMnemonicFromRandom struct {
@@ -243,9 +243,9 @@ type ParamsOfMnemonicFromEntropy struct {
 	// Entropy bytes. Hex encoded.
 	Entropy string `json:"entropy"`
 	// Dictionary identifier.
-	Dictionary null.Int `json:"dictionary"` // optional
+	Dictionary null.Uint8 `json:"dictionary"` // optional
 	// Mnemonic word count.
-	WordCount null.Int `json:"word_count"` // optional
+	WordCount null.Uint8 `json:"word_count"` // optional
 }
 
 type ResultOfMnemonicFromEntropy struct {
@@ -257,9 +257,9 @@ type ParamsOfMnemonicVerify struct {
 	// Phrase.
 	Phrase string `json:"phrase"`
 	// Dictionary identifier.
-	Dictionary null.Int `json:"dictionary"` // optional
+	Dictionary null.Uint8 `json:"dictionary"` // optional
 	// Word count.
-	WordCount null.Int `json:"word_count"` // optional
+	WordCount null.Uint8 `json:"word_count"` // optional
 }
 
 type ResultOfMnemonicVerify struct {
@@ -273,18 +273,18 @@ type ParamsOfMnemonicDeriveSignKeys struct {
 	// Derivation path, for instance "m/44'/396'/0'/0/0".
 	Path null.String `json:"path"` // optional
 	// Dictionary identifier.
-	Dictionary null.Int `json:"dictionary"` // optional
+	Dictionary null.Uint8 `json:"dictionary"` // optional
 	// Word count.
-	WordCount null.Int `json:"word_count"` // optional
+	WordCount null.Uint8 `json:"word_count"` // optional
 }
 
 type ParamsOfHDKeyXPrvFromMnemonic struct {
 	// String with seed phrase.
 	Phrase string `json:"phrase"`
 	// Dictionary identifier.
-	Dictionary null.Int `json:"dictionary"` // optional
+	Dictionary null.Uint8 `json:"dictionary"` // optional
 	// Mnemonic word count.
-	WordCount null.Int `json:"word_count"` // optional
+	WordCount null.Uint8 `json:"word_count"` // optional
 }
 
 type ResultOfHDKeyXPrvFromMnemonic struct {
@@ -296,7 +296,7 @@ type ParamsOfHDKeyDeriveFromXPrv struct {
 	// Serialized extended private key.
 	XPrv string `json:"xprv"`
 	// Child index (see BIP-0032).
-	ChildIndex int `json:"child_index"`
+	ChildIndex uint32 `json:"child_index"`
 	// Indicates the derivation of hardened/not-hardened key (see BIP-0032).
 	Hardened bool `json:"hardened"`
 }
