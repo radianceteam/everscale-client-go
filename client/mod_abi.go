@@ -7,6 +7,7 @@ type AbiType string
 const (
 	ContractAbiType AbiType = "Contract"
 	HandleAbiType   AbiType = "Handle"
+	JSONAbiType     AbiType = "Json"
 )
 
 type Abi struct {
@@ -14,7 +15,7 @@ type Abi struct {
 	Value interface{} `json:"value"`
 }
 
-type SigningBoxHandle int
+type SigningBoxHandle uint32
 
 type MessageSourceType string
 
