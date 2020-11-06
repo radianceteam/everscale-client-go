@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Nov 20 19:09 UTC
+// DON'T EDIT THIS FILE is generated 06 Nov 20 19:25 UTC
 //
 // Mod net
 //
@@ -74,7 +74,7 @@ type ParamsOfSubscribeCollection struct {
 //
 // Queries data that satisfies the `filter` conditions,
 // limits the number of returned records and orders them.
-// The projection fields are limited to  `result` fields.
+// The projection fields are limited to `result` fields.
 func (c *Client) NetQueryCollection(p *ParamsOfQueryCollection) (*ResultOfQueryCollection, error) {
 	response := new(ResultOfQueryCollection)
 	err := c.dllClient.waitErrorOrResultUnmarshal("net.query_collection", p, response)
@@ -87,9 +87,9 @@ func (c *Client) NetQueryCollection(p *ParamsOfQueryCollection) (*ResultOfQueryC
 // Triggers only once.
 // If object that satisfies the `filter` conditions
 // already exists - returns it immediately.
-// If not - waits for insert/update of data withing the specified `timeout`,
+// If not - waits for insert/update of data within the specified `timeout`,
 // and returns it.
-// The projection fields are limited to  `result` fields.
+// The projection fields are limited to `result` fields.
 func (c *Client) NetWaitForCollection(p *ParamsOfWaitForCollection) (*ResultOfWaitForCollection, error) {
 	response := new(ResultOfWaitForCollection)
 	err := c.dllClient.waitErrorOrResultUnmarshal("net.wait_for_collection", p, response)

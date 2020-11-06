@@ -54,6 +54,15 @@ func toGoName(name string) string {
 	return cameled
 }
 
+func toTypeName(name string) string {
+	parts := strings.Split(name, ".")
+	if len(parts) != 1 {
+		return parts[1]
+	}
+
+	return name
+}
+
 func genFunc(m Module, f Function) string {
 	params := make([]Type, 0, 2)
 	for _, p := range f.Params {
@@ -72,14 +81,14 @@ func genFunc(m Module, f Function) string {
 	content := funcContent{
 		Name:       strcase.ToCamel(m.Name + "_" + f.Name),
 		MethodName: m.Name + "." + f.Name,
-		ResultType: f.Result.GenericArgs[0].RefName,
+		ResultType: toTypeName(f.Result.GenericArgs[0].RefName),
 	}
 
 	var tmpl *template.Template
 	if len(params) == 0 {
 		tmpl = withoutParamFunc
 	} else if len(params) == 1 {
-		content.ParamType = params[0].RefName
+		content.ParamType = toTypeName(params[0].RefName)
 		if content.ResultType != "" {
 			tmpl = singleParamFunc
 		} else {
@@ -107,7 +116,7 @@ func GenModule(dir string, m Module) error {
 		if ignoredTypesByName[t.Name] {
 			continue
 		}
-		_, err = file.WriteString(GenerateType(t))
+		_, err = file.WriteString(GenerateAnyType(m, t))
 		if err != nil {
 			return err
 		}
@@ -126,14 +135,14 @@ func GenModule(dir string, m Module) error {
 }
 
 // genStruct - generates struct with each field specified.
-func genStruct(t Type) string {
-	r := "type " + t.Name + " struct {\n"
+func genStruct(m Module, t Type) string {
+	r := "type " + toTypeName(t.Name) + " struct {\n"
 	for _, f := range t.StructFields {
 		if f.Name == "" {
 			fmt.Println("WARNING: add struct field with empty name", t.Type, t.Name, f)
 			f.Name = "value"
 		}
-		r += "\t" + f.ToComment() + "	" + toGoName(f.Name) + " " + GenerateType(f)
+		r += "\t" + f.ToComment() + "	" + toGoName(f.Name) + " " + GenerateAnyType(m, f)
 		if f.Type == Optional {
 			r += " `json:\"" + f.Name + "\"` // optional \n"
 		} else {
@@ -146,7 +155,7 @@ func genStruct(t Type) string {
 }
 
 // genEnumOfTypes - generates enum of types with special enumOfConsts helper type.
-func genEnumOfTypes(t Type) string {
+func genEnumOfTypes(m Module, t Type) string {
 	enumHelperType := Type{Type: EnumOfConsts, Description: Description{Name: t.Name + "Type"}}
 	fields := make(map[string]int)
 	structFields := make([]Type, 1)
@@ -179,69 +188,78 @@ func genEnumOfTypes(t Type) string {
 	}
 	t.StructFields = structFields
 
-	return genEnum(enumHelperType) + "\n" + genStruct(t)
+	return genEnum(enumHelperType) + "\n" + genStruct(m, t)
+}
+
+func genNumber(t Type, isOptional bool) string {
+	fmt.Println(t.NumberType, t.NumberSize)
+	if isOptional {
+		return "null.Int"
+	}
+
+	return "int"
 }
 
 // GenerateOptionalType - pointer or null simple type.
-func GenerateOptionalType(t Type) string {
+func GenerateOptionalType(m Module, t Type) string {
 	switch t.Type { // nolint exhaustive
 	case Ref:
 		if t.RefName == "Value" {
 			return emptyInterface
 		}
 
-		return "*" + t.RefName
+		return "*" + toTypeName(t.RefName)
 	case String:
 		return "null.String"
 	case Value:
 		return emptyInterface
 	case Number:
-		return "null.Int"
+		return genNumber(t, true)
 	case BigInt:
 		return "*big.Int"
 	case None:
 		return ""
 	case Array:
-		return "[]" + GenerateType(*t.ArrayItem)
+		return "[]" + GenerateAnyType(m, *t.ArrayItem)
 	case Boolean:
 		return "null.Bool"
 	default:
-		return "* " + GenerateType(t)
+		return "* " + GenerateAnyType(m, t)
 	}
 }
 
-// GenerateType - root generator function for type.
-func GenerateType(t Type) string {
+// GenerateAnyType - root generator function for type.
+func GenerateAnyType(m Module, t Type) string {
 	r := "NotFound::" + string(t.Type) + "::"
 	switch t.Type {
 	case Ref:
 		if t.RefName == "Value" {
 			r = emptyInterface
 		} else {
-			r = t.RefName + ""
+			r = toTypeName(t.RefName)
 		}
 	case Optional:
-		r = GenerateOptionalType(*t.OptionalInner)
+		r = GenerateOptionalType(m, *t.OptionalInner)
 	case String:
 		r = "string"
 	case Value:
 		r = emptyInterface
 	case Number:
-		r = "int"
+		r = genNumber(t, false)
 	case None:
 		r = ""
 	case Struct:
-		r = genStruct(t)
+		r = genStruct(m, t)
 	case BigInt:
 		r = "big.Int"
 	case Array:
-		r = "[]" + GenerateType(*t.ArrayItem)
+		r = "[]" + GenerateAnyType(m, *t.ArrayItem)
 	case Boolean:
 		r = "bool"
 	case Generic:
 		r = "GENERIC"
 	case EnumOfTypes:
-		r = genEnumOfTypes(t)
+		r = genEnumOfTypes(m, t)
 	case EnumOfConsts:
 		for i := range t.EnumConsts {
 			t.EnumConsts[i].ConstName = strcase.ToCamel(t.EnumConsts[i].Name)

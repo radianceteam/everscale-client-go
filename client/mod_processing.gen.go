@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Nov 20 19:09 UTC
+// DON'T EDIT THIS FILE is generated 06 Nov 20 19:25 UTC
 //
 // Mod processing
 //
@@ -107,7 +107,7 @@ type ResultOfProcessMessage struct {
 type DecodedOutput struct {
 	// Decoded bodies of the out messages.
 	//
-	// If the message can't be decoded then `None` will be stored in
+	// If the message can't be decoded, then `None` will be stored in
 	// the appropriate position.
 	OutMessages []*DecodedMessageBody `json:"out_messages"`
 	// Decoded body of the function output message.
@@ -121,14 +121,14 @@ type ParamsOfSendMessage struct {
 	//
 	// If this parameter is specified and the message has the
 	// `expire` header then expiration time will be checked against
-	// the current time to prevent an unnecessary sending of already expired message.
+	// the current time to prevent unnecessary sending of already expired message.
 	//
 	// The `message already expired` error will be returned in this
 	// case.
 	//
-	// Note that specifying `abi` for ABI compliant contracts is
-	// strongly recommended due to choosing proper processing
-	// strategy.
+	// Note, that specifying `abi` for ABI compliant contracts is
+	// strongly recommended, so that proper processing strategy can be
+	// chosen.
 	Abi *Abi `json:"abi"` // optional
 	// Flag for requesting events sending.
 	SendEvents bool `json:"send_events"`
@@ -146,7 +146,7 @@ type ResultOfSendMessage struct {
 type ParamsOfWaitForTransaction struct {
 	// Optional ABI for decoding the transaction result.
 	//
-	// If it is specified then the output messages' bodies will be
+	// If it is specified, then the output messages' bodies will be
 	// decoded according to this ABI.
 	//
 	// The `abi_decoded` result field will be filled out.

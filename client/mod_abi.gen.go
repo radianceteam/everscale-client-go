@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Nov 20 19:09 UTC
+// DON'T EDIT THIS FILE is generated 06 Nov 20 19:25 UTC
 //
 // Mod abi
 //
@@ -15,10 +15,14 @@ import (
 
 type FunctionHeader struct {
 	// Message expiration time in seconds.
+	// If not specified - calculated automatically from message_expiration_timeout(),
+	// try_index and message_expiration_timeout_grow_factor() (if ABI includes `expire` header).
 	Expire null.Int `json:"expire"` // optional
-	// Message creation time in milliseconds.
+	// Message creation time in milliseconds. If not specified, `now` is used
+	// (if ABI includes `time` header).
 	Time *big.Int `json:"time"` // optional
-	// Public key used to sign message. Encoded with `hex`.
+	// Public key is used by the contract to check the signature. Encoded in `hex`.
+	// If not specified, method fails with exception (if ABI includes `pubkey` header)..
 	Pubkey null.String `json:"pubkey"` // optional
 }
 
@@ -50,8 +54,8 @@ const (
 
 	// No keys are provided. Creates an unsigned message.
 	NoneSignerType SignerType = "None"
-	// Only public key is provided to generate unsigned message and `data_to_sign`
-	// which can be signed later.
+	// Only public key is provided in unprefixed hex string format to generate unsigned message
+	// and `data_to_sign` which can be signed later.
 	ExternalSignerType SignerType = "External"
 	// Key pair is provided for signing.
 	KeysSignerType SignerType = "Keys"
@@ -160,10 +164,11 @@ type AbiFunction struct {
 
 type AbiContract struct {
 	ABIVersion int           `json:"ABI version"`
-	Header     []string      `json:"header"`    // optional
-	Functions  []AbiFunction `json:"functions"` // optional
-	Events     []AbiEvent    `json:"events"`    // optional
-	Data       []AbiData     `json:"data"`      // optional
+	AbiVersion null.Int      `json:"abi_version"` // optional
+	Header     []string      `json:"header"`      // optional
+	Functions  []AbiFunction `json:"functions"`   // optional
+	Events     []AbiEvent    `json:"events"`      // optional
+	Data       []AbiData     `json:"data"`        // optional
 }
 
 type ParamsOfEncodeMessageBody struct {

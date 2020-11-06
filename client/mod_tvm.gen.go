@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Nov 20 19:09 UTC
+// DON'T EDIT THIS FILE is generated 06 Nov 20 19:25 UTC
 //
 // Mod tvm
 //
@@ -28,9 +28,9 @@ const (
 
 	// Non-existing account to run a creation internal message.
 	// Should be used with `skip_transaction_check = true` if the message has no deploy data
-	// since transaction on the unitialized account are always aborted.
+	// since transactions on the uninitialized account are always aborted.
 	NoneAccountForExecutorType AccountForExecutorType = "None"
-	// Emulate unitialized account to run deploy message.
+	// Emulate uninitialized account to run deploy message.
 	UninitAccountForExecutorType AccountForExecutorType = "Uninit"
 	// Account state to run message.
 	AccountAccountForExecutorType AccountForExecutorType = "Account"

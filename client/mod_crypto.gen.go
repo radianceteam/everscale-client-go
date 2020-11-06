@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Nov 20 19:09 UTC
+// DON'T EDIT THIS FILE is generated 06 Nov 20 19:25 UTC
 //
 // Mod crypto
 //
@@ -111,7 +111,7 @@ type ParamsOfScrypt struct {
 	// The password bytes to be hashed.
 	// Must be encoded with `base64`.
 	Password string `json:"password"`
-	// A salt bytes that modifies the hash to protect against Rainbow table attacks.
+	// Salt bytes that modify the hash to protect against Rainbow table attacks.
 	// Must be encoded with `base64`.
 	Salt string `json:"salt"`
 	// CPU/memory cost parameter.
@@ -263,7 +263,7 @@ type ParamsOfMnemonicVerify struct {
 }
 
 type ResultOfMnemonicVerify struct {
-	// Flag indicating the mnemonic is valid or not.
+	// Flag indicating if the mnemonic is valid or not.
 	Valid bool `json:"valid"`
 }
 

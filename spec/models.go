@@ -38,6 +38,8 @@ type Type struct {
 	Type          TypeName      `json:"type,omitempty"`
 	RefName       string        `json:"ref_name,omitempty"`
 	GenericName   string        `json:"generic_name,omitempty"`
+	NumberType    string        `json:"number_type,omitempty"`
+	NumberSize    uint          `json:"number_size,omitempty"`
 	GenericArgs   []Type        `json:"generic_args,omitempty"`
 	OptionalInner *Type         `json:"optional_inner,omitempty"`
 	ArrayItem     *Type         `json:"array_item,omitempty"`
