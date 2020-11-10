@@ -1,14 +1,12 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 06 Nov 20 19:56 UTC
+// DON'T EDIT THIS FILE is generated 10 Nov 20 06:44 UTC
 //
 // Mod client
 //
 // Provides information about library.
 
 import (
-	"math/big"
-
 	"github.com/volatiletech/null"
 )
 
@@ -18,7 +16,7 @@ type NetworkConfig struct {
 	MessageRetriesCount      null.Int8   `json:"message_retries_count"`      // optional
 	MessageProcessingTimeout null.Uint32 `json:"message_processing_timeout"` // optional
 	WaitForTimeout           null.Uint32 `json:"wait_for_timeout"`           // optional
-	OutOfSyncThreshold       *big.Int    `json:"out_of_sync_threshold"`      // optional
+	OutOfSyncThreshold       null.Uint32 `json:"out_of_sync_threshold"`      // optional
 	AccessKey                null.String `json:"access_key"`                 // optional
 }
 

@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 06 Nov 20 19:56 UTC
+// DON'T EDIT THIS FILE is generated 10 Nov 20 06:44 UTC
 //
 // Mod abi
 //
@@ -163,7 +163,7 @@ type AbiFunction struct {
 }
 
 type AbiContract struct {
-	ABIVersion uint32        `json:"ABI version"`
+	ABIVersion null.Uint32   `json:"ABI version"` // optional
 	AbiVersion null.Uint32   `json:"abi_version"` // optional
 	Header     []string      `json:"header"`      // optional
 	Functions  []AbiFunction `json:"functions"`   // optional

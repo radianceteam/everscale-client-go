@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 06 Nov 20 19:56 UTC
+// DON'T EDIT THIS FILE is generated 10 Nov 20 06:44 UTC
 //
 // Mod boc
 //
@@ -33,6 +33,16 @@ type ParamsOfGetBlockchainConfig struct {
 type ResultOfGetBlockchainConfig struct {
 	// Blockchain config BOC encoded as base64.
 	ConfigBoc string `json:"config_boc"`
+}
+
+type ParamsOfGetBocHash struct {
+	// BOC encoded as base64.
+	Boc string `json:"boc"`
+}
+
+type ResultOfGetBocHash struct {
+	// BOC root hash encoded with hex.
+	Hash string `json:"hash"`
 }
 
 // Parses message boc into a JSON
@@ -88,6 +98,14 @@ func (c *Client) BocParseShardstate(p *ParamsOfParseShardstate) (*ResultOfParse,
 func (c *Client) BocGetBlockchainConfig(p *ParamsOfGetBlockchainConfig) (*ResultOfGetBlockchainConfig, error) {
 	response := new(ResultOfGetBlockchainConfig)
 	err := c.dllClient.waitErrorOrResultUnmarshal("boc.get_blockchain_config", p, response)
+
+	return response, err
+}
+
+// Calculates BOC root hash.
+func (c *Client) BocGetBocHash(p *ParamsOfGetBocHash) (*ResultOfGetBocHash, error) {
+	response := new(ResultOfGetBocHash)
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.get_boc_hash", p, response)
 
 	return response, err
 }
