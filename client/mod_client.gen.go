@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 10 Nov 20 06:44 UTC
+// DON'T EDIT THIS FILE is generated 14 Dec 20 06:47 UTC
 //
 // Mod client
 //
@@ -24,7 +24,6 @@ type CryptoConfig struct {
 	MnemonicDictionary  null.Uint8  `json:"mnemonic_dictionary"`   // optional
 	MnemonicWordCount   null.Uint8  `json:"mnemonic_word_count"`   // optional
 	HdkeyDerivationPath null.String `json:"hdkey_derivation_path"` // optional
-	HdkeyCompliant      null.Bool   `json:"hdkey_compliant"`       // optional
 }
 
 type AbiConfig struct {
@@ -34,10 +33,41 @@ type AbiConfig struct {
 }
 
 type BuildInfoDependency struct {
-	// Dependency name. Usually it is a crate name.
+	// Dependency name.
+	// Usually it is a crate name.
 	Name string `json:"name"`
 	// Git commit hash of the related repository.
 	GitCommit string `json:"git_commit"`
+}
+
+type ParamsOfAppRequest struct {
+	// Request ID.
+	// Should be used in `resolve_app_request` call.
+	AppRequestID uint32 `json:"app_request_id"`
+	// Request describing data.
+	RequestData interface{} `json:"request_data"`
+}
+
+type AppRequestResultType string
+
+const (
+
+	// Error occured during request processing.
+	ErrorAppRequestResultType AppRequestResultType = "Error"
+	// Request processed successfully.
+	OkAppRequestResultType AppRequestResultType = "Ok"
+)
+
+type AppRequestResult struct {
+	Type AppRequestResultType `json:"type"`
+	// Error description.
+	// presented in types:
+	// "Error".
+	Text string `json:"text"`
+	// Request processing result.
+	// presented in types:
+	// "Ok".
+	Result interface{} `json:"result"`
 }
 
 type ResultOfVersion struct {
@@ -50,6 +80,13 @@ type ResultOfBuildInfo struct {
 	BuildNumber uint32 `json:"build_number"`
 	// Fingerprint of the most important dependencies.
 	Dependencies []BuildInfoDependency `json:"dependencies"`
+}
+
+type ParamsOfResolveAppRequest struct {
+	// Request ID received from SDK.
+	AppRequestID uint32 `json:"app_request_id"`
+	// Result of request processing.
+	Result AppRequestResult `json:"result"`
 }
 
 // Returns Core Library version.
@@ -66,4 +103,11 @@ func (c *Client) ClientBuildInfo() (*ResultOfBuildInfo, error) {
 	err := c.dllClient.waitErrorOrResultUnmarshal("client.build_info", nil, response)
 
 	return response, err
+}
+
+// Resolves application request processing result.
+func (c *Client) ClientResolveAppRequest(p *ParamsOfResolveAppRequest) error {
+	_, err := c.dllClient.waitErrorOrResult("client.resolve_app_request", p)
+
+	return err
 }

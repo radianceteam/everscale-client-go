@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 10 Nov 20 06:44 UTC
+// DON'T EDIT THIS FILE is generated 14 Dec 20 06:47 UTC
 //
 // Mod boc
 //
@@ -45,8 +45,7 @@ type ResultOfGetBocHash struct {
 	Hash string `json:"hash"`
 }
 
-// Parses message boc into a JSON
-//
+// Parses message boc into a JSON.
 // JSON structure is compatible with GraphQL API message object.
 func (c *Client) BocParseMessage(p *ParamsOfParse) (*ResultOfParse, error) {
 	response := new(ResultOfParse)
@@ -55,8 +54,7 @@ func (c *Client) BocParseMessage(p *ParamsOfParse) (*ResultOfParse, error) {
 	return response, err
 }
 
-// Parses transaction boc into a JSON
-//
+// Parses transaction boc into a JSON.
 // JSON structure is compatible with GraphQL API transaction object.
 func (c *Client) BocParseTransaction(p *ParamsOfParse) (*ResultOfParse, error) {
 	response := new(ResultOfParse)
@@ -65,8 +63,7 @@ func (c *Client) BocParseTransaction(p *ParamsOfParse) (*ResultOfParse, error) {
 	return response, err
 }
 
-// Parses account boc into a JSON
-//
+// Parses account boc into a JSON.
 // JSON structure is compatible with GraphQL API account object.
 func (c *Client) BocParseAccount(p *ParamsOfParse) (*ResultOfParse, error) {
 	response := new(ResultOfParse)
@@ -75,8 +72,7 @@ func (c *Client) BocParseAccount(p *ParamsOfParse) (*ResultOfParse, error) {
 	return response, err
 }
 
-// Parses block boc into a JSON
-//
+// Parses block boc into a JSON.
 // JSON structure is compatible with GraphQL API block object.
 func (c *Client) BocParseBlock(p *ParamsOfParse) (*ResultOfParse, error) {
 	response := new(ResultOfParse)
@@ -85,8 +81,7 @@ func (c *Client) BocParseBlock(p *ParamsOfParse) (*ResultOfParse, error) {
 	return response, err
 }
 
-// Parses shardstate boc into a JSON
-//
+// Parses shardstate boc into a JSON.
 // JSON structure is compatible with GraphQL API shardstate object.
 func (c *Client) BocParseShardstate(p *ParamsOfParseShardstate) (*ResultOfParse, error) {
 	response := new(ResultOfParse)

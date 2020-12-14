@@ -117,7 +117,7 @@ func GenModule(dir string, m Module) error {
 		if ignoredTypesByName[t.Name] {
 			continue
 		}
-		_, err = file.WriteString(GenerateAnyType(m, t))
+		_, err = file.WriteString(GenerateAnyType(m, t, true))
 		if err != nil {
 			return err
 		}
@@ -143,7 +143,7 @@ func genStruct(m Module, t Type) string {
 			fmt.Println("WARNING: add struct field with empty name", t.Type, t.Name, f)
 			f.Name = "value"
 		}
-		r += "\t" + f.ToComment() + "	" + toGoName(f.Name) + " " + GenerateAnyType(m, f)
+		r += "\t" + f.ToComment() + "	" + toGoName(f.Name) + " " + GenerateAnyType(m, f, false)
 		if f.Type == Optional {
 			r += " `json:\"" + f.Name + "\"` // optional \n"
 		} else {
@@ -250,16 +250,16 @@ func GenerateOptionalType(m Module, t Type) string {
 	case None:
 		return ""
 	case Array:
-		return "[]" + GenerateAnyType(m, *t.ArrayItem)
+		return "[]" + GenerateAnyType(m, *t.ArrayItem, false)
 	case Boolean:
 		return "null.Bool"
 	default:
-		return "* " + GenerateAnyType(m, t)
+		return "* " + GenerateAnyType(m, t, false)
 	}
 }
 
 // GenerateAnyType - root generator function for type.
-func GenerateAnyType(m Module, t Type) string {
+func GenerateAnyType(m Module, t Type, isRoot bool) string {
 	r := "NotFound::" + string(t.Type) + "::"
 	switch t.Type {
 	case Ref:
@@ -276,6 +276,9 @@ func GenerateAnyType(m Module, t Type) string {
 		r = emptyInterface
 	case Number:
 		r = genNumber(t, false)
+		if isRoot {
+			r = "type " + t.Name + " " + r + "\n"
+		}
 	case None:
 		r = ""
 	case Struct:
@@ -283,7 +286,7 @@ func GenerateAnyType(m Module, t Type) string {
 	case BigInt:
 		r = "big.Int"
 	case Array:
-		r = "[]" + GenerateAnyType(m, *t.ArrayItem)
+		r = "[]" + GenerateAnyType(m, *t.ArrayItem, false)
 	case Boolean:
 		r = "bool"
 	case Generic:

@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 10 Nov 20 06:44 UTC
+// DON'T EDIT THIS FILE is generated 14 Dec 20 06:47 UTC
 //
 // Mod net
 //
@@ -21,6 +21,19 @@ const (
 	AscSortDirection  SortDirection = "ASC"
 	DescSortDirection SortDirection = "DESC"
 )
+
+type ParamsOfQuery struct {
+	// GraphQL query text.
+	Query string `json:"query"`
+	// Variables used in query.
+	// Must be a map with named values thatcan be used in query.
+	Variables interface{} `json:"variables"` // optional
+}
+
+type ResultOfQuery struct {
+	// Result provided by DAppServer.
+	Result interface{} `json:"result"`
+}
 
 type ParamsOfQueryCollection struct {
 	// Collection name (accounts, blocks, transactions, messages, block_signatures).
@@ -57,7 +70,8 @@ type ResultOfWaitForCollection struct {
 }
 
 type ResultOfSubscribeCollection struct {
-	// Subscription handle. Must be closed with `unsubscribe`.
+	// Subscription handle.
+	// Must be closed with `unsubscribe`.
 	Handle uint32 `json:"handle"`
 }
 
@@ -70,8 +84,15 @@ type ParamsOfSubscribeCollection struct {
 	Result string `json:"result"`
 }
 
-// Queries collection data
-//
+// Performs DAppServer GraphQL query.
+func (c *Client) NetQuery(p *ParamsOfQuery) (*ResultOfQuery, error) {
+	response := new(ResultOfQuery)
+	err := c.dllClient.waitErrorOrResultUnmarshal("net.query", p, response)
+
+	return response, err
+}
+
+// Queries collection data.
 // Queries data that satisfies the `filter` conditions,
 // limits the number of returned records and orders them.
 // The projection fields are limited to `result` fields.
@@ -82,8 +103,7 @@ func (c *Client) NetQueryCollection(p *ParamsOfQueryCollection) (*ResultOfQueryC
 	return response, err
 }
 
-// Returns an object that fulfills the conditions or waits for its appearance
-//
+// Returns an object that fulfills the conditions or waits for its appearance.
 // Triggers only once.
 // If object that satisfies the `filter` conditions
 // already exists - returns it immediately.
@@ -97,8 +117,6 @@ func (c *Client) NetWaitForCollection(p *ParamsOfWaitForCollection) (*ResultOfWa
 	return response, err
 }
 
-// Cancels a subscription
-//
 // Cancels a subscription specified by its handle.
 func (c *Client) NetUnsubscribe(p *ResultOfSubscribeCollection) error {
 	_, err := c.dllClient.waitErrorOrResult("net.unsubscribe", p)

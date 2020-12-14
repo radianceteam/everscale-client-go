@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 10 Nov 20 06:44 UTC
+// DON'T EDIT THIS FILE is generated 14 Dec 20 06:47 UTC
 //
 // Mod tvm
 //
@@ -26,9 +26,7 @@ type AccountForExecutorType string
 
 const (
 
-	// Non-existing account to run a creation internal message.
-	// Should be used with `skip_transaction_check = true` if the message has no deploy data
-	// since transactions on the uninitialized account are always aborted.
+	// Non-existing account to run a creation internal message. Should be used with `skip_transaction_check = true` if the message has no deploy data since transactions on the uninitialized account are always aborted.
 	NoneAccountForExecutorType AccountForExecutorType = "None"
 	// Emulate uninitialized account to run deploy message.
 	UninitAccountForExecutorType AccountForExecutorType = "Uninit"
@@ -38,11 +36,12 @@ const (
 
 type AccountForExecutor struct {
 	Type AccountForExecutorType `json:"type"`
-	// Account BOC. Encoded as base64. presented in types:
+	// Account BOC.
+	// Encoded as base64. presented in types:
 	// "Account".
 	Boc string `json:"boc"`
-	// Flag for running account with the unlimited balance. Can be used to calculate
-	// transaction fees without balance check presented in types:
+	// Flag for running account with the unlimited balance.
+	// Can be used to calculatetransaction fees without balance check presented in types:
 	// "Account".
 	UnlimitedBalance null.Bool `json:"unlimited_balance"` // optional
 }
@@ -57,7 +56,8 @@ type TransactionFees struct {
 }
 
 type ParamsOfRunExecutor struct {
-	// Input message BOC. Must be encoded as base64.
+	// Input message BOC.
+	// Must be encoded as base64.
 	Message string `json:"message"`
 	// Account to run on executor.
 	Account AccountForExecutor `json:"account"`
@@ -71,26 +71,28 @@ type ParamsOfRunExecutor struct {
 
 type ResultOfRunExecutor struct {
 	// Parsed transaction.
-	//
 	// In addition to the regular transaction fields there is a
 	// `boc` field encoded with `base64` which contains source
 	// transaction BOC.
 	Transaction interface{} `json:"transaction"`
-	// List of output messages' BOCs. Encoded as `base64`.
+	// List of output messages' BOCs.
+	// Encoded as `base64`.
 	OutMessages []string `json:"out_messages"`
-	// Optional decoded message bodies according to the optional
-	// `abi` parameter.
+	// Optional decoded message bodies according to the optional `abi` parameter.
 	Decoded *DecodedOutput `json:"decoded"` // optional
-	// Updated account state BOC. Encoded as `base64`.
+	// Updated account state BOC.
+	// Encoded as `base64`.
 	Account string `json:"account"`
 	// Transaction fees.
 	Fees TransactionFees `json:"fees"`
 }
 
 type ParamsOfRunTvm struct {
-	// Input message BOC. Must be encoded as base64.
+	// Input message BOC.
+	// Must be encoded as base64.
 	Message string `json:"message"`
-	// Account BOC. Must be encoded as base64.
+	// Account BOC.
+	// Must be encoded as base64.
 	Account string `json:"account"`
 	// Execution options.
 	ExecutionOptions *ExecutionOptions `json:"execution_options"` // optional
@@ -99,13 +101,13 @@ type ParamsOfRunTvm struct {
 }
 
 type ResultOfRunTvm struct {
-	// List of output messages' BOCs. Encoded as `base64`.
+	// List of output messages' BOCs.
+	// Encoded as `base64`.
 	OutMessages []string `json:"out_messages"`
-	// Optional decoded message bodies according to the optional
-	// `abi` parameter.
+	// Optional decoded message bodies according to the optional `abi` parameter.
 	Decoded *DecodedOutput `json:"decoded"` // optional
-	// Updated account state BOC. Encoded as `base64`.
-	// Attention! Only data in account state is updated.
+	// Updated account state BOC.
+	// Encoded as `base64`.Attention! Only data in account state is updated.
 	Account string `json:"account"`
 }
 
