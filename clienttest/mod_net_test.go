@@ -13,6 +13,14 @@ import (
 	"github.com/radianceteam/ton-client-go/client"
 )
 
+func TestClient_NetSuspendResume(t *testing.T) {
+	a := assert.New(t)
+	c := NewTestClient()
+	defer c.Close()
+	a.NoError(c.NetSuspend(), "suspend")
+	a.NoError(c.NetResume(), "resume")
+}
+
 func TestClient_NetSubscribeCollectionEmpty(t *testing.T) {
 	a := assert.New(t)
 	c := NewTestClient()

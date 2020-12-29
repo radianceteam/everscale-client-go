@@ -11,6 +11,7 @@ linters:
     - misspell
     - maligned
     - goerr113
+    - nlreturn
   enable-all: true
 linters-settings:
   goimports:

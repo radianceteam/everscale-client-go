@@ -21,6 +21,15 @@ func TestModCrypto(t *testing.T) {
 	a.Len(keys.Secret, 64, "hex len")
 }
 
+func TestModCryptoRegisterSigningBox(t *testing.T) {
+	a := assert.New(t)
+	c := NewTestClient()
+	defer c.Close()
+
+	_, err := c.CryptoRegisterSigningBox()
+	a.NoError(err, "CryptoRegisterSigningBox")
+}
+
 func TestModCryptoMnemonicFromRandom(t *testing.T) {
 	a := assert.New(t)
 	c := NewTestClient()

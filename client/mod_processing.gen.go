@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 14 Dec 20 06:47 UTC
+// DON'T EDIT THIS FILE is generated 29 Dec 20 20:08 UTC
 //
 // Mod processing
 //

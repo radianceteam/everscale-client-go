@@ -33,10 +33,12 @@ var ErrContextIsClosed = errors.New("context is closed")
 type ResponseCode uint32
 
 const (
-	ResponseCodeSuccess = ResponseCode(C.tc_response_success)
-	ResponseCodeError   = ResponseCode(C.tc_response_error)
-	ResponseCodeNop     = ResponseCode(C.tc_response_nop)
-	ResponseCodeCustom  = ResponseCode(C.tc_response_custom)
+	ResponseCodeSuccess    = ResponseCode(C.tc_response_success)
+	ResponseCodeError      = ResponseCode(C.tc_response_error)
+	ResponseCodeNop        = ResponseCode(C.tc_response_nop)
+	ResponseCodeAppRequest = ResponseCode(C.tc_response_app_request)
+	ResponseCodeAppNotify  = ResponseCode(C.tc_response_app_notify)
+	ResponseCodeCustom     = ResponseCode(C.tc_response_custom)
 )
 
 func newTcStr(str []byte) C.tc_string_data_t {

@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 14 Dec 20 06:47 UTC
+// DON'T EDIT THIS FILE is generated 29 Dec 20 20:08 UTC
 //
 // Mod crypto
 //
@@ -544,6 +544,11 @@ func (c *Client) CryptoNaclSign(p *ParamsOfNaclSign) (*ResultOfNaclSign, error) 
 	return response, err
 }
 
+// Verifies the signature and returns the unsigned message.
+// Verifies the signature in `signed` using the signer's public key `public`
+// and returns the message `unsigned`.
+//
+// If the signature fails verification, crypto_sign_open raises an exception.
 func (c *Client) CryptoNaclSignOpen(p *ParamsOfNaclSignOpen) (*ResultOfNaclSignOpen, error) {
 	response := new(ResultOfNaclSignOpen)
 	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_sign_open", p, response)
@@ -551,6 +556,9 @@ func (c *Client) CryptoNaclSignOpen(p *ParamsOfNaclSignOpen) (*ResultOfNaclSignO
 	return response, err
 }
 
+// Signs the message using the secret key and returns a signature.
+// Signs the message `unsigned` using the secret key `secret`
+// and returns a signature `signature`.
 func (c *Client) CryptoNaclSignDetached(p *ParamsOfNaclSign) (*ResultOfNaclSignDetached, error) {
 	response := new(ResultOfNaclSignDetached)
 	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_sign_detached", p, response)
@@ -558,6 +566,7 @@ func (c *Client) CryptoNaclSignDetached(p *ParamsOfNaclSign) (*ResultOfNaclSignD
 	return response, err
 }
 
+// Generates a random NaCl key pair.
 func (c *Client) CryptoNaclBoxKeypair() (*KeyPair, error) {
 	response := new(KeyPair)
 	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_box_keypair", nil, response)

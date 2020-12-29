@@ -26,6 +26,7 @@ tasks:
       - go run ./cmd/gen
       - go fmt ./client/*.gen.go
       - goimports -w ./client/*.gen.go
+      - golangci-lint run --fix ./client/
   run:
     desc: "Run in host system without container"
     cmds:

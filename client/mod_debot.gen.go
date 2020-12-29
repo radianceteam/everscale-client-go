@@ -1,12 +1,13 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 14 Dec 20 06:47 UTC
+// DON'T EDIT THIS FILE is generated 29 Dec 20 20:08 UTC
 //
 // Mod debot
 //
 // [UNSTABLE](UNSTABLE.md) Module for working with debot.
 
 type DebotHandle uint32
+
 type DebotAction struct {
 	// A short action description.
 	// Should be used by Debot Browser as name ofmenu item.
@@ -44,6 +45,8 @@ const (
 	LogParamsOfAppDebotBrowserType ParamsOfAppDebotBrowserType = "Log"
 	// Switch debot to another context (menu).
 	SwitchParamsOfAppDebotBrowserType ParamsOfAppDebotBrowserType = "Switch"
+	// Notify browser that all context actions are shown.
+	SwitchCompletedParamsOfAppDebotBrowserType ParamsOfAppDebotBrowserType = "SwitchCompleted"
 	// Show action to the user. Called after `switch` for each action in context.
 	ShowActionParamsOfAppDebotBrowserType ParamsOfAppDebotBrowserType = "ShowAction"
 	// Request user input.

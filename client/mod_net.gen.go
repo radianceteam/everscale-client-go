@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 14 Dec 20 06:47 UTC
+// DON'T EDIT THIS FILE is generated 29 Dec 20 20:08 UTC
 //
 // Mod net
 //
@@ -84,6 +84,16 @@ type ParamsOfSubscribeCollection struct {
 	Result string `json:"result"`
 }
 
+type ParamsOfFindLastShardBlock struct {
+	// Account address.
+	Address string `json:"address"`
+}
+
+type ResultOfFindLastShardBlock struct {
+	// Account shard last block ID.
+	BlockID string `json:"block_id"`
+}
+
 // Performs DAppServer GraphQL query.
 func (c *Client) NetQuery(p *ParamsOfQuery) (*ResultOfQuery, error) {
 	response := new(ResultOfQuery)
@@ -122,4 +132,12 @@ func (c *Client) NetUnsubscribe(p *ResultOfSubscribeCollection) error {
 	_, err := c.dllClient.waitErrorOrResult("net.unsubscribe", p)
 
 	return err
+}
+
+// Returns ID of the last block in a specified account shard.
+func (c *Client) NetFindLastShardBlock(p *ParamsOfFindLastShardBlock) (*ResultOfFindLastShardBlock, error) {
+	response := new(ResultOfFindLastShardBlock)
+	err := c.dllClient.waitErrorOrResultUnmarshal("net.find_last_shard_block", p, response)
+
+	return response, err
 }

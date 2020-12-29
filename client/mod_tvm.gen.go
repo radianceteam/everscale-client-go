@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 14 Dec 20 06:47 UTC
+// DON'T EDIT THIS FILE is generated 29 Dec 20 20:08 UTC
 //
 // Mod tvm
 //
@@ -107,7 +107,7 @@ type ResultOfRunTvm struct {
 	// Optional decoded message bodies according to the optional `abi` parameter.
 	Decoded *DecodedOutput `json:"decoded"` // optional
 	// Updated account state BOC.
-	// Encoded as `base64`.Attention! Only data in account state is updated.
+	// Encoded as `base64`.Attention! Only `account_state.storage.state.data` part of the boc is updated.
 	Account string `json:"account"`
 }
 
@@ -126,6 +126,26 @@ type ResultOfRunGet struct {
 	Output interface{} `json:"output"`
 }
 
+// Emulates all the phases of contract execution locally.
+// Performs all the phases of contract execution on Transaction Executor -
+// the same component that is used on Validator Nodes.
+//
+// Can be used for contract debug, to find out the reason of message unsuccessful
+// delivery - as Validators just throw away failed transactions, here you can catch it.
+//
+// Another use case is to estimate fees for message execution. Set  `AccountForExecutor::Account.unlimited_balance`
+// to `true` so that emulation will not depend on the actual balance.
+//
+// One more use case - you can procude the sequence of operations,
+// thus emulating the multiple contract calls locally.
+// And so on.
+//
+// To get the account boc (bag of cells) - use `net.query` method to download it from graphql api
+// (field `boc` of `account`) or generate it with `abi.encode_account method`.
+// To get the message boc - use `abi.encode_message` or prepare it any other way, for instance, with Fift script.
+//
+// If you need this emulation to be as precise as possible then specify `ParamsOfRunExecutor` parameter.
+// If you need to see the aborted transaction as a result, not as an error, set `skip_transaction_check` to `true`.
 func (c *Client) TvmRunExecutor(p *ParamsOfRunExecutor) (*ResultOfRunExecutor, error) {
 	response := new(ResultOfRunExecutor)
 	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.run_executor", p, response)
@@ -133,6 +153,19 @@ func (c *Client) TvmRunExecutor(p *ParamsOfRunExecutor) (*ResultOfRunExecutor, e
 	return response, err
 }
 
+// Executes get methods of ABI-compatible contracts.
+// Performs only a part of compute phase of transaction execution
+// that is used to run get-methods of ABI-compatible contracts.
+//
+// If you try to run get methods with `run_executor` you will get an error, because it checks ACCEPT and exits
+// if there is none, which is actually true for get methods.
+//
+// To get the account boc (bag of cells) - use `net.query` method to download it from graphql api
+// (field `boc` of `account`) or generate it with `abi.encode_account method`.
+// To get the message boc - use `abi.encode_message` or prepare it any other way, for instance, with Fift script.
+//
+// Attention! Updated account state is produces as well, but only
+// `account_state.storage.state.data`  part of the boc is updated.
 func (c *Client) TvmRunTvm(p *ParamsOfRunTvm) (*ResultOfRunTvm, error) {
 	response := new(ResultOfRunTvm)
 	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.run_tvm", p, response)
@@ -140,7 +173,8 @@ func (c *Client) TvmRunTvm(p *ParamsOfRunTvm) (*ResultOfRunTvm, error) {
 	return response, err
 }
 
-// Executes getmethod and returns data from TVM stack.
+// Executes a getmethod of FIFT contract that fulfills the smc-guidelines https://test.ton.org/smc-guidelines.txt
+// and returns the result data from TVM's stack.
 func (c *Client) TvmRunGet(p *ParamsOfRunGet) (*ResultOfRunGet, error) {
 	response := new(ResultOfRunGet)
 	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.run_get", p, response)

@@ -22,7 +22,7 @@ func TestModClient(t *testing.T) {
 	if !a.NotNil(version, "version response") {
 		return
 	}
-	a.Equal("1.1.0", version.Version, "dll with specified version")
+	a.Equal("1.4.0", version.Version, "dll with specified version")
 	ref, err := c.ClientGetAPIReference()
 	a.NoError(err, "call Client.get_api_version")
 	a.NotNil(ref, "ref not nil")

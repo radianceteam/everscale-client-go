@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 14 Dec 20 06:47 UTC
+// DON'T EDIT THIS FILE is generated 29 Dec 20 20:08 UTC
 //
 // Mod boc
 //
@@ -43,6 +43,16 @@ type ParamsOfGetBocHash struct {
 type ResultOfGetBocHash struct {
 	// BOC root hash encoded with hex.
 	Hash string `json:"hash"`
+}
+
+type ParamsOfGetCodeFromTvc struct {
+	// Contract TVC image encoded as base64.
+	Tvc string `json:"tvc"`
+}
+
+type ResultOfGetCodeFromTvc struct {
+	// Contract code encoded as base64.
+	Code string `json:"code"`
 }
 
 // Parses message boc into a JSON.
@@ -101,6 +111,14 @@ func (c *Client) BocGetBlockchainConfig(p *ParamsOfGetBlockchainConfig) (*Result
 func (c *Client) BocGetBocHash(p *ParamsOfGetBocHash) (*ResultOfGetBocHash, error) {
 	response := new(ResultOfGetBocHash)
 	err := c.dllClient.waitErrorOrResultUnmarshal("boc.get_boc_hash", p, response)
+
+	return response, err
+}
+
+// Extracts code from TVC contract image.
+func (c *Client) BocGetCodeFromTvc(p *ParamsOfGetCodeFromTvc) (*ResultOfGetCodeFromTvc, error) {
+	response := new(ResultOfGetCodeFromTvc)
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.get_code_from_tvc", p, response)
 
 	return response, err
 }
