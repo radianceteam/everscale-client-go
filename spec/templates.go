@@ -84,46 +84,54 @@ var funcTemplateWithAppObject = template.Must(template.New("funcTemplate").Parse
 	}
 
 	go func() {
-		var appRequest ParamsOfAppRequest
-		var appParams {{.AppObjectFirst}}
-
 		for r := range responses {
 			if r.Code == ResponseCodeAppRequest {
-				err = json.Unmarshal(r.Data, &appRequest)
-				if err != nil {
-					panic(err)
-				}
-				err := json.Unmarshal(appRequest.RequestData, &appParams)
-				if err != nil {
-					panic(err)
-				}
-				appResponse, err := app.Request(appParams)
-				appRequestResult := AppRequestResult{}
-				if err != nil {
-					appRequestResult.Type = ErrorAppRequestResultType
-					appRequestResult.Text = err.Error()
-				} else {
-					appRequestResult.Type = OkAppRequestResultType
-					appRequestResult.Result, _ = json.Marshal(appResponse)
-				}
-				err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
-					AppRequestID: appRequest.AppRequestID,
-					Result: appRequestResult,
-				})
-				if err != nil {
-					panic(err)
-				}
+				c.dispatchRequest{{.Name}}(r.Data, app)
 			}
 			if r.Code == ResponseCodeAppNotify {
-				err := json.Unmarshal(r.Data, &appParams)
-				if err != nil {
-					panic(err)
-				}
-				app.Notify(appParams)
+				c.dispatchNotify{{.Name}}(r.Data, app)
 			}
 		}
 	}()
 
 	return result, nil
+}
+
+func (c *Client) dispatchRequest{{.Name}}(payload []byte, app {{.AppType}}) {
+	var appRequest ParamsOfAppRequest
+	var appParams {{.AppObjectFirst}}
+	err := json.Unmarshal(payload, &appRequest)
+	if err != nil {
+		panic(err)
+	}
+	err = json.Unmarshal(appRequest.RequestData, &appParams)
+	if err != nil {
+		panic(err)
+	}
+	appResponse, err := app.Request(appParams)
+	appRequestResult := AppRequestResult{}
+	if err != nil {
+		appRequestResult.Type = ErrorAppRequestResultType
+		appRequestResult.Text = err.Error()
+	} else {
+		appRequestResult.Type = OkAppRequestResultType
+		appRequestResult.Result, _ = json.Marshal(appResponse)
+	}
+	err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
+		AppRequestID: appRequest.AppRequestID,
+		Result: appRequestResult,
+	})
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (c *Client) dispatchNotify{{.Name}}(payload []byte, app {{.AppType}}) {
+	var appParams {{.AppObjectFirst}}
+	err := json.Unmarshal(payload, &appParams)
+	if err != nil {
+		panic(err)
+	}
+	app.Notify(appParams)
 }
 `))

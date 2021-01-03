@@ -95,10 +95,10 @@ func GetGramsFromGiver(c *client.Client, msgParams *client.ParamsOfEncodeMessage
 		Abi:     abi,
 		CallSet: &client.CallSet{
 			FunctionName: "sendGrams",
-			Input: json.RawMessage(fmt.Sprintf(`
+			Input: json.RawMessage(fmt.Sprintf(`{
 				"dest": "%s",
-				"amount": 500000000,
-			`, msg.Address)),
+				"amount": 500000000
+			}`, msg.Address)),
 		},
 		Signer: client.Signer{Type: client.NoneSignerType},
 	}

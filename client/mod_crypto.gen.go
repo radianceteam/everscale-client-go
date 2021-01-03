@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 17:19 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 17:31 UTC
 //
 // Mod crypto
 //
@@ -759,47 +759,55 @@ func (c *Client) CryptoRegisterSigningBox(app AppSigningBox) (*RegisteredSigning
 	}
 
 	go func() {
-		var appRequest ParamsOfAppRequest
-		var appParams ParamsOfAppSigningBox
-
 		for r := range responses {
 			if r.Code == ResponseCodeAppRequest {
-				err = json.Unmarshal(r.Data, &appRequest)
-				if err != nil {
-					panic(err)
-				}
-				err := json.Unmarshal(appRequest.RequestData, &appParams)
-				if err != nil {
-					panic(err)
-				}
-				appResponse, err := app.Request(appParams)
-				appRequestResult := AppRequestResult{}
-				if err != nil {
-					appRequestResult.Type = ErrorAppRequestResultType
-					appRequestResult.Text = err.Error()
-				} else {
-					appRequestResult.Type = OkAppRequestResultType
-					appRequestResult.Result, _ = json.Marshal(appResponse)
-				}
-				err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
-					AppRequestID: appRequest.AppRequestID,
-					Result:       appRequestResult,
-				})
-				if err != nil {
-					panic(err)
-				}
+				c.dispatchRequestCryptoRegisterSigningBox(r.Data, app)
 			}
 			if r.Code == ResponseCodeAppNotify {
-				err := json.Unmarshal(r.Data, &appParams)
-				if err != nil {
-					panic(err)
-				}
-				app.Notify(appParams)
+				c.dispatchNotifyCryptoRegisterSigningBox(r.Data, app)
 			}
 		}
 	}()
 
 	return result, nil
+}
+
+func (c *Client) dispatchRequestCryptoRegisterSigningBox(payload []byte, app AppSigningBox) {
+	var appRequest ParamsOfAppRequest
+	var appParams ParamsOfAppSigningBox
+	err := json.Unmarshal(payload, &appRequest)
+	if err != nil {
+		panic(err)
+	}
+	err = json.Unmarshal(appRequest.RequestData, &appParams)
+	if err != nil {
+		panic(err)
+	}
+	appResponse, err := app.Request(appParams)
+	appRequestResult := AppRequestResult{}
+	if err != nil {
+		appRequestResult.Type = ErrorAppRequestResultType
+		appRequestResult.Text = err.Error()
+	} else {
+		appRequestResult.Type = OkAppRequestResultType
+		appRequestResult.Result, _ = json.Marshal(appResponse)
+	}
+	err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
+		AppRequestID: appRequest.AppRequestID,
+		Result:       appRequestResult,
+	})
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (c *Client) dispatchNotifyCryptoRegisterSigningBox(payload []byte, app AppSigningBox) {
+	var appParams ParamsOfAppSigningBox
+	err := json.Unmarshal(payload, &appParams)
+	if err != nil {
+		panic(err)
+	}
+	app.Notify(appParams)
 }
 
 // Creates a default signing box implementation.

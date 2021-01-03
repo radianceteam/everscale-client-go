@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 17:19 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 17:31 UTC
 //
 // Mod debot
 //
@@ -151,47 +151,55 @@ func (c *Client) DebotStart(p *ParamsOfStart, app AppDebotBrowser) (*RegisteredD
 	}
 
 	go func() {
-		var appRequest ParamsOfAppRequest
-		var appParams ParamsOfAppDebotBrowser
-
 		for r := range responses {
 			if r.Code == ResponseCodeAppRequest {
-				err = json.Unmarshal(r.Data, &appRequest)
-				if err != nil {
-					panic(err)
-				}
-				err := json.Unmarshal(appRequest.RequestData, &appParams)
-				if err != nil {
-					panic(err)
-				}
-				appResponse, err := app.Request(appParams)
-				appRequestResult := AppRequestResult{}
-				if err != nil {
-					appRequestResult.Type = ErrorAppRequestResultType
-					appRequestResult.Text = err.Error()
-				} else {
-					appRequestResult.Type = OkAppRequestResultType
-					appRequestResult.Result, _ = json.Marshal(appResponse)
-				}
-				err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
-					AppRequestID: appRequest.AppRequestID,
-					Result:       appRequestResult,
-				})
-				if err != nil {
-					panic(err)
-				}
+				c.dispatchRequestDebotStart(r.Data, app)
 			}
 			if r.Code == ResponseCodeAppNotify {
-				err := json.Unmarshal(r.Data, &appParams)
-				if err != nil {
-					panic(err)
-				}
-				app.Notify(appParams)
+				c.dispatchNotifyDebotStart(r.Data, app)
 			}
 		}
 	}()
 
 	return result, nil
+}
+
+func (c *Client) dispatchRequestDebotStart(payload []byte, app AppDebotBrowser) {
+	var appRequest ParamsOfAppRequest
+	var appParams ParamsOfAppDebotBrowser
+	err := json.Unmarshal(payload, &appRequest)
+	if err != nil {
+		panic(err)
+	}
+	err = json.Unmarshal(appRequest.RequestData, &appParams)
+	if err != nil {
+		panic(err)
+	}
+	appResponse, err := app.Request(appParams)
+	appRequestResult := AppRequestResult{}
+	if err != nil {
+		appRequestResult.Type = ErrorAppRequestResultType
+		appRequestResult.Text = err.Error()
+	} else {
+		appRequestResult.Type = OkAppRequestResultType
+		appRequestResult.Result, _ = json.Marshal(appResponse)
+	}
+	err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
+		AppRequestID: appRequest.AppRequestID,
+		Result:       appRequestResult,
+	})
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (c *Client) dispatchNotifyDebotStart(payload []byte, app AppDebotBrowser) {
+	var appParams ParamsOfAppDebotBrowser
+	err := json.Unmarshal(payload, &appParams)
+	if err != nil {
+		panic(err)
+	}
+	app.Notify(appParams)
 }
 
 // [UNSTABLE](UNSTABLE.md) Fetches debot from blockchain.
@@ -217,47 +225,55 @@ func (c *Client) DebotFetch(p *ParamsOfFetch, app AppDebotBrowser) (*RegisteredD
 	}
 
 	go func() {
-		var appRequest ParamsOfAppRequest
-		var appParams ParamsOfAppDebotBrowser
-
 		for r := range responses {
 			if r.Code == ResponseCodeAppRequest {
-				err = json.Unmarshal(r.Data, &appRequest)
-				if err != nil {
-					panic(err)
-				}
-				err := json.Unmarshal(appRequest.RequestData, &appParams)
-				if err != nil {
-					panic(err)
-				}
-				appResponse, err := app.Request(appParams)
-				appRequestResult := AppRequestResult{}
-				if err != nil {
-					appRequestResult.Type = ErrorAppRequestResultType
-					appRequestResult.Text = err.Error()
-				} else {
-					appRequestResult.Type = OkAppRequestResultType
-					appRequestResult.Result, _ = json.Marshal(appResponse)
-				}
-				err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
-					AppRequestID: appRequest.AppRequestID,
-					Result:       appRequestResult,
-				})
-				if err != nil {
-					panic(err)
-				}
+				c.dispatchRequestDebotFetch(r.Data, app)
 			}
 			if r.Code == ResponseCodeAppNotify {
-				err := json.Unmarshal(r.Data, &appParams)
-				if err != nil {
-					panic(err)
-				}
-				app.Notify(appParams)
+				c.dispatchNotifyDebotFetch(r.Data, app)
 			}
 		}
 	}()
 
 	return result, nil
+}
+
+func (c *Client) dispatchRequestDebotFetch(payload []byte, app AppDebotBrowser) {
+	var appRequest ParamsOfAppRequest
+	var appParams ParamsOfAppDebotBrowser
+	err := json.Unmarshal(payload, &appRequest)
+	if err != nil {
+		panic(err)
+	}
+	err = json.Unmarshal(appRequest.RequestData, &appParams)
+	if err != nil {
+		panic(err)
+	}
+	appResponse, err := app.Request(appParams)
+	appRequestResult := AppRequestResult{}
+	if err != nil {
+		appRequestResult.Type = ErrorAppRequestResultType
+		appRequestResult.Text = err.Error()
+	} else {
+		appRequestResult.Type = OkAppRequestResultType
+		appRequestResult.Result, _ = json.Marshal(appResponse)
+	}
+	err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
+		AppRequestID: appRequest.AppRequestID,
+		Result:       appRequestResult,
+	})
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (c *Client) dispatchNotifyDebotFetch(payload []byte, app AppDebotBrowser) {
+	var appParams ParamsOfAppDebotBrowser
+	err := json.Unmarshal(payload, &appParams)
+	if err != nil {
+		panic(err)
+	}
+	app.Notify(appParams)
 }
 
 // [UNSTABLE](UNSTABLE.md) Executes debot action.
