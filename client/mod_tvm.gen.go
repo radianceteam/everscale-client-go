@@ -1,11 +1,12 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 10 Nov 20 06:44 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 17:31 UTC
 //
 // Mod tvm
 //
 
 import (
+	"encoding/json"
 	"math/big"
 
 	"github.com/volatiletech/null"
@@ -26,9 +27,7 @@ type AccountForExecutorType string
 
 const (
 
-	// Non-existing account to run a creation internal message.
-	// Should be used with `skip_transaction_check = true` if the message has no deploy data
-	// since transactions on the uninitialized account are always aborted.
+	// Non-existing account to run a creation internal message. Should be used with `skip_transaction_check = true` if the message has no deploy data since transactions on the uninitialized account are always aborted.
 	NoneAccountForExecutorType AccountForExecutorType = "None"
 	// Emulate uninitialized account to run deploy message.
 	UninitAccountForExecutorType AccountForExecutorType = "Uninit"
@@ -38,11 +37,12 @@ const (
 
 type AccountForExecutor struct {
 	Type AccountForExecutorType `json:"type"`
-	// Account BOC. Encoded as base64. presented in types:
+	// Account BOC.
+	// Encoded as base64. presented in types:
 	// "Account".
 	Boc string `json:"boc"`
-	// Flag for running account with the unlimited balance. Can be used to calculate
-	// transaction fees without balance check presented in types:
+	// Flag for running account with the unlimited balance.
+	// Can be used to calculatetransaction fees without balance check presented in types:
 	// "Account".
 	UnlimitedBalance null.Bool `json:"unlimited_balance"` // optional
 }
@@ -57,7 +57,8 @@ type TransactionFees struct {
 }
 
 type ParamsOfRunExecutor struct {
-	// Input message BOC. Must be encoded as base64.
+	// Input message BOC.
+	// Must be encoded as base64.
 	Message string `json:"message"`
 	// Account to run on executor.
 	Account AccountForExecutor `json:"account"`
@@ -71,26 +72,28 @@ type ParamsOfRunExecutor struct {
 
 type ResultOfRunExecutor struct {
 	// Parsed transaction.
-	//
 	// In addition to the regular transaction fields there is a
 	// `boc` field encoded with `base64` which contains source
 	// transaction BOC.
-	Transaction interface{} `json:"transaction"`
-	// List of output messages' BOCs. Encoded as `base64`.
+	Transaction json.RawMessage `json:"transaction"`
+	// List of output messages' BOCs.
+	// Encoded as `base64`.
 	OutMessages []string `json:"out_messages"`
-	// Optional decoded message bodies according to the optional
-	// `abi` parameter.
+	// Optional decoded message bodies according to the optional `abi` parameter.
 	Decoded *DecodedOutput `json:"decoded"` // optional
-	// Updated account state BOC. Encoded as `base64`.
+	// Updated account state BOC.
+	// Encoded as `base64`.
 	Account string `json:"account"`
 	// Transaction fees.
 	Fees TransactionFees `json:"fees"`
 }
 
 type ParamsOfRunTvm struct {
-	// Input message BOC. Must be encoded as base64.
+	// Input message BOC.
+	// Must be encoded as base64.
 	Message string `json:"message"`
-	// Account BOC. Must be encoded as base64.
+	// Account BOC.
+	// Must be encoded as base64.
 	Account string `json:"account"`
 	// Execution options.
 	ExecutionOptions *ExecutionOptions `json:"execution_options"` // optional
@@ -99,13 +102,13 @@ type ParamsOfRunTvm struct {
 }
 
 type ResultOfRunTvm struct {
-	// List of output messages' BOCs. Encoded as `base64`.
+	// List of output messages' BOCs.
+	// Encoded as `base64`.
 	OutMessages []string `json:"out_messages"`
-	// Optional decoded message bodies according to the optional
-	// `abi` parameter.
+	// Optional decoded message bodies according to the optional `abi` parameter.
 	Decoded *DecodedOutput `json:"decoded"` // optional
-	// Updated account state BOC. Encoded as `base64`.
-	// Attention! Only data in account state is updated.
+	// Updated account state BOC.
+	// Encoded as `base64`.Attention! Only `account_state.storage.state.data` part of the boc is updated.
 	Account string `json:"account"`
 }
 
@@ -115,33 +118,70 @@ type ParamsOfRunGet struct {
 	// Function name.
 	FunctionName string `json:"function_name"`
 	// Input parameters.
-	Input            interface{}       `json:"input"`             // optional
+	Input            json.RawMessage   `json:"input"`             // optional
 	ExecutionOptions *ExecutionOptions `json:"execution_options"` // optional
 }
 
 type ResultOfRunGet struct {
 	// Values returned by getmethod on stack.
-	Output interface{} `json:"output"`
+	Output json.RawMessage `json:"output"`
 }
 
+// Emulates all the phases of contract execution locally.
+// Performs all the phases of contract execution on Transaction Executor -
+// the same component that is used on Validator Nodes.
+//
+// Can be used for contract debug, to find out the reason of message unsuccessful
+// delivery - as Validators just throw away failed transactions, here you can catch it.
+//
+// Another use case is to estimate fees for message execution. Set  `AccountForExecutor::Account.unlimited_balance`
+// to `true` so that emulation will not depend on the actual balance.
+//
+// One more use case - you can procude the sequence of operations,
+// thus emulating the multiple contract calls locally.
+// And so on.
+//
+// To get the account boc (bag of cells) - use `net.query` method to download it from graphql api
+// (field `boc` of `account`) or generate it with `abi.encode_account method`.
+// To get the message boc - use `abi.encode_message` or prepare it any other way, for instance, with Fift script.
+//
+// If you need this emulation to be as precise as possible then specify `ParamsOfRunExecutor` parameter.
+// If you need to see the aborted transaction as a result, not as an error, set `skip_transaction_check` to `true`.
 func (c *Client) TvmRunExecutor(p *ParamsOfRunExecutor) (*ResultOfRunExecutor, error) {
-	response := new(ResultOfRunExecutor)
-	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.run_executor", p, response)
+	result := new(ResultOfRunExecutor)
 
-	return response, err
+	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.run_executor", p, result)
+
+	return result, err
 }
 
+// Executes get methods of ABI-compatible contracts.
+// Performs only a part of compute phase of transaction execution
+// that is used to run get-methods of ABI-compatible contracts.
+//
+// If you try to run get methods with `run_executor` you will get an error, because it checks ACCEPT and exits
+// if there is none, which is actually true for get methods.
+//
+// To get the account boc (bag of cells) - use `net.query` method to download it from graphql api
+// (field `boc` of `account`) or generate it with `abi.encode_account method`.
+// To get the message boc - use `abi.encode_message` or prepare it any other way, for instance, with Fift script.
+//
+// Attention! Updated account state is produces as well, but only
+// `account_state.storage.state.data`  part of the boc is updated.
 func (c *Client) TvmRunTvm(p *ParamsOfRunTvm) (*ResultOfRunTvm, error) {
-	response := new(ResultOfRunTvm)
-	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.run_tvm", p, response)
+	result := new(ResultOfRunTvm)
 
-	return response, err
+	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.run_tvm", p, result)
+
+	return result, err
 }
 
-// Executes getmethod and returns data from TVM stack.
+// Executes a getmethod of FIFT contract that fulfills the smc-guidelines https://test.ton.org/smc-guidelines.txt
+// and returns the result data from TVM's stack.
 func (c *Client) TvmRunGet(p *ParamsOfRunGet) (*ResultOfRunGet, error) {
-	response := new(ResultOfRunGet)
-	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.run_get", p, response)
+	result := new(ResultOfRunGet)
 
-	return response, err
+	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.run_get", p, result)
+
+	return result, err
 }

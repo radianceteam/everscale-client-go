@@ -1,28 +1,26 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 10 Nov 20 06:44 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 17:31 UTC
 //
 // Mod abi
 //
-// Provides message encoding and decoding according to the ABI
-// specification.
+// Provides message encoding and decoding according to the ABI specification.
 
 import (
+	"encoding/json"
 	"math/big"
 
 	"github.com/volatiletech/null"
 )
 
 type FunctionHeader struct {
-	// Message expiration time in seconds.
-	// If not specified - calculated automatically from message_expiration_timeout(),
-	// try_index and message_expiration_timeout_grow_factor() (if ABI includes `expire` header).
+	// Message expiration time in seconds. If not specified - calculated automatically from message_expiration_timeout(), try_index and message_expiration_timeout_grow_factor() (if ABI includes `expire` header).
 	Expire null.Uint32 `json:"expire"` // optional
-	// Message creation time in milliseconds. If not specified, `now` is used
-	// (if ABI includes `time` header).
+	// Message creation time in milliseconds.
+	// If not specified, `now` is used(if ABI includes `time` header).
 	Time *big.Int `json:"time"` // optional
-	// Public key is used by the contract to check the signature. Encoded in `hex`.
-	// If not specified, method fails with exception (if ABI includes `pubkey` header)..
+	// Public key is used by the contract to check the signature.
+	// Encoded in `hex`.If not specified, method fails with exception (if ABI includes `pubkey` header)..
 	Pubkey null.String `json:"pubkey"` // optional
 }
 
@@ -30,37 +28,36 @@ type CallSet struct {
 	// Function name that is being called.
 	FunctionName string `json:"function_name"`
 	// Function header.
-	//
 	// If an application omits some header parameters required by the
 	// contract's ABI, the library will set the default values for
 	// them.
 	Header *FunctionHeader `json:"header"` // optional
 	// Function input parameters according to ABI.
-	Input interface{} `json:"input"` // optional
+	Input json.RawMessage `json:"input"` // optional
 }
 
 type DeploySet struct {
 	// Content of TVC file encoded in `base64`.
 	Tvc string `json:"tvc"`
-	// Target workchain for destination address. Default is `0`.
+	// Target workchain for destination address.
+	// Default is `0`.
 	WorkchainID null.Int32 `json:"workchain_id"` // optional
 	// List of initial values for contract's public variables.
-	InitialData interface{} `json:"initial_data"` // optional
+	InitialData json.RawMessage `json:"initial_data"` // optional
 }
 
 type SignerType string
 
 const (
 
-	// No keys are provided. Creates an unsigned message.
+	// No keys are provided.
+	// Creates an unsigned message.
 	NoneSignerType SignerType = "None"
-	// Only public key is provided in unprefixed hex string format to generate unsigned message
-	// and `data_to_sign` which can be signed later.
+	// Only public key is provided in unprefixed hex string format to generate unsigned message and `data_to_sign` which can be signed later.
 	ExternalSignerType SignerType = "External"
 	// Key pair is provided for signing.
 	KeysSignerType SignerType = "Keys"
-	// Signing Box interface is provided for signing, allows Dapps to sign messages using external APIs,
-	// such as HSM, cold wallet, etc.
+	// Signing Box interface is provided for signing, allows Dapps to sign messages using external APIs, such as HSM, cold wallet, etc.
 	SigningBoxSignerType SignerType = "SigningBox"
 )
 
@@ -86,7 +83,6 @@ const (
 	// Message contains the output of the ABI function.
 	OutputMessageBodyType MessageBodyType = "Output"
 	// Message contains the input of the imported ABI function.
-	//
 	// Occurs when contract sends an internal message to other
 	// contract.
 	InternalOutputMessageBodyType MessageBodyType = "InternalOutput"
@@ -102,7 +98,8 @@ const (
 	MessageStateInitSourceType StateInitSourceType = "Message"
 	// State init data.
 	StateInitStateInitSourceType StateInitSourceType = "StateInit"
-	// Content of the TVC file. Encoded in `base64`.
+	// Content of the TVC file.
+	// Encoded in `base64`.
 	TvcStateInitSourceType StateInitSourceType = "Tvc"
 )
 
@@ -111,13 +108,16 @@ type StateInitSource struct {
 	// presented in types:
 	// "Message".
 	Source MessageSource `json:"source"`
-	// Code BOC. Encoded in `base64`. presented in types:
+	// Code BOC.
+	// Encoded in `base64`. presented in types:
 	// "StateInit".
 	Code string `json:"code"`
-	// Data BOC. Encoded in `base64`. presented in types:
+	// Data BOC.
+	// Encoded in `base64`. presented in types:
 	// "StateInit".
 	Data string `json:"data"`
-	// Library BOC. Encoded in `base64`. presented in types:
+	// Library BOC.
+	// Encoded in `base64`. presented in types:
 	// "StateInit".
 	Library null.String `json:"library"` // optional
 	// presented in types:
@@ -132,8 +132,8 @@ type StateInitSource struct {
 }
 
 type StateInitParams struct {
-	Abi   Abi         `json:"abi"`
-	Value interface{} `json:"value"`
+	Abi   Abi             `json:"abi"`
+	Value json.RawMessage `json:"value"`
 }
 
 type AbiParam struct {
@@ -145,7 +145,7 @@ type AbiParam struct {
 type AbiEvent struct {
 	Name   string       `json:"name"`
 	Inputs []AbiParam   `json:"inputs"`
-	ID     *null.Uint32 `json:"id"` // optional
+	ID     *null.String `json:"id"` // optional
 }
 
 type AbiData struct {
@@ -159,7 +159,7 @@ type AbiFunction struct {
 	Name    string       `json:"name"`
 	Inputs  []AbiParam   `json:"inputs"`
 	Outputs []AbiParam   `json:"outputs"`
-	ID      *null.Uint32 `json:"id"` // optional
+	ID      *null.String `json:"id"` // optional
 }
 
 type AbiContract struct {
@@ -175,7 +175,6 @@ type ParamsOfEncodeMessageBody struct {
 	// Contract ABI.
 	Abi Abi `json:"abi"`
 	// Function call parameters.
-	//
 	// Must be specified in non deploy message.
 	//
 	// In case of deploy message contains parameters of constructor.
@@ -185,7 +184,6 @@ type ParamsOfEncodeMessageBody struct {
 	// Signing parameters.
 	Signer Signer `json:"signer"`
 	// Processing try index.
-	//
 	// Used in message processing with retries.
 	//
 	// Encoder uses the provided try index to calculate message
@@ -200,8 +198,8 @@ type ParamsOfEncodeMessageBody struct {
 type ResultOfEncodeMessageBody struct {
 	// Message body BOC encoded with `base64`.
 	Body string `json:"body"`
-	// Optional data to sign. Encoded with `base64`.
-	//
+	// Optional data to sign.
+	// Encoded with `base64`.
 	// Presents when `message` is unsigned. Can be used for external
 	// message signing. Is this case you need to sing this data and
 	// produce signed message using `abi.attach_signature`.
@@ -211,11 +209,14 @@ type ResultOfEncodeMessageBody struct {
 type ParamsOfAttachSignatureToMessageBody struct {
 	// Contract ABI.
 	Abi Abi `json:"abi"`
-	// Public key. Must be encoded with `hex`.
+	// Public key.
+	// Must be encoded with `hex`.
 	PublicKey string `json:"public_key"`
-	// Unsigned message BOC. Must be encoded with `base64`.
+	// Unsigned message body BOC.
+	// Must be encoded with `base64`.
 	Message string `json:"message"`
-	// Signature. Must be encoded with `hex`.
+	// Signature.
+	// Must be encoded with `hex`.
 	Signature string `json:"signature"`
 }
 
@@ -227,15 +228,12 @@ type ParamsOfEncodeMessage struct {
 	// Contract ABI.
 	Abi Abi `json:"abi"`
 	// Target address the message will be sent to.
-	//
 	// Must be specified in case of non-deploy message.
 	Address null.String `json:"address"` // optional
 	// Deploy parameters.
-	//
 	// Must be specified in case of deploy message.
 	DeploySet *DeploySet `json:"deploy_set"` // optional
 	// Function call parameters.
-	//
 	// Must be specified in case of non-deploy message.
 	//
 	// In case of deploy message it is optional and contains parameters
@@ -244,7 +242,6 @@ type ParamsOfEncodeMessage struct {
 	// Signing parameters.
 	Signer Signer `json:"signer"`
 	// Processing try index.
-	//
 	// Used in message processing with retries (if contract's ABI includes "expire" header).
 	//
 	// Encoder uses the provided try index to calculate message
@@ -263,7 +260,6 @@ type ResultOfEncodeMessage struct {
 	// Message BOC encoded with `base64`.
 	Message string `json:"message"`
 	// Optional data to be signed encoded in `base64`.
-	//
 	// Returned in case of `Signer::External`. Can be used for external
 	// message signing. Is this case you need to use this data to create signature and
 	// then produce signed message using `abi.attach_signature`.
@@ -305,7 +301,7 @@ type DecodedMessageBody struct {
 	// Function or event name.
 	Name string `json:"name"`
 	// Parameters or result value.
-	Value interface{} `json:"value"` // optional
+	Value json.RawMessage `json:"value"` // optional
 	// Function header.
 	Header *FunctionHeader `json:"header"` // optional
 }
@@ -339,21 +335,22 @@ type ResultOfEncodeAccount struct {
 
 // Encodes message body according to ABI function call.
 func (c *Client) AbiEncodeMessageBody(p *ParamsOfEncodeMessageBody) (*ResultOfEncodeMessageBody, error) {
-	response := new(ResultOfEncodeMessageBody)
-	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_message_body", p, response)
+	result := new(ResultOfEncodeMessageBody)
 
-	return response, err
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_message_body", p, result)
+
+	return result, err
 }
 
 func (c *Client) AbiAttachSignatureToMessageBody(p *ParamsOfAttachSignatureToMessageBody) (*ResultOfAttachSignatureToMessageBody, error) {
-	response := new(ResultOfAttachSignatureToMessageBody)
-	err := c.dllClient.waitErrorOrResultUnmarshal("abi.attach_signature_to_message_body", p, response)
+	result := new(ResultOfAttachSignatureToMessageBody)
 
-	return response, err
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.attach_signature_to_message_body", p, result)
+
+	return result, err
 }
 
-// Encodes an ABI-compatible message
-//
+// Encodes an ABI-compatible message.
 // Allows to encode deploy and function call messages,
 // both signed and unsigned.
 //
@@ -377,45 +374,48 @@ func (c *Client) AbiAttachSignatureToMessageBody(p *ParamsOfAttachSignatureToMes
 // without private key disclosure to SDK. For instance, in case of using a cold wallet or HSM,
 // when application calls some API to sign data.
 func (c *Client) AbiEncodeMessage(p *ParamsOfEncodeMessage) (*ResultOfEncodeMessage, error) {
-	response := new(ResultOfEncodeMessage)
-	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_message", p, response)
+	result := new(ResultOfEncodeMessage)
 
-	return response, err
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_message", p, result)
+
+	return result, err
 }
 
-// Combines `hex`-encoded `signature` with `base64`-encoded `unsigned_message`.
-// Returns signed message encoded in `base64`.
+// Combines `hex`-encoded `signature` with `base64`-encoded `unsigned_message`. Returns signed message encoded in `base64`.
 func (c *Client) AbiAttachSignature(p *ParamsOfAttachSignature) (*ResultOfAttachSignature, error) {
-	response := new(ResultOfAttachSignature)
-	err := c.dllClient.waitErrorOrResultUnmarshal("abi.attach_signature", p, response)
+	result := new(ResultOfAttachSignature)
 
-	return response, err
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.attach_signature", p, result)
+
+	return result, err
 }
 
 // Decodes message body using provided message BOC and ABI.
 func (c *Client) AbiDecodeMessage(p *ParamsOfDecodeMessage) (*DecodedMessageBody, error) {
-	response := new(DecodedMessageBody)
-	err := c.dllClient.waitErrorOrResultUnmarshal("abi.decode_message", p, response)
+	result := new(DecodedMessageBody)
 
-	return response, err
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.decode_message", p, result)
+
+	return result, err
 }
 
 // Decodes message body using provided body BOC and ABI.
 func (c *Client) AbiDecodeMessageBody(p *ParamsOfDecodeMessageBody) (*DecodedMessageBody, error) {
-	response := new(DecodedMessageBody)
-	err := c.dllClient.waitErrorOrResultUnmarshal("abi.decode_message_body", p, response)
+	result := new(DecodedMessageBody)
 
-	return response, err
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.decode_message_body", p, result)
+
+	return result, err
 }
 
-// Creates account state BOC
-//
+// Creates account state BOC.
 // Creates account state provided with one of these sets of data :
 // 1. BOC of code, BOC of data, BOC of library
 // 2. TVC (string in `base64`), keys, init params.
 func (c *Client) AbiEncodeAccount(p *ParamsOfEncodeAccount) (*ResultOfEncodeAccount, error) {
-	response := new(ResultOfEncodeAccount)
-	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_account", p, response)
+	result := new(ResultOfEncodeAccount)
 
-	return response, err
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_account", p, result)
+
+	return result, err
 }

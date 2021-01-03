@@ -13,6 +13,14 @@ import (
 	"github.com/radianceteam/ton-client-go/client"
 )
 
+func TestClient_NetSuspendResume(t *testing.T) {
+	a := assert.New(t)
+	c := NewTestClient()
+	defer c.Close()
+	a.NoError(c.NetSuspend(), "suspend")
+	a.NoError(c.NetResume(), "resume")
+}
+
 func TestClient_NetSubscribeCollectionEmpty(t *testing.T) {
 	a := assert.New(t)
 	c := NewTestClient()
@@ -77,7 +85,10 @@ func TestClient_NetSubscribeForTransactionWithAddressees(t *testing.T) {
 		defer wg.Done()
 		for r := range responses {
 			a.NotNil(r, "no data when unsubscribe")
-			transactions = append(transactions, r)
+			var transaction interface{}
+			err := json.Unmarshal(r, &transaction)
+			a.NoError(err)
+			transactions = append(transactions, transaction)
 		}
 	}()
 	time.Sleep(1 * time.Second) // wait for messages processing

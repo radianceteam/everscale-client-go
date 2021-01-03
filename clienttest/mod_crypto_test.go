@@ -1,6 +1,9 @@
 package clienttest
 
 import (
+	"crypto/ed25519"
+	"encoding/base64"
+	"encoding/hex"
 	"strings"
 	"testing"
 
@@ -19,6 +22,66 @@ func TestModCrypto(t *testing.T) {
 	a.NoError(err, "call Client.version")
 	a.Len(keys.Public, 64, "hex len")
 	a.Len(keys.Secret, 64, "hex len")
+}
+
+type appSigningBoxMock struct {
+	Public  string
+	Private string
+}
+
+func (app *appSigningBoxMock) Request(p client.ParamsOfAppSigningBox) (client.ResultOfAppSigningBox, error) {
+	t := client.ResultOfAppSigningBoxType(p.Type)
+	if t == client.GetPublicKeyResultOfAppSigningBoxType {
+		return client.ResultOfAppSigningBox{Type: t, PublicKey: app.Public}, nil
+	}
+	seedBytes, err := hex.DecodeString(app.Private)
+	if err != nil {
+		return client.ResultOfAppSigningBox{}, err
+	}
+	privateKey := ed25519.NewKeyFromSeed(seedBytes)
+	data, err := base64.StdEncoding.DecodeString(p.Unsigned)
+	signature := hex.EncodeToString(ed25519.Sign(privateKey, data))
+
+	return client.ResultOfAppSigningBox{Type: t, Signature: signature}, err
+}
+
+func (app *appSigningBoxMock) Notify(client.ParamsOfAppSigningBox) {
+	panic("notify")
+}
+
+func TestModCryptoRegisterSigningBox(t *testing.T) {
+	a := assert.New(t)
+	c := NewTestClient()
+	defer c.Close()
+
+	keys, err := c.CryptoGenerateRandomSignKeys()
+	a.NoError(err, "call Client.version")
+	a.Len(keys.Public, 64, "public hex len")
+	a.Len(keys.Secret, 64, "secret hex len")
+
+	handle, err := c.CryptoRegisterSigningBox(&appSigningBoxMock{
+		Private: keys.Secret,
+		Public:  keys.Public,
+	})
+
+	a.NoError(err, "CryptoRegisterSigningBox")
+	a.NotZero(handle.Handle, "CryptoRegisterSigningBox handle")
+	keyResult, err := c.CryptoSigningBoxGetPublicKey(&client.RegisteredSigningBox{Handle: handle.Handle})
+	a.NoError(err, "CryptoSigningBoxGetPublicKey")
+	a.Equal(keyResult.Pubkey, keys.Public, "public key is the same")
+
+	messageToSign := []byte("test message")
+	signResult, err := c.CryptoSigningBoxSign(&client.ParamsOfSigningBoxSign{
+		SigningBox: handle.Handle,
+		Unsigned:   base64.StdEncoding.EncodeToString(messageToSign),
+	})
+	a.NoError(err, "CryptoSigningBoxSign")
+	pubKeyBytes, err := hex.DecodeString(keyResult.Pubkey)
+	a.NoError(err, "hex.DecodeString(keyResult.Pubkey)")
+	signatureBytes, err := hex.DecodeString(signResult.Signature)
+	a.NoError(err, "hex.DecodeString(signResult.Signature)")
+
+	a.True(ed25519.Verify(pubKeyBytes, messageToSign, signatureBytes))
 }
 
 func TestModCryptoMnemonicFromRandom(t *testing.T) {

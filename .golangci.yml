@@ -11,6 +11,10 @@ linters:
     - misspell
     - maligned
     - goerr113
+    - nlreturn
+    - exhaustivestruct
+    - wrapcheck
+    - paralleltest
   enable-all: true
 linters-settings:
   goimports:

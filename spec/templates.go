@@ -11,7 +11,7 @@ var funcMap = template.FuncMap{
 	},
 }
 
-const emptyInterface = "interface{}"
+const emptyInterface = "json.RawMessage"
 
 var headerTmpl = template.Must(template.New("header").Funcs(funcMap).Parse(
 	`package client
@@ -23,6 +23,7 @@ var headerTmpl = template.Must(template.New("header").Funcs(funcMap).Parse(
 
 import (
 	"math/big"
+	"encoding/json"
 
 	"github.com/volatiletech/null"
 )
@@ -45,28 +46,92 @@ type funcContent struct {
 	MethodName string
 }
 
-var withoutParamFunc = template.Must(template.New("withoutParamFunc").Parse(
-	`func (c *Client) {{.Name}} () (*{{.ResultType}}, error) {
-	response := new({{.ResultType}})
-	err := c.dllClient.waitErrorOrResultUnmarshal("{{.MethodName}}", nil, response)
+type funcWithAppObjectContent struct {
+	funcContent
+	AppType         string
+	AppObjectFirst  string
+	AppObjectSecond string
+}
 
-	return response, err
+var funcTemplate = template.Must(template.New("funcTemplate").Parse(
+	`func (c *Client) {{.Name}}( {{if ne .ParamType ""}} p *{{.ParamType}} {{end}} ) {{if eq .ResultType ""}} error {{else}} (*{{.ResultType}}, error) {{end}} {
+	{{if ne .ResultType ""}} result := new({{.ResultType}}) {{end}}
+	{{if eq .ResultType "" }}
+	_, err := c.dllClient.waitErrorOrResult("{{.MethodName}}", {{if eq .ParamType "" }} nil {{else}} p {{end}})
+	{{else}}
+	err := c.dllClient.waitErrorOrResultUnmarshal("{{.MethodName}}", {{if eq .ParamType "" }} nil {{else}} p {{end}}, result)
+	{{end}}
+
+	return {{if ne .ResultType "" }} result, {{ end }} err
 }
 `))
 
-var singleParamFunc = template.Must(template.New("singleParamFunc").Parse(
-	`func (c *Client) {{.Name}} (p *{{.ParamType}}) (*{{.ResultType}}, error) {
-	response := new({{.ResultType}})
-	err := c.dllClient.waitErrorOrResultUnmarshal("{{.MethodName}}", p, response)
+var funcTemplateWithAppObject = template.Must(template.New("funcTemplate").Parse(
+	`func (c *Client) {{.Name}}( {{if ne .ParamType ""}} p *{{.ParamType}}, {{end}} app {{.AppType}}) (*{{.ResultType}}, error)  {
+	result := new({{.ResultType}}) 
+	responses, err := c.dllClient.resultsChannel("{{.MethodName}}", {{if ne .ParamType ""}} p {{else}} nil {{end}})
+	if err != nil {
+		return nil, err
+	}
 
-	return response, err
+	response := <- responses
+	if response.Code == ResponseCodeError {
+		return nil, response.Error
+	}
+
+	if err := json.Unmarshal(response.Data, result); err != nil {
+		return nil, err
+	}
+
+	go func() {
+		for r := range responses {
+			if r.Code == ResponseCodeAppRequest {
+				c.dispatchRequest{{.Name}}(r.Data, app)
+			}
+			if r.Code == ResponseCodeAppNotify {
+				c.dispatchNotify{{.Name}}(r.Data, app)
+			}
+		}
+	}()
+
+	return result, nil
 }
-`))
 
-var singleParamWithoutResultFunc = template.Must(template.New("singleParamWithoutResultFunc").Parse(
-	`func (c *Client) {{.Name}} (p *{{.ParamType}}) error {
-	_, err := c.dllClient.waitErrorOrResult("{{.MethodName}}", p)
+func (c *Client) dispatchRequest{{.Name}}(payload []byte, app {{.AppType}}) {
+	var appRequest ParamsOfAppRequest
+	var appParams {{.AppObjectFirst}}
+	err := json.Unmarshal(payload, &appRequest)
+	if err != nil {
+		panic(err)
+	}
+	err = json.Unmarshal(appRequest.RequestData, &appParams)
+	if err != nil {
+		panic(err)
+	}
+	appResponse, err := app.Request(appParams)
+	appRequestResult := AppRequestResult{}
+	if err != nil {
+		appRequestResult.Type = ErrorAppRequestResultType
+		appRequestResult.Text = err.Error()
+	} else {
+		appRequestResult.Type = OkAppRequestResultType
+		appRequestResult.Result, _ = json.Marshal(appResponse)
+	}
+	err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
+		AppRequestID: appRequest.AppRequestID,
+		Result: appRequestResult,
+	})
+	if err != nil {
+		panic(err)
+	}
+}
 
-	return  err
+func (c *Client) dispatchNotify{{.Name}}(payload []byte, app {{.AppType}}) {
+	var appParams {{.AppObjectFirst}}
+	err := json.Unmarshal(payload, &appParams)
+	if err != nil {
+		panic(err)
+	}
+	app.Notify(appParams)
 }
 `))

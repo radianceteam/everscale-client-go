@@ -1,13 +1,15 @@
 # TON SDK client Golang
 
-[![Awesome Badges](https://img.shields.io/badge/SDK_version-1.1.0-green.svg)](https://github.com/tonlabs/TON-SDK/tree/1.1.0-rc)
+[![Awesome Badges](https://img.shields.io/badge/SDK_version-1.4.0-green.svg)](https://github.com/tonlabs/TON-SDK/tree/1.4.0)
 [![Awesome Badges](https://img.shields.io/badge/TON_version-0.24.8-green.svg)](https://hub.docker.com/layers/tonlabs/local-node/0.24.8/images/sha256-62239cb2b215cbca7e8792812e27fa293727cfd8b17d3e58523c8a15a3673504?context=explore)
+[![Chat Telegram](https://img.shields.io/badge/chat-Telegram-9cf.svg)](https://t.me/RADIANCE_TON_SDK)
+![CI tests and linters](https://github.com/radianceteam/ton-client-go/workflows/CI/badge.svg)
 
 ## Preparations
 
 One need to install
 - [Rust](https://www.rust-lang.org/tools/install)
-- [TON-SDK](https://github.com/tonlabs/TON-SDK) - *important* version `1.1.0` and compile it via `cargo build --release`
+- [TON-SDK](https://github.com/tonlabs/TON-SDK) - *important* version `1.4.0` and compile it via `cargo build --release`
 
 ## Run 
 
@@ -55,6 +57,7 @@ one can regenerate it via `task generate`.
 
 ## Useful reading
 
+- https://github.com/tonlabs/TON-SDK/blob/1.5.2/docs/app_objects.md
 - https://eli.thegreenplace.net/2019/passing-callbacks-and-pointers-to-cgo/
 - https://dev.to/mattn/call-go-function-from-c-function-1n3
 - https://docs.ton.dev/86757ecb2/p/71d7a8-samples/t/35f373 - example how to use GraphQL

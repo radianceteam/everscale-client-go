@@ -19,21 +19,12 @@ const (
 	EnumOfConsts TypeName = "EnumOfConsts"
 )
 
-type NumberType string
-
-const (
-	NTFloat NumberType = "Float"
-	NTInt   NumberType = "Int"
-	NTUint  NumberType = "UInt"
-)
-
 var ignoredTypesByName = map[string]bool{
 	"ResultOfGetApiReference": true,
 	"ClientError":             true,
 	"ClientConfig":            true,
 	"Abi":                     true,
 	"AbiHandle":               true,
-	"SigningBoxHandle":        true,
 	"MessageSource":           true,
 }
 

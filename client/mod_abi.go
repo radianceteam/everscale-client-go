@@ -15,8 +15,6 @@ type Abi struct {
 	Value interface{} `json:"value"`
 }
 
-type SigningBoxHandle uint32
-
 type MessageSourceType string
 
 const (

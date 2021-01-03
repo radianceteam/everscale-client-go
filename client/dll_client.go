@@ -1,3 +1,4 @@
+//nolint:godot
 package client
 
 import (
@@ -33,10 +34,12 @@ var ErrContextIsClosed = errors.New("context is closed")
 type ResponseCode uint32
 
 const (
-	ResponseCodeSuccess = ResponseCode(C.tc_response_success)
-	ResponseCodeError   = ResponseCode(C.tc_response_error)
-	ResponseCodeNop     = ResponseCode(C.tc_response_nop)
-	ResponseCodeCustom  = ResponseCode(C.tc_response_custom)
+	ResponseCodeSuccess    = ResponseCode(C.tc_response_success)
+	ResponseCodeError      = ResponseCode(C.tc_response_error)
+	ResponseCodeNop        = ResponseCode(C.tc_response_nop) // User-level code never sees this event
+	ResponseCodeAppRequest = ResponseCode(C.tc_response_app_request)
+	ResponseCodeAppNotify  = ResponseCode(C.tc_response_app_notify)
+	ResponseCodeCustom     = ResponseCode(C.tc_response_custom)
 )
 
 func newTcStr(str []byte) C.tc_string_data_t {
@@ -66,7 +69,7 @@ func newDLLResponse(rawBytes []byte, responseType ResponseCode) *RawResponse {
 		} else {
 			res.Error = &sdkErr
 		}
-	} else if responseType == ResponseCodeSuccess || responseType == ResponseCodeCustom {
+	} else {
 		res.Data = rawBytes
 	}
 
@@ -90,7 +93,7 @@ func callbackProxy(requestIDRaw C.uint32_t, data C.tc_string_data_t, responseTyp
 		return
 	}
 
-	if responseType == C.tc_response_nop {
+	if responseType == ResponseCodeNop {
 		if finished {
 			close(responses)
 		}

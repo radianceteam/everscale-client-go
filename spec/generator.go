@@ -6,7 +6,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"text/template"
 
 	"github.com/iancoleman/strcase"
 )
@@ -64,15 +63,25 @@ func toTypeName(name string) string {
 	return name
 }
 
+func findAppObject(params []Type) *Type {
+	for _, p := range params {
+		if p.Type == "Generic" && p.GenericName == "AppObject" {
+			return &p
+		}
+	}
+	return nil
+}
+
 func genFunc(m Module, f Function) string {
 	params := make([]Type, 0, 2)
 	for _, p := range f.Params {
 		if p.Name == "context" || p.Name == "_context" {
-			continue
+			continue // always skips implicit context parameter
 		}
 		params = append(params, p)
 	}
-	if len(params) > 1 {
+	appObject := findAppObject(params)
+	if len(params) > 1 && appObject == nil {
 		fmt.Println("WARNING: ignored function", len(params), m.Name, f.Name)
 
 		return ""
@@ -85,19 +94,25 @@ func genFunc(m Module, f Function) string {
 		ResultType: toTypeName(f.Result.GenericArgs[0].RefName),
 	}
 
-	var tmpl *template.Template
-	if len(params) == 0 {
-		tmpl = withoutParamFunc
-	} else if len(params) == 1 {
+	if len(params) == 1 || len(params) == 2 && appObject != nil {
 		content.ParamType = toTypeName(params[0].RefName)
-		if content.ResultType != "" {
-			tmpl = singleParamFunc
-		} else {
-			tmpl = singleParamWithoutResultFunc
-		}
 	}
 
-	if err := tmpl.Execute(&b, content); err != nil {
+	var err error
+	if appObject == nil {
+		err = funcTemplate.Execute(&b, content)
+	} else {
+		paramsAppObjectType := toTypeName(appObject.GenericArgs[0].RefName)
+		resultAppObjectType := toTypeName(appObject.GenericArgs[1].RefName)
+		err = funcTemplateWithAppObject.Execute(&b, funcWithAppObjectContent{
+			funcContent:     content,
+			AppType:         strings.TrimPrefix(paramsAppObjectType, "ParamsOf"),
+			AppObjectFirst:  paramsAppObjectType,
+			AppObjectSecond: resultAppObjectType,
+		})
+	}
+
+	if err != nil {
 		panic(err)
 	}
 
@@ -117,7 +132,7 @@ func GenModule(dir string, m Module) error {
 		if ignoredTypesByName[t.Name] {
 			continue
 		}
-		_, err = file.WriteString(GenerateAnyType(m, t))
+		_, err = file.WriteString(GenerateAnyType(m, t, true))
 		if err != nil {
 			return err
 		}
@@ -143,7 +158,7 @@ func genStruct(m Module, t Type) string {
 			fmt.Println("WARNING: add struct field with empty name", t.Type, t.Name, f)
 			f.Name = "value"
 		}
-		r += "\t" + f.ToComment() + "	" + toGoName(f.Name) + " " + GenerateAnyType(m, f)
+		r += "\t" + f.ToComment() + "	" + toGoName(f.Name) + " " + GenerateAnyType(m, f, false)
 		if f.Type == Optional {
 			r += " `json:\"" + f.Name + "\"` // optional \n"
 		} else {
@@ -250,17 +265,17 @@ func GenerateOptionalType(m Module, t Type) string {
 	case None:
 		return ""
 	case Array:
-		return "[]" + GenerateAnyType(m, *t.ArrayItem)
+		return "[]" + GenerateAnyType(m, *t.ArrayItem, false)
 	case Boolean:
 		return "null.Bool"
 	default:
-		return "* " + GenerateAnyType(m, t)
+		return "* " + GenerateAnyType(m, t, false)
 	}
 }
 
 // GenerateAnyType - root generator function for type.
-func GenerateAnyType(m Module, t Type) string {
-	r := "NotFound::" + string(t.Type) + "::"
+func GenerateAnyType(m Module, t Type, isRoot bool) string {
+	r := "NotFound::" + string(t.Type) + "::" // easy to find in generated code
 	switch t.Type {
 	case Ref:
 		if t.RefName == "Value" {
@@ -276,6 +291,9 @@ func GenerateAnyType(m Module, t Type) string {
 		r = emptyInterface
 	case Number:
 		r = genNumber(t, false)
+		if isRoot {
+			r = "type " + t.Name + " " + r + "\n"
+		}
 	case None:
 		r = ""
 	case Struct:
@@ -283,7 +301,7 @@ func GenerateAnyType(m Module, t Type) string {
 	case BigInt:
 		r = "big.Int"
 	case Array:
-		r = "[]" + GenerateAnyType(m, *t.ArrayItem)
+		r = "[]" + GenerateAnyType(m, *t.ArrayItem, false)
 	case Boolean:
 		r = "bool"
 	case Generic:
