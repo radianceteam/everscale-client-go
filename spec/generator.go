@@ -63,6 +63,15 @@ func toTypeName(name string) string {
 	return name
 }
 
+func findAppObject(params []Type) *Type {
+	for _, p := range params {
+		if p.Type == "Generic" && p.GenericName == "AppObject" {
+			return &p
+		}
+	}
+	return nil
+}
+
 func genFunc(m Module, f Function) string {
 	params := make([]Type, 0, 2)
 	for _, p := range f.Params {
@@ -71,8 +80,8 @@ func genFunc(m Module, f Function) string {
 		}
 		params = append(params, p)
 	}
-
-	if len(params) > 1 {
+	appObject := findAppObject(params)
+	if len(params) > 1 && appObject == nil {
 		fmt.Println("WARNING: ignored function", len(params), m.Name, f.Name)
 
 		return ""
@@ -85,11 +94,22 @@ func genFunc(m Module, f Function) string {
 		ResultType: toTypeName(f.Result.GenericArgs[0].RefName),
 	}
 
-	if len(params) == 1 {
+	if len(params) == 1 || len(params) == 2 && appObject != nil {
 		content.ParamType = toTypeName(params[0].RefName)
 	}
 
-	if err := funcTemplate.Execute(&b, content); err != nil {
+	var err error
+	if appObject == nil {
+		err = funcTemplate.Execute(&b, content)
+	} else {
+		err = funcTemplateWithAppObject.Execute(&b, funcWithAppObjectContent{
+			funcContent:     content,
+			AppObjectFirst:  appObject.GenericArgs[0].RefName,
+			AppObjectSecond: appObject.GenericArgs[1].RefName,
+		})
+	}
+
+	if err != nil {
 		panic(err)
 	}
 
@@ -252,7 +272,7 @@ func GenerateOptionalType(m Module, t Type) string {
 
 // GenerateAnyType - root generator function for type.
 func GenerateAnyType(m Module, t Type, isRoot bool) string {
-	r := "NotFound::" + string(t.Type) + "::"
+	r := "NotFound::" + string(t.Type) + "::" // easy to find in generated code
 	switch t.Type {
 	case Ref:
 		if t.RefName == "Value" {

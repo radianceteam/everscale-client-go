@@ -1,11 +1,12 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 10:51 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 12:23 UTC
 //
 // Mod tvm
 //
 
 import (
+	"encoding/json"
 	"math/big"
 
 	"github.com/volatiletech/null"
@@ -74,7 +75,7 @@ type ResultOfRunExecutor struct {
 	// In addition to the regular transaction fields there is a
 	// `boc` field encoded with `base64` which contains source
 	// transaction BOC.
-	Transaction interface{} `json:"transaction"`
+	Transaction json.RawMessage `json:"transaction"`
 	// List of output messages' BOCs.
 	// Encoded as `base64`.
 	OutMessages []string `json:"out_messages"`
@@ -117,13 +118,13 @@ type ParamsOfRunGet struct {
 	// Function name.
 	FunctionName string `json:"function_name"`
 	// Input parameters.
-	Input            interface{}       `json:"input"`             // optional
+	Input            json.RawMessage   `json:"input"`             // optional
 	ExecutionOptions *ExecutionOptions `json:"execution_options"` // optional
 }
 
 type ResultOfRunGet struct {
 	// Values returned by getmethod on stack.
-	Output interface{} `json:"output"`
+	Output json.RawMessage `json:"output"`
 }
 
 // Emulates all the phases of contract execution locally.
@@ -147,11 +148,11 @@ type ResultOfRunGet struct {
 // If you need this emulation to be as precise as possible then specify `ParamsOfRunExecutor` parameter.
 // If you need to see the aborted transaction as a result, not as an error, set `skip_transaction_check` to `true`.
 func (c *Client) TvmRunExecutor(p *ParamsOfRunExecutor) (*ResultOfRunExecutor, error) {
-	response := new(ResultOfRunExecutor)
+	result := new(ResultOfRunExecutor)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.run_executor", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.run_executor", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Executes get methods of ABI-compatible contracts.
@@ -168,19 +169,19 @@ func (c *Client) TvmRunExecutor(p *ParamsOfRunExecutor) (*ResultOfRunExecutor, e
 // Attention! Updated account state is produces as well, but only
 // `account_state.storage.state.data`  part of the boc is updated.
 func (c *Client) TvmRunTvm(p *ParamsOfRunTvm) (*ResultOfRunTvm, error) {
-	response := new(ResultOfRunTvm)
+	result := new(ResultOfRunTvm)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.run_tvm", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.run_tvm", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Executes a getmethod of FIFT contract that fulfills the smc-guidelines https://test.ton.org/smc-guidelines.txt
 // and returns the result data from TVM's stack.
 func (c *Client) TvmRunGet(p *ParamsOfRunGet) (*ResultOfRunGet, error) {
-	response := new(ResultOfRunGet)
+	result := new(ResultOfRunGet)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.run_get", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.run_get", p, result)
 
-	return response, err
+	return result, err
 }

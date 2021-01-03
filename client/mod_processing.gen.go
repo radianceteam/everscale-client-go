@@ -1,12 +1,16 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 10:51 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 12:23 UTC
 //
 // Mod processing
 //
 // Message processing module.
 // This module incorporates functions related to complex message
 // processing scenarios.
+
+import (
+	"encoding/json"
+)
 
 type ProcessingEventType string
 
@@ -80,7 +84,7 @@ type ResultOfProcessMessage struct {
 	// In addition to the regular transaction fields there is a
 	// `boc` field encoded with `base64` which contains source
 	// transaction BOC.
-	Transaction interface{} `json:"transaction"`
+	Transaction json.RawMessage `json:"transaction"`
 	// List of output messages' BOCs.
 	// Encoded as `base64`.
 	OutMessages []string `json:"out_messages"`
@@ -96,7 +100,7 @@ type DecodedOutput struct {
 	// the appropriate position.
 	OutMessages []*DecodedMessageBody `json:"out_messages"`
 	// Decoded body of the function output message.
-	Output interface{} `json:"output"` // optional
+	Output json.RawMessage `json:"output"` // optional
 }
 
 type ParamsOfSendMessage struct {

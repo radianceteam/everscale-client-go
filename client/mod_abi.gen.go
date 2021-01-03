@@ -1,12 +1,13 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 10:51 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 12:23 UTC
 //
 // Mod abi
 //
 // Provides message encoding and decoding according to the ABI specification.
 
 import (
+	"encoding/json"
 	"math/big"
 
 	"github.com/volatiletech/null"
@@ -32,7 +33,7 @@ type CallSet struct {
 	// them.
 	Header *FunctionHeader `json:"header"` // optional
 	// Function input parameters according to ABI.
-	Input interface{} `json:"input"` // optional
+	Input json.RawMessage `json:"input"` // optional
 }
 
 type DeploySet struct {
@@ -42,7 +43,7 @@ type DeploySet struct {
 	// Default is `0`.
 	WorkchainID null.Int32 `json:"workchain_id"` // optional
 	// List of initial values for contract's public variables.
-	InitialData interface{} `json:"initial_data"` // optional
+	InitialData json.RawMessage `json:"initial_data"` // optional
 }
 
 type SignerType string
@@ -131,8 +132,8 @@ type StateInitSource struct {
 }
 
 type StateInitParams struct {
-	Abi   Abi         `json:"abi"`
-	Value interface{} `json:"value"`
+	Abi   Abi             `json:"abi"`
+	Value json.RawMessage `json:"value"`
 }
 
 type AbiParam struct {
@@ -300,7 +301,7 @@ type DecodedMessageBody struct {
 	// Function or event name.
 	Name string `json:"name"`
 	// Parameters or result value.
-	Value interface{} `json:"value"` // optional
+	Value json.RawMessage `json:"value"` // optional
 	// Function header.
 	Header *FunctionHeader `json:"header"` // optional
 }
@@ -334,19 +335,19 @@ type ResultOfEncodeAccount struct {
 
 // Encodes message body according to ABI function call.
 func (c *Client) AbiEncodeMessageBody(p *ParamsOfEncodeMessageBody) (*ResultOfEncodeMessageBody, error) {
-	response := new(ResultOfEncodeMessageBody)
+	result := new(ResultOfEncodeMessageBody)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_message_body", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_message_body", p, result)
 
-	return response, err
+	return result, err
 }
 
 func (c *Client) AbiAttachSignatureToMessageBody(p *ParamsOfAttachSignatureToMessageBody) (*ResultOfAttachSignatureToMessageBody, error) {
-	response := new(ResultOfAttachSignatureToMessageBody)
+	result := new(ResultOfAttachSignatureToMessageBody)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("abi.attach_signature_to_message_body", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.attach_signature_to_message_body", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Encodes an ABI-compatible message.
@@ -373,38 +374,38 @@ func (c *Client) AbiAttachSignatureToMessageBody(p *ParamsOfAttachSignatureToMes
 // without private key disclosure to SDK. For instance, in case of using a cold wallet or HSM,
 // when application calls some API to sign data.
 func (c *Client) AbiEncodeMessage(p *ParamsOfEncodeMessage) (*ResultOfEncodeMessage, error) {
-	response := new(ResultOfEncodeMessage)
+	result := new(ResultOfEncodeMessage)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_message", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_message", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Combines `hex`-encoded `signature` with `base64`-encoded `unsigned_message`. Returns signed message encoded in `base64`.
 func (c *Client) AbiAttachSignature(p *ParamsOfAttachSignature) (*ResultOfAttachSignature, error) {
-	response := new(ResultOfAttachSignature)
+	result := new(ResultOfAttachSignature)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("abi.attach_signature", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.attach_signature", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Decodes message body using provided message BOC and ABI.
 func (c *Client) AbiDecodeMessage(p *ParamsOfDecodeMessage) (*DecodedMessageBody, error) {
-	response := new(DecodedMessageBody)
+	result := new(DecodedMessageBody)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("abi.decode_message", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.decode_message", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Decodes message body using provided body BOC and ABI.
 func (c *Client) AbiDecodeMessageBody(p *ParamsOfDecodeMessageBody) (*DecodedMessageBody, error) {
-	response := new(DecodedMessageBody)
+	result := new(DecodedMessageBody)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("abi.decode_message_body", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.decode_message_body", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Creates account state BOC.
@@ -412,9 +413,9 @@ func (c *Client) AbiDecodeMessageBody(p *ParamsOfDecodeMessageBody) (*DecodedMes
 // 1. BOC of code, BOC of data, BOC of library
 // 2. TVC (string in `base64`), keys, init params.
 func (c *Client) AbiEncodeAccount(p *ParamsOfEncodeAccount) (*ResultOfEncodeAccount, error) {
-	response := new(ResultOfEncodeAccount)
+	result := new(ResultOfEncodeAccount)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_account", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_account", p, result)
 
-	return response, err
+	return result, err
 }

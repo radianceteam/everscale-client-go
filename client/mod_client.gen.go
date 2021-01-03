@@ -1,12 +1,14 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 10:51 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 12:23 UTC
 //
 // Mod client
 //
 // Provides information about library.
 
 import (
+	"encoding/json"
+
 	"github.com/volatiletech/null"
 )
 
@@ -45,7 +47,7 @@ type ParamsOfAppRequest struct {
 	// Should be used in `resolve_app_request` call.
 	AppRequestID uint32 `json:"app_request_id"`
 	// Request describing data.
-	RequestData interface{} `json:"request_data"`
+	RequestData json.RawMessage `json:"request_data"`
 }
 
 type AppRequestResultType string
@@ -67,7 +69,7 @@ type AppRequestResult struct {
 	// Request processing result.
 	// presented in types:
 	// "Ok".
-	Result interface{} `json:"result"`
+	Result json.RawMessage `json:"result"`
 }
 
 type ResultOfVersion struct {
@@ -91,20 +93,20 @@ type ParamsOfResolveAppRequest struct {
 
 // Returns Core Library version.
 func (c *Client) ClientVersion() (*ResultOfVersion, error) {
-	response := new(ResultOfVersion)
+	result := new(ResultOfVersion)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("client.version", nil, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("client.version", nil, result)
 
-	return response, err
+	return result, err
 }
 
 // Returns detailed information about this build.
 func (c *Client) ClientBuildInfo() (*ResultOfBuildInfo, error) {
-	response := new(ResultOfBuildInfo)
+	result := new(ResultOfBuildInfo)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("client.build_info", nil, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("client.build_info", nil, result)
 
-	return response, err
+	return result, err
 }
 
 // Resolves application request processing result.

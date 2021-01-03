@@ -34,8 +34,4 @@ var ignoredFunctionsByName = map[string]bool{
 	"wait_for_transaction": true,
 	"process_message":      true,
 	"subscribe_collection": true,
-
-	"register_signing_box": true, // AppObject
-	"start":                true, // AppObject
-	"fetch":                true, // AppObject
 }

@@ -1,31 +1,36 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 10:51 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 12:23 UTC
 //
 // Mod debot
 //
 // [UNSTABLE](UNSTABLE.md) Module for working with debot.
 
-type DebotHandle uint32
+import (
+	"encoding/json"
+)
 
-type DebotAction struct {
-	// A short action description.
-	// Should be used by Debot Browser as name ofmenu item.
-	Description string `json:"description"`
-	// Depends on action type.
-	// Can be a debot function name or a print string(for Print Action).
-	Name string `json:"name"`
-	// Action type.
-	ActionType uint8 `json:"action_type"`
-	// ID of debot context to switch after action execution.
-	To uint8 `json:"to"`
-	// Action attributes.
-	// In the form of "param=value,flag".attribute example: instant, args, fargs, sign.
-	Attributes string `json:"attributes"`
-	// Some internal action data.
-	// Used by debot only.
-	Misc string `json:"misc"`
-}
+type (
+	DebotHandle uint32
+	DebotAction struct {
+		// A short action description.
+		// Should be used by Debot Browser as name ofmenu item.
+		Description string `json:"description"`
+		// Depends on action type.
+		// Can be a debot function name or a print string(for Print Action).
+		Name string `json:"name"`
+		// Action type.
+		ActionType uint8 `json:"action_type"`
+		// ID of debot context to switch after action execution.
+		To uint8 `json:"to"`
+		// Action attributes.
+		// In the form of "param=value,flag".attribute example: instant, args, fargs, sign.
+		Attributes string `json:"attributes"`
+		// Some internal action data.
+		// Used by debot only.
+		Misc string `json:"misc"`
+	}
+)
 
 type ParamsOfStart struct {
 	// Debot smart contract address.
@@ -117,6 +122,70 @@ type ParamsOfExecute struct {
 	DebotHandle DebotHandle `json:"debot_handle"`
 	// Debot Action that must be executed.
 	Action DebotAction `json:"action"`
+}
+
+// [UNSTABLE](UNSTABLE.md) Starts an instance of debot.
+// Downloads debot smart contract from blockchain and switches it to
+// context zero.
+// Returns a debot handle which can be used later in `execute` function.
+// This function must be used by Debot Browser to start a dialog with debot.
+// While the function is executing, several Browser Callbacks can be called,
+// since the debot tries to display all actions from the context 0 to the user.
+//
+// # Remarks
+// `start` is equivalent to `fetch` + switch to context 0.
+func (c *Client) DebotStart(p *ParamsOfStart) (*RegisteredDebot, error) {
+	result := new(RegisteredDebot)
+	responses, err := c.dllClient.resultsChannel("debot.start", p)
+	if err != nil {
+		return nil, err
+	}
+
+	response := <-responses
+	if response.Code == ResponseCodeError {
+		return nil, response.Error
+	}
+
+	if err := json.Unmarshal(response.Data, result); err != nil {
+		return nil, err
+	}
+
+	// result - is populated
+
+	// first = debot.ParamsOfAppDebotBrowser
+	// second = debot.ResultOfAppDebotBrowser
+
+	return result, nil
+}
+
+// [UNSTABLE](UNSTABLE.md) Fetches debot from blockchain.
+// Downloads debot smart contract (code and data) from blockchain and creates
+// an instance of Debot Engine for it.
+//
+// # Remarks
+// It does not switch debot to context 0. Browser Callbacks are not called.
+func (c *Client) DebotFetch(p *ParamsOfFetch) (*RegisteredDebot, error) {
+	result := new(RegisteredDebot)
+	responses, err := c.dllClient.resultsChannel("debot.fetch", p)
+	if err != nil {
+		return nil, err
+	}
+
+	response := <-responses
+	if response.Code == ResponseCodeError {
+		return nil, response.Error
+	}
+
+	if err := json.Unmarshal(response.Data, result); err != nil {
+		return nil, err
+	}
+
+	// result - is populated
+
+	// first = debot.ParamsOfAppDebotBrowser
+	// second = debot.ResultOfAppDebotBrowser
+
+	return result, nil
 }
 
 // [UNSTABLE](UNSTABLE.md) Executes debot action.

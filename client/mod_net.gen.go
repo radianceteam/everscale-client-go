@@ -1,12 +1,14 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 10:51 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 12:23 UTC
 //
 // Mod net
 //
 // Network access.
 
 import (
+	"encoding/json"
+
 	"github.com/volatiletech/null"
 )
 
@@ -27,19 +29,19 @@ type ParamsOfQuery struct {
 	Query string `json:"query"`
 	// Variables used in query.
 	// Must be a map with named values thatcan be used in query.
-	Variables interface{} `json:"variables"` // optional
+	Variables json.RawMessage `json:"variables"` // optional
 }
 
 type ResultOfQuery struct {
 	// Result provided by DAppServer.
-	Result interface{} `json:"result"`
+	Result json.RawMessage `json:"result"`
 }
 
 type ParamsOfQueryCollection struct {
 	// Collection name (accounts, blocks, transactions, messages, block_signatures).
 	Collection string `json:"collection"`
 	// Collection filter.
-	Filter interface{} `json:"filter"` // optional
+	Filter json.RawMessage `json:"filter"` // optional
 	// Projection (result) string.
 	Result string `json:"result"`
 	// Sorting order.
@@ -50,14 +52,14 @@ type ParamsOfQueryCollection struct {
 
 type ResultOfQueryCollection struct {
 	// Objects that match the provided criteria.
-	Result []interface{} `json:"result"`
+	Result []json.RawMessage `json:"result"`
 }
 
 type ParamsOfWaitForCollection struct {
 	// Collection name (accounts, blocks, transactions, messages, block_signatures).
 	Collection string `json:"collection"`
 	// Collection filter.
-	Filter interface{} `json:"filter"` // optional
+	Filter json.RawMessage `json:"filter"` // optional
 	// Projection (result) string.
 	Result string `json:"result"`
 	// Query timeout.
@@ -66,7 +68,7 @@ type ParamsOfWaitForCollection struct {
 
 type ResultOfWaitForCollection struct {
 	// First found object that matches the provided criteria.
-	Result interface{} `json:"result"`
+	Result json.RawMessage `json:"result"`
 }
 
 type ResultOfSubscribeCollection struct {
@@ -79,7 +81,7 @@ type ParamsOfSubscribeCollection struct {
 	// Collection name (accounts, blocks, transactions, messages, block_signatures).
 	Collection string `json:"collection"`
 	// Collection filter.
-	Filter interface{} `json:"filter"` // optional
+	Filter json.RawMessage `json:"filter"` // optional
 	// Projection (result) string.
 	Result string `json:"result"`
 }
@@ -96,11 +98,11 @@ type ResultOfFindLastShardBlock struct {
 
 // Performs DAppServer GraphQL query.
 func (c *Client) NetQuery(p *ParamsOfQuery) (*ResultOfQuery, error) {
-	response := new(ResultOfQuery)
+	result := new(ResultOfQuery)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("net.query", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("net.query", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Queries collection data.
@@ -108,11 +110,11 @@ func (c *Client) NetQuery(p *ParamsOfQuery) (*ResultOfQuery, error) {
 // limits the number of returned records and orders them.
 // The projection fields are limited to `result` fields.
 func (c *Client) NetQueryCollection(p *ParamsOfQueryCollection) (*ResultOfQueryCollection, error) {
-	response := new(ResultOfQueryCollection)
+	result := new(ResultOfQueryCollection)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("net.query_collection", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("net.query_collection", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Returns an object that fulfills the conditions or waits for its appearance.
@@ -123,11 +125,11 @@ func (c *Client) NetQueryCollection(p *ParamsOfQueryCollection) (*ResultOfQueryC
 // and returns it.
 // The projection fields are limited to `result` fields.
 func (c *Client) NetWaitForCollection(p *ParamsOfWaitForCollection) (*ResultOfWaitForCollection, error) {
-	response := new(ResultOfWaitForCollection)
+	result := new(ResultOfWaitForCollection)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("net.wait_for_collection", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("net.wait_for_collection", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Cancels a subscription specified by its handle.
@@ -153,9 +155,9 @@ func (c *Client) NetResume() error {
 
 // Returns ID of the last block in a specified account shard.
 func (c *Client) NetFindLastShardBlock(p *ParamsOfFindLastShardBlock) (*ResultOfFindLastShardBlock, error) {
-	response := new(ResultOfFindLastShardBlock)
+	result := new(ResultOfFindLastShardBlock)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("net.find_last_shard_block", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("net.find_last_shard_block", p, result)
 
-	return response, err
+	return result, err
 }

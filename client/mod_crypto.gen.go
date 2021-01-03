@@ -1,12 +1,14 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 10:51 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 12:23 UTC
 //
 // Mod crypto
 //
 // Crypto functions.
 
 import (
+	"encoding/json"
+
 	"github.com/volatiletech/null"
 )
 
@@ -433,92 +435,92 @@ type ResultOfSigningBoxSign struct {
 
 // Performs prime factorization – decomposition of a composite number into a product of smaller prime integers (factors). See [https://en.wikipedia.org/wiki/Integer_factorization].
 func (c *Client) CryptoFactorize(p *ParamsOfFactorize) (*ResultOfFactorize, error) {
-	response := new(ResultOfFactorize)
+	result := new(ResultOfFactorize)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.factorize", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.factorize", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Performs modular exponentiation for big integers (`base`^`exponent` mod `modulus`). See [https://en.wikipedia.org/wiki/Modular_exponentiation].
 func (c *Client) CryptoModularPower(p *ParamsOfModularPower) (*ResultOfModularPower, error) {
-	response := new(ResultOfModularPower)
+	result := new(ResultOfModularPower)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.modular_power", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.modular_power", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Calculates CRC16 using TON algorithm.
 func (c *Client) CryptoTonCrc16(p *ParamsOfTonCrc16) (*ResultOfTonCrc16, error) {
-	response := new(ResultOfTonCrc16)
+	result := new(ResultOfTonCrc16)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.ton_crc16", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.ton_crc16", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Generates random byte array of the specified length and returns it in `base64` format.
 func (c *Client) CryptoGenerateRandomBytes(p *ParamsOfGenerateRandomBytes) (*ResultOfGenerateRandomBytes, error) {
-	response := new(ResultOfGenerateRandomBytes)
+	result := new(ResultOfGenerateRandomBytes)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.generate_random_bytes", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.generate_random_bytes", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Converts public key to ton safe_format.
 func (c *Client) CryptoConvertPublicKeyToTonSafeFormat(p *ParamsOfConvertPublicKeyToTonSafeFormat) (*ResultOfConvertPublicKeyToTonSafeFormat, error) {
-	response := new(ResultOfConvertPublicKeyToTonSafeFormat)
+	result := new(ResultOfConvertPublicKeyToTonSafeFormat)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.convert_public_key_to_ton_safe_format", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.convert_public_key_to_ton_safe_format", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Generates random ed25519 key pair.
 func (c *Client) CryptoGenerateRandomSignKeys() (*KeyPair, error) {
-	response := new(KeyPair)
+	result := new(KeyPair)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.generate_random_sign_keys", nil, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.generate_random_sign_keys", nil, result)
 
-	return response, err
+	return result, err
 }
 
 // Signs a data using the provided keys.
 func (c *Client) CryptoSign(p *ParamsOfSign) (*ResultOfSign, error) {
-	response := new(ResultOfSign)
+	result := new(ResultOfSign)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.sign", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.sign", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Verifies signed data using the provided public key. Raises error if verification is failed.
 func (c *Client) CryptoVerifySignature(p *ParamsOfVerifySignature) (*ResultOfVerifySignature, error) {
-	response := new(ResultOfVerifySignature)
+	result := new(ResultOfVerifySignature)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.verify_signature", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.verify_signature", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Calculates SHA256 hash of the specified data.
 func (c *Client) CryptoSha256(p *ParamsOfHash) (*ResultOfHash, error) {
-	response := new(ResultOfHash)
+	result := new(ResultOfHash)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.sha256", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.sha256", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Calculates SHA512 hash of the specified data.
 func (c *Client) CryptoSha512(p *ParamsOfHash) (*ResultOfHash, error) {
-	response := new(ResultOfHash)
+	result := new(ResultOfHash)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.sha512", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.sha512", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Derives key from `password` and `key` using `scrypt` algorithm. See [https://en.wikipedia.org/wiki/Scrypt].
@@ -535,29 +537,29 @@ func (c *Client) CryptoSha512(p *ParamsOfHash) (*ResultOfHash, error) {
 // - `r = 8`
 // - `p = 1`.
 func (c *Client) CryptoScrypt(p *ParamsOfScrypt) (*ResultOfScrypt, error) {
-	response := new(ResultOfScrypt)
+	result := new(ResultOfScrypt)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.scrypt", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.scrypt", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Generates a key pair for signing from the secret key.
 func (c *Client) CryptoNaclSignKeypairFromSecretKey(p *ParamsOfNaclSignKeyPairFromSecret) (*KeyPair, error) {
-	response := new(KeyPair)
+	result := new(KeyPair)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_sign_keypair_from_secret_key", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_sign_keypair_from_secret_key", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Signs data using the signer's secret key.
 func (c *Client) CryptoNaclSign(p *ParamsOfNaclSign) (*ResultOfNaclSign, error) {
-	response := new(ResultOfNaclSign)
+	result := new(ResultOfNaclSign)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_sign", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_sign", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Verifies the signature and returns the unsigned message.
@@ -566,204 +568,229 @@ func (c *Client) CryptoNaclSign(p *ParamsOfNaclSign) (*ResultOfNaclSign, error) 
 //
 // If the signature fails verification, crypto_sign_open raises an exception.
 func (c *Client) CryptoNaclSignOpen(p *ParamsOfNaclSignOpen) (*ResultOfNaclSignOpen, error) {
-	response := new(ResultOfNaclSignOpen)
+	result := new(ResultOfNaclSignOpen)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_sign_open", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_sign_open", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Signs the message using the secret key and returns a signature.
 // Signs the message `unsigned` using the secret key `secret`
 // and returns a signature `signature`.
 func (c *Client) CryptoNaclSignDetached(p *ParamsOfNaclSign) (*ResultOfNaclSignDetached, error) {
-	response := new(ResultOfNaclSignDetached)
+	result := new(ResultOfNaclSignDetached)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_sign_detached", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_sign_detached", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Generates a random NaCl key pair.
 func (c *Client) CryptoNaclBoxKeypair() (*KeyPair, error) {
-	response := new(KeyPair)
+	result := new(KeyPair)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_box_keypair", nil, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_box_keypair", nil, result)
 
-	return response, err
+	return result, err
 }
 
 // Generates key pair from a secret key.
 func (c *Client) CryptoNaclBoxKeypairFromSecretKey(p *ParamsOfNaclBoxKeyPairFromSecret) (*KeyPair, error) {
-	response := new(KeyPair)
+	result := new(KeyPair)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_box_keypair_from_secret_key", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_box_keypair_from_secret_key", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Public key authenticated encryption.
 // Encrypt and authenticate a message using the senders secret key, the recievers public
 // key, and a nonce.
 func (c *Client) CryptoNaclBox(p *ParamsOfNaclBox) (*ResultOfNaclBox, error) {
-	response := new(ResultOfNaclBox)
+	result := new(ResultOfNaclBox)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_box", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_box", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Decrypt and verify the cipher text using the recievers secret key, the senders public key, and the nonce.
 func (c *Client) CryptoNaclBoxOpen(p *ParamsOfNaclBoxOpen) (*ResultOfNaclBoxOpen, error) {
-	response := new(ResultOfNaclBoxOpen)
+	result := new(ResultOfNaclBoxOpen)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_box_open", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_box_open", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Encrypt and authenticate message using nonce and secret key.
 func (c *Client) CryptoNaclSecretBox(p *ParamsOfNaclSecretBox) (*ResultOfNaclBox, error) {
-	response := new(ResultOfNaclBox)
+	result := new(ResultOfNaclBox)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_secret_box", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_secret_box", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Decrypts and verifies cipher text using `nonce` and secret `key`.
 func (c *Client) CryptoNaclSecretBoxOpen(p *ParamsOfNaclSecretBoxOpen) (*ResultOfNaclBoxOpen, error) {
-	response := new(ResultOfNaclBoxOpen)
+	result := new(ResultOfNaclBoxOpen)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_secret_box_open", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_secret_box_open", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Prints the list of words from the specified dictionary.
 func (c *Client) CryptoMnemonicWords(p *ParamsOfMnemonicWords) (*ResultOfMnemonicWords, error) {
-	response := new(ResultOfMnemonicWords)
+	result := new(ResultOfMnemonicWords)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.mnemonic_words", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.mnemonic_words", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Generates a random mnemonic from the specified dictionary and word count.
 func (c *Client) CryptoMnemonicFromRandom(p *ParamsOfMnemonicFromRandom) (*ResultOfMnemonicFromRandom, error) {
-	response := new(ResultOfMnemonicFromRandom)
+	result := new(ResultOfMnemonicFromRandom)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.mnemonic_from_random", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.mnemonic_from_random", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Generates mnemonic from pre-generated entropy.
 func (c *Client) CryptoMnemonicFromEntropy(p *ParamsOfMnemonicFromEntropy) (*ResultOfMnemonicFromEntropy, error) {
-	response := new(ResultOfMnemonicFromEntropy)
+	result := new(ResultOfMnemonicFromEntropy)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.mnemonic_from_entropy", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.mnemonic_from_entropy", p, result)
 
-	return response, err
+	return result, err
 }
 
 // The phrase supplied will be checked for word length and validated according to the checksum specified in BIP0039.
 func (c *Client) CryptoMnemonicVerify(p *ParamsOfMnemonicVerify) (*ResultOfMnemonicVerify, error) {
-	response := new(ResultOfMnemonicVerify)
+	result := new(ResultOfMnemonicVerify)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.mnemonic_verify", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.mnemonic_verify", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Validates the seed phrase, generates master key and then derives the key pair from the master key and the specified path.
 func (c *Client) CryptoMnemonicDeriveSignKeys(p *ParamsOfMnemonicDeriveSignKeys) (*KeyPair, error) {
-	response := new(KeyPair)
+	result := new(KeyPair)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.mnemonic_derive_sign_keys", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.mnemonic_derive_sign_keys", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Generates an extended master private key that will be the root for all the derived keys.
 func (c *Client) CryptoHdkeyXprvFromMnemonic(p *ParamsOfHDKeyXPrvFromMnemonic) (*ResultOfHDKeyXPrvFromMnemonic, error) {
-	response := new(ResultOfHDKeyXPrvFromMnemonic)
+	result := new(ResultOfHDKeyXPrvFromMnemonic)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.hdkey_xprv_from_mnemonic", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.hdkey_xprv_from_mnemonic", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Returns extended private key derived from the specified extended private key and child index.
 func (c *Client) CryptoHdkeyDeriveFromXprv(p *ParamsOfHDKeyDeriveFromXPrv) (*ResultOfHDKeyDeriveFromXPrv, error) {
-	response := new(ResultOfHDKeyDeriveFromXPrv)
+	result := new(ResultOfHDKeyDeriveFromXPrv)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.hdkey_derive_from_xprv", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.hdkey_derive_from_xprv", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Derives the extended private key from the specified key and path.
 func (c *Client) CryptoHdkeyDeriveFromXprvPath(p *ParamsOfHDKeyDeriveFromXPrvPath) (*ResultOfHDKeyDeriveFromXPrvPath, error) {
-	response := new(ResultOfHDKeyDeriveFromXPrvPath)
+	result := new(ResultOfHDKeyDeriveFromXPrvPath)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.hdkey_derive_from_xprv_path", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.hdkey_derive_from_xprv_path", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Extracts the private key from the serialized extended private key.
 func (c *Client) CryptoHdkeySecretFromXprv(p *ParamsOfHDKeySecretFromXPrv) (*ResultOfHDKeySecretFromXPrv, error) {
-	response := new(ResultOfHDKeySecretFromXPrv)
+	result := new(ResultOfHDKeySecretFromXPrv)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.hdkey_secret_from_xprv", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.hdkey_secret_from_xprv", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Extracts the public key from the serialized extended private key.
 func (c *Client) CryptoHdkeyPublicFromXprv(p *ParamsOfHDKeyPublicFromXPrv) (*ResultOfHDKeyPublicFromXPrv, error) {
-	response := new(ResultOfHDKeyPublicFromXPrv)
+	result := new(ResultOfHDKeyPublicFromXPrv)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.hdkey_public_from_xprv", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.hdkey_public_from_xprv", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Performs symmetric `chacha20` encryption.
 func (c *Client) CryptoChacha20(p *ParamsOfChaCha20) (*ResultOfChaCha20, error) {
-	response := new(ResultOfChaCha20)
+	result := new(ResultOfChaCha20)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.chacha20", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.chacha20", p, result)
 
-	return response, err
+	return result, err
+}
+
+// Register an application implemented signing box.
+func (c *Client) CryptoRegisterSigningBox() (*RegisteredSigningBox, error) {
+	result := new(RegisteredSigningBox)
+	responses, err := c.dllClient.resultsChannel("crypto.register_signing_box", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	response := <-responses
+	if response.Code == ResponseCodeError {
+		return nil, response.Error
+	}
+
+	if err := json.Unmarshal(response.Data, result); err != nil {
+		return nil, err
+	}
+
+	// result - is populated
+
+	// first = crypto.ParamsOfAppSigningBox
+	// second = crypto.ResultOfAppSigningBox
+
+	return result, nil
 }
 
 // Creates a default signing box implementation.
 func (c *Client) CryptoGetSigningBox(p *KeyPair) (*RegisteredSigningBox, error) {
-	response := new(RegisteredSigningBox)
+	result := new(RegisteredSigningBox)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.get_signing_box", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.get_signing_box", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Returns public key of signing key pair.
 func (c *Client) CryptoSigningBoxGetPublicKey(p *RegisteredSigningBox) (*ResultOfSigningBoxGetPublicKey, error) {
-	response := new(ResultOfSigningBoxGetPublicKey)
+	result := new(ResultOfSigningBoxGetPublicKey)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.signing_box_get_public_key", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.signing_box_get_public_key", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Returns signed user data.
 func (c *Client) CryptoSigningBoxSign(p *ParamsOfSigningBoxSign) (*ResultOfSigningBoxSign, error) {
-	response := new(ResultOfSigningBoxSign)
+	result := new(ResultOfSigningBoxSign)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.signing_box_sign", p, response)
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.signing_box_sign", p, result)
 
-	return response, err
+	return result, err
 }
 
 // Removes signing box from SDK.

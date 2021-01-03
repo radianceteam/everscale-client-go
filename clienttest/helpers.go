@@ -3,6 +3,7 @@ package clienttest
 import (
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 
 	"github.com/volatiletech/null"
@@ -94,10 +95,10 @@ func GetGramsFromGiver(c *client.Client, msgParams *client.ParamsOfEncodeMessage
 		Abi:     abi,
 		CallSet: &client.CallSet{
 			FunctionName: "sendGrams",
-			Input: map[string]interface{}{
-				"dest":   msg.Address,
+			Input: json.RawMessage(fmt.Sprintf(`
+				"dest": "%s",
 				"amount": 500000000,
-			},
+			`, msg.Address)),
 		},
 		Signer: client.Signer{Type: client.NoneSignerType},
 	}
