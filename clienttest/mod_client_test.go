@@ -1,6 +1,7 @@
 package clienttest
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -22,7 +23,7 @@ func TestModClient(t *testing.T) {
 	if !a.NotNil(version, "version response") {
 		return
 	}
-	a.Equal("1.4.0", version.Version, "dll with specified version")
+	a.True(strings.HasPrefix(version.Version, "1."), "dll with major version 1")
 	ref, err := c.ClientGetAPIReference()
 	a.NoError(err, "call Client.get_api_version")
 	a.NotNil(ref, "ref not nil")

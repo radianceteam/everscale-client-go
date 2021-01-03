@@ -1,3 +1,4 @@
 tmp/*
 !tmp/.keep
 .idea
+.DS_Store
