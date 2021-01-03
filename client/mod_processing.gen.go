@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 17:31 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 17:49 UTC
 //
 // Mod processing
 //
@@ -10,6 +10,24 @@ package client
 
 import (
 	"encoding/json"
+)
+
+type ProcessingErrorCode string
+
+const (
+	MessageAlreadyExpiredProcessingErrorCode           ProcessingErrorCode = "MessageAlreadyExpired"
+	MessageHasNotDestinationAddressProcessingErrorCode ProcessingErrorCode = "MessageHasNotDestinationAddress"
+	CanNotBuildMessageCellProcessingErrorCode          ProcessingErrorCode = "CanNotBuildMessageCell"
+	FetchBlockFailedProcessingErrorCode                ProcessingErrorCode = "FetchBlockFailed"
+	SendMessageFailedProcessingErrorCode               ProcessingErrorCode = "SendMessageFailed"
+	InvalidMessageBocProcessingErrorCode               ProcessingErrorCode = "InvalidMessageBoc"
+	MessageExpiredProcessingErrorCode                  ProcessingErrorCode = "MessageExpired"
+	TransactionWaitTimeoutProcessingErrorCode          ProcessingErrorCode = "TransactionWaitTimeout"
+	InvalidBlockReceivedProcessingErrorCode            ProcessingErrorCode = "InvalidBlockReceived"
+	CanNotCheckBlockShardProcessingErrorCode           ProcessingErrorCode = "CanNotCheckBlockShard"
+	BlockNotFoundProcessingErrorCode                   ProcessingErrorCode = "BlockNotFound"
+	InvalidDataProcessingErrorCode                     ProcessingErrorCode = "InvalidData"
+	ExternalSignerMustNotBeUsedProcessingErrorCode     ProcessingErrorCode = "ExternalSignerMustNotBeUsed"
 )
 
 type ProcessingEventType string

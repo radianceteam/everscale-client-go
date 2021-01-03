@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/volatiletech/null"
 
 	"github.com/radianceteam/ton-client-go/client"
 )
@@ -12,7 +13,7 @@ import (
 func TestModClient(t *testing.T) {
 	a := assert.New(t)
 	c, err := client.NewClient(client.Config{
-		Network: &client.NetworkConfig{ServerAddress: "net.ton.dev"},
+		Network: &client.NetworkConfig{ServerAddress: null.NewString("net.ton.dev", true)},
 	})
 	if err == nil {
 		defer c.Close()

@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 17:31 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 17:49 UTC
 //
 // Mod abi
 //
@@ -11,6 +11,22 @@ import (
 	"math/big"
 
 	"github.com/volatiletech/null"
+)
+
+type AbiErrorCode string
+
+const (
+	RequiredAddressMissingForEncodeMessageAbiErrorCode    AbiErrorCode = "RequiredAddressMissingForEncodeMessage"
+	RequiredCallSetMissingForEncodeMessageAbiErrorCode    AbiErrorCode = "RequiredCallSetMissingForEncodeMessage"
+	InvalidJSONAbiErrorCode                               AbiErrorCode = "InvalidJson"
+	InvalidMessageAbiErrorCode                            AbiErrorCode = "InvalidMessage"
+	EncodeDeployMessageFailedAbiErrorCode                 AbiErrorCode = "EncodeDeployMessageFailed"
+	EncodeRunMessageFailedAbiErrorCode                    AbiErrorCode = "EncodeRunMessageFailed"
+	AttachSignatureFailedAbiErrorCode                     AbiErrorCode = "AttachSignatureFailed"
+	InvalidTvcImageAbiErrorCode                           AbiErrorCode = "InvalidTvcImage"
+	RequiredPublicKeyMissingForFunctionHeaderAbiErrorCode AbiErrorCode = "RequiredPublicKeyMissingForFunctionHeader"
+	InvalidSignerAbiErrorCode                             AbiErrorCode = "InvalidSigner"
+	InvalidAbiAbiErrorCode                                AbiErrorCode = "InvalidAbi"
 )
 
 type FunctionHeader struct {

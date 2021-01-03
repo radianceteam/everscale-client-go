@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 17:31 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 17:49 UTC
 //
 // Mod crypto
 //
@@ -10,6 +10,30 @@ import (
 	"encoding/json"
 
 	"github.com/volatiletech/null"
+)
+
+type CryptoErrorCode string
+
+const (
+	InvalidPublicKeyCryptoErrorCode          CryptoErrorCode = "InvalidPublicKey"
+	InvalidSecretKeyCryptoErrorCode          CryptoErrorCode = "InvalidSecretKey"
+	InvalidKeyCryptoErrorCode                CryptoErrorCode = "InvalidKey"
+	InvalidFactorizeChallengeCryptoErrorCode CryptoErrorCode = "InvalidFactorizeChallenge"
+	InvalidBigIntCryptoErrorCode             CryptoErrorCode = "InvalidBigInt"
+	ScryptFailedCryptoErrorCode              CryptoErrorCode = "ScryptFailed"
+	InvalidKeySizeCryptoErrorCode            CryptoErrorCode = "InvalidKeySize"
+	NaclSecretBoxFailedCryptoErrorCode       CryptoErrorCode = "NaclSecretBoxFailed"
+	NaclBoxFailedCryptoErrorCode             CryptoErrorCode = "NaclBoxFailed"
+	NaclSignFailedCryptoErrorCode            CryptoErrorCode = "NaclSignFailed"
+	Bip39InvalidEntropyCryptoErrorCode       CryptoErrorCode = "Bip39InvalidEntropy"
+	Bip39InvalidPhraseCryptoErrorCode        CryptoErrorCode = "Bip39InvalidPhrase"
+	Bip32InvalidKeyCryptoErrorCode           CryptoErrorCode = "Bip32InvalidKey"
+	Bip32InvalidDerivePathCryptoErrorCode    CryptoErrorCode = "Bip32InvalidDerivePath"
+	Bip39InvalidDictionaryCryptoErrorCode    CryptoErrorCode = "Bip39InvalidDictionary"
+	Bip39InvalidWordCountCryptoErrorCode     CryptoErrorCode = "Bip39InvalidWordCount"
+	MnemonicGenerationFailedCryptoErrorCode  CryptoErrorCode = "MnemonicGenerationFailed"
+	MnemonicFromEntropyFailedCryptoErrorCode CryptoErrorCode = "MnemonicFromEntropyFailed"
+	SigningBoxNotRegisteredCryptoErrorCode   CryptoErrorCode = "SigningBoxNotRegistered"
 )
 
 type (
