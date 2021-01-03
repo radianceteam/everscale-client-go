@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 17:31 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 17:49 UTC
 //
 // Mod boc
 //
@@ -8,6 +8,15 @@ package client
 
 import (
 	"encoding/json"
+)
+
+type BocErrorCode string
+
+const (
+	InvalidBocBocErrorCode         BocErrorCode = "InvalidBoc"
+	SerializationErrorBocErrorCode BocErrorCode = "SerializationError"
+	InappropriateBlockBocErrorCode BocErrorCode = "InappropriateBlock"
+	MissingSourceBocBocErrorCode   BocErrorCode = "MissingSourceBoc"
 )
 
 type ParamsOfParse struct {

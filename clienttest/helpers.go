@@ -69,7 +69,7 @@ func LoadTvc(name string, v AbiVersion) string {
 
 func NewTestClient() *client.Client {
 	c, err := client.NewClient(client.Config{
-		Network: &client.NetworkConfig{ServerAddress: "http://localhost"},
+		Network: &client.NetworkConfig{ServerAddress: null.NewString("http://localhost", true)},
 	})
 	if err != nil {
 		panic(err)

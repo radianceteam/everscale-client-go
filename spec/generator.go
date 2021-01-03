@@ -11,7 +11,9 @@ import (
 )
 
 func genEnum(t Type) string {
+	t.Name = withTypeAlias(t.Name)
 	for i := range t.EnumConsts {
+		t.EnumConsts[i].Name = withTypeAlias(t.EnumConsts[i].Name)
 		t.EnumConsts[i].GoComment = t.EnumConsts[i].ToComment()
 		t.EnumConsts[i].ConstName = toGoName(strcase.ToSnake(t.EnumConsts[i].ConstName)) + t.Name
 	}
@@ -41,6 +43,13 @@ var ExceptionForCamelCase = map[string]string{
 	"account_id_address_string": "AccountIDAddressString",
 }
 
+func withTypeAlias(name string) string {
+	if name == "ClientErrorCode" {
+		return "ErrorCode"
+	}
+	return name
+}
+
 func toGoName(name string) string {
 	if cameled, ok := ExceptionForCamelCase[name]; ok {
 		return cameled
@@ -49,6 +58,12 @@ func toGoName(name string) string {
 	cameled := strcase.ToCamel(name)
 	if strings.Contains(name, "id") {
 		cameled = strings.ReplaceAll(cameled, "Id", "ID")
+	}
+	if strings.Contains(name, "http") {
+		cameled = strings.ReplaceAll(cameled, "Http", "HTTP")
+	}
+	if strings.Contains(name, "json") {
+		cameled = strings.ReplaceAll(cameled, "Json", "JSON")
 	}
 
 	return cameled

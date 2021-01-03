@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 17:31 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 17:49 UTC
 //
 // Mod net
 //
@@ -10,6 +10,23 @@ import (
 	"encoding/json"
 
 	"github.com/volatiletech/null"
+)
+
+type NetErrorCode string
+
+const (
+	QueryFailedNetErrorCode                 NetErrorCode = "QueryFailed"
+	SubscribeFailedNetErrorCode             NetErrorCode = "SubscribeFailed"
+	WaitForFailedNetErrorCode               NetErrorCode = "WaitForFailed"
+	GetSubscriptionResultFailedNetErrorCode NetErrorCode = "GetSubscriptionResultFailed"
+	InvalidServerResponseNetErrorCode       NetErrorCode = "InvalidServerResponse"
+	ClockOutOfSyncNetErrorCode              NetErrorCode = "ClockOutOfSync"
+	WaitForTimeoutNetErrorCode              NetErrorCode = "WaitForTimeout"
+	GraphqlErrorNetErrorCode                NetErrorCode = "GraphqlError"
+	NetworkModuleSuspendedNetErrorCode      NetErrorCode = "NetworkModuleSuspended"
+	WebsocketDisconnectedNetErrorCode       NetErrorCode = "WebsocketDisconnected"
+	NotSupportedNetErrorCode                NetErrorCode = "NotSupported"
+	NoEndpointsProvidedNetErrorCode         NetErrorCode = "NoEndpointsProvided"
 )
 
 type OrderBy struct {
@@ -96,6 +113,11 @@ type ResultOfFindLastShardBlock struct {
 	BlockID string `json:"block_id"`
 }
 
+type EndpointsSet struct {
+	// List of endpoints provided by server.
+	Endpoints []string `json:"endpoints"`
+}
+
 // Performs DAppServer GraphQL query.
 func (c *Client) NetQuery(p *ParamsOfQuery) (*ResultOfQuery, error) {
 	result := new(ResultOfQuery)
@@ -160,4 +182,20 @@ func (c *Client) NetFindLastShardBlock(p *ParamsOfFindLastShardBlock) (*ResultOf
 	err := c.dllClient.waitErrorOrResultUnmarshal("net.find_last_shard_block", p, result)
 
 	return result, err
+}
+
+// Requests the list of alternative endpoints from server.
+func (c *Client) NetFetchEndpoints() (*EndpointsSet, error) {
+	result := new(EndpointsSet)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("net.fetch_endpoints", nil, result)
+
+	return result, err
+}
+
+// Sets the list of endpoints to use on reinit.
+func (c *Client) NetSetEndpoints(p *EndpointsSet) error {
+	_, err := c.dllClient.waitErrorOrResult("net.set_endpoints", p)
+
+	return err
 }

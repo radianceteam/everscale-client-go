@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 17:31 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 17:49 UTC
 //
 // Mod tvm
 //
@@ -10,6 +10,25 @@ import (
 	"math/big"
 
 	"github.com/volatiletech/null"
+)
+
+type TvmErrorCode string
+
+const (
+	CanNotReadTransactionTvmErrorCode      TvmErrorCode = "CanNotReadTransaction"
+	CanNotReadBlockchainConfigTvmErrorCode TvmErrorCode = "CanNotReadBlockchainConfig"
+	TransactionAbortedTvmErrorCode         TvmErrorCode = "TransactionAborted"
+	InternalErrorTvmErrorCode              TvmErrorCode = "InternalError"
+	ActionPhaseFailedTvmErrorCode          TvmErrorCode = "ActionPhaseFailed"
+	AccountCodeMissingTvmErrorCode         TvmErrorCode = "AccountCodeMissing"
+	LowBalanceTvmErrorCode                 TvmErrorCode = "LowBalance"
+	AccountFrozenOrDeletedTvmErrorCode     TvmErrorCode = "AccountFrozenOrDeleted"
+	AccountMissingTvmErrorCode             TvmErrorCode = "AccountMissing"
+	UnknownExecutionErrorTvmErrorCode      TvmErrorCode = "UnknownExecutionError"
+	InvalidInputStackTvmErrorCode          TvmErrorCode = "InvalidInputStack"
+	InvalidAccountBocTvmErrorCode          TvmErrorCode = "InvalidAccountBoc"
+	InvalidMessageTypeTvmErrorCode         TvmErrorCode = "InvalidMessageType"
+	ContractExecutionErrorTvmErrorCode     TvmErrorCode = "ContractExecutionError"
 )
 
 type ExecutionOptions struct {

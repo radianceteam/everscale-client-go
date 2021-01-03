@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 17:31 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 17:49 UTC
 //
 // Mod debot
 //
@@ -8,6 +8,15 @@ package client
 
 import (
 	"encoding/json"
+)
+
+type DebotErrorCode string
+
+const (
+	DebotStartFailedDebotErrorCode     DebotErrorCode = "DebotStartFailed"
+	DebotFetchFailedDebotErrorCode     DebotErrorCode = "DebotFetchFailed"
+	DebotExecutionFailedDebotErrorCode DebotErrorCode = "DebotExecutionFailed"
+	DebotInvalidHandleDebotErrorCode   DebotErrorCode = "DebotInvalidHandle"
 )
 
 type (

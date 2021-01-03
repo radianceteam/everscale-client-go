@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 17:31 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 17:49 UTC
 //
 // Mod client
 //
@@ -12,25 +12,85 @@ import (
 	"github.com/volatiletech/null"
 )
 
+type ErrorCode string
+
+const (
+	NotImplementedErrorCode                      ErrorCode = "NotImplemented"
+	InvalidHexErrorCode                          ErrorCode = "InvalidHex"
+	InvalidBase64ErrorCode                       ErrorCode = "InvalidBase64"
+	InvalidAddressErrorCode                      ErrorCode = "InvalidAddress"
+	CallbackParamsCantBeConvertedToJSONErrorCode ErrorCode = "CallbackParamsCantBeConvertedToJson"
+	WebsocketConnectErrorErrorCode               ErrorCode = "WebsocketConnectError"
+	WebsocketReceiveErrorErrorCode               ErrorCode = "WebsocketReceiveError"
+	WebsocketSendErrorErrorCode                  ErrorCode = "WebsocketSendError"
+	HTTPClientCreateErrorErrorCode               ErrorCode = "HttpClientCreateError"
+	HTTPRequestCreateErrorErrorCode              ErrorCode = "HttpRequestCreateError"
+	HTTPRequestSendErrorErrorCode                ErrorCode = "HttpRequestSendError"
+	HTTPRequestParseErrorErrorCode               ErrorCode = "HttpRequestParseError"
+	CallbackNotRegisteredErrorCode               ErrorCode = "CallbackNotRegistered"
+	NetModuleNotInitErrorCode                    ErrorCode = "NetModuleNotInit"
+	InvalidConfigErrorCode                       ErrorCode = "InvalidConfig"
+	CannotCreateRuntimeErrorCode                 ErrorCode = "CannotCreateRuntime"
+	InvalidContextHandleErrorCode                ErrorCode = "InvalidContextHandle"
+	CannotSerializeResultErrorCode               ErrorCode = "CannotSerializeResult"
+	CannotSerializeErrorErrorCode                ErrorCode = "CannotSerializeError"
+	CannotConvertJsValueToJSONErrorCode          ErrorCode = "CannotConvertJsValueToJson"
+	CannotReceiveSpawnedResultErrorCode          ErrorCode = "CannotReceiveSpawnedResult"
+	SetTimerErrorErrorCode                       ErrorCode = "SetTimerError"
+	InvalidParamsErrorCode                       ErrorCode = "InvalidParams"
+	ContractsAddressConversionFailedErrorCode    ErrorCode = "ContractsAddressConversionFailed"
+	UnknownFunctionErrorCode                     ErrorCode = "UnknownFunction"
+	AppRequestErrorErrorCode                     ErrorCode = "AppRequestError"
+	NoSuchRequestErrorCode                       ErrorCode = "NoSuchRequest"
+	CanNotSendRequestResultErrorCode             ErrorCode = "CanNotSendRequestResult"
+	CanNotReceiveRequestResultErrorCode          ErrorCode = "CanNotReceiveRequestResult"
+	CanNotParseRequestResultErrorCode            ErrorCode = "CanNotParseRequestResult"
+	UnexpectedCallbackResponseErrorCode          ErrorCode = "UnexpectedCallbackResponse"
+	CanNotParseNumberErrorCode                   ErrorCode = "CanNotParseNumber"
+	InternalErrorErrorCode                       ErrorCode = "InternalError"
+)
+
 type NetworkConfig struct {
-	ServerAddress            string      `json:"server_address"`
-	NetworkRetriesCount      null.Int8   `json:"network_retries_count"`      // optional
-	MessageRetriesCount      null.Int8   `json:"message_retries_count"`      // optional
+	// DApp Server public address. For instance, for `net.ton.dev/graphql` GraphQL endpoint the server address will be net.ton.dev.
+	ServerAddress null.String `json:"server_address"` // optional
+	// List of DApp Server addresses.
+	// Any correct URL format can be specified, including IP addresses.
+	Endpoints []string `json:"endpoints"` // optional
+	// The number of automatic network retries that SDK performs in case of connection problems The default value is 5.
+	NetworkRetriesCount null.Int8 `json:"network_retries_count"` // optional
+	// The number of automatic message processing retries that SDK performs in case of `Message Expired (507)` error - but only for those messages which local emulation was successfull or failed with replay protection error. The default value is 5.
+	MessageRetriesCount null.Int8 `json:"message_retries_count"` // optional
+	// Timeout that is used to process message delivery for the contracts which ABI does not include "expire" header. If the message is not delivered within the speficied timeout the appropriate error occurs.
 	MessageProcessingTimeout null.Uint32 `json:"message_processing_timeout"` // optional
-	WaitForTimeout           null.Uint32 `json:"wait_for_timeout"`           // optional
-	OutOfSyncThreshold       null.Uint32 `json:"out_of_sync_threshold"`      // optional
-	AccessKey                null.String `json:"access_key"`                 // optional
+	// Maximum timeout that is used for query response. The default value is 40 sec.
+	WaitForTimeout null.Uint32 `json:"wait_for_timeout"` // optional
+	// Maximum time difference between server and client.
+	// If client's device time is out of sink and difference is more thanthe threshhold then error will occur. Also the error will occur if the specified threshhold is more than
+	// `message_processing_timeout/2`.
+	// The default value is 15 sec.
+	OutOfSyncThreshold null.Uint32 `json:"out_of_sync_threshold"` // optional
+	// Timeout between reconnect attempts.
+	ReconnectTimeout null.Uint32 `json:"reconnect_timeout"` // optional
+	// Access key to GraphQL API.
+	// At the moment is not used in production.
+	AccessKey null.String `json:"access_key"` // optional
 }
 
 type CryptoConfig struct {
-	MnemonicDictionary  null.Uint8  `json:"mnemonic_dictionary"`   // optional
-	MnemonicWordCount   null.Uint8  `json:"mnemonic_word_count"`   // optional
+	// Mnemonic dictionary that will be used by default in crypto funcions. If not specified, 1 dictionary will be used.
+	MnemonicDictionary null.Uint8 `json:"mnemonic_dictionary"` // optional
+	// Mnemonic word count that will be used by default in crypto functions. If not specified the default value will be 12.
+	MnemonicWordCount null.Uint8 `json:"mnemonic_word_count"` // optional
+	// Derivation path that will be used by default in crypto functions. If not specified `m/44'/396'/0'/0/0` will be used.
 	HdkeyDerivationPath null.String `json:"hdkey_derivation_path"` // optional
 }
 
 type AbiConfig struct {
-	Workchain                          null.Int32   `json:"workchain"`                              // optional
-	MessageExpirationTimeout           null.Uint32  `json:"message_expiration_timeout"`             // optional
+	// Workchain id that is used by default in DeploySet.
+	Workchain null.Int32 `json:"workchain"` // optional
+	// Message lifetime for contracts which ABI includes "expire" header. The default value is 40 sec.
+	MessageExpirationTimeout null.Uint32 `json:"message_expiration_timeout"` // optional
+	// Factor that increases the expiration timeout for each retry The default value is 1.5.
 	MessageExpirationTimeoutGrowFactor null.Float32 `json:"message_expiration_timeout_grow_factor"` // optional
 }
 
