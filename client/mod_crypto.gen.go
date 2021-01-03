@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 12:23 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 17:19 UTC
 //
 // Mod crypto
 //
@@ -742,7 +742,7 @@ func (c *Client) CryptoChacha20(p *ParamsOfChaCha20) (*ResultOfChaCha20, error) 
 }
 
 // Register an application implemented signing box.
-func (c *Client) CryptoRegisterSigningBox() (*RegisteredSigningBox, error) {
+func (c *Client) CryptoRegisterSigningBox(app AppSigningBox) (*RegisteredSigningBox, error) {
 	result := new(RegisteredSigningBox)
 	responses, err := c.dllClient.resultsChannel("crypto.register_signing_box", nil)
 	if err != nil {
@@ -758,10 +758,46 @@ func (c *Client) CryptoRegisterSigningBox() (*RegisteredSigningBox, error) {
 		return nil, err
 	}
 
-	// result - is populated
+	go func() {
+		var appRequest ParamsOfAppRequest
+		var appParams ParamsOfAppSigningBox
 
-	// first = crypto.ParamsOfAppSigningBox
-	// second = crypto.ResultOfAppSigningBox
+		for r := range responses {
+			if r.Code == ResponseCodeAppRequest {
+				err = json.Unmarshal(r.Data, &appRequest)
+				if err != nil {
+					panic(err)
+				}
+				err := json.Unmarshal(appRequest.RequestData, &appParams)
+				if err != nil {
+					panic(err)
+				}
+				appResponse, err := app.Request(appParams)
+				appRequestResult := AppRequestResult{}
+				if err != nil {
+					appRequestResult.Type = ErrorAppRequestResultType
+					appRequestResult.Text = err.Error()
+				} else {
+					appRequestResult.Type = OkAppRequestResultType
+					appRequestResult.Result, _ = json.Marshal(appResponse)
+				}
+				err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
+					AppRequestID: appRequest.AppRequestID,
+					Result:       appRequestResult,
+				})
+				if err != nil {
+					panic(err)
+				}
+			}
+			if r.Code == ResponseCodeAppNotify {
+				err := json.Unmarshal(r.Data, &appParams)
+				if err != nil {
+					panic(err)
+				}
+				app.Notify(appParams)
+			}
+		}
+	}()
 
 	return result, nil
 }

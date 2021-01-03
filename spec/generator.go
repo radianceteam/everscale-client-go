@@ -102,10 +102,13 @@ func genFunc(m Module, f Function) string {
 	if appObject == nil {
 		err = funcTemplate.Execute(&b, content)
 	} else {
+		paramsAppObjectType := toTypeName(appObject.GenericArgs[0].RefName)
+		resultAppObjectType := toTypeName(appObject.GenericArgs[1].RefName)
 		err = funcTemplateWithAppObject.Execute(&b, funcWithAppObjectContent{
 			funcContent:     content,
-			AppObjectFirst:  appObject.GenericArgs[0].RefName,
-			AppObjectSecond: appObject.GenericArgs[1].RefName,
+			AppType:         strings.TrimPrefix(paramsAppObjectType, "ParamsOf"),
+			AppObjectFirst:  paramsAppObjectType,
+			AppObjectSecond: resultAppObjectType,
 		})
 	}
 

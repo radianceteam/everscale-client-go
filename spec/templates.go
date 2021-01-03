@@ -48,6 +48,7 @@ type funcContent struct {
 
 type funcWithAppObjectContent struct {
 	funcContent
+	AppType         string
 	AppObjectFirst  string
 	AppObjectSecond string
 }
@@ -66,7 +67,7 @@ var funcTemplate = template.Must(template.New("funcTemplate").Parse(
 `))
 
 var funcTemplateWithAppObject = template.Must(template.New("funcTemplate").Parse(
-	`func (c *Client) {{.Name}}( {{if ne .ParamType ""}} p *{{.ParamType}} {{end}} ) (*{{.ResultType}}, error)  {
+	`func (c *Client) {{.Name}}( {{if ne .ParamType ""}} p *{{.ParamType}}, {{end}} app {{.AppType}}) (*{{.ResultType}}, error)  {
 	result := new({{.ResultType}}) 
 	responses, err := c.dllClient.resultsChannel("{{.MethodName}}", {{if ne .ParamType ""}} p {{else}} nil {{end}})
 	if err != nil {
@@ -81,11 +82,47 @@ var funcTemplateWithAppObject = template.Must(template.New("funcTemplate").Parse
 	if err := json.Unmarshal(response.Data, result); err != nil {
 		return nil, err
 	}
-	
-	// result - is populated
 
-    // first = {{.AppObjectFirst}}
-    // second = {{.AppObjectSecond}}
+	go func() {
+		var appRequest ParamsOfAppRequest
+		var appParams {{.AppObjectFirst}}
+
+		for r := range responses {
+			if r.Code == ResponseCodeAppRequest {
+				err = json.Unmarshal(r.Data, &appRequest)
+				if err != nil {
+					panic(err)
+				}
+				err := json.Unmarshal(appRequest.RequestData, &appParams)
+				if err != nil {
+					panic(err)
+				}
+				appResponse, err := app.Request(appParams)
+				appRequestResult := AppRequestResult{}
+				if err != nil {
+					appRequestResult.Type = ErrorAppRequestResultType
+					appRequestResult.Text = err.Error()
+				} else {
+					appRequestResult.Type = OkAppRequestResultType
+					appRequestResult.Result, _ = json.Marshal(appResponse)
+				}
+				err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
+					AppRequestID: appRequest.AppRequestID,
+					Result: appRequestResult,
+				})
+				if err != nil {
+					panic(err)
+				}
+			}
+			if r.Code == ResponseCodeAppNotify {
+				err := json.Unmarshal(r.Data, &appParams)
+				if err != nil {
+					panic(err)
+				}
+				app.Notify(appParams)
+			}
+		}
+	}()
 
 	return result, nil
 }
