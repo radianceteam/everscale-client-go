@@ -4,20 +4,6 @@ package client
 
 import "encoding/json"
 
-// NetSuspend Suspends network module to stop any network activity.
-func (c *Client) NetSuspend() error {
-	_, err := c.dllClient.waitErrorOrResult("net.suspend", nil)
-
-	return err
-}
-
-// NetSuspend Resumes network module to enable network activity.
-func (c *Client) NetResume() error {
-	_, err := c.dllClient.waitErrorOrResult("net.resume", nil)
-
-	return err
-}
-
 // NetQueryCollectionRaw gives ability to unmarshall raw data yourself.
 func (c *Client) NetQueryCollectionRaw(p *ParamsOfQueryCollection) ([]byte, error) {
 	return c.dllClient.waitErrorOrResult("net.query_collection", p)

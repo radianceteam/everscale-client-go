@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 29 Dec 20 20:08 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 10:51 UTC
 //
 // Mod utils
 //
@@ -42,6 +42,7 @@ type ResultOfConvertAddress struct {
 // Converts address from any TON format to any TON format.
 func (c *Client) UtilsConvertAddress(p *ParamsOfConvertAddress) (*ResultOfConvertAddress, error) {
 	response := new(ResultOfConvertAddress)
+
 	err := c.dllClient.waitErrorOrResultUnmarshal("utils.convert_address", p, response)
 
 	return response, err

@@ -6,7 +6,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"text/template"
 
 	"github.com/iancoleman/strcase"
 )
@@ -68,10 +67,11 @@ func genFunc(m Module, f Function) string {
 	params := make([]Type, 0, 2)
 	for _, p := range f.Params {
 		if p.Name == "context" || p.Name == "_context" {
-			continue
+			continue // always skips implicit context parameter
 		}
 		params = append(params, p)
 	}
+
 	if len(params) > 1 {
 		fmt.Println("WARNING: ignored function", len(params), m.Name, f.Name)
 
@@ -85,19 +85,11 @@ func genFunc(m Module, f Function) string {
 		ResultType: toTypeName(f.Result.GenericArgs[0].RefName),
 	}
 
-	var tmpl *template.Template
-	if len(params) == 0 {
-		tmpl = withoutParamFunc
-	} else if len(params) == 1 {
+	if len(params) == 1 {
 		content.ParamType = toTypeName(params[0].RefName)
-		if content.ResultType != "" {
-			tmpl = singleParamFunc
-		} else {
-			tmpl = singleParamWithoutResultFunc
-		}
 	}
 
-	if err := tmpl.Execute(&b, content); err != nil {
+	if err := funcTemplate.Execute(&b, content); err != nil {
 		panic(err)
 	}
 

@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 29 Dec 20 20:08 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 10:51 UTC
 //
 // Mod client
 //
@@ -92,6 +92,7 @@ type ParamsOfResolveAppRequest struct {
 // Returns Core Library version.
 func (c *Client) ClientVersion() (*ResultOfVersion, error) {
 	response := new(ResultOfVersion)
+
 	err := c.dllClient.waitErrorOrResultUnmarshal("client.version", nil, response)
 
 	return response, err
@@ -100,6 +101,7 @@ func (c *Client) ClientVersion() (*ResultOfVersion, error) {
 // Returns detailed information about this build.
 func (c *Client) ClientBuildInfo() (*ResultOfBuildInfo, error) {
 	response := new(ResultOfBuildInfo)
+
 	err := c.dllClient.waitErrorOrResultUnmarshal("client.build_info", nil, response)
 
 	return response, err

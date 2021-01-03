@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 29 Dec 20 20:08 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 10:51 UTC
 //
 // Mod tvm
 //
@@ -148,6 +148,7 @@ type ResultOfRunGet struct {
 // If you need to see the aborted transaction as a result, not as an error, set `skip_transaction_check` to `true`.
 func (c *Client) TvmRunExecutor(p *ParamsOfRunExecutor) (*ResultOfRunExecutor, error) {
 	response := new(ResultOfRunExecutor)
+
 	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.run_executor", p, response)
 
 	return response, err
@@ -168,6 +169,7 @@ func (c *Client) TvmRunExecutor(p *ParamsOfRunExecutor) (*ResultOfRunExecutor, e
 // `account_state.storage.state.data`  part of the boc is updated.
 func (c *Client) TvmRunTvm(p *ParamsOfRunTvm) (*ResultOfRunTvm, error) {
 	response := new(ResultOfRunTvm)
+
 	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.run_tvm", p, response)
 
 	return response, err
@@ -177,6 +179,7 @@ func (c *Client) TvmRunTvm(p *ParamsOfRunTvm) (*ResultOfRunTvm, error) {
 // and returns the result data from TVM's stack.
 func (c *Client) TvmRunGet(p *ParamsOfRunGet) (*ResultOfRunGet, error) {
 	response := new(ResultOfRunGet)
+
 	err := c.dllClient.waitErrorOrResultUnmarshal("tvm.run_get", p, response)
 
 	return response, err

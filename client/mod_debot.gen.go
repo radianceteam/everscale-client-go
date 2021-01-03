@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 29 Dec 20 20:08 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 10:51 UTC
 //
 // Mod debot
 //

@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 29 Dec 20 20:08 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 10:51 UTC
 //
 // Mod net
 //
@@ -97,6 +97,7 @@ type ResultOfFindLastShardBlock struct {
 // Performs DAppServer GraphQL query.
 func (c *Client) NetQuery(p *ParamsOfQuery) (*ResultOfQuery, error) {
 	response := new(ResultOfQuery)
+
 	err := c.dllClient.waitErrorOrResultUnmarshal("net.query", p, response)
 
 	return response, err
@@ -108,6 +109,7 @@ func (c *Client) NetQuery(p *ParamsOfQuery) (*ResultOfQuery, error) {
 // The projection fields are limited to `result` fields.
 func (c *Client) NetQueryCollection(p *ParamsOfQueryCollection) (*ResultOfQueryCollection, error) {
 	response := new(ResultOfQueryCollection)
+
 	err := c.dllClient.waitErrorOrResultUnmarshal("net.query_collection", p, response)
 
 	return response, err
@@ -122,6 +124,7 @@ func (c *Client) NetQueryCollection(p *ParamsOfQueryCollection) (*ResultOfQueryC
 // The projection fields are limited to `result` fields.
 func (c *Client) NetWaitForCollection(p *ParamsOfWaitForCollection) (*ResultOfWaitForCollection, error) {
 	response := new(ResultOfWaitForCollection)
+
 	err := c.dllClient.waitErrorOrResultUnmarshal("net.wait_for_collection", p, response)
 
 	return response, err
@@ -134,9 +137,24 @@ func (c *Client) NetUnsubscribe(p *ResultOfSubscribeCollection) error {
 	return err
 }
 
+// Suspends network module to stop any network activity.
+func (c *Client) NetSuspend() error {
+	_, err := c.dllClient.waitErrorOrResult("net.suspend", nil)
+
+	return err
+}
+
+// Resumes network module to enable network activity.
+func (c *Client) NetResume() error {
+	_, err := c.dllClient.waitErrorOrResult("net.resume", nil)
+
+	return err
+}
+
 // Returns ID of the last block in a specified account shard.
 func (c *Client) NetFindLastShardBlock(p *ParamsOfFindLastShardBlock) (*ResultOfFindLastShardBlock, error) {
 	response := new(ResultOfFindLastShardBlock)
+
 	err := c.dllClient.waitErrorOrResultUnmarshal("net.find_last_shard_block", p, response)
 
 	return response, err

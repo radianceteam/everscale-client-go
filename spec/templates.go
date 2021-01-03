@@ -45,28 +45,15 @@ type funcContent struct {
 	MethodName string
 }
 
-var withoutParamFunc = template.Must(template.New("withoutParamFunc").Parse(
-	`func (c *Client) {{.Name}} () (*{{.ResultType}}, error) {
-	response := new({{.ResultType}})
-	err := c.dllClient.waitErrorOrResultUnmarshal("{{.MethodName}}", nil, response)
+var funcTemplate = template.Must(template.New("funcTemplate").Parse(
+	`func (c *Client) {{.Name}}( {{if ne .ParamType ""}} p *{{.ParamType}} {{end}} ) {{if eq .ResultType ""}} error {{else}} (*{{.ResultType}}, error) {{end}} {
+	{{if ne .ResultType ""}} response := new({{.ResultType}}) {{end}}
+	{{if eq .ResultType "" }}
+	_, err := c.dllClient.waitErrorOrResult("{{.MethodName}}", {{if eq .ParamType "" }} nil {{else}} p {{end}})
+	{{else}}
+	err := c.dllClient.waitErrorOrResultUnmarshal("{{.MethodName}}", {{if eq .ParamType "" }} nil {{else}} p {{end}}, response)
+	{{end}}
 
-	return response, err
-}
-`))
-
-var singleParamFunc = template.Must(template.New("singleParamFunc").Parse(
-	`func (c *Client) {{.Name}} (p *{{.ParamType}}) (*{{.ResultType}}, error) {
-	response := new({{.ResultType}})
-	err := c.dllClient.waitErrorOrResultUnmarshal("{{.MethodName}}", p, response)
-
-	return response, err
-}
-`))
-
-var singleParamWithoutResultFunc = template.Must(template.New("singleParamWithoutResultFunc").Parse(
-	`func (c *Client) {{.Name}} (p *{{.ParamType}}) error {
-	_, err := c.dllClient.waitErrorOrResult("{{.MethodName}}", p)
-
-	return  err
+	return {{if ne .ResultType "" }} response, {{ end }} err
 }
 `))

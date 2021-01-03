@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 29 Dec 20 20:08 UTC
+// DON'T EDIT THIS FILE is generated 03 Jan 21 10:51 UTC
 //
 // Mod boc
 //
@@ -59,6 +59,7 @@ type ResultOfGetCodeFromTvc struct {
 // JSON structure is compatible with GraphQL API message object.
 func (c *Client) BocParseMessage(p *ParamsOfParse) (*ResultOfParse, error) {
 	response := new(ResultOfParse)
+
 	err := c.dllClient.waitErrorOrResultUnmarshal("boc.parse_message", p, response)
 
 	return response, err
@@ -68,6 +69,7 @@ func (c *Client) BocParseMessage(p *ParamsOfParse) (*ResultOfParse, error) {
 // JSON structure is compatible with GraphQL API transaction object.
 func (c *Client) BocParseTransaction(p *ParamsOfParse) (*ResultOfParse, error) {
 	response := new(ResultOfParse)
+
 	err := c.dllClient.waitErrorOrResultUnmarshal("boc.parse_transaction", p, response)
 
 	return response, err
@@ -77,6 +79,7 @@ func (c *Client) BocParseTransaction(p *ParamsOfParse) (*ResultOfParse, error) {
 // JSON structure is compatible with GraphQL API account object.
 func (c *Client) BocParseAccount(p *ParamsOfParse) (*ResultOfParse, error) {
 	response := new(ResultOfParse)
+
 	err := c.dllClient.waitErrorOrResultUnmarshal("boc.parse_account", p, response)
 
 	return response, err
@@ -86,6 +89,7 @@ func (c *Client) BocParseAccount(p *ParamsOfParse) (*ResultOfParse, error) {
 // JSON structure is compatible with GraphQL API block object.
 func (c *Client) BocParseBlock(p *ParamsOfParse) (*ResultOfParse, error) {
 	response := new(ResultOfParse)
+
 	err := c.dllClient.waitErrorOrResultUnmarshal("boc.parse_block", p, response)
 
 	return response, err
@@ -95,6 +99,7 @@ func (c *Client) BocParseBlock(p *ParamsOfParse) (*ResultOfParse, error) {
 // JSON structure is compatible with GraphQL API shardstate object.
 func (c *Client) BocParseShardstate(p *ParamsOfParseShardstate) (*ResultOfParse, error) {
 	response := new(ResultOfParse)
+
 	err := c.dllClient.waitErrorOrResultUnmarshal("boc.parse_shardstate", p, response)
 
 	return response, err
@@ -102,6 +107,7 @@ func (c *Client) BocParseShardstate(p *ParamsOfParseShardstate) (*ResultOfParse,
 
 func (c *Client) BocGetBlockchainConfig(p *ParamsOfGetBlockchainConfig) (*ResultOfGetBlockchainConfig, error) {
 	response := new(ResultOfGetBlockchainConfig)
+
 	err := c.dllClient.waitErrorOrResultUnmarshal("boc.get_blockchain_config", p, response)
 
 	return response, err
@@ -110,6 +116,7 @@ func (c *Client) BocGetBlockchainConfig(p *ParamsOfGetBlockchainConfig) (*Result
 // Calculates BOC root hash.
 func (c *Client) BocGetBocHash(p *ParamsOfGetBocHash) (*ResultOfGetBocHash, error) {
 	response := new(ResultOfGetBocHash)
+
 	err := c.dllClient.waitErrorOrResultUnmarshal("boc.get_boc_hash", p, response)
 
 	return response, err
@@ -118,6 +125,7 @@ func (c *Client) BocGetBocHash(p *ParamsOfGetBocHash) (*ResultOfGetBocHash, erro
 // Extracts code from TVC contract image.
 func (c *Client) BocGetCodeFromTvc(p *ParamsOfGetCodeFromTvc) (*ResultOfGetCodeFromTvc, error) {
 	response := new(ResultOfGetCodeFromTvc)
+
 	err := c.dllClient.waitErrorOrResultUnmarshal("boc.get_code_from_tvc", p, response)
 
 	return response, err
