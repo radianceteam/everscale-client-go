@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 17:49 UTC
+// DON'T EDIT THIS FILE is generated 31 Jan 21 10:48 UTC
 //
 // Mod crypto
 //
@@ -34,6 +34,7 @@ const (
 	MnemonicGenerationFailedCryptoErrorCode  CryptoErrorCode = "MnemonicGenerationFailed"
 	MnemonicFromEntropyFailedCryptoErrorCode CryptoErrorCode = "MnemonicFromEntropyFailed"
 	SigningBoxNotRegisteredCryptoErrorCode   CryptoErrorCode = "SigningBoxNotRegistered"
+	InvalidSignatureCryptoErrorCode          CryptoErrorCode = "InvalidSignature"
 )
 
 type (
@@ -193,6 +194,22 @@ type ResultOfNaclSignOpen struct {
 type ResultOfNaclSignDetached struct {
 	// Signature encoded in `hex`.
 	Signature string `json:"signature"`
+}
+
+type ParamsOfNaclSignDetachedVerify struct {
+	// Unsigned data that must be verified.
+	// Encoded with `base64`.
+	Unsigned string `json:"unsigned"`
+	// Signature that must be verified.
+	// Encoded with `hex`.
+	Signature string `json:"signature"`
+	// Signer's public key - unprefixed 0-padded to 64 symbols hex string.
+	Public string `json:"public"`
+}
+
+type ResultOfNaclSignDetachedVerify struct {
+	// `true` if verification succeeded or `false` if it failed.
+	Succeeded bool `json:"succeeded"`
 }
 
 type ParamsOfNaclBoxKeyPairFromSecret struct {
@@ -453,7 +470,7 @@ type ParamsOfSigningBoxSign struct {
 
 type ResultOfSigningBoxSign struct {
 	// Data signature.
-	// Encoded with `base64`.
+	// Encoded with `hex`.
 	Signature string `json:"signature"`
 }
 
@@ -606,6 +623,15 @@ func (c *Client) CryptoNaclSignDetached(p *ParamsOfNaclSign) (*ResultOfNaclSignD
 	result := new(ResultOfNaclSignDetached)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_sign_detached", p, result)
+
+	return result, err
+}
+
+// Verifies the signature with public key and `unsigned` data.
+func (c *Client) CryptoNaclSignDetachedVerify(p *ParamsOfNaclSignDetachedVerify) (*ResultOfNaclSignDetachedVerify, error) {
+	result := new(ResultOfNaclSignDetachedVerify)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.nacl_sign_detached_verify", p, result)
 
 	return result, err
 }

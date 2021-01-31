@@ -4,6 +4,11 @@ package client
 
 import "encoding/json"
 
+type (
+	FieldAggregation       json.RawMessage
+	ParamsOfQueryOperation json.RawMessage
+)
+
 // NetSubscribeCollection Creates a subscription with unmarshalled to interface{} data.
 //
 // Triggers for each insert/update of data

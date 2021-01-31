@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 17:49 UTC
+// DON'T EDIT THIS FILE is generated 31 Jan 21 10:48 UTC
 //
 // Mod net
 //
@@ -27,6 +27,8 @@ const (
 	WebsocketDisconnectedNetErrorCode       NetErrorCode = "WebsocketDisconnected"
 	NotSupportedNetErrorCode                NetErrorCode = "NotSupported"
 	NoEndpointsProvidedNetErrorCode         NetErrorCode = "NoEndpointsProvided"
+	GraphqlWebsocketInitErrorNetErrorCode   NetErrorCode = "GraphqlWebsocketInitError"
+	NetworkModuleResumedNetErrorCode        NetErrorCode = "NetworkModuleResumed"
 )
 
 type OrderBy struct {
@@ -45,13 +47,24 @@ type ParamsOfQuery struct {
 	// GraphQL query text.
 	Query string `json:"query"`
 	// Variables used in query.
-	// Must be a map with named values thatcan be used in query.
+	// Must be a map with named values that can be used in query.
 	Variables json.RawMessage `json:"variables"` // optional
 }
 
 type ResultOfQuery struct {
 	// Result provided by DAppServer.
 	Result json.RawMessage `json:"result"`
+}
+
+type ParamsOfBatchQuery struct {
+	// List of query operations that must be performed per single fetch.
+	Operations []ParamsOfQueryOperation `json:"operations"`
+}
+
+type ResultOfBatchQuery struct {
+	// Result values for batched queries.
+	// Returns an array of values. Each value corresponds to `queries` item.
+	Results []json.RawMessage `json:"results"`
 }
 
 type ParamsOfQueryCollection struct {
@@ -70,6 +83,22 @@ type ParamsOfQueryCollection struct {
 type ResultOfQueryCollection struct {
 	// Objects that match the provided criteria.
 	Result []json.RawMessage `json:"result"`
+}
+
+type ParamsOfAggregateCollection struct {
+	// Collection name (accounts, blocks, transactions, messages, block_signatures).
+	Collection string `json:"collection"`
+	// Collection filter.
+	Filter json.RawMessage `json:"filter"` // optional
+	// Projection (result) string.
+	Fields []FieldAggregation `json:"fields"` // optional
+}
+
+type ResultOfAggregateCollection struct {
+	// Values for requested fields.
+	// Returns an array of strings. Each string refers to the corresponding `fields` item.
+	// Numeric value is returned as a decimal string representations.
+	Values json.RawMessage `json:"values"`
 }
 
 type ParamsOfWaitForCollection struct {
@@ -127,6 +156,15 @@ func (c *Client) NetQuery(p *ParamsOfQuery) (*ResultOfQuery, error) {
 	return result, err
 }
 
+// Performs multiple queries per single fetch.
+func (c *Client) NetBatchQuery(p *ParamsOfBatchQuery) (*ResultOfBatchQuery, error) {
+	result := new(ResultOfBatchQuery)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("net.batch_query", p, result)
+
+	return result, err
+}
+
 // Queries collection data.
 // Queries data that satisfies the `filter` conditions,
 // limits the number of returned records and orders them.
@@ -135,6 +173,17 @@ func (c *Client) NetQueryCollection(p *ParamsOfQueryCollection) (*ResultOfQueryC
 	result := new(ResultOfQueryCollection)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("net.query_collection", p, result)
+
+	return result, err
+}
+
+// Aggregates collection data.
+// Aggregates values from the specified `fields` for records
+// that satisfies the `filter` conditions,.
+func (c *Client) NetAggregateCollection(p *ParamsOfAggregateCollection) (*ResultOfAggregateCollection, error) {
+	result := new(ResultOfAggregateCollection)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("net.aggregate_collection", p, result)
 
 	return result, err
 }

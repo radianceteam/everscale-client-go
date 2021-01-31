@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 17:49 UTC
+// DON'T EDIT THIS FILE is generated 31 Jan 21 10:48 UTC
 //
 // Mod abi
 //
@@ -33,10 +33,10 @@ type FunctionHeader struct {
 	// Message expiration time in seconds. If not specified - calculated automatically from message_expiration_timeout(), try_index and message_expiration_timeout_grow_factor() (if ABI includes `expire` header).
 	Expire null.Uint32 `json:"expire"` // optional
 	// Message creation time in milliseconds.
-	// If not specified, `now` is used(if ABI includes `time` header).
+	// If not specified, `now` is used (if ABI includes `time` header).
 	Time *big.Int `json:"time"` // optional
 	// Public key is used by the contract to check the signature.
-	// Encoded in `hex`.If not specified, method fails with exception (if ABI includes `pubkey` header)..
+	// Encoded in `hex`. If not specified, method fails with exception (if ABI includes `pubkey` header)..
 	Pubkey null.String `json:"pubkey"` // optional
 }
 
@@ -60,6 +60,12 @@ type DeploySet struct {
 	WorkchainID null.Int32 `json:"workchain_id"` // optional
 	// List of initial values for contract's public variables.
 	InitialData json.RawMessage `json:"initial_data"` // optional
+	// Optional public key that can be provided in deploy set in order to substitute one in TVM file or provided by Signer.
+	// Public key resolving priority:
+	// 1. Public key from deploy set.
+	// 2. Public key, specified in TVM file.
+	// 3. Public key, provided by Signer.
+	InitialPubkey null.String `json:"initial_pubkey"` // optional
 }
 
 type SignerType string
@@ -386,9 +392,17 @@ func (c *Client) AbiAttachSignatureToMessageBody(p *ParamsOfAttachSignatureToMes
 //
 // `Signer::Keys` creates a signed message with provided key pair.
 //
-// [SOON] `Signer::SigningBox` Allows using a special interface to imlepement signing
+// [SOON] `Signer::SigningBox` Allows using a special interface to implement signing
 // without private key disclosure to SDK. For instance, in case of using a cold wallet or HSM,
 // when application calls some API to sign data.
+//
+// There is an optional public key can be provided in deploy set in order to substitute one
+// in TVM file.
+//
+// Public key resolving priority:
+// 1. Public key from deploy set.
+// 2. Public key, specified in TVM file.
+// 3. Public key, provided by signer.
 func (c *Client) AbiEncodeMessage(p *ParamsOfEncodeMessage) (*ResultOfEncodeMessage, error) {
 	result := new(ResultOfEncodeMessage)
 

@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 17:49 UTC
+// DON'T EDIT THIS FILE is generated 31 Jan 21 10:48 UTC
 //
 // Mod debot
 //
@@ -13,27 +13,30 @@ import (
 type DebotErrorCode string
 
 const (
-	DebotStartFailedDebotErrorCode     DebotErrorCode = "DebotStartFailed"
-	DebotFetchFailedDebotErrorCode     DebotErrorCode = "DebotFetchFailed"
-	DebotExecutionFailedDebotErrorCode DebotErrorCode = "DebotExecutionFailed"
-	DebotInvalidHandleDebotErrorCode   DebotErrorCode = "DebotInvalidHandle"
+	DebotStartFailedDebotErrorCode       DebotErrorCode = "DebotStartFailed"
+	DebotFetchFailedDebotErrorCode       DebotErrorCode = "DebotFetchFailed"
+	DebotExecutionFailedDebotErrorCode   DebotErrorCode = "DebotExecutionFailed"
+	DebotInvalidHandleDebotErrorCode     DebotErrorCode = "DebotInvalidHandle"
+	DebotInvalidJSONParamsDebotErrorCode DebotErrorCode = "DebotInvalidJsonParams"
+	DebotInvalidFunctionIDDebotErrorCode DebotErrorCode = "DebotInvalidFunctionId"
+	DebotInvalidAbiDebotErrorCode        DebotErrorCode = "DebotInvalidAbi"
 )
 
 type (
 	DebotHandle uint32
 	DebotAction struct {
 		// A short action description.
-		// Should be used by Debot Browser as name ofmenu item.
+		// Should be used by Debot Browser as name of menu item.
 		Description string `json:"description"`
 		// Depends on action type.
-		// Can be a debot function name or a print string(for Print Action).
+		// Can be a debot function name or a print string (for Print Action).
 		Name string `json:"name"`
 		// Action type.
 		ActionType uint8 `json:"action_type"`
 		// ID of debot context to switch after action execution.
 		To uint8 `json:"to"`
 		// Action attributes.
-		// In the form of "param=value,flag".attribute example: instant, args, fargs, sign.
+		// In the form of "param=value,flag". attribute example: instant, args, fargs, sign.
 		Attributes string `json:"attributes"`
 		// Some internal action data.
 		// Used by debot only.
@@ -70,6 +73,8 @@ const (
 	GetSigningBoxParamsOfAppDebotBrowserType ParamsOfAppDebotBrowserType = "GetSigningBox"
 	// Execute action of another debot.
 	InvokeDebotParamsOfAppDebotBrowserType ParamsOfAppDebotBrowserType = "InvokeDebot"
+	// Used by Debot to call DInterface implemented by Debot Browser.
+	SendParamsOfAppDebotBrowserType ParamsOfAppDebotBrowserType = "Send"
 )
 
 type ParamsOfAppDebotBrowser struct {
@@ -95,6 +100,10 @@ type ParamsOfAppDebotBrowser struct {
 	// presented in types:
 	// "InvokeDebot".
 	DebotAddr string `json:"debot_addr"`
+	// Internal message to DInterface address.
+	// Message body contains interface function and parameters. presented in types:
+	// "Send".
+	Message string `json:"message"`
 }
 
 type ResultOfAppDebotBrowserType string
@@ -131,6 +140,17 @@ type ParamsOfExecute struct {
 	DebotHandle DebotHandle `json:"debot_handle"`
 	// Debot Action that must be executed.
 	Action DebotAction `json:"action"`
+}
+
+type ParamsOfSend struct {
+	// Debot handle which references an instance of debot engine.
+	DebotHandle DebotHandle `json:"debot_handle"`
+	// Std address of interface or debot.
+	Source string `json:"source"`
+	// Function Id to call.
+	FuncID uint32 `json:"func_id"`
+	// Json string with parameters.
+	Params string `json:"params"`
 }
 
 // [UNSTABLE](UNSTABLE.md) Starts an instance of debot.
@@ -293,6 +313,14 @@ func (c *Client) dispatchNotifyDebotFetch(payload []byte, app AppDebotBrowser) {
 // Chain of actions can be executed if input action generates a list of subactions.
 func (c *Client) DebotExecute(p *ParamsOfExecute) error {
 	_, err := c.dllClient.waitErrorOrResult("debot.execute", p)
+
+	return err
+}
+
+// [UNSTABLE](UNSTABLE.md) Sends message to Debot.
+// Used by Debot Browser to send response on Dinterface call or from other Debots.
+func (c *Client) DebotSend(p *ParamsOfSend) error {
+	_, err := c.dllClient.waitErrorOrResult("debot.send", p)
 
 	return err
 }
