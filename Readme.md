@@ -1,21 +1,57 @@
 # TON SDK client Golang
 
-[![Awesome Badges](https://img.shields.io/badge/SDK_version-1.5.2-green.svg)](https://github.com/tonlabs/TON-SDK/tree/1.5.2)
-[![Awesome Badges](https://img.shields.io/badge/TON_version-0.24.8-green.svg)](https://hub.docker.com/layers/tonlabs/local-node/0.24.8/images/sha256-62239cb2b215cbca7e8792812e27fa293727cfd8b17d3e58523c8a15a3673504?context=explore)
+[![TON-SDK Version](https://img.shields.io/badge/SDK_version-1.6.0-green.svg)](https://github.com/tonlabs/TON-SDK/tree/1.6.0)
+[![TON local-node docker image](https://img.shields.io/badge/TON_version-0.24.8-green.svg)](https://hub.docker.com/layers/tonlabs/local-node/0.24.8/images/sha256-62239cb2b215cbca7e8792812e27fa293727cfd8b17d3e58523c8a15a3673504?context=explore)
 [![Chat Telegram](https://img.shields.io/badge/chat-Telegram-9cf.svg)](https://t.me/RADIANCE_TON_SDK)
+[![Documentation](https://godoc.org/github.com/radianceteam/ton-client-go/client?status.svg)](http://godoc.org/github.com/radianceteam/ton-client-go/client)
 ![CI tests and linters](https://github.com/radianceteam/ton-client-go/workflows/CI/badge.svg)
 
 ## Preparations
 
 One need to install
-- [Rust](https://www.rust-lang.org/tools/install)
-- [TON-SDK](https://github.com/tonlabs/TON-SDK) - *important* version `1.5.2` and compile it via `cargo build --release`
+- [Golang](https://golang.org/doc/install)
+- [TON-SDK](https://github.com/tonlabs/TON-SDK#download-precompiled-binaries) - download precompiled binaries and extract them 
+
+### TON-SDK installation - Mac OS
+```bash
+export TON_SDK_INSTALLATION_PATH=`pwd`/tmp # example - should be specified as absolute path
+# clean previous installation in case of reinstalling
+rm -f $TON_SDK_INSTALLATION_PATH/libton_client.dylib.gz $TON_SDK_INSTALLATION_PATH/libton_client.dylib 
+# download binaries
+wget http://sdkbinaries-ws.tonlabs.io/tonclient_1_darwin.gz -O $TON_SDK_INSTALLATION_PATH/libton_client.dylib.gz 
+# extract binaries
+gzip -d $TON_SDK_INSTALLATION_PATH/libton_client.dylib.gz 
+# make extracted file executable
+chmod +x $TON_SDK_INSTALLATION_PATH/libton_client.dylib 
+# set loading by absolute path
+install_name_tool -id $TON_SDK_INSTALLATION_PATH/libton_client.dylib $TON_SDK_INSTALLATION_PATH/libton_client.dylib
+
+# Better to add this to ~/.bashrc or ~/.zshrc to DRY in terminal each time you use it
+export CGO_LDFLAGS="-L$TON_SDK_INSTALLATION_PATH -lton_client"
+```
+
+### TON-SDK installation - Linux
+```bash
+TON_SDK_INSTALLATION_PATH=`pwd`/tmp # example - should be specified as absolute path
+# clean previous installation in case of reinstalling
+rm -f $TON_SDK_INSTALLATION_PATH/libton_client.so.gz $TON_SDK_INSTALLATION_PATH/libton_client.so
+# download binaries
+wget http://sdkbinaries-ws.tonlabs.io/tonclient_1_linux.gz -O $TON_SDK_INSTALLATION_PATH/libton_client.so.gz
+# extract binaries
+gzip -d $TON_SDK_INSTALLATION_PATH/libton_client.so.gz
+# make extracted file executable
+chmod +x $TON_SDK_INSTALLATION_PATH/libton_client.so
+
+# Better to add this to ~/.bashrc or ~/.zshrc to DRY in terminal each time you use it
+export LD_LIBRARY_PATH=$TON_SDK_INSTALLATION_PATH:$LD_LIBRARY_PATH
+export CGO_LDFLAGS="-L$TON_SDK_INSTALLATION_PATH -lton_client"
+```
 
 ## Run
 
 One need to specify compiled DLL directory path:
 ```shell script
-export CGO_LDFLAGS="-L/path-to-installation/TON-SDK/target/release/deps/ -lton_client"
+export CGO_LDFLAGS="-L$TON_SDK_INSTALLATION_PATH -lton_client"
 go build ./cmd/cli
 go run ./cmd/cli
 # or
@@ -24,7 +60,7 @@ task run
 
 On Linux one need also provide search path for DLL loader:
 ```shell script
-export LD_LIBRARY_PATH=/path-to-installation/TON-SDK/target/release/deps/
+export LD_LIBRARY_PATH=$TON_SDK_INSTALLATION_PATH:$LD_LIBRARY_PATH
 ```
 ## Wrapper usage
 
@@ -35,7 +71,7 @@ All non-generated code has test coverage at least of 70% - one can see it via `t
 ## Tests
 
 ```shell script
-export CGO_LDFLAGS="..."
+export CGO_LDFLAGS="-L$TON_SDK_INSTALLATION_PATH -lton_client"
 docker run -d --name local-node -p80:80 tonlabs/local-node:0.24.8
 task test # tests without node
 task full_test # tests including with node
@@ -57,6 +93,7 @@ one can regenerate it via `task generate`.
 
 ## Useful reading
 
+- https://medium.com/@donblas/fun-with-rpath-otool-and-install-name-tool-e3e41ae86172 - about DLL linking
 - https://github.com/tonlabs/TON-SDK/blob/1.5.2/docs/app_objects.md
 - https://eli.thegreenplace.net/2019/passing-callbacks-and-pointers-to-cgo/
 - https://dev.to/mattn/call-go-function-from-c-function-1n3
