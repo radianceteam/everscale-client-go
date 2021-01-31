@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 17:49 UTC
+// DON'T EDIT THIS FILE is generated 31 Jan 21 10:48 UTC
 //
 // Mod client
 //
@@ -54,10 +54,16 @@ type NetworkConfig struct {
 	// DApp Server public address. For instance, for `net.ton.dev/graphql` GraphQL endpoint the server address will be net.ton.dev.
 	ServerAddress null.String `json:"server_address"` // optional
 	// List of DApp Server addresses.
-	// Any correct URL format can be specified, including IP addresses.
+	// Any correct URL format can be specified, including IP addresses This parameter is prevailing over `server_address`.
 	Endpoints []string `json:"endpoints"` // optional
-	// The number of automatic network retries that SDK performs in case of connection problems The default value is 5.
+	// Deprecated.
+	// You must use `network.max_reconnect_timeout` that allows to specify maximum network resolving timeout.
 	NetworkRetriesCount null.Int8 `json:"network_retries_count"` // optional
+	// Maximum time for sequential reconnections in ms.
+	// Default value is 120000 (2 min).
+	MaxReconnectTimeout null.Uint32 `json:"max_reconnect_timeout"` // optional
+	// Deprecated.
+	ReconnectTimeout null.Uint32 `json:"reconnect_timeout"` // optional
 	// The number of automatic message processing retries that SDK performs in case of `Message Expired (507)` error - but only for those messages which local emulation was successfull or failed with replay protection error. The default value is 5.
 	MessageRetriesCount null.Int8 `json:"message_retries_count"` // optional
 	// Timeout that is used to process message delivery for the contracts which ABI does not include "expire" header. If the message is not delivered within the speficied timeout the appropriate error occurs.
@@ -65,19 +71,17 @@ type NetworkConfig struct {
 	// Maximum timeout that is used for query response. The default value is 40 sec.
 	WaitForTimeout null.Uint32 `json:"wait_for_timeout"` // optional
 	// Maximum time difference between server and client.
-	// If client's device time is out of sink and difference is more thanthe threshhold then error will occur. Also the error will occur if the specified threshhold is more than
+	// If client's device time is out of sync and difference is more than the threshold then error will occur. Also an error will occur if the specified threshold is more than
 	// `message_processing_timeout/2`.
 	// The default value is 15 sec.
 	OutOfSyncThreshold null.Uint32 `json:"out_of_sync_threshold"` // optional
-	// Timeout between reconnect attempts.
-	ReconnectTimeout null.Uint32 `json:"reconnect_timeout"` // optional
 	// Access key to GraphQL API.
 	// At the moment is not used in production.
 	AccessKey null.String `json:"access_key"` // optional
 }
 
 type CryptoConfig struct {
-	// Mnemonic dictionary that will be used by default in crypto funcions. If not specified, 1 dictionary will be used.
+	// Mnemonic dictionary that will be used by default in crypto functions. If not specified, 1 dictionary will be used.
 	MnemonicDictionary null.Uint8 `json:"mnemonic_dictionary"` // optional
 	// Mnemonic word count that will be used by default in crypto functions. If not specified the default value will be 12.
 	MnemonicWordCount null.Uint8 `json:"mnemonic_word_count"` // optional

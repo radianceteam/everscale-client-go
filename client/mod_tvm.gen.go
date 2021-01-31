@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 03 Jan 21 17:49 UTC
+// DON'T EDIT THIS FILE is generated 31 Jan 21 10:48 UTC
 //
 // Mod tvm
 //
@@ -61,7 +61,7 @@ type AccountForExecutor struct {
 	// "Account".
 	Boc string `json:"boc"`
 	// Flag for running account with the unlimited balance.
-	// Can be used to calculatetransaction fees without balance check presented in types:
+	// Can be used to calculate transaction fees without balance check presented in types:
 	// "Account".
 	UnlimitedBalance null.Bool `json:"unlimited_balance"` // optional
 }
@@ -127,7 +127,7 @@ type ResultOfRunTvm struct {
 	// Optional decoded message bodies according to the optional `abi` parameter.
 	Decoded *DecodedOutput `json:"decoded"` // optional
 	// Updated account state BOC.
-	// Encoded as `base64`.Attention! Only `account_state.storage.state.data` part of the boc is updated.
+	// Encoded as `base64`. Attention! Only `account_state.storage.state.data` part of the boc is updated.
 	Account string `json:"account"`
 }
 
