@@ -1,0 +1,21 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+      - name: Send Telegram Notification
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TGBOT_RADIANCEDEPLOY_TO }}
+          token: ${{ secrets.TGBOT_RADIANCEDEPLOY_TOKEN }}
+          message: |
+            Go SDK Wrapper ${{ steps.get_version.outputs.VERSION }} has been released.
+            https://github.com/radianceteam/ton-client-go/releases/tag/${{ steps.get_version.outputs.VERSION }}
