@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:51 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
 //
 // Mod tvm
 //
@@ -28,6 +28,23 @@ const (
 	InvalidMessageTypeTvmErrorCode         = 413
 	ContractExecutionErrorTvmErrorCode     = 414
 )
+
+func init() { // nolint gochecknoinits
+	errorCodesToErrorTypes[CanNotReadTransactionTvmErrorCode] = "CanNotReadTransactionTvmErrorCode"
+	errorCodesToErrorTypes[CanNotReadBlockchainConfigTvmErrorCode] = "CanNotReadBlockchainConfigTvmErrorCode"
+	errorCodesToErrorTypes[TransactionAbortedTvmErrorCode] = "TransactionAbortedTvmErrorCode"
+	errorCodesToErrorTypes[InternalErrorTvmErrorCode] = "InternalErrorTvmErrorCode"
+	errorCodesToErrorTypes[ActionPhaseFailedTvmErrorCode] = "ActionPhaseFailedTvmErrorCode"
+	errorCodesToErrorTypes[AccountCodeMissingTvmErrorCode] = "AccountCodeMissingTvmErrorCode"
+	errorCodesToErrorTypes[LowBalanceTvmErrorCode] = "LowBalanceTvmErrorCode"
+	errorCodesToErrorTypes[AccountFrozenOrDeletedTvmErrorCode] = "AccountFrozenOrDeletedTvmErrorCode"
+	errorCodesToErrorTypes[AccountMissingTvmErrorCode] = "AccountMissingTvmErrorCode"
+	errorCodesToErrorTypes[UnknownExecutionErrorTvmErrorCode] = "UnknownExecutionErrorTvmErrorCode"
+	errorCodesToErrorTypes[InvalidInputStackTvmErrorCode] = "InvalidInputStackTvmErrorCode"
+	errorCodesToErrorTypes[InvalidAccountBocTvmErrorCode] = "InvalidAccountBocTvmErrorCode"
+	errorCodesToErrorTypes[InvalidMessageTypeTvmErrorCode] = "InvalidMessageTypeTvmErrorCode"
+	errorCodesToErrorTypes[ContractExecutionErrorTvmErrorCode] = "ContractExecutionErrorTvmErrorCode"
+}
 
 type ExecutionOptions struct {
 	// boc with config.

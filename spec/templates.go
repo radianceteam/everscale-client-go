@@ -40,6 +40,13 @@ const (
 {{range $e := .EnumConsts}} 
 	{{$e.GoComment}} {{$e.ConstName}} {{$.Name}} = {{$e.Value}}{{end}}
 )
+
+{{if eq .Name ""}}
+func init() { // nolint gochecknoinits {{range $e := .EnumConsts}} 
+	 errorCodesToErrorTypes[{{$e.ConstName}}] = "{{$e.ConstName}}"{{end}}
+}
+{{ end }}
+
 `))
 
 type funcContent struct {

@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:51 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
 //
 // Mod debot
 //
@@ -22,6 +22,19 @@ const (
 	DebotInvalidMsgDebotErrorCode        = 809
 	DebotExternaCallFailedDebotErrorCode = 810
 )
+
+func init() { // nolint gochecknoinits
+	errorCodesToErrorTypes[DebotStartFailedDebotErrorCode] = "DebotStartFailedDebotErrorCode"
+	errorCodesToErrorTypes[DebotFetchFailedDebotErrorCode] = "DebotFetchFailedDebotErrorCode"
+	errorCodesToErrorTypes[DebotExecutionFailedDebotErrorCode] = "DebotExecutionFailedDebotErrorCode"
+	errorCodesToErrorTypes[DebotInvalidHandleDebotErrorCode] = "DebotInvalidHandleDebotErrorCode"
+	errorCodesToErrorTypes[DebotInvalidJSONParamsDebotErrorCode] = "DebotInvalidJSONParamsDebotErrorCode"
+	errorCodesToErrorTypes[DebotInvalidFunctionIDDebotErrorCode] = "DebotInvalidFunctionIDDebotErrorCode"
+	errorCodesToErrorTypes[DebotInvalidAbiDebotErrorCode] = "DebotInvalidAbiDebotErrorCode"
+	errorCodesToErrorTypes[DebotGetMethodFailedDebotErrorCode] = "DebotGetMethodFailedDebotErrorCode"
+	errorCodesToErrorTypes[DebotInvalidMsgDebotErrorCode] = "DebotInvalidMsgDebotErrorCode"
+	errorCodesToErrorTypes[DebotExternaCallFailedDebotErrorCode] = "DebotExternaCallFailedDebotErrorCode"
+}
 
 type (
 	DebotHandle uint32

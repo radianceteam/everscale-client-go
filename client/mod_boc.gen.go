@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:51 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
 //
 // Mod boc
 //
@@ -39,6 +39,16 @@ const (
 	BocRefNotFoundBocErrorCode        = 206
 	InvalidBocRefBocErrorCode         = 207
 )
+
+func init() { // nolint gochecknoinits
+	errorCodesToErrorTypes[InvalidBocBocErrorCode] = "InvalidBocBocErrorCode"
+	errorCodesToErrorTypes[SerializationErrorBocErrorCode] = "SerializationErrorBocErrorCode"
+	errorCodesToErrorTypes[InappropriateBlockBocErrorCode] = "InappropriateBlockBocErrorCode"
+	errorCodesToErrorTypes[MissingSourceBocBocErrorCode] = "MissingSourceBocBocErrorCode"
+	errorCodesToErrorTypes[InsufficientCacheSizeBocErrorCode] = "InsufficientCacheSizeBocErrorCode"
+	errorCodesToErrorTypes[BocRefNotFoundBocErrorCode] = "BocRefNotFoundBocErrorCode"
+	errorCodesToErrorTypes[InvalidBocRefBocErrorCode] = "InvalidBocRefBocErrorCode"
+}
 
 type ParamsOfParse struct {
 	// BOC encoded as base64.

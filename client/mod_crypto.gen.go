@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:51 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
 //
 // Mod crypto
 //
@@ -34,6 +34,29 @@ const (
 	SigningBoxNotRegisteredCryptoErrorCode   = 121
 	InvalidSignatureCryptoErrorCode          = 122
 )
+
+func init() { // nolint gochecknoinits
+	errorCodesToErrorTypes[InvalidPublicKeyCryptoErrorCode] = "InvalidPublicKeyCryptoErrorCode"
+	errorCodesToErrorTypes[InvalidSecretKeyCryptoErrorCode] = "InvalidSecretKeyCryptoErrorCode"
+	errorCodesToErrorTypes[InvalidKeyCryptoErrorCode] = "InvalidKeyCryptoErrorCode"
+	errorCodesToErrorTypes[InvalidFactorizeChallengeCryptoErrorCode] = "InvalidFactorizeChallengeCryptoErrorCode"
+	errorCodesToErrorTypes[InvalidBigIntCryptoErrorCode] = "InvalidBigIntCryptoErrorCode"
+	errorCodesToErrorTypes[ScryptFailedCryptoErrorCode] = "ScryptFailedCryptoErrorCode"
+	errorCodesToErrorTypes[InvalidKeySizeCryptoErrorCode] = "InvalidKeySizeCryptoErrorCode"
+	errorCodesToErrorTypes[NaclSecretBoxFailedCryptoErrorCode] = "NaclSecretBoxFailedCryptoErrorCode"
+	errorCodesToErrorTypes[NaclBoxFailedCryptoErrorCode] = "NaclBoxFailedCryptoErrorCode"
+	errorCodesToErrorTypes[NaclSignFailedCryptoErrorCode] = "NaclSignFailedCryptoErrorCode"
+	errorCodesToErrorTypes[Bip39InvalidEntropyCryptoErrorCode] = "Bip39InvalidEntropyCryptoErrorCode"
+	errorCodesToErrorTypes[Bip39InvalidPhraseCryptoErrorCode] = "Bip39InvalidPhraseCryptoErrorCode"
+	errorCodesToErrorTypes[Bip32InvalidKeyCryptoErrorCode] = "Bip32InvalidKeyCryptoErrorCode"
+	errorCodesToErrorTypes[Bip32InvalidDerivePathCryptoErrorCode] = "Bip32InvalidDerivePathCryptoErrorCode"
+	errorCodesToErrorTypes[Bip39InvalidDictionaryCryptoErrorCode] = "Bip39InvalidDictionaryCryptoErrorCode"
+	errorCodesToErrorTypes[Bip39InvalidWordCountCryptoErrorCode] = "Bip39InvalidWordCountCryptoErrorCode"
+	errorCodesToErrorTypes[MnemonicGenerationFailedCryptoErrorCode] = "MnemonicGenerationFailedCryptoErrorCode"
+	errorCodesToErrorTypes[MnemonicFromEntropyFailedCryptoErrorCode] = "MnemonicFromEntropyFailedCryptoErrorCode"
+	errorCodesToErrorTypes[SigningBoxNotRegisteredCryptoErrorCode] = "SigningBoxNotRegisteredCryptoErrorCode"
+	errorCodesToErrorTypes[InvalidSignatureCryptoErrorCode] = "InvalidSignatureCryptoErrorCode"
+}
 
 type (
 	SigningBoxHandle  uint32

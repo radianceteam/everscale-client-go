@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:51 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
 //
 // Mod net
 //
@@ -28,6 +28,23 @@ const (
 	GraphqlWebsocketInitErrorNetErrorCode   = 613
 	NetworkModuleResumedNetErrorCode        = 614
 )
+
+func init() { // nolint gochecknoinits
+	errorCodesToErrorTypes[QueryFailedNetErrorCode] = "QueryFailedNetErrorCode"
+	errorCodesToErrorTypes[SubscribeFailedNetErrorCode] = "SubscribeFailedNetErrorCode"
+	errorCodesToErrorTypes[WaitForFailedNetErrorCode] = "WaitForFailedNetErrorCode"
+	errorCodesToErrorTypes[GetSubscriptionResultFailedNetErrorCode] = "GetSubscriptionResultFailedNetErrorCode"
+	errorCodesToErrorTypes[InvalidServerResponseNetErrorCode] = "InvalidServerResponseNetErrorCode"
+	errorCodesToErrorTypes[ClockOutOfSyncNetErrorCode] = "ClockOutOfSyncNetErrorCode"
+	errorCodesToErrorTypes[WaitForTimeoutNetErrorCode] = "WaitForTimeoutNetErrorCode"
+	errorCodesToErrorTypes[GraphqlErrorNetErrorCode] = "GraphqlErrorNetErrorCode"
+	errorCodesToErrorTypes[NetworkModuleSuspendedNetErrorCode] = "NetworkModuleSuspendedNetErrorCode"
+	errorCodesToErrorTypes[WebsocketDisconnectedNetErrorCode] = "WebsocketDisconnectedNetErrorCode"
+	errorCodesToErrorTypes[NotSupportedNetErrorCode] = "NotSupportedNetErrorCode"
+	errorCodesToErrorTypes[NoEndpointsProvidedNetErrorCode] = "NoEndpointsProvidedNetErrorCode"
+	errorCodesToErrorTypes[GraphqlWebsocketInitErrorNetErrorCode] = "GraphqlWebsocketInitErrorNetErrorCode"
+	errorCodesToErrorTypes[NetworkModuleResumedNetErrorCode] = "NetworkModuleResumedNetErrorCode"
+}
 
 type OrderBy struct {
 	Path      string        `json:"path"`

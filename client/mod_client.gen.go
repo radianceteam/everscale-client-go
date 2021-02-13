@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:51 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
 //
 // Mod client
 //
@@ -47,6 +47,42 @@ const (
 	CanNotParseNumberErrorCode                   = 32
 	InternalErrorErrorCode                       = 33
 )
+
+func init() { // nolint gochecknoinits
+	errorCodesToErrorTypes[NotImplementedErrorCode] = "NotImplementedErrorCode"
+	errorCodesToErrorTypes[InvalidHexErrorCode] = "InvalidHexErrorCode"
+	errorCodesToErrorTypes[InvalidBase64ErrorCode] = "InvalidBase64ErrorCode"
+	errorCodesToErrorTypes[InvalidAddressErrorCode] = "InvalidAddressErrorCode"
+	errorCodesToErrorTypes[CallbackParamsCantBeConvertedToJSONErrorCode] = "CallbackParamsCantBeConvertedToJSONErrorCode"
+	errorCodesToErrorTypes[WebsocketConnectErrorErrorCode] = "WebsocketConnectErrorErrorCode"
+	errorCodesToErrorTypes[WebsocketReceiveErrorErrorCode] = "WebsocketReceiveErrorErrorCode"
+	errorCodesToErrorTypes[WebsocketSendErrorErrorCode] = "WebsocketSendErrorErrorCode"
+	errorCodesToErrorTypes[HTTPClientCreateErrorErrorCode] = "HTTPClientCreateErrorErrorCode"
+	errorCodesToErrorTypes[HTTPRequestCreateErrorErrorCode] = "HTTPRequestCreateErrorErrorCode"
+	errorCodesToErrorTypes[HTTPRequestSendErrorErrorCode] = "HTTPRequestSendErrorErrorCode"
+	errorCodesToErrorTypes[HTTPRequestParseErrorErrorCode] = "HTTPRequestParseErrorErrorCode"
+	errorCodesToErrorTypes[CallbackNotRegisteredErrorCode] = "CallbackNotRegisteredErrorCode"
+	errorCodesToErrorTypes[NetModuleNotInitErrorCode] = "NetModuleNotInitErrorCode"
+	errorCodesToErrorTypes[InvalidConfigErrorCode] = "InvalidConfigErrorCode"
+	errorCodesToErrorTypes[CannotCreateRuntimeErrorCode] = "CannotCreateRuntimeErrorCode"
+	errorCodesToErrorTypes[InvalidContextHandleErrorCode] = "InvalidContextHandleErrorCode"
+	errorCodesToErrorTypes[CannotSerializeResultErrorCode] = "CannotSerializeResultErrorCode"
+	errorCodesToErrorTypes[CannotSerializeErrorErrorCode] = "CannotSerializeErrorErrorCode"
+	errorCodesToErrorTypes[CannotConvertJsValueToJSONErrorCode] = "CannotConvertJsValueToJSONErrorCode"
+	errorCodesToErrorTypes[CannotReceiveSpawnedResultErrorCode] = "CannotReceiveSpawnedResultErrorCode"
+	errorCodesToErrorTypes[SetTimerErrorErrorCode] = "SetTimerErrorErrorCode"
+	errorCodesToErrorTypes[InvalidParamsErrorCode] = "InvalidParamsErrorCode"
+	errorCodesToErrorTypes[ContractsAddressConversionFailedErrorCode] = "ContractsAddressConversionFailedErrorCode"
+	errorCodesToErrorTypes[UnknownFunctionErrorCode] = "UnknownFunctionErrorCode"
+	errorCodesToErrorTypes[AppRequestErrorErrorCode] = "AppRequestErrorErrorCode"
+	errorCodesToErrorTypes[NoSuchRequestErrorCode] = "NoSuchRequestErrorCode"
+	errorCodesToErrorTypes[CanNotSendRequestResultErrorCode] = "CanNotSendRequestResultErrorCode"
+	errorCodesToErrorTypes[CanNotReceiveRequestResultErrorCode] = "CanNotReceiveRequestResultErrorCode"
+	errorCodesToErrorTypes[CanNotParseRequestResultErrorCode] = "CanNotParseRequestResultErrorCode"
+	errorCodesToErrorTypes[UnexpectedCallbackResponseErrorCode] = "UnexpectedCallbackResponseErrorCode"
+	errorCodesToErrorTypes[CanNotParseNumberErrorCode] = "CanNotParseNumberErrorCode"
+	errorCodesToErrorTypes[InternalErrorErrorCode] = "InternalErrorErrorCode"
+}
 
 type Error struct {
 	Code    uint32          `json:"code"`

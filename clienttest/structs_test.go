@@ -29,3 +29,12 @@ func TestClient_ParamsOfQueryOperation_MarshalJSON(t *testing.T) {
   "type": "QueryCollection"
 }`, string(jsonBytes), "add type field")
 }
+
+func TestClient_Error(t *testing.T) {
+	a := assert.New(t)
+	a.EqualError(&client.Error{Code: client.AppRequestErrorErrorCode, Message: "some app error", Data: json.RawMessage(`{"val": "field"}`)},
+		`sdk_error_code=26,
+ sdk_error_code_description=AppRequestErrorErrorCode,
+ sdk_error_msg='some app error',
+ sdk_error_data: '{"val": "field"}'`)
+}

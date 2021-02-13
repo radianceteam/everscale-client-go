@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:51 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
 //
 // Mod processing
 //
@@ -27,6 +27,22 @@ const (
 	InvalidDataProcessingErrorCode                     = 512
 	ExternalSignerMustNotBeUsedProcessingErrorCode     = 513
 )
+
+func init() { // nolint gochecknoinits
+	errorCodesToErrorTypes[MessageAlreadyExpiredProcessingErrorCode] = "MessageAlreadyExpiredProcessingErrorCode"
+	errorCodesToErrorTypes[MessageHasNotDestinationAddressProcessingErrorCode] = "MessageHasNotDestinationAddressProcessingErrorCode"
+	errorCodesToErrorTypes[CanNotBuildMessageCellProcessingErrorCode] = "CanNotBuildMessageCellProcessingErrorCode"
+	errorCodesToErrorTypes[FetchBlockFailedProcessingErrorCode] = "FetchBlockFailedProcessingErrorCode"
+	errorCodesToErrorTypes[SendMessageFailedProcessingErrorCode] = "SendMessageFailedProcessingErrorCode"
+	errorCodesToErrorTypes[InvalidMessageBocProcessingErrorCode] = "InvalidMessageBocProcessingErrorCode"
+	errorCodesToErrorTypes[MessageExpiredProcessingErrorCode] = "MessageExpiredProcessingErrorCode"
+	errorCodesToErrorTypes[TransactionWaitTimeoutProcessingErrorCode] = "TransactionWaitTimeoutProcessingErrorCode"
+	errorCodesToErrorTypes[InvalidBlockReceivedProcessingErrorCode] = "InvalidBlockReceivedProcessingErrorCode"
+	errorCodesToErrorTypes[CanNotCheckBlockShardProcessingErrorCode] = "CanNotCheckBlockShardProcessingErrorCode"
+	errorCodesToErrorTypes[BlockNotFoundProcessingErrorCode] = "BlockNotFoundProcessingErrorCode"
+	errorCodesToErrorTypes[InvalidDataProcessingErrorCode] = "InvalidDataProcessingErrorCode"
+	errorCodesToErrorTypes[ExternalSignerMustNotBeUsedProcessingErrorCode] = "ExternalSignerMustNotBeUsedProcessingErrorCode"
+}
 
 type ProcessingEventType string
 
