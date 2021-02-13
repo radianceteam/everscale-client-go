@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 31 Jan 21 10:48 UTC
+// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
 //
 // Mod net
 //
@@ -41,6 +41,29 @@ type SortDirection string
 const (
 	AscSortDirection  SortDirection = "ASC"
 	DescSortDirection SortDirection = "DESC"
+)
+
+type FieldAggregation struct {
+	// Dot separated path to the field.
+	Field string `json:"field"`
+	// Aggregation function that must be applied to field values.
+	Fn AggregationFn `json:"fn"`
+}
+
+type AggregationFn string
+
+const (
+
+	// Returns count of filtered record.
+	CountAggregationFn AggregationFn = "COUNT"
+	// Returns the minimal value for a field in filtered records.
+	MinAggregationFn AggregationFn = "MIN"
+	// Returns the maximal value for a field in filtered records.
+	MaxAggregationFn AggregationFn = "MAX"
+	// Returns a sum of values for a field in filtered records.
+	SumAggregationFn AggregationFn = "SUM"
+	// Returns an average value for a field in filtered records.
+	AverageAggregationFn AggregationFn = "AVERAGE"
 )
 
 type ParamsOfQuery struct {

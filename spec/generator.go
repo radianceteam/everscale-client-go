@@ -47,6 +47,12 @@ func withTypeAlias(name string) string {
 	if name == "ClientErrorCode" {
 		return "ErrorCode"
 	}
+	if name == "ClientConfig" {
+		return "Config"
+	}
+	if name == "ClientError" {
+		return "Error"
+	}
 	return name
 }
 
@@ -167,7 +173,7 @@ func GenModule(dir string, m Module) error {
 
 // genStruct - generates struct with each field specified.
 func genStruct(m Module, t Type) string {
-	r := "type " + toTypeName(t.Name) + " struct {\n"
+	r := "type " + withTypeAlias(toTypeName(t.Name)) + " struct {\n"
 	for _, f := range t.StructFields {
 		if f.Name == "" {
 			fmt.Println("WARNING: add struct field with empty name", t.Type, t.Name, f)
@@ -296,7 +302,7 @@ func GenerateAnyType(m Module, t Type, isRoot bool) string {
 		if t.RefName == "Value" {
 			r = emptyInterface
 		} else {
-			r = toTypeName(t.RefName)
+			r = withTypeAlias(toTypeName(t.RefName))
 		}
 	case Optional:
 		r = GenerateOptionalType(m, *t.OptionalInner)

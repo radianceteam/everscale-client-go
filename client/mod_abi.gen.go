@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 31 Jan 21 10:48 UTC
+// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
 //
 // Mod abi
 //
@@ -29,16 +29,19 @@ const (
 	InvalidAbiAbiErrorCode                                AbiErrorCode = "InvalidAbi"
 )
 
-type FunctionHeader struct {
-	// Message expiration time in seconds. If not specified - calculated automatically from message_expiration_timeout(), try_index and message_expiration_timeout_grow_factor() (if ABI includes `expire` header).
-	Expire null.Uint32 `json:"expire"` // optional
-	// Message creation time in milliseconds.
-	// If not specified, `now` is used (if ABI includes `time` header).
-	Time *big.Int `json:"time"` // optional
-	// Public key is used by the contract to check the signature.
-	// Encoded in `hex`. If not specified, method fails with exception (if ABI includes `pubkey` header)..
-	Pubkey null.String `json:"pubkey"` // optional
-}
+type (
+	AbiHandle      uint32
+	FunctionHeader struct {
+		// Message expiration time in seconds. If not specified - calculated automatically from message_expiration_timeout(), try_index and message_expiration_timeout_grow_factor() (if ABI includes `expire` header).
+		Expire null.Uint32 `json:"expire"` // optional
+		// Message creation time in milliseconds.
+		// If not specified, `now` is used (if ABI includes `time` header).
+		Time *big.Int `json:"time"` // optional
+		// Public key is used by the contract to check the signature.
+		// Encoded in `hex`. If not specified, method fails with exception (if ABI includes `pubkey` header)..
+		Pubkey null.String `json:"pubkey"` // optional
+	}
+)
 
 type CallSet struct {
 	// Function name that is being called.
@@ -292,6 +295,40 @@ type ResultOfEncodeMessage struct {
 	MessageID string `json:"message_id"`
 }
 
+type ParamsOfEncodeInternalMessage struct {
+	// Contract ABI.
+	Abi Abi `json:"abi"`
+	// Target address the message will be sent to.
+	// Must be specified in case of non-deploy message.
+	Address null.String `json:"address"` // optional
+	// Deploy parameters.
+	// Must be specified in case of deploy message.
+	DeploySet *DeploySet `json:"deploy_set"` // optional
+	// Function call parameters.
+	// Must be specified in case of non-deploy message.
+	//
+	// In case of deploy message it is optional and contains parameters
+	// of the functions that will to be called upon deploy transaction.
+	CallSet *CallSet `json:"call_set"` // optional
+	// Value in nanograms to be sent with message.
+	Value string `json:"value"`
+	// Flag of bounceable message.
+	// Default is true.
+	Bounce null.Bool `json:"bounce"` // optional
+	// Enable Instant Hypercube Routing for the message.
+	// Default is false.
+	EnableIhr null.Bool `json:"enable_ihr"` // optional
+}
+
+type ResultOfEncodeInternalMessage struct {
+	// Message BOC encoded with `base64`.
+	Message string `json:"message"`
+	// Destination address.
+	Address string `json:"address"`
+	// Message id.
+	MessageID string `json:"message_id"`
+}
+
 type ParamsOfAttachSignature struct {
 	// Contract ABI.
 	Abi Abi `json:"abi"`
@@ -346,6 +383,9 @@ type ParamsOfEncodeAccount struct {
 	LastTransLt *big.Int `json:"last_trans_lt"` // optional
 	// Initial value for the `last_paid`.
 	LastPaid null.Uint32 `json:"last_paid"` // optional
+	// Cache type to put the result.
+	// The BOC intself returned if no cache type provided.
+	BocCache *BocCacheType `json:"boc_cache"` // optional
 }
 
 type ResultOfEncodeAccount struct {
@@ -407,6 +447,29 @@ func (c *Client) AbiEncodeMessage(p *ParamsOfEncodeMessage) (*ResultOfEncodeMess
 	result := new(ResultOfEncodeMessage)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_message", p, result)
+
+	return result, err
+}
+
+// Encodes an internal ABI-compatible message.
+// Allows to encode deploy and function call messages.
+//
+// Use cases include messages of any possible type:
+// - deploy with initial function call (i.e. `constructor` or any other function that is used for some kind
+// of initialization);
+// - deploy without initial function call;
+// - simple function call
+//
+// There is an optional public key can be provided in deploy set in order to substitute one
+// in TVM file.
+//
+// Public key resolving priority:
+// 1. Public key from deploy set.
+// 2. Public key, specified in TVM file.
+func (c *Client) AbiEncodeInternalMessage(p *ParamsOfEncodeInternalMessage) (*ResultOfEncodeInternalMessage, error) {
+	result := new(ResultOfEncodeInternalMessage)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_internal_message", p, result)
 
 	return result, err
 }

@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 31 Jan 21 10:48 UTC
+// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
 //
 // Mod tvm
 //
@@ -87,6 +87,12 @@ type ParamsOfRunExecutor struct {
 	Abi *Abi `json:"abi"` // optional
 	// Skip transaction check flag.
 	SkipTransactionCheck null.Bool `json:"skip_transaction_check"` // optional
+	// Cache type to put the result.
+	// The BOC intself returned if no cache type provided.
+	BocCache *BocCacheType `json:"boc_cache"` // optional
+	// Return updated account flag.
+	// Empty string is returned if the flag is `false`.
+	ReturnUpdatedAccount null.Bool `json:"return_updated_account"` // optional
 }
 
 type ResultOfRunExecutor struct {
@@ -118,6 +124,12 @@ type ParamsOfRunTvm struct {
 	ExecutionOptions *ExecutionOptions `json:"execution_options"` // optional
 	// Contract ABI for dedcoding output messages.
 	Abi *Abi `json:"abi"` // optional
+	// Cache type to put the result.
+	// The BOC intself returned if no cache type provided.
+	BocCache *BocCacheType `json:"boc_cache"` // optional
+	// Return updated account flag.
+	// Empty string is returned if the flag is `false`.
+	ReturnUpdatedAccount null.Bool `json:"return_updated_account"` // optional
 }
 
 type ResultOfRunTvm struct {
