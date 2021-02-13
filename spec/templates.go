@@ -15,7 +15,7 @@ const emptyInterface = "json.RawMessage"
 
 var headerTmpl = template.Must(template.New("header").Funcs(funcMap).Parse(
 	`package client
-// DON'T EDIT THIS FILE is generated {{now}}
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at {{now}}
 //
 // Mod {{.Name}}
 //
@@ -32,10 +32,11 @@ import (
 
 var enumTmpl = template.Must(template.New("enum").Parse(
 	`
-type {{.Name}} string
+type {{.Name}} {{.GoType}}
+
 const (
 {{range $e := .EnumConsts}} 
-	{{$e.GoComment}} {{$e.ConstName}} {{$.Name}} = "{{$e.Name}}"{{end}}
+	{{$e.GoComment}} {{$e.ConstName}} {{$.Name}} = {{$e.Value}}{{end}}
 )
 `))
 

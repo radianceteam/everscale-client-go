@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:36 UTC
 //
 // Mod tvm
 //
@@ -12,23 +12,23 @@ import (
 	"github.com/volatiletech/null"
 )
 
-type TvmErrorCode string
+type TvmErrorCode uint32
 
 const (
-	CanNotReadTransactionTvmErrorCode      TvmErrorCode = "CanNotReadTransaction"
-	CanNotReadBlockchainConfigTvmErrorCode TvmErrorCode = "CanNotReadBlockchainConfig"
-	TransactionAbortedTvmErrorCode         TvmErrorCode = "TransactionAborted"
-	InternalErrorTvmErrorCode              TvmErrorCode = "InternalError"
-	ActionPhaseFailedTvmErrorCode          TvmErrorCode = "ActionPhaseFailed"
-	AccountCodeMissingTvmErrorCode         TvmErrorCode = "AccountCodeMissing"
-	LowBalanceTvmErrorCode                 TvmErrorCode = "LowBalance"
-	AccountFrozenOrDeletedTvmErrorCode     TvmErrorCode = "AccountFrozenOrDeleted"
-	AccountMissingTvmErrorCode             TvmErrorCode = "AccountMissing"
-	UnknownExecutionErrorTvmErrorCode      TvmErrorCode = "UnknownExecutionError"
-	InvalidInputStackTvmErrorCode          TvmErrorCode = "InvalidInputStack"
-	InvalidAccountBocTvmErrorCode          TvmErrorCode = "InvalidAccountBoc"
-	InvalidMessageTypeTvmErrorCode         TvmErrorCode = "InvalidMessageType"
-	ContractExecutionErrorTvmErrorCode     TvmErrorCode = "ContractExecutionError"
+	CanNotReadTransactionTvmErrorCode      TvmErrorCode = 401
+	CanNotReadBlockchainConfigTvmErrorCode TvmErrorCode = 402
+	TransactionAbortedTvmErrorCode         TvmErrorCode = 403
+	InternalErrorTvmErrorCode              TvmErrorCode = 404
+	ActionPhaseFailedTvmErrorCode          TvmErrorCode = 405
+	AccountCodeMissingTvmErrorCode         TvmErrorCode = 406
+	LowBalanceTvmErrorCode                 TvmErrorCode = 407
+	AccountFrozenOrDeletedTvmErrorCode     TvmErrorCode = 408
+	AccountMissingTvmErrorCode             TvmErrorCode = 409
+	UnknownExecutionErrorTvmErrorCode      TvmErrorCode = 410
+	InvalidInputStackTvmErrorCode          TvmErrorCode = 411
+	InvalidAccountBocTvmErrorCode          TvmErrorCode = 412
+	InvalidMessageTypeTvmErrorCode         TvmErrorCode = 413
+	ContractExecutionErrorTvmErrorCode     TvmErrorCode = 414
 )
 
 type ExecutionOptions struct {

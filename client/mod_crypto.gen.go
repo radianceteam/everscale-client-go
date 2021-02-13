@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:36 UTC
 //
 // Mod crypto
 //
@@ -12,29 +12,29 @@ import (
 	"github.com/volatiletech/null"
 )
 
-type CryptoErrorCode string
+type CryptoErrorCode uint32
 
 const (
-	InvalidPublicKeyCryptoErrorCode          CryptoErrorCode = "InvalidPublicKey"
-	InvalidSecretKeyCryptoErrorCode          CryptoErrorCode = "InvalidSecretKey"
-	InvalidKeyCryptoErrorCode                CryptoErrorCode = "InvalidKey"
-	InvalidFactorizeChallengeCryptoErrorCode CryptoErrorCode = "InvalidFactorizeChallenge"
-	InvalidBigIntCryptoErrorCode             CryptoErrorCode = "InvalidBigInt"
-	ScryptFailedCryptoErrorCode              CryptoErrorCode = "ScryptFailed"
-	InvalidKeySizeCryptoErrorCode            CryptoErrorCode = "InvalidKeySize"
-	NaclSecretBoxFailedCryptoErrorCode       CryptoErrorCode = "NaclSecretBoxFailed"
-	NaclBoxFailedCryptoErrorCode             CryptoErrorCode = "NaclBoxFailed"
-	NaclSignFailedCryptoErrorCode            CryptoErrorCode = "NaclSignFailed"
-	Bip39InvalidEntropyCryptoErrorCode       CryptoErrorCode = "Bip39InvalidEntropy"
-	Bip39InvalidPhraseCryptoErrorCode        CryptoErrorCode = "Bip39InvalidPhrase"
-	Bip32InvalidKeyCryptoErrorCode           CryptoErrorCode = "Bip32InvalidKey"
-	Bip32InvalidDerivePathCryptoErrorCode    CryptoErrorCode = "Bip32InvalidDerivePath"
-	Bip39InvalidDictionaryCryptoErrorCode    CryptoErrorCode = "Bip39InvalidDictionary"
-	Bip39InvalidWordCountCryptoErrorCode     CryptoErrorCode = "Bip39InvalidWordCount"
-	MnemonicGenerationFailedCryptoErrorCode  CryptoErrorCode = "MnemonicGenerationFailed"
-	MnemonicFromEntropyFailedCryptoErrorCode CryptoErrorCode = "MnemonicFromEntropyFailed"
-	SigningBoxNotRegisteredCryptoErrorCode   CryptoErrorCode = "SigningBoxNotRegistered"
-	InvalidSignatureCryptoErrorCode          CryptoErrorCode = "InvalidSignature"
+	InvalidPublicKeyCryptoErrorCode          CryptoErrorCode = 100
+	InvalidSecretKeyCryptoErrorCode          CryptoErrorCode = 101
+	InvalidKeyCryptoErrorCode                CryptoErrorCode = 102
+	InvalidFactorizeChallengeCryptoErrorCode CryptoErrorCode = 106
+	InvalidBigIntCryptoErrorCode             CryptoErrorCode = 107
+	ScryptFailedCryptoErrorCode              CryptoErrorCode = 108
+	InvalidKeySizeCryptoErrorCode            CryptoErrorCode = 109
+	NaclSecretBoxFailedCryptoErrorCode       CryptoErrorCode = 110
+	NaclBoxFailedCryptoErrorCode             CryptoErrorCode = 111
+	NaclSignFailedCryptoErrorCode            CryptoErrorCode = 112
+	Bip39InvalidEntropyCryptoErrorCode       CryptoErrorCode = 113
+	Bip39InvalidPhraseCryptoErrorCode        CryptoErrorCode = 114
+	Bip32InvalidKeyCryptoErrorCode           CryptoErrorCode = 115
+	Bip32InvalidDerivePathCryptoErrorCode    CryptoErrorCode = 116
+	Bip39InvalidDictionaryCryptoErrorCode    CryptoErrorCode = 117
+	Bip39InvalidWordCountCryptoErrorCode     CryptoErrorCode = 118
+	MnemonicGenerationFailedCryptoErrorCode  CryptoErrorCode = 119
+	MnemonicFromEntropyFailedCryptoErrorCode CryptoErrorCode = 120
+	SigningBoxNotRegisteredCryptoErrorCode   CryptoErrorCode = 121
+	InvalidSignatureCryptoErrorCode          CryptoErrorCode = 122
 )
 
 type (

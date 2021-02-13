@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:36 UTC
 //
 // Mod debot
 //
@@ -10,19 +10,19 @@ import (
 	"encoding/json"
 )
 
-type DebotErrorCode string
+type DebotErrorCode uint32
 
 const (
-	DebotStartFailedDebotErrorCode       DebotErrorCode = "DebotStartFailed"
-	DebotFetchFailedDebotErrorCode       DebotErrorCode = "DebotFetchFailed"
-	DebotExecutionFailedDebotErrorCode   DebotErrorCode = "DebotExecutionFailed"
-	DebotInvalidHandleDebotErrorCode     DebotErrorCode = "DebotInvalidHandle"
-	DebotInvalidJSONParamsDebotErrorCode DebotErrorCode = "DebotInvalidJsonParams"
-	DebotInvalidFunctionIDDebotErrorCode DebotErrorCode = "DebotInvalidFunctionId"
-	DebotInvalidAbiDebotErrorCode        DebotErrorCode = "DebotInvalidAbi"
-	DebotGetMethodFailedDebotErrorCode   DebotErrorCode = "DebotGetMethodFailed"
-	DebotInvalidMsgDebotErrorCode        DebotErrorCode = "DebotInvalidMsg"
-	DebotExternaCallFailedDebotErrorCode DebotErrorCode = "DebotExternaCallFailed"
+	DebotStartFailedDebotErrorCode       DebotErrorCode = 801
+	DebotFetchFailedDebotErrorCode       DebotErrorCode = 802
+	DebotExecutionFailedDebotErrorCode   DebotErrorCode = 803
+	DebotInvalidHandleDebotErrorCode     DebotErrorCode = 804
+	DebotInvalidJSONParamsDebotErrorCode DebotErrorCode = 805
+	DebotInvalidFunctionIDDebotErrorCode DebotErrorCode = 806
+	DebotInvalidAbiDebotErrorCode        DebotErrorCode = 807
+	DebotGetMethodFailedDebotErrorCode   DebotErrorCode = 808
+	DebotInvalidMsgDebotErrorCode        DebotErrorCode = 809
+	DebotExternaCallFailedDebotErrorCode DebotErrorCode = 810
 )
 
 type (

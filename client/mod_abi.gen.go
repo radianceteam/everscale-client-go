@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:36 UTC
 //
 // Mod abi
 //
@@ -13,20 +13,20 @@ import (
 	"github.com/volatiletech/null"
 )
 
-type AbiErrorCode string
+type AbiErrorCode uint32
 
 const (
-	RequiredAddressMissingForEncodeMessageAbiErrorCode    AbiErrorCode = "RequiredAddressMissingForEncodeMessage"
-	RequiredCallSetMissingForEncodeMessageAbiErrorCode    AbiErrorCode = "RequiredCallSetMissingForEncodeMessage"
-	InvalidJSONAbiErrorCode                               AbiErrorCode = "InvalidJson"
-	InvalidMessageAbiErrorCode                            AbiErrorCode = "InvalidMessage"
-	EncodeDeployMessageFailedAbiErrorCode                 AbiErrorCode = "EncodeDeployMessageFailed"
-	EncodeRunMessageFailedAbiErrorCode                    AbiErrorCode = "EncodeRunMessageFailed"
-	AttachSignatureFailedAbiErrorCode                     AbiErrorCode = "AttachSignatureFailed"
-	InvalidTvcImageAbiErrorCode                           AbiErrorCode = "InvalidTvcImage"
-	RequiredPublicKeyMissingForFunctionHeaderAbiErrorCode AbiErrorCode = "RequiredPublicKeyMissingForFunctionHeader"
-	InvalidSignerAbiErrorCode                             AbiErrorCode = "InvalidSigner"
-	InvalidAbiAbiErrorCode                                AbiErrorCode = "InvalidAbi"
+	RequiredAddressMissingForEncodeMessageAbiErrorCode    AbiErrorCode = 301
+	RequiredCallSetMissingForEncodeMessageAbiErrorCode    AbiErrorCode = 302
+	InvalidJSONAbiErrorCode                               AbiErrorCode = 303
+	InvalidMessageAbiErrorCode                            AbiErrorCode = 304
+	EncodeDeployMessageFailedAbiErrorCode                 AbiErrorCode = 305
+	EncodeRunMessageFailedAbiErrorCode                    AbiErrorCode = 306
+	AttachSignatureFailedAbiErrorCode                     AbiErrorCode = 307
+	InvalidTvcImageAbiErrorCode                           AbiErrorCode = 308
+	RequiredPublicKeyMissingForFunctionHeaderAbiErrorCode AbiErrorCode = 309
+	InvalidSignerAbiErrorCode                             AbiErrorCode = 310
+	InvalidAbiAbiErrorCode                                AbiErrorCode = 311
 )
 
 type (

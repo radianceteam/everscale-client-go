@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:36 UTC
 //
 // Mod processing
 //
@@ -12,22 +12,22 @@ import (
 	"encoding/json"
 )
 
-type ProcessingErrorCode string
+type ProcessingErrorCode uint32
 
 const (
-	MessageAlreadyExpiredProcessingErrorCode           ProcessingErrorCode = "MessageAlreadyExpired"
-	MessageHasNotDestinationAddressProcessingErrorCode ProcessingErrorCode = "MessageHasNotDestinationAddress"
-	CanNotBuildMessageCellProcessingErrorCode          ProcessingErrorCode = "CanNotBuildMessageCell"
-	FetchBlockFailedProcessingErrorCode                ProcessingErrorCode = "FetchBlockFailed"
-	SendMessageFailedProcessingErrorCode               ProcessingErrorCode = "SendMessageFailed"
-	InvalidMessageBocProcessingErrorCode               ProcessingErrorCode = "InvalidMessageBoc"
-	MessageExpiredProcessingErrorCode                  ProcessingErrorCode = "MessageExpired"
-	TransactionWaitTimeoutProcessingErrorCode          ProcessingErrorCode = "TransactionWaitTimeout"
-	InvalidBlockReceivedProcessingErrorCode            ProcessingErrorCode = "InvalidBlockReceived"
-	CanNotCheckBlockShardProcessingErrorCode           ProcessingErrorCode = "CanNotCheckBlockShard"
-	BlockNotFoundProcessingErrorCode                   ProcessingErrorCode = "BlockNotFound"
-	InvalidDataProcessingErrorCode                     ProcessingErrorCode = "InvalidData"
-	ExternalSignerMustNotBeUsedProcessingErrorCode     ProcessingErrorCode = "ExternalSignerMustNotBeUsed"
+	MessageAlreadyExpiredProcessingErrorCode           ProcessingErrorCode = 501
+	MessageHasNotDestinationAddressProcessingErrorCode ProcessingErrorCode = 502
+	CanNotBuildMessageCellProcessingErrorCode          ProcessingErrorCode = 503
+	FetchBlockFailedProcessingErrorCode                ProcessingErrorCode = 504
+	SendMessageFailedProcessingErrorCode               ProcessingErrorCode = 505
+	InvalidMessageBocProcessingErrorCode               ProcessingErrorCode = 506
+	MessageExpiredProcessingErrorCode                  ProcessingErrorCode = 507
+	TransactionWaitTimeoutProcessingErrorCode          ProcessingErrorCode = 508
+	InvalidBlockReceivedProcessingErrorCode            ProcessingErrorCode = 509
+	CanNotCheckBlockShardProcessingErrorCode           ProcessingErrorCode = 510
+	BlockNotFoundProcessingErrorCode                   ProcessingErrorCode = 511
+	InvalidDataProcessingErrorCode                     ProcessingErrorCode = 512
+	ExternalSignerMustNotBeUsedProcessingErrorCode     ProcessingErrorCode = 513
 )
 
 type ProcessingEventType string

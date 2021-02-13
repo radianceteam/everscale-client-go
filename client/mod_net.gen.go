@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:36 UTC
 //
 // Mod net
 //
@@ -12,23 +12,23 @@ import (
 	"github.com/volatiletech/null"
 )
 
-type NetErrorCode string
+type NetErrorCode uint32
 
 const (
-	QueryFailedNetErrorCode                 NetErrorCode = "QueryFailed"
-	SubscribeFailedNetErrorCode             NetErrorCode = "SubscribeFailed"
-	WaitForFailedNetErrorCode               NetErrorCode = "WaitForFailed"
-	GetSubscriptionResultFailedNetErrorCode NetErrorCode = "GetSubscriptionResultFailed"
-	InvalidServerResponseNetErrorCode       NetErrorCode = "InvalidServerResponse"
-	ClockOutOfSyncNetErrorCode              NetErrorCode = "ClockOutOfSync"
-	WaitForTimeoutNetErrorCode              NetErrorCode = "WaitForTimeout"
-	GraphqlErrorNetErrorCode                NetErrorCode = "GraphqlError"
-	NetworkModuleSuspendedNetErrorCode      NetErrorCode = "NetworkModuleSuspended"
-	WebsocketDisconnectedNetErrorCode       NetErrorCode = "WebsocketDisconnected"
-	NotSupportedNetErrorCode                NetErrorCode = "NotSupported"
-	NoEndpointsProvidedNetErrorCode         NetErrorCode = "NoEndpointsProvided"
-	GraphqlWebsocketInitErrorNetErrorCode   NetErrorCode = "GraphqlWebsocketInitError"
-	NetworkModuleResumedNetErrorCode        NetErrorCode = "NetworkModuleResumed"
+	QueryFailedNetErrorCode                 NetErrorCode = 601
+	SubscribeFailedNetErrorCode             NetErrorCode = 602
+	WaitForFailedNetErrorCode               NetErrorCode = 603
+	GetSubscriptionResultFailedNetErrorCode NetErrorCode = 604
+	InvalidServerResponseNetErrorCode       NetErrorCode = 605
+	ClockOutOfSyncNetErrorCode              NetErrorCode = 606
+	WaitForTimeoutNetErrorCode              NetErrorCode = 607
+	GraphqlErrorNetErrorCode                NetErrorCode = 608
+	NetworkModuleSuspendedNetErrorCode      NetErrorCode = 609
+	WebsocketDisconnectedNetErrorCode       NetErrorCode = 610
+	NotSupportedNetErrorCode                NetErrorCode = 611
+	NoEndpointsProvidedNetErrorCode         NetErrorCode = 612
+	GraphqlWebsocketInitErrorNetErrorCode   NetErrorCode = 613
+	NetworkModuleResumedNetErrorCode        NetErrorCode = 614
 )
 
 type OrderBy struct {
