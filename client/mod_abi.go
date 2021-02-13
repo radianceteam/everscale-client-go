@@ -28,6 +28,9 @@ type MessageSource struct {
 	// "Encoded".
 	Message string `json:"message"`
 	// presented in types:
+	// "Encoded".
+	Abi *Abi `json:"abi,omitempty"` // optional
+	// presented in types:
 	// "EncodingParams", but abi field also for "Encoded"
 	ParamsOfEncodeMessage
 }
