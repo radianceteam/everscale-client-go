@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
 //
 // Mod debot
 //
@@ -10,20 +10,31 @@ import (
 	"encoding/json"
 )
 
-type DebotErrorCode string
-
 const (
-	DebotStartFailedDebotErrorCode       DebotErrorCode = "DebotStartFailed"
-	DebotFetchFailedDebotErrorCode       DebotErrorCode = "DebotFetchFailed"
-	DebotExecutionFailedDebotErrorCode   DebotErrorCode = "DebotExecutionFailed"
-	DebotInvalidHandleDebotErrorCode     DebotErrorCode = "DebotInvalidHandle"
-	DebotInvalidJSONParamsDebotErrorCode DebotErrorCode = "DebotInvalidJsonParams"
-	DebotInvalidFunctionIDDebotErrorCode DebotErrorCode = "DebotInvalidFunctionId"
-	DebotInvalidAbiDebotErrorCode        DebotErrorCode = "DebotInvalidAbi"
-	DebotGetMethodFailedDebotErrorCode   DebotErrorCode = "DebotGetMethodFailed"
-	DebotInvalidMsgDebotErrorCode        DebotErrorCode = "DebotInvalidMsg"
-	DebotExternaCallFailedDebotErrorCode DebotErrorCode = "DebotExternaCallFailed"
+	DebotStartFailedDebotErrorCode       = 801
+	DebotFetchFailedDebotErrorCode       = 802
+	DebotExecutionFailedDebotErrorCode   = 803
+	DebotInvalidHandleDebotErrorCode     = 804
+	DebotInvalidJSONParamsDebotErrorCode = 805
+	DebotInvalidFunctionIDDebotErrorCode = 806
+	DebotInvalidAbiDebotErrorCode        = 807
+	DebotGetMethodFailedDebotErrorCode   = 808
+	DebotInvalidMsgDebotErrorCode        = 809
+	DebotExternaCallFailedDebotErrorCode = 810
 )
+
+func init() { // nolint gochecknoinits
+	errorCodesToErrorTypes[DebotStartFailedDebotErrorCode] = "DebotStartFailedDebotErrorCode"
+	errorCodesToErrorTypes[DebotFetchFailedDebotErrorCode] = "DebotFetchFailedDebotErrorCode"
+	errorCodesToErrorTypes[DebotExecutionFailedDebotErrorCode] = "DebotExecutionFailedDebotErrorCode"
+	errorCodesToErrorTypes[DebotInvalidHandleDebotErrorCode] = "DebotInvalidHandleDebotErrorCode"
+	errorCodesToErrorTypes[DebotInvalidJSONParamsDebotErrorCode] = "DebotInvalidJSONParamsDebotErrorCode"
+	errorCodesToErrorTypes[DebotInvalidFunctionIDDebotErrorCode] = "DebotInvalidFunctionIDDebotErrorCode"
+	errorCodesToErrorTypes[DebotInvalidAbiDebotErrorCode] = "DebotInvalidAbiDebotErrorCode"
+	errorCodesToErrorTypes[DebotGetMethodFailedDebotErrorCode] = "DebotGetMethodFailedDebotErrorCode"
+	errorCodesToErrorTypes[DebotInvalidMsgDebotErrorCode] = "DebotInvalidMsgDebotErrorCode"
+	errorCodesToErrorTypes[DebotExternaCallFailedDebotErrorCode] = "DebotExternaCallFailedDebotErrorCode"
+}
 
 type (
 	DebotHandle uint32

@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
 //
 // Mod net
 //
@@ -12,24 +12,39 @@ import (
 	"github.com/volatiletech/null"
 )
 
-type NetErrorCode string
-
 const (
-	QueryFailedNetErrorCode                 NetErrorCode = "QueryFailed"
-	SubscribeFailedNetErrorCode             NetErrorCode = "SubscribeFailed"
-	WaitForFailedNetErrorCode               NetErrorCode = "WaitForFailed"
-	GetSubscriptionResultFailedNetErrorCode NetErrorCode = "GetSubscriptionResultFailed"
-	InvalidServerResponseNetErrorCode       NetErrorCode = "InvalidServerResponse"
-	ClockOutOfSyncNetErrorCode              NetErrorCode = "ClockOutOfSync"
-	WaitForTimeoutNetErrorCode              NetErrorCode = "WaitForTimeout"
-	GraphqlErrorNetErrorCode                NetErrorCode = "GraphqlError"
-	NetworkModuleSuspendedNetErrorCode      NetErrorCode = "NetworkModuleSuspended"
-	WebsocketDisconnectedNetErrorCode       NetErrorCode = "WebsocketDisconnected"
-	NotSupportedNetErrorCode                NetErrorCode = "NotSupported"
-	NoEndpointsProvidedNetErrorCode         NetErrorCode = "NoEndpointsProvided"
-	GraphqlWebsocketInitErrorNetErrorCode   NetErrorCode = "GraphqlWebsocketInitError"
-	NetworkModuleResumedNetErrorCode        NetErrorCode = "NetworkModuleResumed"
+	QueryFailedNetErrorCode                 = 601
+	SubscribeFailedNetErrorCode             = 602
+	WaitForFailedNetErrorCode               = 603
+	GetSubscriptionResultFailedNetErrorCode = 604
+	InvalidServerResponseNetErrorCode       = 605
+	ClockOutOfSyncNetErrorCode              = 606
+	WaitForTimeoutNetErrorCode              = 607
+	GraphqlErrorNetErrorCode                = 608
+	NetworkModuleSuspendedNetErrorCode      = 609
+	WebsocketDisconnectedNetErrorCode       = 610
+	NotSupportedNetErrorCode                = 611
+	NoEndpointsProvidedNetErrorCode         = 612
+	GraphqlWebsocketInitErrorNetErrorCode   = 613
+	NetworkModuleResumedNetErrorCode        = 614
 )
+
+func init() { // nolint gochecknoinits
+	errorCodesToErrorTypes[QueryFailedNetErrorCode] = "QueryFailedNetErrorCode"
+	errorCodesToErrorTypes[SubscribeFailedNetErrorCode] = "SubscribeFailedNetErrorCode"
+	errorCodesToErrorTypes[WaitForFailedNetErrorCode] = "WaitForFailedNetErrorCode"
+	errorCodesToErrorTypes[GetSubscriptionResultFailedNetErrorCode] = "GetSubscriptionResultFailedNetErrorCode"
+	errorCodesToErrorTypes[InvalidServerResponseNetErrorCode] = "InvalidServerResponseNetErrorCode"
+	errorCodesToErrorTypes[ClockOutOfSyncNetErrorCode] = "ClockOutOfSyncNetErrorCode"
+	errorCodesToErrorTypes[WaitForTimeoutNetErrorCode] = "WaitForTimeoutNetErrorCode"
+	errorCodesToErrorTypes[GraphqlErrorNetErrorCode] = "GraphqlErrorNetErrorCode"
+	errorCodesToErrorTypes[NetworkModuleSuspendedNetErrorCode] = "NetworkModuleSuspendedNetErrorCode"
+	errorCodesToErrorTypes[WebsocketDisconnectedNetErrorCode] = "WebsocketDisconnectedNetErrorCode"
+	errorCodesToErrorTypes[NotSupportedNetErrorCode] = "NotSupportedNetErrorCode"
+	errorCodesToErrorTypes[NoEndpointsProvidedNetErrorCode] = "NoEndpointsProvidedNetErrorCode"
+	errorCodesToErrorTypes[GraphqlWebsocketInitErrorNetErrorCode] = "GraphqlWebsocketInitErrorNetErrorCode"
+	errorCodesToErrorTypes[NetworkModuleResumedNetErrorCode] = "NetworkModuleResumedNetErrorCode"
+}
 
 type OrderBy struct {
 	Path      string        `json:"path"`

@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
 //
 // Mod abi
 //
@@ -13,21 +13,33 @@ import (
 	"github.com/volatiletech/null"
 )
 
-type AbiErrorCode string
-
 const (
-	RequiredAddressMissingForEncodeMessageAbiErrorCode    AbiErrorCode = "RequiredAddressMissingForEncodeMessage"
-	RequiredCallSetMissingForEncodeMessageAbiErrorCode    AbiErrorCode = "RequiredCallSetMissingForEncodeMessage"
-	InvalidJSONAbiErrorCode                               AbiErrorCode = "InvalidJson"
-	InvalidMessageAbiErrorCode                            AbiErrorCode = "InvalidMessage"
-	EncodeDeployMessageFailedAbiErrorCode                 AbiErrorCode = "EncodeDeployMessageFailed"
-	EncodeRunMessageFailedAbiErrorCode                    AbiErrorCode = "EncodeRunMessageFailed"
-	AttachSignatureFailedAbiErrorCode                     AbiErrorCode = "AttachSignatureFailed"
-	InvalidTvcImageAbiErrorCode                           AbiErrorCode = "InvalidTvcImage"
-	RequiredPublicKeyMissingForFunctionHeaderAbiErrorCode AbiErrorCode = "RequiredPublicKeyMissingForFunctionHeader"
-	InvalidSignerAbiErrorCode                             AbiErrorCode = "InvalidSigner"
-	InvalidAbiAbiErrorCode                                AbiErrorCode = "InvalidAbi"
+	RequiredAddressMissingForEncodeMessageAbiErrorCode    = 301
+	RequiredCallSetMissingForEncodeMessageAbiErrorCode    = 302
+	InvalidJSONAbiErrorCode                               = 303
+	InvalidMessageAbiErrorCode                            = 304
+	EncodeDeployMessageFailedAbiErrorCode                 = 305
+	EncodeRunMessageFailedAbiErrorCode                    = 306
+	AttachSignatureFailedAbiErrorCode                     = 307
+	InvalidTvcImageAbiErrorCode                           = 308
+	RequiredPublicKeyMissingForFunctionHeaderAbiErrorCode = 309
+	InvalidSignerAbiErrorCode                             = 310
+	InvalidAbiAbiErrorCode                                = 311
 )
+
+func init() { // nolint gochecknoinits
+	errorCodesToErrorTypes[RequiredAddressMissingForEncodeMessageAbiErrorCode] = "RequiredAddressMissingForEncodeMessageAbiErrorCode"
+	errorCodesToErrorTypes[RequiredCallSetMissingForEncodeMessageAbiErrorCode] = "RequiredCallSetMissingForEncodeMessageAbiErrorCode"
+	errorCodesToErrorTypes[InvalidJSONAbiErrorCode] = "InvalidJSONAbiErrorCode"
+	errorCodesToErrorTypes[InvalidMessageAbiErrorCode] = "InvalidMessageAbiErrorCode"
+	errorCodesToErrorTypes[EncodeDeployMessageFailedAbiErrorCode] = "EncodeDeployMessageFailedAbiErrorCode"
+	errorCodesToErrorTypes[EncodeRunMessageFailedAbiErrorCode] = "EncodeRunMessageFailedAbiErrorCode"
+	errorCodesToErrorTypes[AttachSignatureFailedAbiErrorCode] = "AttachSignatureFailedAbiErrorCode"
+	errorCodesToErrorTypes[InvalidTvcImageAbiErrorCode] = "InvalidTvcImageAbiErrorCode"
+	errorCodesToErrorTypes[RequiredPublicKeyMissingForFunctionHeaderAbiErrorCode] = "RequiredPublicKeyMissingForFunctionHeaderAbiErrorCode"
+	errorCodesToErrorTypes[InvalidSignerAbiErrorCode] = "InvalidSignerAbiErrorCode"
+	errorCodesToErrorTypes[InvalidAbiAbiErrorCode] = "InvalidAbiAbiErrorCode"
+}
 
 type (
 	AbiHandle      uint32

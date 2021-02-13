@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
 //
 // Mod crypto
 //
@@ -12,30 +12,51 @@ import (
 	"github.com/volatiletech/null"
 )
 
-type CryptoErrorCode string
-
 const (
-	InvalidPublicKeyCryptoErrorCode          CryptoErrorCode = "InvalidPublicKey"
-	InvalidSecretKeyCryptoErrorCode          CryptoErrorCode = "InvalidSecretKey"
-	InvalidKeyCryptoErrorCode                CryptoErrorCode = "InvalidKey"
-	InvalidFactorizeChallengeCryptoErrorCode CryptoErrorCode = "InvalidFactorizeChallenge"
-	InvalidBigIntCryptoErrorCode             CryptoErrorCode = "InvalidBigInt"
-	ScryptFailedCryptoErrorCode              CryptoErrorCode = "ScryptFailed"
-	InvalidKeySizeCryptoErrorCode            CryptoErrorCode = "InvalidKeySize"
-	NaclSecretBoxFailedCryptoErrorCode       CryptoErrorCode = "NaclSecretBoxFailed"
-	NaclBoxFailedCryptoErrorCode             CryptoErrorCode = "NaclBoxFailed"
-	NaclSignFailedCryptoErrorCode            CryptoErrorCode = "NaclSignFailed"
-	Bip39InvalidEntropyCryptoErrorCode       CryptoErrorCode = "Bip39InvalidEntropy"
-	Bip39InvalidPhraseCryptoErrorCode        CryptoErrorCode = "Bip39InvalidPhrase"
-	Bip32InvalidKeyCryptoErrorCode           CryptoErrorCode = "Bip32InvalidKey"
-	Bip32InvalidDerivePathCryptoErrorCode    CryptoErrorCode = "Bip32InvalidDerivePath"
-	Bip39InvalidDictionaryCryptoErrorCode    CryptoErrorCode = "Bip39InvalidDictionary"
-	Bip39InvalidWordCountCryptoErrorCode     CryptoErrorCode = "Bip39InvalidWordCount"
-	MnemonicGenerationFailedCryptoErrorCode  CryptoErrorCode = "MnemonicGenerationFailed"
-	MnemonicFromEntropyFailedCryptoErrorCode CryptoErrorCode = "MnemonicFromEntropyFailed"
-	SigningBoxNotRegisteredCryptoErrorCode   CryptoErrorCode = "SigningBoxNotRegistered"
-	InvalidSignatureCryptoErrorCode          CryptoErrorCode = "InvalidSignature"
+	InvalidPublicKeyCryptoErrorCode          = 100
+	InvalidSecretKeyCryptoErrorCode          = 101
+	InvalidKeyCryptoErrorCode                = 102
+	InvalidFactorizeChallengeCryptoErrorCode = 106
+	InvalidBigIntCryptoErrorCode             = 107
+	ScryptFailedCryptoErrorCode              = 108
+	InvalidKeySizeCryptoErrorCode            = 109
+	NaclSecretBoxFailedCryptoErrorCode       = 110
+	NaclBoxFailedCryptoErrorCode             = 111
+	NaclSignFailedCryptoErrorCode            = 112
+	Bip39InvalidEntropyCryptoErrorCode       = 113
+	Bip39InvalidPhraseCryptoErrorCode        = 114
+	Bip32InvalidKeyCryptoErrorCode           = 115
+	Bip32InvalidDerivePathCryptoErrorCode    = 116
+	Bip39InvalidDictionaryCryptoErrorCode    = 117
+	Bip39InvalidWordCountCryptoErrorCode     = 118
+	MnemonicGenerationFailedCryptoErrorCode  = 119
+	MnemonicFromEntropyFailedCryptoErrorCode = 120
+	SigningBoxNotRegisteredCryptoErrorCode   = 121
+	InvalidSignatureCryptoErrorCode          = 122
 )
+
+func init() { // nolint gochecknoinits
+	errorCodesToErrorTypes[InvalidPublicKeyCryptoErrorCode] = "InvalidPublicKeyCryptoErrorCode"
+	errorCodesToErrorTypes[InvalidSecretKeyCryptoErrorCode] = "InvalidSecretKeyCryptoErrorCode"
+	errorCodesToErrorTypes[InvalidKeyCryptoErrorCode] = "InvalidKeyCryptoErrorCode"
+	errorCodesToErrorTypes[InvalidFactorizeChallengeCryptoErrorCode] = "InvalidFactorizeChallengeCryptoErrorCode"
+	errorCodesToErrorTypes[InvalidBigIntCryptoErrorCode] = "InvalidBigIntCryptoErrorCode"
+	errorCodesToErrorTypes[ScryptFailedCryptoErrorCode] = "ScryptFailedCryptoErrorCode"
+	errorCodesToErrorTypes[InvalidKeySizeCryptoErrorCode] = "InvalidKeySizeCryptoErrorCode"
+	errorCodesToErrorTypes[NaclSecretBoxFailedCryptoErrorCode] = "NaclSecretBoxFailedCryptoErrorCode"
+	errorCodesToErrorTypes[NaclBoxFailedCryptoErrorCode] = "NaclBoxFailedCryptoErrorCode"
+	errorCodesToErrorTypes[NaclSignFailedCryptoErrorCode] = "NaclSignFailedCryptoErrorCode"
+	errorCodesToErrorTypes[Bip39InvalidEntropyCryptoErrorCode] = "Bip39InvalidEntropyCryptoErrorCode"
+	errorCodesToErrorTypes[Bip39InvalidPhraseCryptoErrorCode] = "Bip39InvalidPhraseCryptoErrorCode"
+	errorCodesToErrorTypes[Bip32InvalidKeyCryptoErrorCode] = "Bip32InvalidKeyCryptoErrorCode"
+	errorCodesToErrorTypes[Bip32InvalidDerivePathCryptoErrorCode] = "Bip32InvalidDerivePathCryptoErrorCode"
+	errorCodesToErrorTypes[Bip39InvalidDictionaryCryptoErrorCode] = "Bip39InvalidDictionaryCryptoErrorCode"
+	errorCodesToErrorTypes[Bip39InvalidWordCountCryptoErrorCode] = "Bip39InvalidWordCountCryptoErrorCode"
+	errorCodesToErrorTypes[MnemonicGenerationFailedCryptoErrorCode] = "MnemonicGenerationFailedCryptoErrorCode"
+	errorCodesToErrorTypes[MnemonicFromEntropyFailedCryptoErrorCode] = "MnemonicFromEntropyFailedCryptoErrorCode"
+	errorCodesToErrorTypes[SigningBoxNotRegisteredCryptoErrorCode] = "SigningBoxNotRegisteredCryptoErrorCode"
+	errorCodesToErrorTypes[InvalidSignatureCryptoErrorCode] = "InvalidSignatureCryptoErrorCode"
+}
 
 type (
 	SigningBoxHandle  uint32

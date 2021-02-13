@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
 //
 // Mod client
 //
@@ -12,43 +12,77 @@ import (
 	"github.com/volatiletech/null"
 )
 
-type ErrorCode string
-
 const (
-	NotImplementedErrorCode                      ErrorCode = "NotImplemented"
-	InvalidHexErrorCode                          ErrorCode = "InvalidHex"
-	InvalidBase64ErrorCode                       ErrorCode = "InvalidBase64"
-	InvalidAddressErrorCode                      ErrorCode = "InvalidAddress"
-	CallbackParamsCantBeConvertedToJSONErrorCode ErrorCode = "CallbackParamsCantBeConvertedToJson"
-	WebsocketConnectErrorErrorCode               ErrorCode = "WebsocketConnectError"
-	WebsocketReceiveErrorErrorCode               ErrorCode = "WebsocketReceiveError"
-	WebsocketSendErrorErrorCode                  ErrorCode = "WebsocketSendError"
-	HTTPClientCreateErrorErrorCode               ErrorCode = "HttpClientCreateError"
-	HTTPRequestCreateErrorErrorCode              ErrorCode = "HttpRequestCreateError"
-	HTTPRequestSendErrorErrorCode                ErrorCode = "HttpRequestSendError"
-	HTTPRequestParseErrorErrorCode               ErrorCode = "HttpRequestParseError"
-	CallbackNotRegisteredErrorCode               ErrorCode = "CallbackNotRegistered"
-	NetModuleNotInitErrorCode                    ErrorCode = "NetModuleNotInit"
-	InvalidConfigErrorCode                       ErrorCode = "InvalidConfig"
-	CannotCreateRuntimeErrorCode                 ErrorCode = "CannotCreateRuntime"
-	InvalidContextHandleErrorCode                ErrorCode = "InvalidContextHandle"
-	CannotSerializeResultErrorCode               ErrorCode = "CannotSerializeResult"
-	CannotSerializeErrorErrorCode                ErrorCode = "CannotSerializeError"
-	CannotConvertJsValueToJSONErrorCode          ErrorCode = "CannotConvertJsValueToJson"
-	CannotReceiveSpawnedResultErrorCode          ErrorCode = "CannotReceiveSpawnedResult"
-	SetTimerErrorErrorCode                       ErrorCode = "SetTimerError"
-	InvalidParamsErrorCode                       ErrorCode = "InvalidParams"
-	ContractsAddressConversionFailedErrorCode    ErrorCode = "ContractsAddressConversionFailed"
-	UnknownFunctionErrorCode                     ErrorCode = "UnknownFunction"
-	AppRequestErrorErrorCode                     ErrorCode = "AppRequestError"
-	NoSuchRequestErrorCode                       ErrorCode = "NoSuchRequest"
-	CanNotSendRequestResultErrorCode             ErrorCode = "CanNotSendRequestResult"
-	CanNotReceiveRequestResultErrorCode          ErrorCode = "CanNotReceiveRequestResult"
-	CanNotParseRequestResultErrorCode            ErrorCode = "CanNotParseRequestResult"
-	UnexpectedCallbackResponseErrorCode          ErrorCode = "UnexpectedCallbackResponse"
-	CanNotParseNumberErrorCode                   ErrorCode = "CanNotParseNumber"
-	InternalErrorErrorCode                       ErrorCode = "InternalError"
+	NotImplementedErrorCode                      = 1
+	InvalidHexErrorCode                          = 2
+	InvalidBase64ErrorCode                       = 3
+	InvalidAddressErrorCode                      = 4
+	CallbackParamsCantBeConvertedToJSONErrorCode = 5
+	WebsocketConnectErrorErrorCode               = 6
+	WebsocketReceiveErrorErrorCode               = 7
+	WebsocketSendErrorErrorCode                  = 8
+	HTTPClientCreateErrorErrorCode               = 9
+	HTTPRequestCreateErrorErrorCode              = 10
+	HTTPRequestSendErrorErrorCode                = 11
+	HTTPRequestParseErrorErrorCode               = 12
+	CallbackNotRegisteredErrorCode               = 13
+	NetModuleNotInitErrorCode                    = 14
+	InvalidConfigErrorCode                       = 15
+	CannotCreateRuntimeErrorCode                 = 16
+	InvalidContextHandleErrorCode                = 17
+	CannotSerializeResultErrorCode               = 18
+	CannotSerializeErrorErrorCode                = 19
+	CannotConvertJsValueToJSONErrorCode          = 20
+	CannotReceiveSpawnedResultErrorCode          = 21
+	SetTimerErrorErrorCode                       = 22
+	InvalidParamsErrorCode                       = 23
+	ContractsAddressConversionFailedErrorCode    = 24
+	UnknownFunctionErrorCode                     = 25
+	AppRequestErrorErrorCode                     = 26
+	NoSuchRequestErrorCode                       = 27
+	CanNotSendRequestResultErrorCode             = 28
+	CanNotReceiveRequestResultErrorCode          = 29
+	CanNotParseRequestResultErrorCode            = 30
+	UnexpectedCallbackResponseErrorCode          = 31
+	CanNotParseNumberErrorCode                   = 32
+	InternalErrorErrorCode                       = 33
 )
+
+func init() { // nolint gochecknoinits
+	errorCodesToErrorTypes[NotImplementedErrorCode] = "NotImplementedErrorCode"
+	errorCodesToErrorTypes[InvalidHexErrorCode] = "InvalidHexErrorCode"
+	errorCodesToErrorTypes[InvalidBase64ErrorCode] = "InvalidBase64ErrorCode"
+	errorCodesToErrorTypes[InvalidAddressErrorCode] = "InvalidAddressErrorCode"
+	errorCodesToErrorTypes[CallbackParamsCantBeConvertedToJSONErrorCode] = "CallbackParamsCantBeConvertedToJSONErrorCode"
+	errorCodesToErrorTypes[WebsocketConnectErrorErrorCode] = "WebsocketConnectErrorErrorCode"
+	errorCodesToErrorTypes[WebsocketReceiveErrorErrorCode] = "WebsocketReceiveErrorErrorCode"
+	errorCodesToErrorTypes[WebsocketSendErrorErrorCode] = "WebsocketSendErrorErrorCode"
+	errorCodesToErrorTypes[HTTPClientCreateErrorErrorCode] = "HTTPClientCreateErrorErrorCode"
+	errorCodesToErrorTypes[HTTPRequestCreateErrorErrorCode] = "HTTPRequestCreateErrorErrorCode"
+	errorCodesToErrorTypes[HTTPRequestSendErrorErrorCode] = "HTTPRequestSendErrorErrorCode"
+	errorCodesToErrorTypes[HTTPRequestParseErrorErrorCode] = "HTTPRequestParseErrorErrorCode"
+	errorCodesToErrorTypes[CallbackNotRegisteredErrorCode] = "CallbackNotRegisteredErrorCode"
+	errorCodesToErrorTypes[NetModuleNotInitErrorCode] = "NetModuleNotInitErrorCode"
+	errorCodesToErrorTypes[InvalidConfigErrorCode] = "InvalidConfigErrorCode"
+	errorCodesToErrorTypes[CannotCreateRuntimeErrorCode] = "CannotCreateRuntimeErrorCode"
+	errorCodesToErrorTypes[InvalidContextHandleErrorCode] = "InvalidContextHandleErrorCode"
+	errorCodesToErrorTypes[CannotSerializeResultErrorCode] = "CannotSerializeResultErrorCode"
+	errorCodesToErrorTypes[CannotSerializeErrorErrorCode] = "CannotSerializeErrorErrorCode"
+	errorCodesToErrorTypes[CannotConvertJsValueToJSONErrorCode] = "CannotConvertJsValueToJSONErrorCode"
+	errorCodesToErrorTypes[CannotReceiveSpawnedResultErrorCode] = "CannotReceiveSpawnedResultErrorCode"
+	errorCodesToErrorTypes[SetTimerErrorErrorCode] = "SetTimerErrorErrorCode"
+	errorCodesToErrorTypes[InvalidParamsErrorCode] = "InvalidParamsErrorCode"
+	errorCodesToErrorTypes[ContractsAddressConversionFailedErrorCode] = "ContractsAddressConversionFailedErrorCode"
+	errorCodesToErrorTypes[UnknownFunctionErrorCode] = "UnknownFunctionErrorCode"
+	errorCodesToErrorTypes[AppRequestErrorErrorCode] = "AppRequestErrorErrorCode"
+	errorCodesToErrorTypes[NoSuchRequestErrorCode] = "NoSuchRequestErrorCode"
+	errorCodesToErrorTypes[CanNotSendRequestResultErrorCode] = "CanNotSendRequestResultErrorCode"
+	errorCodesToErrorTypes[CanNotReceiveRequestResultErrorCode] = "CanNotReceiveRequestResultErrorCode"
+	errorCodesToErrorTypes[CanNotParseRequestResultErrorCode] = "CanNotParseRequestResultErrorCode"
+	errorCodesToErrorTypes[UnexpectedCallbackResponseErrorCode] = "UnexpectedCallbackResponseErrorCode"
+	errorCodesToErrorTypes[CanNotParseNumberErrorCode] = "CanNotParseNumberErrorCode"
+	errorCodesToErrorTypes[InternalErrorErrorCode] = "InternalErrorErrorCode"
+}
 
 type Error struct {
 	Code    uint32          `json:"code"`

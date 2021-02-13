@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
 //
 // Mod tvm
 //
@@ -12,24 +12,39 @@ import (
 	"github.com/volatiletech/null"
 )
 
-type TvmErrorCode string
-
 const (
-	CanNotReadTransactionTvmErrorCode      TvmErrorCode = "CanNotReadTransaction"
-	CanNotReadBlockchainConfigTvmErrorCode TvmErrorCode = "CanNotReadBlockchainConfig"
-	TransactionAbortedTvmErrorCode         TvmErrorCode = "TransactionAborted"
-	InternalErrorTvmErrorCode              TvmErrorCode = "InternalError"
-	ActionPhaseFailedTvmErrorCode          TvmErrorCode = "ActionPhaseFailed"
-	AccountCodeMissingTvmErrorCode         TvmErrorCode = "AccountCodeMissing"
-	LowBalanceTvmErrorCode                 TvmErrorCode = "LowBalance"
-	AccountFrozenOrDeletedTvmErrorCode     TvmErrorCode = "AccountFrozenOrDeleted"
-	AccountMissingTvmErrorCode             TvmErrorCode = "AccountMissing"
-	UnknownExecutionErrorTvmErrorCode      TvmErrorCode = "UnknownExecutionError"
-	InvalidInputStackTvmErrorCode          TvmErrorCode = "InvalidInputStack"
-	InvalidAccountBocTvmErrorCode          TvmErrorCode = "InvalidAccountBoc"
-	InvalidMessageTypeTvmErrorCode         TvmErrorCode = "InvalidMessageType"
-	ContractExecutionErrorTvmErrorCode     TvmErrorCode = "ContractExecutionError"
+	CanNotReadTransactionTvmErrorCode      = 401
+	CanNotReadBlockchainConfigTvmErrorCode = 402
+	TransactionAbortedTvmErrorCode         = 403
+	InternalErrorTvmErrorCode              = 404
+	ActionPhaseFailedTvmErrorCode          = 405
+	AccountCodeMissingTvmErrorCode         = 406
+	LowBalanceTvmErrorCode                 = 407
+	AccountFrozenOrDeletedTvmErrorCode     = 408
+	AccountMissingTvmErrorCode             = 409
+	UnknownExecutionErrorTvmErrorCode      = 410
+	InvalidInputStackTvmErrorCode          = 411
+	InvalidAccountBocTvmErrorCode          = 412
+	InvalidMessageTypeTvmErrorCode         = 413
+	ContractExecutionErrorTvmErrorCode     = 414
 )
+
+func init() { // nolint gochecknoinits
+	errorCodesToErrorTypes[CanNotReadTransactionTvmErrorCode] = "CanNotReadTransactionTvmErrorCode"
+	errorCodesToErrorTypes[CanNotReadBlockchainConfigTvmErrorCode] = "CanNotReadBlockchainConfigTvmErrorCode"
+	errorCodesToErrorTypes[TransactionAbortedTvmErrorCode] = "TransactionAbortedTvmErrorCode"
+	errorCodesToErrorTypes[InternalErrorTvmErrorCode] = "InternalErrorTvmErrorCode"
+	errorCodesToErrorTypes[ActionPhaseFailedTvmErrorCode] = "ActionPhaseFailedTvmErrorCode"
+	errorCodesToErrorTypes[AccountCodeMissingTvmErrorCode] = "AccountCodeMissingTvmErrorCode"
+	errorCodesToErrorTypes[LowBalanceTvmErrorCode] = "LowBalanceTvmErrorCode"
+	errorCodesToErrorTypes[AccountFrozenOrDeletedTvmErrorCode] = "AccountFrozenOrDeletedTvmErrorCode"
+	errorCodesToErrorTypes[AccountMissingTvmErrorCode] = "AccountMissingTvmErrorCode"
+	errorCodesToErrorTypes[UnknownExecutionErrorTvmErrorCode] = "UnknownExecutionErrorTvmErrorCode"
+	errorCodesToErrorTypes[InvalidInputStackTvmErrorCode] = "InvalidInputStackTvmErrorCode"
+	errorCodesToErrorTypes[InvalidAccountBocTvmErrorCode] = "InvalidAccountBocTvmErrorCode"
+	errorCodesToErrorTypes[InvalidMessageTypeTvmErrorCode] = "InvalidMessageTypeTvmErrorCode"
+	errorCodesToErrorTypes[ContractExecutionErrorTvmErrorCode] = "ContractExecutionErrorTvmErrorCode"
+}
 
 type ExecutionOptions struct {
 	// boc with config.

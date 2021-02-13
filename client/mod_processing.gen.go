@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
 //
 // Mod processing
 //
@@ -12,23 +12,37 @@ import (
 	"encoding/json"
 )
 
-type ProcessingErrorCode string
-
 const (
-	MessageAlreadyExpiredProcessingErrorCode           ProcessingErrorCode = "MessageAlreadyExpired"
-	MessageHasNotDestinationAddressProcessingErrorCode ProcessingErrorCode = "MessageHasNotDestinationAddress"
-	CanNotBuildMessageCellProcessingErrorCode          ProcessingErrorCode = "CanNotBuildMessageCell"
-	FetchBlockFailedProcessingErrorCode                ProcessingErrorCode = "FetchBlockFailed"
-	SendMessageFailedProcessingErrorCode               ProcessingErrorCode = "SendMessageFailed"
-	InvalidMessageBocProcessingErrorCode               ProcessingErrorCode = "InvalidMessageBoc"
-	MessageExpiredProcessingErrorCode                  ProcessingErrorCode = "MessageExpired"
-	TransactionWaitTimeoutProcessingErrorCode          ProcessingErrorCode = "TransactionWaitTimeout"
-	InvalidBlockReceivedProcessingErrorCode            ProcessingErrorCode = "InvalidBlockReceived"
-	CanNotCheckBlockShardProcessingErrorCode           ProcessingErrorCode = "CanNotCheckBlockShard"
-	BlockNotFoundProcessingErrorCode                   ProcessingErrorCode = "BlockNotFound"
-	InvalidDataProcessingErrorCode                     ProcessingErrorCode = "InvalidData"
-	ExternalSignerMustNotBeUsedProcessingErrorCode     ProcessingErrorCode = "ExternalSignerMustNotBeUsed"
+	MessageAlreadyExpiredProcessingErrorCode           = 501
+	MessageHasNotDestinationAddressProcessingErrorCode = 502
+	CanNotBuildMessageCellProcessingErrorCode          = 503
+	FetchBlockFailedProcessingErrorCode                = 504
+	SendMessageFailedProcessingErrorCode               = 505
+	InvalidMessageBocProcessingErrorCode               = 506
+	MessageExpiredProcessingErrorCode                  = 507
+	TransactionWaitTimeoutProcessingErrorCode          = 508
+	InvalidBlockReceivedProcessingErrorCode            = 509
+	CanNotCheckBlockShardProcessingErrorCode           = 510
+	BlockNotFoundProcessingErrorCode                   = 511
+	InvalidDataProcessingErrorCode                     = 512
+	ExternalSignerMustNotBeUsedProcessingErrorCode     = 513
 )
+
+func init() { // nolint gochecknoinits
+	errorCodesToErrorTypes[MessageAlreadyExpiredProcessingErrorCode] = "MessageAlreadyExpiredProcessingErrorCode"
+	errorCodesToErrorTypes[MessageHasNotDestinationAddressProcessingErrorCode] = "MessageHasNotDestinationAddressProcessingErrorCode"
+	errorCodesToErrorTypes[CanNotBuildMessageCellProcessingErrorCode] = "CanNotBuildMessageCellProcessingErrorCode"
+	errorCodesToErrorTypes[FetchBlockFailedProcessingErrorCode] = "FetchBlockFailedProcessingErrorCode"
+	errorCodesToErrorTypes[SendMessageFailedProcessingErrorCode] = "SendMessageFailedProcessingErrorCode"
+	errorCodesToErrorTypes[InvalidMessageBocProcessingErrorCode] = "InvalidMessageBocProcessingErrorCode"
+	errorCodesToErrorTypes[MessageExpiredProcessingErrorCode] = "MessageExpiredProcessingErrorCode"
+	errorCodesToErrorTypes[TransactionWaitTimeoutProcessingErrorCode] = "TransactionWaitTimeoutProcessingErrorCode"
+	errorCodesToErrorTypes[InvalidBlockReceivedProcessingErrorCode] = "InvalidBlockReceivedProcessingErrorCode"
+	errorCodesToErrorTypes[CanNotCheckBlockShardProcessingErrorCode] = "CanNotCheckBlockShardProcessingErrorCode"
+	errorCodesToErrorTypes[BlockNotFoundProcessingErrorCode] = "BlockNotFoundProcessingErrorCode"
+	errorCodesToErrorTypes[InvalidDataProcessingErrorCode] = "InvalidDataProcessingErrorCode"
+	errorCodesToErrorTypes[ExternalSignerMustNotBeUsedProcessingErrorCode] = "ExternalSignerMustNotBeUsedProcessingErrorCode"
+}
 
 type ProcessingEventType string
 

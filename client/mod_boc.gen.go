@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
 //
 // Mod boc
 //
@@ -30,17 +30,25 @@ type BocCacheType struct {
 	Pin string `json:"pin"`
 }
 
-type BocErrorCode string
-
 const (
-	InvalidBocBocErrorCode            BocErrorCode = "InvalidBoc"
-	SerializationErrorBocErrorCode    BocErrorCode = "SerializationError"
-	InappropriateBlockBocErrorCode    BocErrorCode = "InappropriateBlock"
-	MissingSourceBocBocErrorCode      BocErrorCode = "MissingSourceBoc"
-	InsufficientCacheSizeBocErrorCode BocErrorCode = "InsufficientCacheSize"
-	BocRefNotFoundBocErrorCode        BocErrorCode = "BocRefNotFound"
-	InvalidBocRefBocErrorCode         BocErrorCode = "InvalidBocRef"
+	InvalidBocBocErrorCode            = 201
+	SerializationErrorBocErrorCode    = 202
+	InappropriateBlockBocErrorCode    = 203
+	MissingSourceBocBocErrorCode      = 204
+	InsufficientCacheSizeBocErrorCode = 205
+	BocRefNotFoundBocErrorCode        = 206
+	InvalidBocRefBocErrorCode         = 207
 )
+
+func init() { // nolint gochecknoinits
+	errorCodesToErrorTypes[InvalidBocBocErrorCode] = "InvalidBocBocErrorCode"
+	errorCodesToErrorTypes[SerializationErrorBocErrorCode] = "SerializationErrorBocErrorCode"
+	errorCodesToErrorTypes[InappropriateBlockBocErrorCode] = "InappropriateBlockBocErrorCode"
+	errorCodesToErrorTypes[MissingSourceBocBocErrorCode] = "MissingSourceBocBocErrorCode"
+	errorCodesToErrorTypes[InsufficientCacheSizeBocErrorCode] = "InsufficientCacheSizeBocErrorCode"
+	errorCodesToErrorTypes[BocRefNotFoundBocErrorCode] = "BocRefNotFoundBocErrorCode"
+	errorCodesToErrorTypes[InvalidBocRefBocErrorCode] = "InvalidBocRefBocErrorCode"
+}
 
 type ParamsOfParse struct {
 	// BOC encoded as base64.

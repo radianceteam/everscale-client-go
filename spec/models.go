@@ -35,17 +35,19 @@ func (d *Description) ToComment() string {
 // Type description from JSON spec.
 type Type struct {
 	Description
-	Type          TypeName      `json:"type,omitempty"`
-	RefName       string        `json:"ref_name,omitempty"`
-	GenericName   string        `json:"generic_name,omitempty"`
-	NumberType    string        `json:"number_type,omitempty"`
-	NumberSize    int           `json:"number_size,omitempty"`
-	GenericArgs   []Type        `json:"generic_args,omitempty"`
-	OptionalInner *Type         `json:"optional_inner,omitempty"`
-	ArrayItem     *Type         `json:"array_item,omitempty"`
-	StructFields  []Type        `json:"struct_fields,omitempty"`
-	EnumConsts    []Description `json:"enum_consts,omitempty"`
-	EnumTypes     []Type        `json:"enum_types"`
+	Type          TypeName `json:"type,omitempty"`
+	GoType        string   `json:"-"`
+	Value         string   `json:"value"`
+	RefName       string   `json:"ref_name,omitempty"`
+	GenericName   string   `json:"generic_name,omitempty"`
+	NumberType    string   `json:"number_type,omitempty"`
+	NumberSize    int      `json:"number_size,omitempty"`
+	GenericArgs   []Type   `json:"generic_args,omitempty"`
+	OptionalInner *Type    `json:"optional_inner,omitempty"`
+	ArrayItem     *Type    `json:"array_item,omitempty"`
+	StructFields  []Type   `json:"struct_fields,omitempty"`
+	EnumConsts    []Type   `json:"enum_consts,omitempty"`
+	EnumTypes     []Type   `json:"enum_types"`
 }
 
 type Function struct {
