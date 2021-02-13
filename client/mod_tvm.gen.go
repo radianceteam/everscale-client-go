@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:36 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:51 UTC
 //
 // Mod tvm
 //
@@ -12,23 +12,21 @@ import (
 	"github.com/volatiletech/null"
 )
 
-type TvmErrorCode uint32
-
 const (
-	CanNotReadTransactionTvmErrorCode      TvmErrorCode = 401
-	CanNotReadBlockchainConfigTvmErrorCode TvmErrorCode = 402
-	TransactionAbortedTvmErrorCode         TvmErrorCode = 403
-	InternalErrorTvmErrorCode              TvmErrorCode = 404
-	ActionPhaseFailedTvmErrorCode          TvmErrorCode = 405
-	AccountCodeMissingTvmErrorCode         TvmErrorCode = 406
-	LowBalanceTvmErrorCode                 TvmErrorCode = 407
-	AccountFrozenOrDeletedTvmErrorCode     TvmErrorCode = 408
-	AccountMissingTvmErrorCode             TvmErrorCode = 409
-	UnknownExecutionErrorTvmErrorCode      TvmErrorCode = 410
-	InvalidInputStackTvmErrorCode          TvmErrorCode = 411
-	InvalidAccountBocTvmErrorCode          TvmErrorCode = 412
-	InvalidMessageTypeTvmErrorCode         TvmErrorCode = 413
-	ContractExecutionErrorTvmErrorCode     TvmErrorCode = 414
+	CanNotReadTransactionTvmErrorCode      = 401
+	CanNotReadBlockchainConfigTvmErrorCode = 402
+	TransactionAbortedTvmErrorCode         = 403
+	InternalErrorTvmErrorCode              = 404
+	ActionPhaseFailedTvmErrorCode          = 405
+	AccountCodeMissingTvmErrorCode         = 406
+	LowBalanceTvmErrorCode                 = 407
+	AccountFrozenOrDeletedTvmErrorCode     = 408
+	AccountMissingTvmErrorCode             = 409
+	UnknownExecutionErrorTvmErrorCode      = 410
+	InvalidInputStackTvmErrorCode          = 411
+	InvalidAccountBocTvmErrorCode          = 412
+	InvalidMessageTypeTvmErrorCode         = 413
+	ContractExecutionErrorTvmErrorCode     = 414
 )
 
 type ExecutionOptions struct {

@@ -11,16 +11,17 @@ import (
 func genEnumOfConsts(t Type) string {
 	t.Name = withTypeAlias(t.Name)
 	for i := range t.EnumConsts {
-		if t.GoType == "" && strings.HasSuffix(t.Name, "ErrorCode") {
-			t.GoType = "uint32"
-		}
 		if t.EnumConsts[i].Type == None {
 			t.GoType = "string"
 			t.EnumConsts[i].Value = strconv.Quote(withTypeAlias(t.EnumConsts[i].Name))
 		}
+
 		t.EnumConsts[i].Name = withTypeAlias(t.EnumConsts[i].Name)
 		t.EnumConsts[i].GoComment = t.EnumConsts[i].ToComment()
 		t.EnumConsts[i].ConstName = toGoName(strcase.ToSnake(t.EnumConsts[i].ConstName)) + t.Name
+	}
+	if strings.HasSuffix(t.Name, "ErrorCode") {
+		t.Name = "" // constants without type for error-codes
 	}
 	var tpl bytes.Buffer
 	if err := enumTmpl.Execute(&tpl, t); err != nil {

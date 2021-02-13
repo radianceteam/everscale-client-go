@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:36 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:51 UTC
 //
 // Mod crypto
 //
@@ -12,29 +12,27 @@ import (
 	"github.com/volatiletech/null"
 )
 
-type CryptoErrorCode uint32
-
 const (
-	InvalidPublicKeyCryptoErrorCode          CryptoErrorCode = 100
-	InvalidSecretKeyCryptoErrorCode          CryptoErrorCode = 101
-	InvalidKeyCryptoErrorCode                CryptoErrorCode = 102
-	InvalidFactorizeChallengeCryptoErrorCode CryptoErrorCode = 106
-	InvalidBigIntCryptoErrorCode             CryptoErrorCode = 107
-	ScryptFailedCryptoErrorCode              CryptoErrorCode = 108
-	InvalidKeySizeCryptoErrorCode            CryptoErrorCode = 109
-	NaclSecretBoxFailedCryptoErrorCode       CryptoErrorCode = 110
-	NaclBoxFailedCryptoErrorCode             CryptoErrorCode = 111
-	NaclSignFailedCryptoErrorCode            CryptoErrorCode = 112
-	Bip39InvalidEntropyCryptoErrorCode       CryptoErrorCode = 113
-	Bip39InvalidPhraseCryptoErrorCode        CryptoErrorCode = 114
-	Bip32InvalidKeyCryptoErrorCode           CryptoErrorCode = 115
-	Bip32InvalidDerivePathCryptoErrorCode    CryptoErrorCode = 116
-	Bip39InvalidDictionaryCryptoErrorCode    CryptoErrorCode = 117
-	Bip39InvalidWordCountCryptoErrorCode     CryptoErrorCode = 118
-	MnemonicGenerationFailedCryptoErrorCode  CryptoErrorCode = 119
-	MnemonicFromEntropyFailedCryptoErrorCode CryptoErrorCode = 120
-	SigningBoxNotRegisteredCryptoErrorCode   CryptoErrorCode = 121
-	InvalidSignatureCryptoErrorCode          CryptoErrorCode = 122
+	InvalidPublicKeyCryptoErrorCode          = 100
+	InvalidSecretKeyCryptoErrorCode          = 101
+	InvalidKeyCryptoErrorCode                = 102
+	InvalidFactorizeChallengeCryptoErrorCode = 106
+	InvalidBigIntCryptoErrorCode             = 107
+	ScryptFailedCryptoErrorCode              = 108
+	InvalidKeySizeCryptoErrorCode            = 109
+	NaclSecretBoxFailedCryptoErrorCode       = 110
+	NaclBoxFailedCryptoErrorCode             = 111
+	NaclSignFailedCryptoErrorCode            = 112
+	Bip39InvalidEntropyCryptoErrorCode       = 113
+	Bip39InvalidPhraseCryptoErrorCode        = 114
+	Bip32InvalidKeyCryptoErrorCode           = 115
+	Bip32InvalidDerivePathCryptoErrorCode    = 116
+	Bip39InvalidDictionaryCryptoErrorCode    = 117
+	Bip39InvalidWordCountCryptoErrorCode     = 118
+	MnemonicGenerationFailedCryptoErrorCode  = 119
+	MnemonicFromEntropyFailedCryptoErrorCode = 120
+	SigningBoxNotRegisteredCryptoErrorCode   = 121
+	InvalidSignatureCryptoErrorCode          = 122
 )
 
 type (

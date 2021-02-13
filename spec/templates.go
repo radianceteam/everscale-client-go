@@ -32,7 +32,9 @@ import (
 
 var enumTmpl = template.Must(template.New("enum").Parse(
 	`
+{{if ne .Name ""}}
 type {{.Name}} {{.GoType}}
+{{ end }}
 
 const (
 {{range $e := .EnumConsts}} 

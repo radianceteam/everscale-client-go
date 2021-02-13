@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:36 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:51 UTC
 //
 // Mod abi
 //
@@ -13,20 +13,18 @@ import (
 	"github.com/volatiletech/null"
 )
 
-type AbiErrorCode uint32
-
 const (
-	RequiredAddressMissingForEncodeMessageAbiErrorCode    AbiErrorCode = 301
-	RequiredCallSetMissingForEncodeMessageAbiErrorCode    AbiErrorCode = 302
-	InvalidJSONAbiErrorCode                               AbiErrorCode = 303
-	InvalidMessageAbiErrorCode                            AbiErrorCode = 304
-	EncodeDeployMessageFailedAbiErrorCode                 AbiErrorCode = 305
-	EncodeRunMessageFailedAbiErrorCode                    AbiErrorCode = 306
-	AttachSignatureFailedAbiErrorCode                     AbiErrorCode = 307
-	InvalidTvcImageAbiErrorCode                           AbiErrorCode = 308
-	RequiredPublicKeyMissingForFunctionHeaderAbiErrorCode AbiErrorCode = 309
-	InvalidSignerAbiErrorCode                             AbiErrorCode = 310
-	InvalidAbiAbiErrorCode                                AbiErrorCode = 311
+	RequiredAddressMissingForEncodeMessageAbiErrorCode    = 301
+	RequiredCallSetMissingForEncodeMessageAbiErrorCode    = 302
+	InvalidJSONAbiErrorCode                               = 303
+	InvalidMessageAbiErrorCode                            = 304
+	EncodeDeployMessageFailedAbiErrorCode                 = 305
+	EncodeRunMessageFailedAbiErrorCode                    = 306
+	AttachSignatureFailedAbiErrorCode                     = 307
+	InvalidTvcImageAbiErrorCode                           = 308
+	RequiredPublicKeyMissingForFunctionHeaderAbiErrorCode = 309
+	InvalidSignerAbiErrorCode                             = 310
+	InvalidAbiAbiErrorCode                                = 311
 )
 
 type (

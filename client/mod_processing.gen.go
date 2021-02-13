@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:36 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:51 UTC
 //
 // Mod processing
 //
@@ -12,22 +12,20 @@ import (
 	"encoding/json"
 )
 
-type ProcessingErrorCode uint32
-
 const (
-	MessageAlreadyExpiredProcessingErrorCode           ProcessingErrorCode = 501
-	MessageHasNotDestinationAddressProcessingErrorCode ProcessingErrorCode = 502
-	CanNotBuildMessageCellProcessingErrorCode          ProcessingErrorCode = 503
-	FetchBlockFailedProcessingErrorCode                ProcessingErrorCode = 504
-	SendMessageFailedProcessingErrorCode               ProcessingErrorCode = 505
-	InvalidMessageBocProcessingErrorCode               ProcessingErrorCode = 506
-	MessageExpiredProcessingErrorCode                  ProcessingErrorCode = 507
-	TransactionWaitTimeoutProcessingErrorCode          ProcessingErrorCode = 508
-	InvalidBlockReceivedProcessingErrorCode            ProcessingErrorCode = 509
-	CanNotCheckBlockShardProcessingErrorCode           ProcessingErrorCode = 510
-	BlockNotFoundProcessingErrorCode                   ProcessingErrorCode = 511
-	InvalidDataProcessingErrorCode                     ProcessingErrorCode = 512
-	ExternalSignerMustNotBeUsedProcessingErrorCode     ProcessingErrorCode = 513
+	MessageAlreadyExpiredProcessingErrorCode           = 501
+	MessageHasNotDestinationAddressProcessingErrorCode = 502
+	CanNotBuildMessageCellProcessingErrorCode          = 503
+	FetchBlockFailedProcessingErrorCode                = 504
+	SendMessageFailedProcessingErrorCode               = 505
+	InvalidMessageBocProcessingErrorCode               = 506
+	MessageExpiredProcessingErrorCode                  = 507
+	TransactionWaitTimeoutProcessingErrorCode          = 508
+	InvalidBlockReceivedProcessingErrorCode            = 509
+	CanNotCheckBlockShardProcessingErrorCode           = 510
+	BlockNotFoundProcessingErrorCode                   = 511
+	InvalidDataProcessingErrorCode                     = 512
+	ExternalSignerMustNotBeUsedProcessingErrorCode     = 513
 )
 
 type ProcessingEventType string

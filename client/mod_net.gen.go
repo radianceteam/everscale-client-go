@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:36 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:51 UTC
 //
 // Mod net
 //
@@ -12,23 +12,21 @@ import (
 	"github.com/volatiletech/null"
 )
 
-type NetErrorCode uint32
-
 const (
-	QueryFailedNetErrorCode                 NetErrorCode = 601
-	SubscribeFailedNetErrorCode             NetErrorCode = 602
-	WaitForFailedNetErrorCode               NetErrorCode = 603
-	GetSubscriptionResultFailedNetErrorCode NetErrorCode = 604
-	InvalidServerResponseNetErrorCode       NetErrorCode = 605
-	ClockOutOfSyncNetErrorCode              NetErrorCode = 606
-	WaitForTimeoutNetErrorCode              NetErrorCode = 607
-	GraphqlErrorNetErrorCode                NetErrorCode = 608
-	NetworkModuleSuspendedNetErrorCode      NetErrorCode = 609
-	WebsocketDisconnectedNetErrorCode       NetErrorCode = 610
-	NotSupportedNetErrorCode                NetErrorCode = 611
-	NoEndpointsProvidedNetErrorCode         NetErrorCode = 612
-	GraphqlWebsocketInitErrorNetErrorCode   NetErrorCode = 613
-	NetworkModuleResumedNetErrorCode        NetErrorCode = 614
+	QueryFailedNetErrorCode                 = 601
+	SubscribeFailedNetErrorCode             = 602
+	WaitForFailedNetErrorCode               = 603
+	GetSubscriptionResultFailedNetErrorCode = 604
+	InvalidServerResponseNetErrorCode       = 605
+	ClockOutOfSyncNetErrorCode              = 606
+	WaitForTimeoutNetErrorCode              = 607
+	GraphqlErrorNetErrorCode                = 608
+	NetworkModuleSuspendedNetErrorCode      = 609
+	WebsocketDisconnectedNetErrorCode       = 610
+	NotSupportedNetErrorCode                = 611
+	NoEndpointsProvidedNetErrorCode         = 612
+	GraphqlWebsocketInitErrorNetErrorCode   = 613
+	NetworkModuleResumedNetErrorCode        = 614
 )
 
 type OrderBy struct {

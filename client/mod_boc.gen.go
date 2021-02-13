@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:36 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:51 UTC
 //
 // Mod boc
 //
@@ -30,16 +30,14 @@ type BocCacheType struct {
 	Pin string `json:"pin"`
 }
 
-type BocErrorCode uint32
-
 const (
-	InvalidBocBocErrorCode            BocErrorCode = 201
-	SerializationErrorBocErrorCode    BocErrorCode = 202
-	InappropriateBlockBocErrorCode    BocErrorCode = 203
-	MissingSourceBocBocErrorCode      BocErrorCode = 204
-	InsufficientCacheSizeBocErrorCode BocErrorCode = 205
-	BocRefNotFoundBocErrorCode        BocErrorCode = 206
-	InvalidBocRefBocErrorCode         BocErrorCode = 207
+	InvalidBocBocErrorCode            = 201
+	SerializationErrorBocErrorCode    = 202
+	InappropriateBlockBocErrorCode    = 203
+	MissingSourceBocBocErrorCode      = 204
+	InsufficientCacheSizeBocErrorCode = 205
+	BocRefNotFoundBocErrorCode        = 206
+	InvalidBocRefBocErrorCode         = 207
 )
 
 type ParamsOfParse struct {

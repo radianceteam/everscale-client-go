@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:36 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:51 UTC
 //
 // Mod client
 //
@@ -12,42 +12,40 @@ import (
 	"github.com/volatiletech/null"
 )
 
-type ErrorCode uint32
-
 const (
-	NotImplementedErrorCode                      ErrorCode = 1
-	InvalidHexErrorCode                          ErrorCode = 2
-	InvalidBase64ErrorCode                       ErrorCode = 3
-	InvalidAddressErrorCode                      ErrorCode = 4
-	CallbackParamsCantBeConvertedToJSONErrorCode ErrorCode = 5
-	WebsocketConnectErrorErrorCode               ErrorCode = 6
-	WebsocketReceiveErrorErrorCode               ErrorCode = 7
-	WebsocketSendErrorErrorCode                  ErrorCode = 8
-	HTTPClientCreateErrorErrorCode               ErrorCode = 9
-	HTTPRequestCreateErrorErrorCode              ErrorCode = 10
-	HTTPRequestSendErrorErrorCode                ErrorCode = 11
-	HTTPRequestParseErrorErrorCode               ErrorCode = 12
-	CallbackNotRegisteredErrorCode               ErrorCode = 13
-	NetModuleNotInitErrorCode                    ErrorCode = 14
-	InvalidConfigErrorCode                       ErrorCode = 15
-	CannotCreateRuntimeErrorCode                 ErrorCode = 16
-	InvalidContextHandleErrorCode                ErrorCode = 17
-	CannotSerializeResultErrorCode               ErrorCode = 18
-	CannotSerializeErrorErrorCode                ErrorCode = 19
-	CannotConvertJsValueToJSONErrorCode          ErrorCode = 20
-	CannotReceiveSpawnedResultErrorCode          ErrorCode = 21
-	SetTimerErrorErrorCode                       ErrorCode = 22
-	InvalidParamsErrorCode                       ErrorCode = 23
-	ContractsAddressConversionFailedErrorCode    ErrorCode = 24
-	UnknownFunctionErrorCode                     ErrorCode = 25
-	AppRequestErrorErrorCode                     ErrorCode = 26
-	NoSuchRequestErrorCode                       ErrorCode = 27
-	CanNotSendRequestResultErrorCode             ErrorCode = 28
-	CanNotReceiveRequestResultErrorCode          ErrorCode = 29
-	CanNotParseRequestResultErrorCode            ErrorCode = 30
-	UnexpectedCallbackResponseErrorCode          ErrorCode = 31
-	CanNotParseNumberErrorCode                   ErrorCode = 32
-	InternalErrorErrorCode                       ErrorCode = 33
+	NotImplementedErrorCode                      = 1
+	InvalidHexErrorCode                          = 2
+	InvalidBase64ErrorCode                       = 3
+	InvalidAddressErrorCode                      = 4
+	CallbackParamsCantBeConvertedToJSONErrorCode = 5
+	WebsocketConnectErrorErrorCode               = 6
+	WebsocketReceiveErrorErrorCode               = 7
+	WebsocketSendErrorErrorCode                  = 8
+	HTTPClientCreateErrorErrorCode               = 9
+	HTTPRequestCreateErrorErrorCode              = 10
+	HTTPRequestSendErrorErrorCode                = 11
+	HTTPRequestParseErrorErrorCode               = 12
+	CallbackNotRegisteredErrorCode               = 13
+	NetModuleNotInitErrorCode                    = 14
+	InvalidConfigErrorCode                       = 15
+	CannotCreateRuntimeErrorCode                 = 16
+	InvalidContextHandleErrorCode                = 17
+	CannotSerializeResultErrorCode               = 18
+	CannotSerializeErrorErrorCode                = 19
+	CannotConvertJsValueToJSONErrorCode          = 20
+	CannotReceiveSpawnedResultErrorCode          = 21
+	SetTimerErrorErrorCode                       = 22
+	InvalidParamsErrorCode                       = 23
+	ContractsAddressConversionFailedErrorCode    = 24
+	UnknownFunctionErrorCode                     = 25
+	AppRequestErrorErrorCode                     = 26
+	NoSuchRequestErrorCode                       = 27
+	CanNotSendRequestResultErrorCode             = 28
+	CanNotReceiveRequestResultErrorCode          = 29
+	CanNotParseRequestResultErrorCode            = 30
+	UnexpectedCallbackResponseErrorCode          = 31
+	CanNotParseNumberErrorCode                   = 32
+	InternalErrorErrorCode                       = 33
 )
 
 type Error struct {

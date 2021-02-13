@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:36 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 14:51 UTC
 //
 // Mod debot
 //
@@ -10,19 +10,17 @@ import (
 	"encoding/json"
 )
 
-type DebotErrorCode uint32
-
 const (
-	DebotStartFailedDebotErrorCode       DebotErrorCode = 801
-	DebotFetchFailedDebotErrorCode       DebotErrorCode = 802
-	DebotExecutionFailedDebotErrorCode   DebotErrorCode = 803
-	DebotInvalidHandleDebotErrorCode     DebotErrorCode = 804
-	DebotInvalidJSONParamsDebotErrorCode DebotErrorCode = 805
-	DebotInvalidFunctionIDDebotErrorCode DebotErrorCode = 806
-	DebotInvalidAbiDebotErrorCode        DebotErrorCode = 807
-	DebotGetMethodFailedDebotErrorCode   DebotErrorCode = 808
-	DebotInvalidMsgDebotErrorCode        DebotErrorCode = 809
-	DebotExternaCallFailedDebotErrorCode DebotErrorCode = 810
+	DebotStartFailedDebotErrorCode       = 801
+	DebotFetchFailedDebotErrorCode       = 802
+	DebotExecutionFailedDebotErrorCode   = 803
+	DebotInvalidHandleDebotErrorCode     = 804
+	DebotInvalidJSONParamsDebotErrorCode = 805
+	DebotInvalidFunctionIDDebotErrorCode = 806
+	DebotInvalidAbiDebotErrorCode        = 807
+	DebotGetMethodFailedDebotErrorCode   = 808
+	DebotInvalidMsgDebotErrorCode        = 809
+	DebotExternaCallFailedDebotErrorCode = 810
 )
 
 type (
