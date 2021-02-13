@@ -5,7 +5,6 @@ package client
 import "encoding/json"
 
 type (
-	FieldAggregation       json.RawMessage
 	ParamsOfQueryOperation json.RawMessage
 )
 

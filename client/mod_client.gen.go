@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 31 Jan 21 10:48 UTC
+// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
 //
 // Mod client
 //
@@ -50,6 +50,19 @@ const (
 	InternalErrorErrorCode                       ErrorCode = "InternalError"
 )
 
+type Error struct {
+	Code    uint32          `json:"code"`
+	Message string          `json:"message"`
+	Data    json.RawMessage `json:"data"`
+}
+
+type Config struct {
+	Network *NetworkConfig `json:"network"` // optional
+	Crypto  *CryptoConfig  `json:"crypto"`  // optional
+	Abi     *AbiConfig     `json:"abi"`     // optional
+	Boc     *BocConfig     `json:"boc"`     // optional
+}
+
 type NetworkConfig struct {
 	// DApp Server public address. For instance, for `net.ton.dev/graphql` GraphQL endpoint the server address will be net.ton.dev.
 	ServerAddress null.String `json:"server_address"` // optional
@@ -64,9 +77,9 @@ type NetworkConfig struct {
 	MaxReconnectTimeout null.Uint32 `json:"max_reconnect_timeout"` // optional
 	// Deprecated.
 	ReconnectTimeout null.Uint32 `json:"reconnect_timeout"` // optional
-	// The number of automatic message processing retries that SDK performs in case of `Message Expired (507)` error - but only for those messages which local emulation was successfull or failed with replay protection error. The default value is 5.
+	// The number of automatic message processing retries that SDK performs in case of `Message Expired (507)` error - but only for those messages which local emulation was successful or failed with replay protection error. The default value is 5.
 	MessageRetriesCount null.Int8 `json:"message_retries_count"` // optional
-	// Timeout that is used to process message delivery for the contracts which ABI does not include "expire" header. If the message is not delivered within the speficied timeout the appropriate error occurs.
+	// Timeout that is used to process message delivery for the contracts which ABI does not include "expire" header. If the message is not delivered within the specified timeout the appropriate error occurs.
 	MessageProcessingTimeout null.Uint32 `json:"message_processing_timeout"` // optional
 	// Maximum timeout that is used for query response. The default value is 40 sec.
 	WaitForTimeout null.Uint32 `json:"wait_for_timeout"` // optional
@@ -98,6 +111,12 @@ type AbiConfig struct {
 	MessageExpirationTimeoutGrowFactor null.Float32 `json:"message_expiration_timeout_grow_factor"` // optional
 }
 
+type BocConfig struct {
+	// Maximum BOC cache size in kilobytes.
+	// Default is 10 MB.
+	CacheMaxSize null.Uint32 `json:"cache_max_size"` // optional
+}
+
 type BuildInfoDependency struct {
 	// Dependency name.
 	// Usually it is a crate name.
@@ -118,7 +137,7 @@ type AppRequestResultType string
 
 const (
 
-	// Error occured during request processing.
+	// Error occurred during request processing.
 	ErrorAppRequestResultType AppRequestResultType = "Error"
 	// Request processed successfully.
 	OkAppRequestResultType AppRequestResultType = "Ok"

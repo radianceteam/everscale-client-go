@@ -20,12 +20,10 @@ const (
 )
 
 var ignoredTypesByName = map[string]bool{
-	"ResultOfGetApiReference": true,
-	"ClientError":             true,
-	"ClientConfig":            true,
+	"ResultOfGetApiReference": true, // implemented via spec from this package
 	"Abi":                     true,
-	"AbiHandle":               true,
 	"MessageSource":           true,
+	"ParamsOfQueryOperation":  true,
 }
 
 var ignoredFunctionsByName = map[string]bool{

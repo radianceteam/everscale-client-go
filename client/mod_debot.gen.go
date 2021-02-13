@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 31 Jan 21 10:48 UTC
+// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
 //
 // Mod debot
 //
@@ -20,6 +20,9 @@ const (
 	DebotInvalidJSONParamsDebotErrorCode DebotErrorCode = "DebotInvalidJsonParams"
 	DebotInvalidFunctionIDDebotErrorCode DebotErrorCode = "DebotInvalidFunctionId"
 	DebotInvalidAbiDebotErrorCode        DebotErrorCode = "DebotInvalidAbi"
+	DebotGetMethodFailedDebotErrorCode   DebotErrorCode = "DebotGetMethodFailed"
+	DebotInvalidMsgDebotErrorCode        DebotErrorCode = "DebotInvalidMsg"
+	DebotExternaCallFailedDebotErrorCode DebotErrorCode = "DebotExternaCallFailed"
 )
 
 type (

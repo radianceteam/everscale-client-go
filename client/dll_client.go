@@ -62,7 +62,7 @@ func newDLLResponse(rawBytes []byte, responseType ResponseCode) *RawResponse {
 		Code: responseType,
 	}
 	if responseType == ResponseCodeError {
-		var sdkErr ClientError
+		var sdkErr Error
 		err := json.Unmarshal(rawBytes, &sdkErr)
 		if err != nil {
 			res.Error = err
@@ -139,8 +139,8 @@ type dllClientCtx struct {
 }
 
 type contextCreateResponse struct {
-	Result uint32       `json:"result"`
-	Error  *ClientError `json:"error"`
+	Result uint32 `json:"result"`
+	Error  *Error `json:"error"`
 }
 
 func (c *dllClientCtx) createContext(data []byte) error {

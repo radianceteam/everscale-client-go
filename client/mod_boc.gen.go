@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE is generated 31 Jan 21 10:48 UTC
+// DON'T EDIT THIS FILE is generated 13 Feb 21 11:00 UTC
 //
 // Mod boc
 //
@@ -8,15 +8,38 @@ package client
 
 import (
 	"encoding/json"
+
+	"github.com/volatiletech/null"
 )
+
+type BocCacheTypeType string
+
+const (
+
+	// Pin the BOC with `pin` name.
+	// Such BOC will not be removed from cache until it is unpinned.
+	PinnedBocCacheTypeType BocCacheTypeType = "Pinned"
+	// .
+	UnpinnedBocCacheTypeType BocCacheTypeType = "Unpinned"
+)
+
+type BocCacheType struct {
+	Type BocCacheTypeType `json:"type"`
+	// presented in types:
+	// "Pinned".
+	Pin string `json:"pin"`
+}
 
 type BocErrorCode string
 
 const (
-	InvalidBocBocErrorCode         BocErrorCode = "InvalidBoc"
-	SerializationErrorBocErrorCode BocErrorCode = "SerializationError"
-	InappropriateBlockBocErrorCode BocErrorCode = "InappropriateBlock"
-	MissingSourceBocBocErrorCode   BocErrorCode = "MissingSourceBoc"
+	InvalidBocBocErrorCode            BocErrorCode = "InvalidBoc"
+	SerializationErrorBocErrorCode    BocErrorCode = "SerializationError"
+	InappropriateBlockBocErrorCode    BocErrorCode = "InappropriateBlock"
+	MissingSourceBocBocErrorCode      BocErrorCode = "MissingSourceBoc"
+	InsufficientCacheSizeBocErrorCode BocErrorCode = "InsufficientCacheSize"
+	BocRefNotFoundBocErrorCode        BocErrorCode = "BocRefNotFound"
+	InvalidBocRefBocErrorCode         BocErrorCode = "InvalidBocRef"
 )
 
 type ParamsOfParse struct {
@@ -66,6 +89,36 @@ type ParamsOfGetCodeFromTvc struct {
 type ResultOfGetCodeFromTvc struct {
 	// Contract code encoded as base64.
 	Code string `json:"code"`
+}
+
+type ParamsOfBocCacheGet struct {
+	// Reference to the cached BOC.
+	BocRef string `json:"boc_ref"`
+}
+
+type ResultOfBocCacheGet struct {
+	// BOC encoded as base64.
+	Boc null.String `json:"boc"` // optional
+}
+
+type ParamsOfBocCacheSet struct {
+	// BOC encoded as base64 or BOC reference.
+	Boc string `json:"boc"`
+	// Cache type.
+	CacheType BocCacheType `json:"cache_type"`
+}
+
+type ResultOfBocCacheSet struct {
+	// Reference to the cached BOC.
+	BocRef string `json:"boc_ref"`
+}
+
+type ParamsOfBocCacheUnpin struct {
+	// Pinned name.
+	Pin string `json:"pin"`
+	// Reference to the cached BOC.
+	// If it is provided then only referenced BOC is unpinned.
+	BocRef null.String `json:"boc_ref"` // optional
 }
 
 // Parses message boc into a JSON.
@@ -142,4 +195,30 @@ func (c *Client) BocGetCodeFromTvc(p *ParamsOfGetCodeFromTvc) (*ResultOfGetCodeF
 	err := c.dllClient.waitErrorOrResultUnmarshal("boc.get_code_from_tvc", p, result)
 
 	return result, err
+}
+
+// Get BOC from cache.
+func (c *Client) BocCacheGet(p *ParamsOfBocCacheGet) (*ResultOfBocCacheGet, error) {
+	result := new(ResultOfBocCacheGet)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.cache_get", p, result)
+
+	return result, err
+}
+
+// Save BOC into cache.
+func (c *Client) BocCacheSet(p *ParamsOfBocCacheSet) (*ResultOfBocCacheSet, error) {
+	result := new(ResultOfBocCacheSet)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.cache_set", p, result)
+
+	return result, err
+}
+
+// Unpin BOCs with specified pin.
+// BOCs which don't have another pins will be removed from cache.
+func (c *Client) BocCacheUnpin(p *ParamsOfBocCacheUnpin) error {
+	_, err := c.dllClient.waitErrorOrResult("boc.cache_unpin", p)
+
+	return err
 }

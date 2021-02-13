@@ -4,13 +4,7 @@ import (
 	"fmt"
 )
 
-type ClientError struct { // nolint golint
-	Code    uint32      `json:"code"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
-}
-
-func (e *ClientError) Error() string {
+func (e *Error) Error() string {
 	if e == nil {
 		return ""
 	}

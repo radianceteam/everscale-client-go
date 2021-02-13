@@ -17,12 +17,6 @@ func (c *Client) Close() {
 	c.dllClient.close()
 }
 
-type Config struct {
-	Crypto  *CryptoConfig  `json:"crypto,omitempty"`
-	ABI     *AbiConfig     `json:"abi,omitempty"`
-	Network *NetworkConfig `json:"network,omitempty"`
-}
-
 func NewClient(config Config) (*Client, error) {
 	rawConfig, err := json.Marshal(config)
 	if err != nil {
