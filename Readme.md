@@ -8,7 +8,7 @@
 
 ## Preparations
 
-One need to install
+One needs to install
 - [Golang](https://golang.org/doc/install)
 - [TON-SDK](https://github.com/tonlabs/TON-SDK#download-precompiled-binaries) - download precompiled binaries and extract them 
 
@@ -49,7 +49,7 @@ export CGO_LDFLAGS="-L$TON_SDK_INSTALLATION_PATH -lton_client"
 
 ## Run
 
-One need to specify compiled DLL directory path:
+One needs to specify compiled DLL directory path:
 ```shell script
 export CGO_LDFLAGS="-L$TON_SDK_INSTALLATION_PATH -lton_client"
 go build ./cmd/cli
@@ -58,10 +58,11 @@ go run ./cmd/cli
 task run
 ```
 
-On Linux one need also provide search path for DLL loader:
+On Linux one needs to provide search path for DLL loader:
 ```shell script
 export LD_LIBRARY_PATH=$TON_SDK_INSTALLATION_PATH:$LD_LIBRARY_PATH
 ```
+
 ## Wrapper usage
 
 For examples see `cmd/cli/main.go` and run it via `go run ./cmd/cli`.
@@ -80,10 +81,11 @@ task coverage # full_test with coverage
 
 ## Development
 
-See available task commands via `task` without arguments.
 You need to install:
 - [golangci-lint](https://github.com/golangci/golangci-lint).
 - [Taskfile](https://taskfile.dev/) (optional)
+
+See available task commands via `task` without arguments.
 To attach git hooks run `task attach_hooks`
 
 ### Code generation
@@ -100,6 +102,7 @@ one can regenerate it via `task generate`.
 - https://docs.ton.dev/86757ecb2/p/71d7a8-samples/t/35f373 - example how to use GraphQL
 
 ## Methods and types with manual implementation
+
 See more at `spec/types.go`
 - processing.send_message
 - processing.wait_for_transaction
