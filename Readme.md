@@ -3,7 +3,7 @@
 [![TON-SDK Version](https://img.shields.io/badge/SDK_version-1.8.0-green.svg)](https://github.com/tonlabs/TON-SDK/tree/1.8.0)
 [![TON local-node docker image](https://img.shields.io/badge/TON_version-0.24.11-green.svg)](https://hub.docker.com/layers/tonlabs/local-node/0.24.8/images/sha256-62239cb2b215cbca7e8792812e27fa293727cfd8b17d3e58523c8a15a3673504?context=explore)
 [![Chat Telegram](https://img.shields.io/badge/chat-Telegram-9cf.svg)](https://t.me/RADIANCE_TON_SDK)
-[![Documentation](https://godoc.org/github.com/radianceteam/ton-client-go/client?status.svg)](http://godoc.org/github.com/radianceteam/ton-client-go/client)
+[![Documentation](https://godoc.org/github.com/radianceteam/ton-client-go/client?status.svg)](https://godoc.org/github.com/radianceteam/ton-client-go/client)
 ![CI tests and linters](https://github.com/radianceteam/ton-client-go/workflows/CI/badge.svg)
 
 ## Preparations
@@ -18,7 +18,7 @@ export TON_SDK_INSTALLATION_PATH=`pwd`/tmp # example - should be specified as ab
 # clean previous installation in case of reinstalling
 rm -f $TON_SDK_INSTALLATION_PATH/libton_client.dylib.gz $TON_SDK_INSTALLATION_PATH/libton_client.dylib 
 # download binaries
-wget http://sdkbinaries-ws.tonlabs.io/tonclient_1_darwin.gz -O $TON_SDK_INSTALLATION_PATH/libton_client.dylib.gz 
+wget https://binaries.tonlabs.io/tonclient_1_darwin.gz -O $TON_SDK_INSTALLATION_PATH/libton_client.dylib.gz 
 # extract binaries
 gzip -d $TON_SDK_INSTALLATION_PATH/libton_client.dylib.gz 
 # make extracted file executable
@@ -36,7 +36,7 @@ TON_SDK_INSTALLATION_PATH=`pwd`/tmp # example - should be specified as absolute 
 # clean previous installation in case of reinstalling
 rm -f $TON_SDK_INSTALLATION_PATH/libton_client.so.gz $TON_SDK_INSTALLATION_PATH/libton_client.so
 # download binaries
-wget http://sdkbinaries-ws.tonlabs.io/tonclient_1_linux.gz -O $TON_SDK_INSTALLATION_PATH/libton_client.so.gz
+wget https://binaries.tonlabs.io/tonclient_1_linux.gz -O $TON_SDK_INSTALLATION_PATH/libton_client.so.gz
 # extract binaries
 gzip -d $TON_SDK_INSTALLATION_PATH/libton_client.so.gz
 # make extracted file executable

@@ -31,7 +31,7 @@ tasks:
     desk: "Downloads SDK"
     cmds:
       - rm -rf ./tmp/libton_client.*
-      - wget http://sdkbinaries-ws.tonlabs.io/tonclient_1_{{OS}}.gz -O ./tmp/libton_client.{{if eq OS "darwin"}}dylib{{else}}so{{end}}.gz
+      - wget https://binaries.tonlabs.io/tonclient_1_{{OS}}.gz -O ./tmp/libton_client.{{if eq OS "darwin"}}dylib{{else}}so{{end}}.gz
       - gzip -d ./tmp/*.gz
       - chmod 777 ./tmp/libton_client.*
   run:
