@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:34 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:43 UTC
 //
 // Mod crypto
 //
@@ -436,8 +436,7 @@ type RegisteredSigningBox struct {
 	Handle SigningBoxHandle `json:"handle"`
 }
 
-type GetPublicKeyParamsOfAppSigningBox struct {
-}
+type GetPublicKeyParamsOfAppSigningBox struct{}
 
 type SignParamsOfAppSigningBox struct {
 	// Data to sign encoded as base64.

@@ -193,7 +193,10 @@ func GenModule(dir string, m Module) error {
 
 // genStruct - generates struct with each field specified.
 func genStruct(m Module, t Type) string {
-	r := "type " + withTypeAlias(toTypeName(t.Name)) + " struct {\n"
+	r := "type " + withTypeAlias(toTypeName(t.Name)) + " struct {"
+	if len(t.StructFields) != 0 {
+		r += "\n"
+	}
 	for _, f := range t.StructFields {
 		if f.Name == "" {
 			fmt.Println("WARNING: add struct field with empty name", t.Type, t.Name, f)

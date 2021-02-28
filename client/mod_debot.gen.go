@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:34 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:43 UTC
 //
 // Mod debot
 //
@@ -79,8 +79,7 @@ type SwitchParamsOfAppDebotBrowser struct {
 	ContextID uint8 `json:"context_id"`
 }
 
-type SwitchCompletedParamsOfAppDebotBrowser struct {
-}
+type SwitchCompletedParamsOfAppDebotBrowser struct{}
 
 type ShowActionParamsOfAppDebotBrowser struct {
 	// Debot action that must be shown to user as menu item. At least `description` property must be shown from [DebotAction] structure.
@@ -92,8 +91,7 @@ type InputParamsOfAppDebotBrowser struct {
 	Prompt string `json:"prompt"`
 }
 
-type GetSigningBoxParamsOfAppDebotBrowser struct {
-}
+type GetSigningBoxParamsOfAppDebotBrowser struct{}
 
 type InvokeDebotParamsOfAppDebotBrowser struct {
 	// Address of debot in blockchain.
@@ -275,8 +273,7 @@ type GetSigningBoxResultOfAppDebotBrowser struct {
 	SigningBox SigningBoxHandle `json:"signing_box"`
 }
 
-type InvokeDebotResultOfAppDebotBrowser struct {
-}
+type InvokeDebotResultOfAppDebotBrowser struct{}
 
 type ResultOfAppDebotBrowser struct {
 	EnumTypeValue interface{} // any of InputResultOfAppDebotBrowser, GetSigningBoxResultOfAppDebotBrowser, InvokeDebotResultOfAppDebotBrowser,

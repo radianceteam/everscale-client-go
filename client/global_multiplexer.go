@@ -22,14 +22,14 @@ func (m *multiplexer) DeleteByRequestID(requestID uint32) {
 	delete(m.callbacks, requestID)
 }
 
-func (m *multiplexer) SetChannels(responses chan<- *RawResponse, close <-chan struct{}) uint32 {
+func (m *multiplexer) SetChannels(responses chan<- *RawResponse, closeSig <-chan struct{}) uint32 {
 	m.Lock()
 	defer m.Unlock()
 	m.requestIDCounter++
 	requestID := m.requestIDCounter
 	m.callbacks[requestID] = channelPair{
 		responses: responses,
-		close:     close,
+		close:     closeSig,
 	}
 
 	return requestID
@@ -49,7 +49,7 @@ func (m *multiplexer) GetChannels(requestID uint32, toDelete bool) (chan<- *RawR
 type Multiplexer interface {
 	SetChannels(chan<- *RawResponse, <-chan struct{}) uint32
 	DeleteByRequestID(uint32)
-	GetChannels(requestID uint32, delete bool) (chan<- *RawResponse, <-chan struct{}, bool)
+	GetChannels(requestID uint32, deleteAfterGet bool) (chan<- *RawResponse, <-chan struct{}, bool)
 }
 
 func NewMultiplexer() Multiplexer {

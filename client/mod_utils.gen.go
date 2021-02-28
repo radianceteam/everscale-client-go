@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:34 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:43 UTC
 //
 // Mod utils
 //
@@ -11,11 +11,9 @@ import (
 	"fmt"
 )
 
-type AccountIDAddressStringFormat struct {
-}
+type AccountIDAddressStringFormat struct{}
 
-type HexAddressStringFormat struct {
-}
+type HexAddressStringFormat struct{}
 
 type Base64AddressStringFormat struct {
 	URL    bool `json:"url"`

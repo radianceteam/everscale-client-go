@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:34 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:43 UTC
 //
 // Mod abi
 //
@@ -86,8 +86,7 @@ type DeploySet struct {
 	InitialPubkey null.String `json:"initial_pubkey"` // optional
 }
 
-type NoneSigner struct {
-}
+type NoneSigner struct{}
 
 type ExternalSigner struct {
 	PublicKey string `json:"public_key"`

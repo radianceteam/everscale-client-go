@@ -145,6 +145,7 @@ type contextCreateResponse struct {
 
 func (c *dllClientCtx) createContext(data []byte) error {
 	rawHandler := C.tc_create_context(newTcStr(data))
+
 	defer C.tc_destroy_string(rawHandler)
 	rawResponse := newBytesFromTcStr(C.tc_read_string(rawHandler))
 	var response contextCreateResponse

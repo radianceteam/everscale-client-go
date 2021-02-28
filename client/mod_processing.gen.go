@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:34 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:43 UTC
 //
 // Mod processing
 //
@@ -45,8 +45,7 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[ExternalSignerMustNotBeUsedProcessingErrorCode] = "ExternalSignerMustNotBeUsedProcessingErrorCode"
 }
 
-type WillFetchFirstBlockProcessingEvent struct {
-}
+type WillFetchFirstBlockProcessingEvent struct{}
 
 type FetchFirstBlockFailedProcessingEvent struct {
 	Error Error `json:"error"`
