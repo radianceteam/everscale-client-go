@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 27 Feb 21 21:40 UTC
 //
 // Mod debot
 //
@@ -11,16 +11,16 @@ import (
 )
 
 const (
-	DebotStartFailedDebotErrorCode       = 801
-	DebotFetchFailedDebotErrorCode       = 802
-	DebotExecutionFailedDebotErrorCode   = 803
-	DebotInvalidHandleDebotErrorCode     = 804
-	DebotInvalidJSONParamsDebotErrorCode = 805
-	DebotInvalidFunctionIDDebotErrorCode = 806
-	DebotInvalidAbiDebotErrorCode        = 807
-	DebotGetMethodFailedDebotErrorCode   = 808
-	DebotInvalidMsgDebotErrorCode        = 809
-	DebotExternaCallFailedDebotErrorCode = 810
+	DebotStartFailedDebotErrorCode        = 801
+	DebotFetchFailedDebotErrorCode        = 802
+	DebotExecutionFailedDebotErrorCode    = 803
+	DebotInvalidHandleDebotErrorCode      = 804
+	DebotInvalidJSONParamsDebotErrorCode  = 805
+	DebotInvalidFunctionIDDebotErrorCode  = 806
+	DebotInvalidAbiDebotErrorCode         = 807
+	DebotGetMethodFailedDebotErrorCode    = 808
+	DebotInvalidMsgDebotErrorCode         = 809
+	DebotExternalCallFailedDebotErrorCode = 810
 )
 
 func init() { // nolint gochecknoinits
@@ -33,7 +33,7 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[DebotInvalidAbiDebotErrorCode] = "DebotInvalidAbiDebotErrorCode"
 	errorCodesToErrorTypes[DebotGetMethodFailedDebotErrorCode] = "DebotGetMethodFailedDebotErrorCode"
 	errorCodesToErrorTypes[DebotInvalidMsgDebotErrorCode] = "DebotInvalidMsgDebotErrorCode"
-	errorCodesToErrorTypes[DebotExternaCallFailedDebotErrorCode] = "DebotExternaCallFailedDebotErrorCode"
+	errorCodesToErrorTypes[DebotExternalCallFailedDebotErrorCode] = "DebotExternalCallFailedDebotErrorCode"
 }
 
 type (

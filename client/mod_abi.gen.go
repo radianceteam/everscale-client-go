@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 27 Feb 21 21:40 UTC
 //
 // Mod abi
 //
@@ -25,6 +25,7 @@ const (
 	RequiredPublicKeyMissingForFunctionHeaderAbiErrorCode = 309
 	InvalidSignerAbiErrorCode                             = 310
 	InvalidAbiAbiErrorCode                                = 311
+	InvalidFunctionIDAbiErrorCode                         = 312
 )
 
 func init() { // nolint gochecknoinits
@@ -39,6 +40,7 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[RequiredPublicKeyMissingForFunctionHeaderAbiErrorCode] = "RequiredPublicKeyMissingForFunctionHeaderAbiErrorCode"
 	errorCodesToErrorTypes[InvalidSignerAbiErrorCode] = "InvalidSignerAbiErrorCode"
 	errorCodesToErrorTypes[InvalidAbiAbiErrorCode] = "InvalidAbiAbiErrorCode"
+	errorCodesToErrorTypes[InvalidFunctionIDAbiErrorCode] = "InvalidFunctionIDAbiErrorCode"
 }
 
 type (
@@ -56,7 +58,7 @@ type (
 )
 
 type CallSet struct {
-	// Function name that is being called.
+	// Function name that is being called. Or function id encoded as string in hex (starting with 0x).
 	FunctionName string `json:"function_name"`
 	// Function header.
 	// If an application omits some header parameters required by the
@@ -396,7 +398,7 @@ type ParamsOfEncodeAccount struct {
 	// Initial value for the `last_paid`.
 	LastPaid null.Uint32 `json:"last_paid"` // optional
 	// Cache type to put the result.
-	// The BOC intself returned if no cache type provided.
+	// The BOC itself returned if no cache type provided.
 	BocCache *BocCacheType `json:"boc_cache"` // optional
 }
 

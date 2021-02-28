@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 27 Feb 21 21:40 UTC
 //
 // Mod crypto
 //
@@ -676,7 +676,7 @@ func (c *Client) CryptoNaclBoxKeypairFromSecretKey(p *ParamsOfNaclBoxKeyPairFrom
 }
 
 // Public key authenticated encryption.
-// Encrypt and authenticate a message using the senders secret key, the recievers public
+// Encrypt and authenticate a message using the senders secret key, the receivers public
 // key, and a nonce.
 func (c *Client) CryptoNaclBox(p *ParamsOfNaclBox) (*ResultOfNaclBox, error) {
 	result := new(ResultOfNaclBox)
@@ -686,7 +686,7 @@ func (c *Client) CryptoNaclBox(p *ParamsOfNaclBox) (*ResultOfNaclBox, error) {
 	return result, err
 }
 
-// Decrypt and verify the cipher text using the recievers secret key, the senders public key, and the nonce.
+// Decrypt and verify the cipher text using the receivers secret key, the senders public key, and the nonce.
 func (c *Client) CryptoNaclBoxOpen(p *ParamsOfNaclBoxOpen) (*ResultOfNaclBoxOpen, error) {
 	result := new(ResultOfNaclBoxOpen)
 
