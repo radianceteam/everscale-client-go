@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:43 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 18:04 UTC
 //
 // Mod client
 //
@@ -128,6 +128,7 @@ type NetworkConfig struct {
 	AccessKey null.String `json:"access_key"` // optional
 }
 
+// Crypto config.
 type CryptoConfig struct {
 	// Mnemonic dictionary that will be used by default in crypto functions. If not specified, 1 dictionary will be used.
 	MnemonicDictionary null.Uint8 `json:"mnemonic_dictionary"` // optional
@@ -168,18 +169,23 @@ type ParamsOfAppRequest struct {
 	RequestData json.RawMessage `json:"request_data"`
 }
 
+// Error occurred during request processing.
 type ErrorAppRequestResult struct {
 	// Error description.
 	Text string `json:"text"`
 }
 
+// Request processed successfully.
 type OkAppRequestResult struct {
 	// Request processing result.
 	Result json.RawMessage `json:"result"`
 }
 
 type AppRequestResult struct {
-	EnumTypeValue interface{} // any of ErrorAppRequestResult, OkAppRequestResult,
+	// Should be any of
+	// ErrorAppRequestResult
+	// OkAppRequestResult
+	EnumTypeValue interface{}
 }
 
 // MarshalJSON implements custom marshalling for rust

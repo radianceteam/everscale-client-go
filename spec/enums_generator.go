@@ -35,18 +35,22 @@ func genEnumOfConsts(t Type) string {
 func genEnumOfTypes(m Module, t Type) string {
 	var tpl bytes.Buffer
 	for i, et := range t.EnumTypes {
-		if et.Type != Struct {
+		if et.Type != Struct && et.Type != Ref {
 			panic("EnumOfTypes only supports structs " + et.Name)
 		}
-		typeName := toGoName(strcase.ToSnake(et.Name + t.Name))
-		t.EnumTypes[i].GoType = typeName
-		et.Name = typeName
-		tpl.WriteString("\n" + genStruct(m, et))
+		if et.Type == Struct {
+			typeName := toGoName(strcase.ToSnake(et.Name + t.Name))
+			t.EnumTypes[i].GoType = typeName
+			et.Name = typeName
+			tpl.WriteString("\n" + genStruct(m, et))
+		} else {
+			t.EnumTypes[i].GoType = toTypeName(et.RefName)
+		}
 	}
 
 	if err := enumOfTypesTpl.Execute(&tpl, t); err != nil {
 		panic(err)
 	}
 
-	return tpl.String()
+	return t.ToComment() + tpl.String()
 }

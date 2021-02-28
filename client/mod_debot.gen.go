@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:43 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 18:04 UTC
 //
 // Mod debot
 //
@@ -37,62 +37,75 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[DebotExternalCallFailedDebotErrorCode] = "DebotExternalCallFailedDebotErrorCode"
 }
 
-type (
-	DebotHandle uint32
-	DebotAction struct {
-		// A short action description.
-		// Should be used by Debot Browser as name of menu item.
-		Description string `json:"description"`
-		// Depends on action type.
-		// Can be a debot function name or a print string (for Print Action).
-		Name string `json:"name"`
-		// Action type.
-		ActionType uint8 `json:"action_type"`
-		// ID of debot context to switch after action execution.
-		To uint8 `json:"to"`
-		// Action attributes.
-		// In the form of "param=value,flag". attribute example: instant, args, fargs, sign.
-		Attributes string `json:"attributes"`
-		// Some internal action data.
-		// Used by debot only.
-		Misc string `json:"misc"`
-	}
-)
+type DebotHandle uint32
 
+// [UNSTABLE](UNSTABLE.md) Describes a debot action in a Debot Context.
+type DebotAction struct {
+	// A short action description.
+	// Should be used by Debot Browser as name of menu item.
+	Description string `json:"description"`
+	// Depends on action type.
+	// Can be a debot function name or a print string (for Print Action).
+	Name string `json:"name"`
+	// Action type.
+	ActionType uint8 `json:"action_type"`
+	// ID of debot context to switch after action execution.
+	To uint8 `json:"to"`
+	// Action attributes.
+	// In the form of "param=value,flag". attribute example: instant, args, fargs, sign.
+	Attributes string `json:"attributes"`
+	// Some internal action data.
+	// Used by debot only.
+	Misc string `json:"misc"`
+}
+
+// [UNSTABLE](UNSTABLE.md) Parameters to start debot.
 type ParamsOfStart struct {
 	// Debot smart contract address.
 	Address string `json:"address"`
 }
 
+// [UNSTABLE](UNSTABLE.md) Structure for storing debot handle returned from `start` and `fetch` functions.
 type RegisteredDebot struct {
 	// Debot handle which references an instance of debot engine.
 	DebotHandle DebotHandle `json:"debot_handle"`
 }
 
+// [UNSTABLE](UNSTABLE.md) Debot Browser callbacks.
+// Called by debot engine to communicate with debot browser.
+
+// Print message to user.
 type LogParamsOfAppDebotBrowser struct {
 	// A string that must be printed to user.
 	Msg string `json:"msg"`
 }
 
+// Switch debot to another context (menu).
 type SwitchParamsOfAppDebotBrowser struct {
 	// Debot context ID to which debot is switched.
 	ContextID uint8 `json:"context_id"`
 }
 
+// Notify browser that all context actions are shown.
 type SwitchCompletedParamsOfAppDebotBrowser struct{}
 
+// Show action to the user. Called after `switch` for each action in context.
 type ShowActionParamsOfAppDebotBrowser struct {
 	// Debot action that must be shown to user as menu item. At least `description` property must be shown from [DebotAction] structure.
 	Action DebotAction `json:"action"`
 }
 
+// Request user input.
 type InputParamsOfAppDebotBrowser struct {
 	// A prompt string that must be printed to user before input request.
 	Prompt string `json:"prompt"`
 }
 
+// Get signing box to sign data.
+// Signing box returned is owned and disposed by debot engine.
 type GetSigningBoxParamsOfAppDebotBrowser struct{}
 
+// Execute action of another debot.
 type InvokeDebotParamsOfAppDebotBrowser struct {
 	// Address of debot in blockchain.
 	DebotAddr string `json:"debot_addr"`
@@ -100,6 +113,7 @@ type InvokeDebotParamsOfAppDebotBrowser struct {
 	Action DebotAction `json:"action"`
 }
 
+// Used by Debot to call DInterface implemented by Debot Browser.
 type SendParamsOfAppDebotBrowser struct {
 	// Internal message to DInterface address.
 	// Message body contains interface function and parameters.
@@ -107,7 +121,16 @@ type SendParamsOfAppDebotBrowser struct {
 }
 
 type ParamsOfAppDebotBrowser struct {
-	EnumTypeValue interface{} // any of LogParamsOfAppDebotBrowser, SwitchParamsOfAppDebotBrowser, SwitchCompletedParamsOfAppDebotBrowser, ShowActionParamsOfAppDebotBrowser, InputParamsOfAppDebotBrowser, GetSigningBoxParamsOfAppDebotBrowser, InvokeDebotParamsOfAppDebotBrowser, SendParamsOfAppDebotBrowser,
+	// Should be any of
+	// LogParamsOfAppDebotBrowser
+	// SwitchParamsOfAppDebotBrowser
+	// SwitchCompletedParamsOfAppDebotBrowser
+	// ShowActionParamsOfAppDebotBrowser
+	// InputParamsOfAppDebotBrowser
+	// GetSigningBoxParamsOfAppDebotBrowser
+	// InvokeDebotParamsOfAppDebotBrowser
+	// SendParamsOfAppDebotBrowser
+	EnumTypeValue interface{}
 }
 
 // MarshalJSON implements custom marshalling for rust
@@ -262,21 +285,30 @@ func (p *ParamsOfAppDebotBrowser) UnmarshalJSON(b []byte) error { // nolint funl
 	return nil
 }
 
+// [UNSTABLE](UNSTABLE.md) Returning values from Debot Browser callbacks.
+
+// Result of user input.
 type InputResultOfAppDebotBrowser struct {
 	// String entered by user.
 	Value string `json:"value"`
 }
 
+// Result of getting signing box.
 type GetSigningBoxResultOfAppDebotBrowser struct {
 	// Signing box for signing data requested by debot engine.
 	// Signing box is owned and disposed by debot engine.
 	SigningBox SigningBoxHandle `json:"signing_box"`
 }
 
+// Result of debot invoking.
 type InvokeDebotResultOfAppDebotBrowser struct{}
 
 type ResultOfAppDebotBrowser struct {
-	EnumTypeValue interface{} // any of InputResultOfAppDebotBrowser, GetSigningBoxResultOfAppDebotBrowser, InvokeDebotResultOfAppDebotBrowser,
+	// Should be any of
+	// InputResultOfAppDebotBrowser
+	// GetSigningBoxResultOfAppDebotBrowser
+	// InvokeDebotResultOfAppDebotBrowser
+	EnumTypeValue interface{}
 }
 
 // MarshalJSON implements custom marshalling for rust
@@ -351,11 +383,13 @@ func (p *ResultOfAppDebotBrowser) UnmarshalJSON(b []byte) error { // nolint funl
 	return nil
 }
 
+// [UNSTABLE](UNSTABLE.md) Parameters to fetch debot.
 type ParamsOfFetch struct {
 	// Debot smart contract address.
 	Address string `json:"address"`
 }
 
+// [UNSTABLE](UNSTABLE.md) Parameters for executing debot action.
 type ParamsOfExecute struct {
 	// Debot handle which references an instance of debot engine.
 	DebotHandle DebotHandle `json:"debot_handle"`
@@ -363,6 +397,7 @@ type ParamsOfExecute struct {
 	Action DebotAction `json:"action"`
 }
 
+// [UNSTABLE](UNSTABLE.md) Parameters of `send` function.
 type ParamsOfSend struct {
 	// Debot handle which references an instance of debot engine.
 	DebotHandle DebotHandle `json:"debot_handle"`

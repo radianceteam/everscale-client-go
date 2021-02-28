@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:43 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 18:04 UTC
 //
 // Mod boc
 //
@@ -13,14 +13,20 @@ import (
 	"github.com/volatiletech/null"
 )
 
+// Pin the BOC with `pin` name.
+// Such BOC will not be removed from cache until it is unpinned.
 type PinnedBocCacheType struct {
 	Pin string `json:"pin"`
 }
 
+// .
 type UnpinnedBocCacheType struct{}
 
 type BocCacheType struct {
-	EnumTypeValue interface{} // any of PinnedBocCacheType, UnpinnedBocCacheType,
+	// Should be any of
+	// PinnedBocCacheType
+	// UnpinnedBocCacheType
+	EnumTypeValue interface{}
 }
 
 // MarshalJSON implements custom marshalling for rust

@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:43 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 18:04 UTC
 //
 // Mod net
 //
@@ -8,6 +8,7 @@ package client
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/volatiletech/null"
 )
@@ -57,6 +58,86 @@ const (
 	AscSortDirection  SortDirection = "ASC"
 	DescSortDirection SortDirection = "DESC"
 )
+
+type ParamsOfQueryOperation struct {
+	// Should be any of
+	// ParamsOfQueryCollection
+	// ParamsOfWaitForCollection
+	// ParamsOfAggregateCollection
+	EnumTypeValue interface{}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ParamsOfQueryOperation) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case ParamsOfQueryCollection:
+		return json.Marshal(struct {
+			ParamsOfQueryCollection
+			Type string `json:"type"`
+		}{
+			value,
+			"QueryCollection",
+		})
+
+	case ParamsOfWaitForCollection:
+		return json.Marshal(struct {
+			ParamsOfWaitForCollection
+			Type string `json:"type"`
+		}{
+			value,
+			"WaitForCollection",
+		})
+
+	case ParamsOfAggregateCollection:
+		return json.Marshal(struct {
+			ParamsOfAggregateCollection
+			Type string `json:"type"`
+		}{
+			value,
+			"AggregateCollection",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for ParamsOfQueryOperation %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ParamsOfQueryOperation) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "QueryCollection":
+		var enumTypeValue ParamsOfQueryCollection
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "WaitForCollection":
+		var enumTypeValue ParamsOfWaitForCollection
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "AggregateCollection":
+		var enumTypeValue ParamsOfAggregateCollection
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for ParamsOfQueryOperation %v", typeDescriptor.Type)
+	}
+
+	return nil
+}
 
 type FieldAggregation struct {
 	// Dot separated path to the field.

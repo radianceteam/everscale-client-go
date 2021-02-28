@@ -211,7 +211,7 @@ func genStruct(m Module, t Type) string {
 	}
 	r += "}\n\n"
 
-	return r
+	return t.ToComment() + r
 }
 
 // GenerateOptionalType - pointer or null simple type.

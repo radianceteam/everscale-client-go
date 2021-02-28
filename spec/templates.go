@@ -52,7 +52,9 @@ func init() { // nolint gochecknoinits {{range $e := .EnumConsts}}
 var enumOfTypesTpl = template.Must(template.New("enumOfTypesTpl").Parse(
 	`
 type {{.Name}} struct {
-	EnumTypeValue interface{} // any of {{range $e := .EnumTypes}}{{$e.GoType}}, {{end}}
+	// Should be any of
+    {{range $e := .EnumTypes}}// {{$e.GoType}}
+{{end}}EnumTypeValue interface{} 
 }
 
 // MarshalJSON implements custom marshalling for rust

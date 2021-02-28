@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:43 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 18:04 UTC
 //
 // Mod utils
 //
@@ -22,7 +22,11 @@ type Base64AddressStringFormat struct {
 }
 
 type AddressStringFormat struct {
-	EnumTypeValue interface{} // any of AccountIDAddressStringFormat, HexAddressStringFormat, Base64AddressStringFormat,
+	// Should be any of
+	// AccountIDAddressStringFormat
+	// HexAddressStringFormat
+	// Base64AddressStringFormat
+	EnumTypeValue interface{}
 }
 
 // MarshalJSON implements custom marshalling for rust

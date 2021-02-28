@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:43 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 18:04 UTC
 //
 // Mod tvm
 //
@@ -58,10 +58,13 @@ type ExecutionOptions struct {
 	TransactionLt *big.Int `json:"transaction_lt"` // optional
 }
 
+// Non-existing account to run a creation internal message. Should be used with `skip_transaction_check = true` if the message has no deploy data since transactions on the uninitialized account are always aborted.
 type NoneAccountForExecutor struct{}
 
+// Emulate uninitialized account to run deploy message.
 type UninitAccountForExecutor struct{}
 
+// Account state to run message.
 type AccountAccountForExecutor struct {
 	// Account BOC.
 	// Encoded as base64.
@@ -72,7 +75,11 @@ type AccountAccountForExecutor struct {
 }
 
 type AccountForExecutor struct {
-	EnumTypeValue interface{} // any of NoneAccountForExecutor, UninitAccountForExecutor, AccountAccountForExecutor,
+	// Should be any of
+	// NoneAccountForExecutor
+	// UninitAccountForExecutor
+	// AccountAccountForExecutor
+	EnumTypeValue interface{}
 }
 
 // MarshalJSON implements custom marshalling for rust

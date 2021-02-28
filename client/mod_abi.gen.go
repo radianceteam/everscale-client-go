@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:43 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 18:04 UTC
 //
 // Mod abi
 //
@@ -44,19 +44,24 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[InvalidFunctionIDAbiErrorCode] = "InvalidFunctionIDAbiErrorCode"
 }
 
-type (
-	AbiHandle      uint32
-	FunctionHeader struct {
-		// Message expiration time in seconds. If not specified - calculated automatically from message_expiration_timeout(), try_index and message_expiration_timeout_grow_factor() (if ABI includes `expire` header).
-		Expire null.Uint32 `json:"expire"` // optional
-		// Message creation time in milliseconds.
-		// If not specified, `now` is used (if ABI includes `time` header).
-		Time *big.Int `json:"time"` // optional
-		// Public key is used by the contract to check the signature.
-		// Encoded in `hex`. If not specified, method fails with exception (if ABI includes `pubkey` header)..
-		Pubkey null.String `json:"pubkey"` // optional
-	}
-)
+type AbiHandle uint32
+
+// The ABI function header.
+// Includes several hidden function parameters that contract
+// uses for security, message delivery monitoring and replay protection reasons.
+//
+// The actual set of header fields depends on the contract's ABI.
+// If a contract's ABI does not include some headers, then they are not filled.
+type FunctionHeader struct {
+	// Message expiration time in seconds. If not specified - calculated automatically from message_expiration_timeout(), try_index and message_expiration_timeout_grow_factor() (if ABI includes `expire` header).
+	Expire null.Uint32 `json:"expire"` // optional
+	// Message creation time in milliseconds.
+	// If not specified, `now` is used (if ABI includes `time` header).
+	Time *big.Int `json:"time"` // optional
+	// Public key is used by the contract to check the signature.
+	// Encoded in `hex`. If not specified, method fails with exception (if ABI includes `pubkey` header)..
+	Pubkey null.String `json:"pubkey"` // optional
+}
 
 type CallSet struct {
 	// Function name that is being called. Or function id encoded as string in hex (starting with 0x).
@@ -86,22 +91,32 @@ type DeploySet struct {
 	InitialPubkey null.String `json:"initial_pubkey"` // optional
 }
 
+// No keys are provided.
+// Creates an unsigned message.
 type NoneSigner struct{}
 
+// Only public key is provided in unprefixed hex string format to generate unsigned message and `data_to_sign` which can be signed later.
 type ExternalSigner struct {
 	PublicKey string `json:"public_key"`
 }
 
+// Key pair is provided for signing.
 type KeysSigner struct {
 	Keys KeyPair `json:"keys"`
 }
 
+// Signing Box interface is provided for signing, allows Dapps to sign messages using external APIs, such as HSM, cold wallet, etc.
 type SigningBoxSigner struct {
 	Handle SigningBoxHandle `json:"handle"`
 }
 
 type Signer struct {
-	EnumTypeValue interface{} // any of NoneSigner, ExternalSigner, KeysSigner, SigningBoxSigner,
+	// Should be any of
+	// NoneSigner
+	// ExternalSigner
+	// KeysSigner
+	// SigningBoxSigner
+	EnumTypeValue interface{}
 }
 
 // MarshalJSON implements custom marshalling for rust
@@ -208,10 +223,12 @@ const (
 	EventMessageBodyType MessageBodyType = "Event"
 )
 
+// Deploy message.
 type MessageStateInitSource struct {
 	Source MessageSource `json:"source"`
 }
 
+// State init data.
 type StateInitStateInitSource struct {
 	// Code BOC.
 	// Encoded in `base64`.
@@ -224,6 +241,8 @@ type StateInitStateInitSource struct {
 	Library null.String `json:"library"` // optional
 }
 
+// Content of the TVC file.
+// Encoded in `base64`.
 type TvcStateInitSource struct {
 	Tvc        string           `json:"tvc"`
 	PublicKey  null.String      `json:"public_key"`  // optional
@@ -231,7 +250,11 @@ type TvcStateInitSource struct {
 }
 
 type StateInitSource struct {
-	EnumTypeValue interface{} // any of MessageStateInitSource, StateInitStateInitSource, TvcStateInitSource,
+	// Should be any of
+	// MessageStateInitSource
+	// StateInitStateInitSource
+	// TvcStateInitSource
+	EnumTypeValue interface{}
 }
 
 // MarshalJSON implements custom marshalling for rust
@@ -309,6 +332,74 @@ func (p *StateInitSource) UnmarshalJSON(b []byte) error { // nolint funlen
 type StateInitParams struct {
 	Abi   Abi             `json:"abi"`
 	Value json.RawMessage `json:"value"`
+}
+
+type EncodedMessageSource struct {
+	Message string `json:"message"`
+	Abi     *Abi   `json:"abi"` // optional
+}
+
+type MessageSource struct {
+	// Should be any of
+	// EncodedMessageSource
+	// ParamsOfEncodeMessage
+	EnumTypeValue interface{}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *MessageSource) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case EncodedMessageSource:
+		return json.Marshal(struct {
+			EncodedMessageSource
+			Type string `json:"type"`
+		}{
+			value,
+			"Encoded",
+		})
+
+	case ParamsOfEncodeMessage:
+		return json.Marshal(struct {
+			ParamsOfEncodeMessage
+			Type string `json:"type"`
+		}{
+			value,
+			"EncodingParams",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for MessageSource %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *MessageSource) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "Encoded":
+		var enumTypeValue EncodedMessageSource
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "EncodingParams":
+		var enumTypeValue ParamsOfEncodeMessage
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for MessageSource %v", typeDescriptor.Type)
+	}
+
+	return nil
 }
 
 type AbiParam struct {

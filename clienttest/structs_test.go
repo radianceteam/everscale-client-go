@@ -13,11 +13,11 @@ import (
 func TestClient_ParamsOfQueryOperation_MarshalJSON(t *testing.T) {
 	a := assert.New(t)
 	params := client.ParamsOfQueryOperation{
-		Value: client.ParamsOfQueryCollection{
+		EnumTypeValue: client.ParamsOfQueryCollection{
 			Collection: "collection_name",
 		},
 	}
-	jsonBytes, err := json.MarshalIndent(params, "", "  ")
+	jsonBytes, err := json.MarshalIndent(&params, "", "  ")
 	fmt.Println(string(jsonBytes))
 	a.NoError(err, "marshal")
 	a.JSONEq(`{

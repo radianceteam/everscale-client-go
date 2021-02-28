@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:43 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 18:04 UTC
 //
 // Mod crypto
 //
@@ -436,15 +436,22 @@ type RegisteredSigningBox struct {
 	Handle SigningBoxHandle `json:"handle"`
 }
 
+// Signing box callbacks.
+
+// Get signing box public key.
 type GetPublicKeyParamsOfAppSigningBox struct{}
 
+// Sign data.
 type SignParamsOfAppSigningBox struct {
 	// Data to sign encoded as base64.
 	Unsigned string `json:"unsigned"`
 }
 
 type ParamsOfAppSigningBox struct {
-	EnumTypeValue interface{} // any of GetPublicKeyParamsOfAppSigningBox, SignParamsOfAppSigningBox,
+	// Should be any of
+	// GetPublicKeyParamsOfAppSigningBox
+	// SignParamsOfAppSigningBox
+	EnumTypeValue interface{}
 }
 
 // MarshalJSON implements custom marshalling for rust
@@ -503,18 +510,25 @@ func (p *ParamsOfAppSigningBox) UnmarshalJSON(b []byte) error { // nolint funlen
 	return nil
 }
 
+// Returning values from signing box callbacks.
+
+// Result of getting public key.
 type GetPublicKeyResultOfAppSigningBox struct {
 	// Signing box public key.
 	PublicKey string `json:"public_key"`
 }
 
+// Result of signing data.
 type SignResultOfAppSigningBox struct {
 	// Data signature encoded as hex.
 	Signature string `json:"signature"`
 }
 
 type ResultOfAppSigningBox struct {
-	EnumTypeValue interface{} // any of GetPublicKeyResultOfAppSigningBox, SignResultOfAppSigningBox,
+	// Should be any of
+	// GetPublicKeyResultOfAppSigningBox
+	// SignResultOfAppSigningBox
+	EnumTypeValue interface{}
 }
 
 // MarshalJSON implements custom marshalling for rust
