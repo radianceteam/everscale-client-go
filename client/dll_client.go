@@ -190,7 +190,7 @@ func (c *dllClientCtx) resultsChannel(method string, body interface{}) (<-chan *
 		zap.Uint32("request_id", requestID),
 		zap.String("method", method),
 		zap.ByteString("body", rawBody))
-	// TODO maybe add global worker pool later for CGO calls
+	// maybe add global worker pool later for CGO calls
 	C.call_tc_request(c.ctx, newTcStr([]byte(method)), newTcStr(rawBody), C.uint32_t(requestID))
 
 	return responses, nil

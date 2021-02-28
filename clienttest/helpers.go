@@ -100,7 +100,7 @@ func GetGramsFromGiver(c *client.Client, msgParams *client.ParamsOfEncodeMessage
 				"amount": 500000000
 			}`, msg.Address)),
 		},
-		Signer: client.Signer{Type: client.NoneSignerType},
+		Signer: client.Signer{EnumTypeValue: client.NoneSigner{}},
 	}
 
 	res, err := c.ProcessingProcessMessage(&client.ParamsOfProcessMessage{

@@ -30,7 +30,7 @@ import (
 
 `))
 
-var enumTmpl = template.Must(template.New("enum").Parse(
+var enumOfConstsTpl = template.Must(template.New("enumOfConstsTpl").Parse(
 	`
 {{if ne .Name ""}}
 type {{.Name}} {{.GoType}}
@@ -47,6 +47,57 @@ func init() { // nolint gochecknoinits {{range $e := .EnumConsts}}
 }
 {{ end }}
 
+`))
+
+var enumOfTypesTpl = template.Must(template.New("enumOfTypesTpl").Parse(
+	`
+type {{.Name}} struct {
+	EnumTypeValue interface{} // any of {{range $e := .EnumTypes}}{{$e.GoType}}, {{end}}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *{{.Name}}) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	{{range $e := .EnumTypes}}
+	case {{$e.GoType}}:
+		return json.Marshal(struct {
+			{{$e.GoType}}
+			Type string ` + "`json:\"type\"`" + `
+		}{
+			value,
+			"{{$e.Name}}",
+		})
+	{{end}}
+
+	default:
+		return nil, fmt.Errorf("unsupported type for {{.Name}} %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *{{.Name}}) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+        return err
+    }
+	switch typeDescriptor.Type {
+	{{range $e := .EnumTypes}}
+	case "{{$e.Name}}":
+		var enumTypeValue {{$e.GoType}}
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+        	return err
+    	}
+		p.EnumTypeValue = enumTypeValue
+	{{end}}
+
+	default:
+		return fmt.Errorf("unsupported type for {{.Name}} %v", typeDescriptor.Type)
+	}
+
+	return nil
+}
 `))
 
 type funcContent struct {
@@ -121,11 +172,10 @@ func (c *Client) dispatchRequest{{.Name}}(payload []byte, app {{.AppType}}) {
 	appResponse, err := app.Request(appParams)
 	appRequestResult := AppRequestResult{}
 	if err != nil {
-		appRequestResult.Type = ErrorAppRequestResultType
-		appRequestResult.Text = err.Error()
+		appRequestResult.EnumTypeValue = ErrorAppRequestResult{Text:err.Error()}
 	} else {
-		appRequestResult.Type = OkAppRequestResultType
-		appRequestResult.Result, _ = json.Marshal(appResponse)
+		marshalled, _:= json.Marshal(&appResponse)
+		appRequestResult.EnumTypeValue = OkAppRequestResult{Result:marshalled}
 	}
 	err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
 		AppRequestID: appRequest.AppRequestID,

@@ -21,10 +21,9 @@ func prepareMultiline(data string) string {
 
 // ExceptionForCamelCase - camel case names exception.
 var ExceptionForCamelCase = map[string]string{
-	"id":                        "ID",
-	"xprv":                      "XPrv",
-	"url":                       "URL",
-	"account_id_address_string": "AccountIDAddressString",
+	"id":   "ID",
+	"xprv": "XPrv",
+	"url":  "URL",
 }
 
 func withTypeAlias(name string) string {

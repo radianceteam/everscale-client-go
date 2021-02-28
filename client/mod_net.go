@@ -40,7 +40,7 @@ func (p ParamsOfQueryOperation) MarshalJSON() ([]byte, error) {
 			"AggregateCollection",
 		})
 	default:
-		panic(fmt.Sprintf("unsupported type for ParamsOfQueryOperation %v", p.Value))
+		return nil, fmt.Errorf("unsupported type for ParamsOfQueryOperation %v", p.Value)
 	}
 }
 

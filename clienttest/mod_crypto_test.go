@@ -4,6 +4,7 @@ import (
 	"crypto/ed25519"
 	"encoding/base64"
 	"encoding/hex"
+	"fmt"
 	"strings"
 	"testing"
 
@@ -30,19 +31,23 @@ type appSigningBoxMock struct {
 }
 
 func (app *appSigningBoxMock) Request(p client.ParamsOfAppSigningBox) (client.ResultOfAppSigningBox, error) {
-	t := client.ResultOfAppSigningBoxType(p.Type)
-	if t == client.GetPublicKeyResultOfAppSigningBoxType {
-		return client.ResultOfAppSigningBox{Type: t, PublicKey: app.Public}, nil
+	t := p.EnumTypeValue
+	if _, ok := t.(client.GetPublicKeyParamsOfAppSigningBox); ok {
+		return client.ResultOfAppSigningBox{EnumTypeValue: client.GetPublicKeyResultOfAppSigningBox{PublicKey: app.Public}}, nil
+	}
+	signParams, ok := t.(client.SignParamsOfAppSigningBox)
+	if !ok {
+		return client.ResultOfAppSigningBox{}, fmt.Errorf("invalid type")
 	}
 	seedBytes, err := hex.DecodeString(app.Private)
 	if err != nil {
 		return client.ResultOfAppSigningBox{}, err
 	}
 	privateKey := ed25519.NewKeyFromSeed(seedBytes)
-	data, err := base64.StdEncoding.DecodeString(p.Unsigned)
+	data, err := base64.StdEncoding.DecodeString(signParams.Unsigned)
 	signature := hex.EncodeToString(ed25519.Sign(privateKey, data))
 
-	return client.ResultOfAppSigningBox{Type: t, Signature: signature}, err
+	return client.ResultOfAppSigningBox{EnumTypeValue: client.SignResultOfAppSigningBox{Signature: signature}}, err
 }
 
 func (app *appSigningBoxMock) Notify(client.ParamsOfAppSigningBox) {

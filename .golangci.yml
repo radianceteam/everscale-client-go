@@ -7,7 +7,7 @@ linters:
     - gomnd
     - testpackage
     - nolintlint
-    - godox
+#    - godox
     - misspell
     - maligned
     - goerr113

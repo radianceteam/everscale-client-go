@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 27 Feb 21 21:40 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 15:56 UTC
 //
 // Mod crypto
 //
@@ -8,6 +8,7 @@ package client
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/volatiletech/null"
 )
@@ -435,44 +436,142 @@ type RegisteredSigningBox struct {
 	Handle SigningBoxHandle `json:"handle"`
 }
 
-type ParamsOfAppSigningBoxType string
+type GetPublicKeyParamsOfAppSigningBox struct {
+}
 
-const (
-
-	// Get signing box public key.
-	GetPublicKeyParamsOfAppSigningBoxType ParamsOfAppSigningBoxType = "GetPublicKey"
-	// Sign data.
-	SignParamsOfAppSigningBoxType ParamsOfAppSigningBoxType = "Sign"
-)
-
-type ParamsOfAppSigningBox struct {
-	Type ParamsOfAppSigningBoxType `json:"type"`
+type SignParamsOfAppSigningBox struct {
 	// Data to sign encoded as base64.
-	// presented in types:
-	// "Sign".
 	Unsigned string `json:"unsigned"`
 }
 
-type ResultOfAppSigningBoxType string
+type ParamsOfAppSigningBox struct {
+	EnumTypeValue interface{} // any of GetPublicKeyParamsOfAppSigningBox, SignParamsOfAppSigningBox,
+}
 
-const (
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ParamsOfAppSigningBox) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case GetPublicKeyParamsOfAppSigningBox:
+		return json.Marshal(struct {
+			GetPublicKeyParamsOfAppSigningBox
+			Type string `json:"type"`
+		}{
+			value,
+			"GetPublicKey",
+		})
 
-	// Result of getting public key.
-	GetPublicKeyResultOfAppSigningBoxType ResultOfAppSigningBoxType = "GetPublicKey"
-	// Result of signing data.
-	SignResultOfAppSigningBoxType ResultOfAppSigningBoxType = "Sign"
-)
+	case SignParamsOfAppSigningBox:
+		return json.Marshal(struct {
+			SignParamsOfAppSigningBox
+			Type string `json:"type"`
+		}{
+			value,
+			"Sign",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for ParamsOfAppSigningBox %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ParamsOfAppSigningBox) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "GetPublicKey":
+		var enumTypeValue GetPublicKeyParamsOfAppSigningBox
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Sign":
+		var enumTypeValue SignParamsOfAppSigningBox
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for ParamsOfAppSigningBox %v", typeDescriptor.Type)
+	}
+
+	return nil
+}
+
+type GetPublicKeyResultOfAppSigningBox struct {
+	// Signing box public key.
+	PublicKey string `json:"public_key"`
+}
+
+type SignResultOfAppSigningBox struct {
+	// Data signature encoded as hex.
+	Signature string `json:"signature"`
+}
 
 type ResultOfAppSigningBox struct {
-	Type ResultOfAppSigningBoxType `json:"type"`
-	// Signing box public key.
-	// presented in types:
-	// "GetPublicKey".
-	PublicKey string `json:"public_key"`
-	// Data signature encoded as hex.
-	// presented in types:
-	// "Sign".
-	Signature string `json:"signature"`
+	EnumTypeValue interface{} // any of GetPublicKeyResultOfAppSigningBox, SignResultOfAppSigningBox,
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ResultOfAppSigningBox) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case GetPublicKeyResultOfAppSigningBox:
+		return json.Marshal(struct {
+			GetPublicKeyResultOfAppSigningBox
+			Type string `json:"type"`
+		}{
+			value,
+			"GetPublicKey",
+		})
+
+	case SignResultOfAppSigningBox:
+		return json.Marshal(struct {
+			SignResultOfAppSigningBox
+			Type string `json:"type"`
+		}{
+			value,
+			"Sign",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for ResultOfAppSigningBox %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ResultOfAppSigningBox) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "GetPublicKey":
+		var enumTypeValue GetPublicKeyResultOfAppSigningBox
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Sign":
+		var enumTypeValue SignResultOfAppSigningBox
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for ResultOfAppSigningBox %v", typeDescriptor.Type)
+	}
+
+	return nil
 }
 
 type ResultOfSigningBoxGetPublicKey struct {
@@ -857,11 +956,10 @@ func (c *Client) dispatchRequestCryptoRegisterSigningBox(payload []byte, app App
 	appResponse, err := app.Request(appParams)
 	appRequestResult := AppRequestResult{}
 	if err != nil {
-		appRequestResult.Type = ErrorAppRequestResultType
-		appRequestResult.Text = err.Error()
+		appRequestResult.EnumTypeValue = ErrorAppRequestResult{Text: err.Error()}
 	} else {
-		appRequestResult.Type = OkAppRequestResultType
-		appRequestResult.Result, _ = json.Marshal(appResponse)
+		marshalled, _ := json.Marshal(&appResponse)
+		appRequestResult.EnumTypeValue = OkAppRequestResult{Result: marshalled}
 	}
 	err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
 		AppRequestID: appRequest.AppRequestID,

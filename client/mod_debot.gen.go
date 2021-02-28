@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 27 Feb 21 21:40 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 15:56 UTC
 //
 // Mod debot
 //
@@ -8,6 +8,7 @@ package client
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 const (
@@ -68,80 +69,289 @@ type RegisteredDebot struct {
 	DebotHandle DebotHandle `json:"debot_handle"`
 }
 
-type ParamsOfAppDebotBrowserType string
-
-const (
-
-	// Print message to user.
-	LogParamsOfAppDebotBrowserType ParamsOfAppDebotBrowserType = "Log"
-	// Switch debot to another context (menu).
-	SwitchParamsOfAppDebotBrowserType ParamsOfAppDebotBrowserType = "Switch"
-	// Notify browser that all context actions are shown.
-	SwitchCompletedParamsOfAppDebotBrowserType ParamsOfAppDebotBrowserType = "SwitchCompleted"
-	// Show action to the user. Called after `switch` for each action in context.
-	ShowActionParamsOfAppDebotBrowserType ParamsOfAppDebotBrowserType = "ShowAction"
-	// Request user input.
-	InputParamsOfAppDebotBrowserType ParamsOfAppDebotBrowserType = "Input"
-	// Get signing box to sign data.
-	// Signing box returned is owned and disposed by debot engine.
-	GetSigningBoxParamsOfAppDebotBrowserType ParamsOfAppDebotBrowserType = "GetSigningBox"
-	// Execute action of another debot.
-	InvokeDebotParamsOfAppDebotBrowserType ParamsOfAppDebotBrowserType = "InvokeDebot"
-	// Used by Debot to call DInterface implemented by Debot Browser.
-	SendParamsOfAppDebotBrowserType ParamsOfAppDebotBrowserType = "Send"
-)
-
-type ParamsOfAppDebotBrowser struct {
-	Type ParamsOfAppDebotBrowserType `json:"type"`
+type LogParamsOfAppDebotBrowser struct {
 	// A string that must be printed to user.
-	// presented in types:
-	// "Log".
 	Msg string `json:"msg"`
+}
+
+type SwitchParamsOfAppDebotBrowser struct {
 	// Debot context ID to which debot is switched.
-	// presented in types:
-	// "Switch".
 	ContextID uint8 `json:"context_id"`
+}
+
+type SwitchCompletedParamsOfAppDebotBrowser struct {
+}
+
+type ShowActionParamsOfAppDebotBrowser struct {
 	// Debot action that must be shown to user as menu item. At least `description` property must be shown from [DebotAction] structure.
-	// presented in types:
-	// "ShowAction"
-	// "InvokeDebot".
 	Action DebotAction `json:"action"`
+}
+
+type InputParamsOfAppDebotBrowser struct {
 	// A prompt string that must be printed to user before input request.
-	// presented in types:
-	// "Input".
 	Prompt string `json:"prompt"`
+}
+
+type GetSigningBoxParamsOfAppDebotBrowser struct {
+}
+
+type InvokeDebotParamsOfAppDebotBrowser struct {
 	// Address of debot in blockchain.
-	// presented in types:
-	// "InvokeDebot".
 	DebotAddr string `json:"debot_addr"`
+	// Debot action to execute.
+	Action DebotAction `json:"action"`
+}
+
+type SendParamsOfAppDebotBrowser struct {
 	// Internal message to DInterface address.
-	// Message body contains interface function and parameters. presented in types:
-	// "Send".
+	// Message body contains interface function and parameters.
 	Message string `json:"message"`
 }
 
-type ResultOfAppDebotBrowserType string
+type ParamsOfAppDebotBrowser struct {
+	EnumTypeValue interface{} // any of LogParamsOfAppDebotBrowser, SwitchParamsOfAppDebotBrowser, SwitchCompletedParamsOfAppDebotBrowser, ShowActionParamsOfAppDebotBrowser, InputParamsOfAppDebotBrowser, GetSigningBoxParamsOfAppDebotBrowser, InvokeDebotParamsOfAppDebotBrowser, SendParamsOfAppDebotBrowser,
+}
 
-const (
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ParamsOfAppDebotBrowser) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case LogParamsOfAppDebotBrowser:
+		return json.Marshal(struct {
+			LogParamsOfAppDebotBrowser
+			Type string `json:"type"`
+		}{
+			value,
+			"Log",
+		})
 
-	// Result of user input.
-	InputResultOfAppDebotBrowserType ResultOfAppDebotBrowserType = "Input"
-	// Result of getting signing box.
-	GetSigningBoxResultOfAppDebotBrowserType ResultOfAppDebotBrowserType = "GetSigningBox"
-	// Result of debot invoking.
-	InvokeDebotResultOfAppDebotBrowserType ResultOfAppDebotBrowserType = "InvokeDebot"
-)
+	case SwitchParamsOfAppDebotBrowser:
+		return json.Marshal(struct {
+			SwitchParamsOfAppDebotBrowser
+			Type string `json:"type"`
+		}{
+			value,
+			"Switch",
+		})
+
+	case SwitchCompletedParamsOfAppDebotBrowser:
+		return json.Marshal(struct {
+			SwitchCompletedParamsOfAppDebotBrowser
+			Type string `json:"type"`
+		}{
+			value,
+			"SwitchCompleted",
+		})
+
+	case ShowActionParamsOfAppDebotBrowser:
+		return json.Marshal(struct {
+			ShowActionParamsOfAppDebotBrowser
+			Type string `json:"type"`
+		}{
+			value,
+			"ShowAction",
+		})
+
+	case InputParamsOfAppDebotBrowser:
+		return json.Marshal(struct {
+			InputParamsOfAppDebotBrowser
+			Type string `json:"type"`
+		}{
+			value,
+			"Input",
+		})
+
+	case GetSigningBoxParamsOfAppDebotBrowser:
+		return json.Marshal(struct {
+			GetSigningBoxParamsOfAppDebotBrowser
+			Type string `json:"type"`
+		}{
+			value,
+			"GetSigningBox",
+		})
+
+	case InvokeDebotParamsOfAppDebotBrowser:
+		return json.Marshal(struct {
+			InvokeDebotParamsOfAppDebotBrowser
+			Type string `json:"type"`
+		}{
+			value,
+			"InvokeDebot",
+		})
+
+	case SendParamsOfAppDebotBrowser:
+		return json.Marshal(struct {
+			SendParamsOfAppDebotBrowser
+			Type string `json:"type"`
+		}{
+			value,
+			"Send",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for ParamsOfAppDebotBrowser %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ParamsOfAppDebotBrowser) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "Log":
+		var enumTypeValue LogParamsOfAppDebotBrowser
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Switch":
+		var enumTypeValue SwitchParamsOfAppDebotBrowser
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "SwitchCompleted":
+		var enumTypeValue SwitchCompletedParamsOfAppDebotBrowser
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "ShowAction":
+		var enumTypeValue ShowActionParamsOfAppDebotBrowser
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Input":
+		var enumTypeValue InputParamsOfAppDebotBrowser
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "GetSigningBox":
+		var enumTypeValue GetSigningBoxParamsOfAppDebotBrowser
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "InvokeDebot":
+		var enumTypeValue InvokeDebotParamsOfAppDebotBrowser
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Send":
+		var enumTypeValue SendParamsOfAppDebotBrowser
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for ParamsOfAppDebotBrowser %v", typeDescriptor.Type)
+	}
+
+	return nil
+}
+
+type InputResultOfAppDebotBrowser struct {
+	// String entered by user.
+	Value string `json:"value"`
+}
+
+type GetSigningBoxResultOfAppDebotBrowser struct {
+	// Signing box for signing data requested by debot engine.
+	// Signing box is owned and disposed by debot engine.
+	SigningBox SigningBoxHandle `json:"signing_box"`
+}
+
+type InvokeDebotResultOfAppDebotBrowser struct {
+}
 
 type ResultOfAppDebotBrowser struct {
-	Type ResultOfAppDebotBrowserType `json:"type"`
-	// String entered by user.
-	// presented in types:
-	// "Input".
-	Value string `json:"value"`
-	// Signing box for signing data requested by debot engine.
-	// Signing box is owned and disposed by debot engine presented in types:
-	// "GetSigningBox".
-	SigningBox SigningBoxHandle `json:"signing_box"`
+	EnumTypeValue interface{} // any of InputResultOfAppDebotBrowser, GetSigningBoxResultOfAppDebotBrowser, InvokeDebotResultOfAppDebotBrowser,
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ResultOfAppDebotBrowser) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case InputResultOfAppDebotBrowser:
+		return json.Marshal(struct {
+			InputResultOfAppDebotBrowser
+			Type string `json:"type"`
+		}{
+			value,
+			"Input",
+		})
+
+	case GetSigningBoxResultOfAppDebotBrowser:
+		return json.Marshal(struct {
+			GetSigningBoxResultOfAppDebotBrowser
+			Type string `json:"type"`
+		}{
+			value,
+			"GetSigningBox",
+		})
+
+	case InvokeDebotResultOfAppDebotBrowser:
+		return json.Marshal(struct {
+			InvokeDebotResultOfAppDebotBrowser
+			Type string `json:"type"`
+		}{
+			value,
+			"InvokeDebot",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for ResultOfAppDebotBrowser %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ResultOfAppDebotBrowser) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "Input":
+		var enumTypeValue InputResultOfAppDebotBrowser
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "GetSigningBox":
+		var enumTypeValue GetSigningBoxResultOfAppDebotBrowser
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "InvokeDebot":
+		var enumTypeValue InvokeDebotResultOfAppDebotBrowser
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for ResultOfAppDebotBrowser %v", typeDescriptor.Type)
+	}
+
+	return nil
 }
 
 type ParamsOfFetch struct {
@@ -221,11 +431,10 @@ func (c *Client) dispatchRequestDebotStart(payload []byte, app AppDebotBrowser) 
 	appResponse, err := app.Request(appParams)
 	appRequestResult := AppRequestResult{}
 	if err != nil {
-		appRequestResult.Type = ErrorAppRequestResultType
-		appRequestResult.Text = err.Error()
+		appRequestResult.EnumTypeValue = ErrorAppRequestResult{Text: err.Error()}
 	} else {
-		appRequestResult.Type = OkAppRequestResultType
-		appRequestResult.Result, _ = json.Marshal(appResponse)
+		marshalled, _ := json.Marshal(&appResponse)
+		appRequestResult.EnumTypeValue = OkAppRequestResult{Result: marshalled}
 	}
 	err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
 		AppRequestID: appRequest.AppRequestID,
@@ -295,11 +504,10 @@ func (c *Client) dispatchRequestDebotFetch(payload []byte, app AppDebotBrowser) 
 	appResponse, err := app.Request(appParams)
 	appRequestResult := AppRequestResult{}
 	if err != nil {
-		appRequestResult.Type = ErrorAppRequestResultType
-		appRequestResult.Text = err.Error()
+		appRequestResult.EnumTypeValue = ErrorAppRequestResult{Text: err.Error()}
 	} else {
-		appRequestResult.Type = OkAppRequestResultType
-		appRequestResult.Result, _ = json.Marshal(appResponse)
+		marshalled, _ := json.Marshal(&appResponse)
+		appRequestResult.EnumTypeValue = OkAppRequestResult{Result: marshalled}
 	}
 	err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
 		AppRequestID: appRequest.AppRequestID,

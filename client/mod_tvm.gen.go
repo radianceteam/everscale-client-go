@@ -1,12 +1,13 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 27 Feb 21 21:40 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 15:56 UTC
 //
 // Mod tvm
 //
 
 import (
 	"encoding/json"
+	"fmt"
 	"math/big"
 
 	"github.com/volatiletech/null"
@@ -57,28 +58,95 @@ type ExecutionOptions struct {
 	TransactionLt *big.Int `json:"transaction_lt"` // optional
 }
 
-type AccountForExecutorType string
+type NoneAccountForExecutor struct {
+}
 
-const (
+type UninitAccountForExecutor struct {
+}
 
-	// Non-existing account to run a creation internal message. Should be used with `skip_transaction_check = true` if the message has no deploy data since transactions on the uninitialized account are always aborted.
-	NoneAccountForExecutorType AccountForExecutorType = "None"
-	// Emulate uninitialized account to run deploy message.
-	UninitAccountForExecutorType AccountForExecutorType = "Uninit"
-	// Account state to run message.
-	AccountAccountForExecutorType AccountForExecutorType = "Account"
-)
-
-type AccountForExecutor struct {
-	Type AccountForExecutorType `json:"type"`
+type AccountAccountForExecutor struct {
 	// Account BOC.
-	// Encoded as base64. presented in types:
-	// "Account".
+	// Encoded as base64.
 	Boc string `json:"boc"`
 	// Flag for running account with the unlimited balance.
-	// Can be used to calculate transaction fees without balance check presented in types:
-	// "Account".
+	// Can be used to calculate transaction fees without balance check.
 	UnlimitedBalance null.Bool `json:"unlimited_balance"` // optional
+}
+
+type AccountForExecutor struct {
+	EnumTypeValue interface{} // any of NoneAccountForExecutor, UninitAccountForExecutor, AccountAccountForExecutor,
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *AccountForExecutor) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case NoneAccountForExecutor:
+		return json.Marshal(struct {
+			NoneAccountForExecutor
+			Type string `json:"type"`
+		}{
+			value,
+			"None",
+		})
+
+	case UninitAccountForExecutor:
+		return json.Marshal(struct {
+			UninitAccountForExecutor
+			Type string `json:"type"`
+		}{
+			value,
+			"Uninit",
+		})
+
+	case AccountAccountForExecutor:
+		return json.Marshal(struct {
+			AccountAccountForExecutor
+			Type string `json:"type"`
+		}{
+			value,
+			"Account",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for AccountForExecutor %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *AccountForExecutor) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "None":
+		var enumTypeValue NoneAccountForExecutor
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Uninit":
+		var enumTypeValue UninitAccountForExecutor
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Account":
+		var enumTypeValue AccountAccountForExecutor
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for AccountForExecutor %v", typeDescriptor.Type)
+	}
+
+	return nil
 }
 
 type TransactionFees struct {

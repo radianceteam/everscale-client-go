@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 27 Feb 21 21:40 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 15:56 UTC
 //
 // Mod abi
 //
@@ -8,6 +8,7 @@ package client
 
 import (
 	"encoding/json"
+	"fmt"
 	"math/big"
 
 	"github.com/volatiletech/null"
@@ -85,32 +86,111 @@ type DeploySet struct {
 	InitialPubkey null.String `json:"initial_pubkey"` // optional
 }
 
-type SignerType string
+type NoneSigner struct {
+}
 
-const (
+type ExternalSigner struct {
+	PublicKey string `json:"public_key"`
+}
 
-	// No keys are provided.
-	// Creates an unsigned message.
-	NoneSignerType SignerType = "None"
-	// Only public key is provided in unprefixed hex string format to generate unsigned message and `data_to_sign` which can be signed later.
-	ExternalSignerType SignerType = "External"
-	// Key pair is provided for signing.
-	KeysSignerType SignerType = "Keys"
-	// Signing Box interface is provided for signing, allows Dapps to sign messages using external APIs, such as HSM, cold wallet, etc.
-	SigningBoxSignerType SignerType = "SigningBox"
-)
+type KeysSigner struct {
+	Keys KeyPair `json:"keys"`
+}
+
+type SigningBoxSigner struct {
+	Handle SigningBoxHandle `json:"handle"`
+}
 
 type Signer struct {
-	Type SignerType `json:"type"`
-	// presented in types:
-	// "External".
-	PublicKey string `json:"public_key"`
-	// presented in types:
-	// "Keys".
-	Keys KeyPair `json:"keys"`
-	// presented in types:
-	// "SigningBox".
-	Handle SigningBoxHandle `json:"handle"`
+	EnumTypeValue interface{} // any of NoneSigner, ExternalSigner, KeysSigner, SigningBoxSigner,
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *Signer) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case NoneSigner:
+		return json.Marshal(struct {
+			NoneSigner
+			Type string `json:"type"`
+		}{
+			value,
+			"None",
+		})
+
+	case ExternalSigner:
+		return json.Marshal(struct {
+			ExternalSigner
+			Type string `json:"type"`
+		}{
+			value,
+			"External",
+		})
+
+	case KeysSigner:
+		return json.Marshal(struct {
+			KeysSigner
+			Type string `json:"type"`
+		}{
+			value,
+			"Keys",
+		})
+
+	case SigningBoxSigner:
+		return json.Marshal(struct {
+			SigningBoxSigner
+			Type string `json:"type"`
+		}{
+			value,
+			"SigningBox",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for Signer %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *Signer) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "None":
+		var enumTypeValue NoneSigner
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "External":
+		var enumTypeValue ExternalSigner
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Keys":
+		var enumTypeValue KeysSigner
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "SigningBox":
+		var enumTypeValue SigningBoxSigner
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for Signer %v", typeDescriptor.Type)
+	}
+
+	return nil
 }
 
 type MessageBodyType string
@@ -129,45 +209,102 @@ const (
 	EventMessageBodyType MessageBodyType = "Event"
 )
 
-type StateInitSourceType string
-
-const (
-
-	// Deploy message.
-	MessageStateInitSourceType StateInitSourceType = "Message"
-	// State init data.
-	StateInitStateInitSourceType StateInitSourceType = "StateInit"
-	// Content of the TVC file.
-	// Encoded in `base64`.
-	TvcStateInitSourceType StateInitSourceType = "Tvc"
-)
-
-type StateInitSource struct {
-	Type StateInitSourceType `json:"type"`
-	// presented in types:
-	// "Message".
+type MessageStateInitSource struct {
 	Source MessageSource `json:"source"`
+}
+
+type StateInitStateInitSource struct {
 	// Code BOC.
-	// Encoded in `base64`. presented in types:
-	// "StateInit".
+	// Encoded in `base64`.
 	Code string `json:"code"`
 	// Data BOC.
-	// Encoded in `base64`. presented in types:
-	// "StateInit".
+	// Encoded in `base64`.
 	Data string `json:"data"`
 	// Library BOC.
-	// Encoded in `base64`. presented in types:
-	// "StateInit".
+	// Encoded in `base64`.
 	Library null.String `json:"library"` // optional
-	// presented in types:
-	// "Tvc".
-	Tvc string `json:"tvc"`
-	// presented in types:
-	// "Tvc".
-	PublicKey null.String `json:"public_key"` // optional
-	// presented in types:
-	// "Tvc".
+}
+
+type TvcStateInitSource struct {
+	Tvc        string           `json:"tvc"`
+	PublicKey  null.String      `json:"public_key"`  // optional
 	InitParams *StateInitParams `json:"init_params"` // optional
+}
+
+type StateInitSource struct {
+	EnumTypeValue interface{} // any of MessageStateInitSource, StateInitStateInitSource, TvcStateInitSource,
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *StateInitSource) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case MessageStateInitSource:
+		return json.Marshal(struct {
+			MessageStateInitSource
+			Type string `json:"type"`
+		}{
+			value,
+			"Message",
+		})
+
+	case StateInitStateInitSource:
+		return json.Marshal(struct {
+			StateInitStateInitSource
+			Type string `json:"type"`
+		}{
+			value,
+			"StateInit",
+		})
+
+	case TvcStateInitSource:
+		return json.Marshal(struct {
+			TvcStateInitSource
+			Type string `json:"type"`
+		}{
+			value,
+			"Tvc",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for StateInitSource %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *StateInitSource) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "Message":
+		var enumTypeValue MessageStateInitSource
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "StateInit":
+		var enumTypeValue StateInitStateInitSource
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Tvc":
+		var enumTypeValue TvcStateInitSource
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for StateInitSource %v", typeDescriptor.Type)
+	}
+
+	return nil
 }
 
 type StateInitParams struct {

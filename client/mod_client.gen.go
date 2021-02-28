@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 27 Feb 21 21:40 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 15:56 UTC
 //
 // Mod client
 //
@@ -8,6 +8,7 @@ package client
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/volatiletech/null"
 )
@@ -167,26 +168,74 @@ type ParamsOfAppRequest struct {
 	RequestData json.RawMessage `json:"request_data"`
 }
 
-type AppRequestResultType string
+type ErrorAppRequestResult struct {
+	// Error description.
+	Text string `json:"text"`
+}
 
-const (
-
-	// Error occurred during request processing.
-	ErrorAppRequestResultType AppRequestResultType = "Error"
-	// Request processed successfully.
-	OkAppRequestResultType AppRequestResultType = "Ok"
-)
+type OkAppRequestResult struct {
+	// Request processing result.
+	Result json.RawMessage `json:"result"`
+}
 
 type AppRequestResult struct {
-	Type AppRequestResultType `json:"type"`
-	// Error description.
-	// presented in types:
-	// "Error".
-	Text string `json:"text"`
-	// Request processing result.
-	// presented in types:
-	// "Ok".
-	Result json.RawMessage `json:"result"`
+	EnumTypeValue interface{} // any of ErrorAppRequestResult, OkAppRequestResult,
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *AppRequestResult) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case ErrorAppRequestResult:
+		return json.Marshal(struct {
+			ErrorAppRequestResult
+			Type string `json:"type"`
+		}{
+			value,
+			"Error",
+		})
+
+	case OkAppRequestResult:
+		return json.Marshal(struct {
+			OkAppRequestResult
+			Type string `json:"type"`
+		}{
+			value,
+			"Ok",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for AppRequestResult %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *AppRequestResult) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "Error":
+		var enumTypeValue ErrorAppRequestResult
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Ok":
+		var enumTypeValue OkAppRequestResult
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for AppRequestResult %v", typeDescriptor.Type)
+	}
+
+	return nil
 }
 
 type ResultOfVersion struct {
