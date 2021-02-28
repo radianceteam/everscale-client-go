@@ -1,5 +1,9 @@
 package client
 
+type EnumOfTypesDescriptor struct {
+	Type string `json:"type"`
+}
+
 func NewDynamicallyBufferedResponses(in <-chan *RawResponse) <-chan *RawResponse {
 	out := make(chan *RawResponse, 1)
 	var storage []*RawResponse

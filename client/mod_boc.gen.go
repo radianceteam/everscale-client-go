@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 18:04 UTC
 //
 // Mod boc
 //
@@ -8,26 +8,81 @@ package client
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/volatiletech/null"
 )
 
-type BocCacheTypeType string
+// Pin the BOC with `pin` name.
+// Such BOC will not be removed from cache until it is unpinned.
+type PinnedBocCacheType struct {
+	Pin string `json:"pin"`
+}
 
-const (
-
-	// Pin the BOC with `pin` name.
-	// Such BOC will not be removed from cache until it is unpinned.
-	PinnedBocCacheTypeType BocCacheTypeType = "Pinned"
-	// .
-	UnpinnedBocCacheTypeType BocCacheTypeType = "Unpinned"
-)
+// .
+type UnpinnedBocCacheType struct{}
 
 type BocCacheType struct {
-	Type BocCacheTypeType `json:"type"`
-	// presented in types:
-	// "Pinned".
-	Pin string `json:"pin"`
+	// Should be any of
+	// PinnedBocCacheType
+	// UnpinnedBocCacheType
+	EnumTypeValue interface{}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *BocCacheType) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case PinnedBocCacheType:
+		return json.Marshal(struct {
+			PinnedBocCacheType
+			Type string `json:"type"`
+		}{
+			value,
+			"Pinned",
+		})
+
+	case UnpinnedBocCacheType:
+		return json.Marshal(struct {
+			UnpinnedBocCacheType
+			Type string `json:"type"`
+		}{
+			value,
+			"Unpinned",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for BocCacheType %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *BocCacheType) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "Pinned":
+		var enumTypeValue PinnedBocCacheType
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Unpinned":
+		var enumTypeValue UnpinnedBocCacheType
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for BocCacheType %v", typeDescriptor.Type)
+	}
+
+	return nil
 }
 
 const (

@@ -145,6 +145,7 @@ type contextCreateResponse struct {
 
 func (c *dllClientCtx) createContext(data []byte) error {
 	rawHandler := C.tc_create_context(newTcStr(data))
+
 	defer C.tc_destroy_string(rawHandler)
 	rawResponse := newBytesFromTcStr(C.tc_read_string(rawHandler))
 	var response contextCreateResponse
@@ -190,7 +191,7 @@ func (c *dllClientCtx) resultsChannel(method string, body interface{}) (<-chan *
 		zap.Uint32("request_id", requestID),
 		zap.String("method", method),
 		zap.ByteString("body", rawBody))
-	// TODO maybe add global worker pool later for CGO calls
+	// maybe add global worker pool later for CGO calls
 	C.call_tc_request(c.ctx, newTcStr([]byte(method)), newTcStr(rawBody), C.uint32_t(requestID))
 
 	return responses, nil

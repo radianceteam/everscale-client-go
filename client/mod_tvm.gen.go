@@ -1,12 +1,13 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 18:04 UTC
 //
 // Mod tvm
 //
 
 import (
 	"encoding/json"
+	"fmt"
 	"math/big"
 
 	"github.com/volatiletech/null"
@@ -57,28 +58,100 @@ type ExecutionOptions struct {
 	TransactionLt *big.Int `json:"transaction_lt"` // optional
 }
 
-type AccountForExecutorType string
+// Non-existing account to run a creation internal message. Should be used with `skip_transaction_check = true` if the message has no deploy data since transactions on the uninitialized account are always aborted.
+type NoneAccountForExecutor struct{}
 
-const (
+// Emulate uninitialized account to run deploy message.
+type UninitAccountForExecutor struct{}
 
-	// Non-existing account to run a creation internal message. Should be used with `skip_transaction_check = true` if the message has no deploy data since transactions on the uninitialized account are always aborted.
-	NoneAccountForExecutorType AccountForExecutorType = "None"
-	// Emulate uninitialized account to run deploy message.
-	UninitAccountForExecutorType AccountForExecutorType = "Uninit"
-	// Account state to run message.
-	AccountAccountForExecutorType AccountForExecutorType = "Account"
-)
-
-type AccountForExecutor struct {
-	Type AccountForExecutorType `json:"type"`
+// Account state to run message.
+type AccountAccountForExecutor struct {
 	// Account BOC.
-	// Encoded as base64. presented in types:
-	// "Account".
+	// Encoded as base64.
 	Boc string `json:"boc"`
 	// Flag for running account with the unlimited balance.
-	// Can be used to calculate transaction fees without balance check presented in types:
-	// "Account".
+	// Can be used to calculate transaction fees without balance check.
 	UnlimitedBalance null.Bool `json:"unlimited_balance"` // optional
+}
+
+type AccountForExecutor struct {
+	// Should be any of
+	// NoneAccountForExecutor
+	// UninitAccountForExecutor
+	// AccountAccountForExecutor
+	EnumTypeValue interface{}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *AccountForExecutor) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case NoneAccountForExecutor:
+		return json.Marshal(struct {
+			NoneAccountForExecutor
+			Type string `json:"type"`
+		}{
+			value,
+			"None",
+		})
+
+	case UninitAccountForExecutor:
+		return json.Marshal(struct {
+			UninitAccountForExecutor
+			Type string `json:"type"`
+		}{
+			value,
+			"Uninit",
+		})
+
+	case AccountAccountForExecutor:
+		return json.Marshal(struct {
+			AccountAccountForExecutor
+			Type string `json:"type"`
+		}{
+			value,
+			"Account",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for AccountForExecutor %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *AccountForExecutor) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "None":
+		var enumTypeValue NoneAccountForExecutor
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Uninit":
+		var enumTypeValue UninitAccountForExecutor
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Account":
+		var enumTypeValue AccountAccountForExecutor
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for AccountForExecutor %v", typeDescriptor.Type)
+	}
+
+	return nil
 }
 
 type TransactionFees struct {
@@ -103,7 +176,7 @@ type ParamsOfRunExecutor struct {
 	// Skip transaction check flag.
 	SkipTransactionCheck null.Bool `json:"skip_transaction_check"` // optional
 	// Cache type to put the result.
-	// The BOC intself returned if no cache type provided.
+	// The BOC itself returned if no cache type provided.
 	BocCache *BocCacheType `json:"boc_cache"` // optional
 	// Return updated account flag.
 	// Empty string is returned if the flag is `false`.
@@ -137,10 +210,10 @@ type ParamsOfRunTvm struct {
 	Account string `json:"account"`
 	// Execution options.
 	ExecutionOptions *ExecutionOptions `json:"execution_options"` // optional
-	// Contract ABI for dedcoding output messages.
+	// Contract ABI for decoding output messages.
 	Abi *Abi `json:"abi"` // optional
 	// Cache type to put the result.
-	// The BOC intself returned if no cache type provided.
+	// The BOC itself returned if no cache type provided.
 	BocCache *BocCacheType `json:"boc_cache"` // optional
 	// Return updated account flag.
 	// Empty string is returned if the flag is `false`.
@@ -154,7 +227,7 @@ type ResultOfRunTvm struct {
 	// Optional decoded message bodies according to the optional `abi` parameter.
 	Decoded *DecodedOutput `json:"decoded"` // optional
 	// Updated account state BOC.
-	// Encoded as `base64`. Attention! Only `account_state.storage.state.data` part of the boc is updated.
+	// Encoded as `base64`. Attention! Only `account_state.storage.state.data` part of the BOC is updated.
 	Account string `json:"account"`
 }
 
@@ -164,12 +237,19 @@ type ParamsOfRunGet struct {
 	// Function name.
 	FunctionName string `json:"function_name"`
 	// Input parameters.
-	Input            json.RawMessage   `json:"input"`             // optional
+	Input json.RawMessage `json:"input"` // optional
+	// Execution options.
 	ExecutionOptions *ExecutionOptions `json:"execution_options"` // optional
+	// Convert lists based on nested tuples in the **result** into plain arrays.
+	// Default is `false`. Input parameters may use any of lists representations
+	// If you receive this error on Web: "Runtime error. Unreachable code should not be executed...",
+	// set this flag to true.
+	// This may happen, for example, when elector contract contains too many participants.
+	TupleListAsArray null.Bool `json:"tuple_list_as_array"` // optional
 }
 
 type ResultOfRunGet struct {
-	// Values returned by getmethod on stack.
+	// Values returned by get-method on stack.
 	Output json.RawMessage `json:"output"`
 }
 
@@ -177,19 +257,19 @@ type ResultOfRunGet struct {
 // Performs all the phases of contract execution on Transaction Executor -
 // the same component that is used on Validator Nodes.
 //
-// Can be used for contract debug, to find out the reason of message unsuccessful
-// delivery - as Validators just throw away failed transactions, here you can catch it.
+// Can be used for contract debugginh, to find out the reason why message was not delivered successfully
+// - because Validators just throw away the failed external inbound messages, here you can catch them.
 //
 // Another use case is to estimate fees for message execution. Set  `AccountForExecutor::Account.unlimited_balance`
 // to `true` so that emulation will not depend on the actual balance.
 //
-// One more use case - you can procude the sequence of operations,
+// One more use case - you can produce the sequence of operations,
 // thus emulating the multiple contract calls locally.
 // And so on.
 //
-// To get the account boc (bag of cells) - use `net.query` method to download it from graphql api
-// (field `boc` of `account`) or generate it with `abi.encode_account method`.
-// To get the message boc - use `abi.encode_message` or prepare it any other way, for instance, with Fift script.
+// To get the account BOC (bag of cells) - use `net.query` method to download it from GraphQL API
+// (field `boc` of `account`) or generate it with `abi.encode_account` method.
+// To get the message BOC - use `abi.encode_message` or prepare it any other way, for instance, with FIFT script.
 //
 // If you need this emulation to be as precise as possible then specify `ParamsOfRunExecutor` parameter.
 // If you need to see the aborted transaction as a result, not as an error, set `skip_transaction_check` to `true`.
@@ -201,19 +281,19 @@ func (c *Client) TvmRunExecutor(p *ParamsOfRunExecutor) (*ResultOfRunExecutor, e
 	return result, err
 }
 
-// Executes get methods of ABI-compatible contracts.
+// Executes get-methods of ABI-compatible contracts.
 // Performs only a part of compute phase of transaction execution
 // that is used to run get-methods of ABI-compatible contracts.
 //
-// If you try to run get methods with `run_executor` you will get an error, because it checks ACCEPT and exits
-// if there is none, which is actually true for get methods.
+// If you try to run get-methods with `run_executor` you will get an error, because it checks ACCEPT and exits
+// if there is none, which is actually true for get-methods.
 //
-// To get the account boc (bag of cells) - use `net.query` method to download it from graphql api
+// To get the account BOC (bag of cells) - use `net.query` method to download it from GraphQL API
 // (field `boc` of `account`) or generate it with `abi.encode_account method`.
-// To get the message boc - use `abi.encode_message` or prepare it any other way, for instance, with Fift script.
+// To get the message BOC - use `abi.encode_message` or prepare it any other way, for instance, with FIFT script.
 //
 // Attention! Updated account state is produces as well, but only
-// `account_state.storage.state.data`  part of the boc is updated.
+// `account_state.storage.state.data`  part of the BOC is updated.
 func (c *Client) TvmRunTvm(p *ParamsOfRunTvm) (*ResultOfRunTvm, error) {
 	result := new(ResultOfRunTvm)
 
@@ -222,7 +302,7 @@ func (c *Client) TvmRunTvm(p *ParamsOfRunTvm) (*ResultOfRunTvm, error) {
 	return result, err
 }
 
-// Executes a getmethod of FIFT contract that fulfills the smc-guidelines https://test.ton.org/smc-guidelines.txt
+// Executes a get-method of FIFT contract that fulfills the smc-guidelines https://test.ton.org/smc-guidelines.txt
 // and returns the result data from TVM's stack.
 func (c *Client) TvmRunGet(p *ParamsOfRunGet) (*ResultOfRunGet, error) {
 	result := new(ResultOfRunGet)

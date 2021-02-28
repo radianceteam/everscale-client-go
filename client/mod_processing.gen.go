@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 18:04 UTC
 //
 // Mod processing
 //
@@ -10,6 +10,7 @@ package client
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 const (
@@ -44,71 +45,233 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[ExternalSignerMustNotBeUsedProcessingErrorCode] = "ExternalSignerMustNotBeUsedProcessingErrorCode"
 }
 
-type ProcessingEventType string
+// Notifies the app that the current shard block will be fetched from the network.
+// Fetched block will be used later in waiting phase.
+type WillFetchFirstBlockProcessingEvent struct{}
 
-const (
+// Notifies the app that the client has failed to fetch current shard block.
+// Message processing has finished.
+type FetchFirstBlockFailedProcessingEvent struct {
+	Error Error `json:"error"`
+}
 
-	// Notifies the app that the current shard block will be fetched from the network.
-	// Fetched block will be used later in waiting phase.
-	WillFetchFirstBlockProcessingEventType ProcessingEventType = "WillFetchFirstBlock"
-	// Notifies the app that the client has failed to fetch current shard block.
-	// Message processing has finished.
-	FetchFirstBlockFailedProcessingEventType ProcessingEventType = "FetchFirstBlockFailed"
-	// Notifies the app that the message will be sent to the network.
-	WillSendProcessingEventType ProcessingEventType = "WillSend"
-	// Notifies the app that the message was sent to the network.
-	DidSendProcessingEventType ProcessingEventType = "DidSend"
-	// Notifies the app that the sending operation was failed with network error.
-	// Nevertheless the processing will be continued at the waiting
-	// phase because the message possibly has been delivered to the
-	// node.
-	SendFailedProcessingEventType ProcessingEventType = "SendFailed"
-	// Notifies the app that the next shard block will be fetched from the network.
-	// Event can occurs more than one time due to block walking
-	// procedure.
-	WillFetchNextBlockProcessingEventType ProcessingEventType = "WillFetchNextBlock"
-	// Notifies the app that the next block can't be fetched due to error.
-	// Processing will be continued after `network_resume_timeout`.
-	FetchNextBlockFailedProcessingEventType ProcessingEventType = "FetchNextBlockFailed"
-	// Notifies the app that the message was expired.
-	// Event occurs for contracts which ABI includes header "expire"
-	//
-	// Processing will be continued from encoding phase after
-	// `expiration_retries_timeout`.
-	MessageExpiredProcessingEventType ProcessingEventType = "MessageExpired"
-)
+// Notifies the app that the message will be sent to the network.
+type WillSendProcessingEvent struct {
+	ShardBlockID string `json:"shard_block_id"`
+	MessageID    string `json:"message_id"`
+	Message      string `json:"message"`
+}
+
+// Notifies the app that the message was sent to the network.
+type DidSendProcessingEvent struct {
+	ShardBlockID string `json:"shard_block_id"`
+	MessageID    string `json:"message_id"`
+	Message      string `json:"message"`
+}
+
+// Notifies the app that the sending operation was failed with network error.
+// Nevertheless the processing will be continued at the waiting
+// phase because the message possibly has been delivered to the
+// node.
+type SendFailedProcessingEvent struct {
+	ShardBlockID string `json:"shard_block_id"`
+	MessageID    string `json:"message_id"`
+	Message      string `json:"message"`
+	Error        Error  `json:"error"`
+}
+
+// Notifies the app that the next shard block will be fetched from the network.
+// Event can occurs more than one time due to block walking
+// procedure.
+type WillFetchNextBlockProcessingEvent struct {
+	ShardBlockID string `json:"shard_block_id"`
+	MessageID    string `json:"message_id"`
+	Message      string `json:"message"`
+}
+
+// Notifies the app that the next block can't be fetched due to error.
+// Processing will be continued after `network_resume_timeout`.
+type FetchNextBlockFailedProcessingEvent struct {
+	ShardBlockID string `json:"shard_block_id"`
+	MessageID    string `json:"message_id"`
+	Message      string `json:"message"`
+	Error        Error  `json:"error"`
+}
+
+// Notifies the app that the message was expired.
+// Event occurs for contracts which ABI includes header "expire"
+//
+// Processing will be continued from encoding phase after
+// `expiration_retries_timeout`.
+type MessageExpiredProcessingEvent struct {
+	MessageID string `json:"message_id"`
+	Message   string `json:"message"`
+	Error     Error  `json:"error"`
+}
 
 type ProcessingEvent struct {
-	Type ProcessingEventType `json:"type"`
-	// presented in types:
-	// "FetchFirstBlockFailed"
-	// "SendFailed"
-	// "FetchNextBlockFailed"
-	// "MessageExpired".
-	Error Error `json:"error"`
-	// presented in types:
-	// "WillSend"
-	// "DidSend"
-	// "SendFailed"
-	// "WillFetchNextBlock"
-	// "FetchNextBlockFailed".
-	ShardBlockID string `json:"shard_block_id"`
-	// presented in types:
-	// "WillSend"
-	// "DidSend"
-	// "SendFailed"
-	// "WillFetchNextBlock"
-	// "FetchNextBlockFailed"
-	// "MessageExpired".
-	MessageID string `json:"message_id"`
-	// presented in types:
-	// "WillSend"
-	// "DidSend"
-	// "SendFailed"
-	// "WillFetchNextBlock"
-	// "FetchNextBlockFailed"
-	// "MessageExpired".
-	Message string `json:"message"`
+	// Should be any of
+	// WillFetchFirstBlockProcessingEvent
+	// FetchFirstBlockFailedProcessingEvent
+	// WillSendProcessingEvent
+	// DidSendProcessingEvent
+	// SendFailedProcessingEvent
+	// WillFetchNextBlockProcessingEvent
+	// FetchNextBlockFailedProcessingEvent
+	// MessageExpiredProcessingEvent
+	EnumTypeValue interface{}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ProcessingEvent) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case WillFetchFirstBlockProcessingEvent:
+		return json.Marshal(struct {
+			WillFetchFirstBlockProcessingEvent
+			Type string `json:"type"`
+		}{
+			value,
+			"WillFetchFirstBlock",
+		})
+
+	case FetchFirstBlockFailedProcessingEvent:
+		return json.Marshal(struct {
+			FetchFirstBlockFailedProcessingEvent
+			Type string `json:"type"`
+		}{
+			value,
+			"FetchFirstBlockFailed",
+		})
+
+	case WillSendProcessingEvent:
+		return json.Marshal(struct {
+			WillSendProcessingEvent
+			Type string `json:"type"`
+		}{
+			value,
+			"WillSend",
+		})
+
+	case DidSendProcessingEvent:
+		return json.Marshal(struct {
+			DidSendProcessingEvent
+			Type string `json:"type"`
+		}{
+			value,
+			"DidSend",
+		})
+
+	case SendFailedProcessingEvent:
+		return json.Marshal(struct {
+			SendFailedProcessingEvent
+			Type string `json:"type"`
+		}{
+			value,
+			"SendFailed",
+		})
+
+	case WillFetchNextBlockProcessingEvent:
+		return json.Marshal(struct {
+			WillFetchNextBlockProcessingEvent
+			Type string `json:"type"`
+		}{
+			value,
+			"WillFetchNextBlock",
+		})
+
+	case FetchNextBlockFailedProcessingEvent:
+		return json.Marshal(struct {
+			FetchNextBlockFailedProcessingEvent
+			Type string `json:"type"`
+		}{
+			value,
+			"FetchNextBlockFailed",
+		})
+
+	case MessageExpiredProcessingEvent:
+		return json.Marshal(struct {
+			MessageExpiredProcessingEvent
+			Type string `json:"type"`
+		}{
+			value,
+			"MessageExpired",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for ProcessingEvent %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ProcessingEvent) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "WillFetchFirstBlock":
+		var enumTypeValue WillFetchFirstBlockProcessingEvent
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "FetchFirstBlockFailed":
+		var enumTypeValue FetchFirstBlockFailedProcessingEvent
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "WillSend":
+		var enumTypeValue WillSendProcessingEvent
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "DidSend":
+		var enumTypeValue DidSendProcessingEvent
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "SendFailed":
+		var enumTypeValue SendFailedProcessingEvent
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "WillFetchNextBlock":
+		var enumTypeValue WillFetchNextBlockProcessingEvent
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "FetchNextBlockFailed":
+		var enumTypeValue FetchNextBlockFailedProcessingEvent
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "MessageExpired":
+		var enumTypeValue MessageExpiredProcessingEvent
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for ProcessingEvent %v", typeDescriptor.Type)
+	}
+
+	return nil
 }
 
 type ResultOfProcessMessage struct {

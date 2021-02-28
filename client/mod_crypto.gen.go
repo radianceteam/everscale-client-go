@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 18:04 UTC
 //
 // Mod crypto
 //
@@ -8,6 +8,7 @@ package client
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/volatiletech/null"
 )
@@ -435,44 +436,155 @@ type RegisteredSigningBox struct {
 	Handle SigningBoxHandle `json:"handle"`
 }
 
-type ParamsOfAppSigningBoxType string
+// Signing box callbacks.
 
-const (
+// Get signing box public key.
+type GetPublicKeyParamsOfAppSigningBox struct{}
 
-	// Get signing box public key.
-	GetPublicKeyParamsOfAppSigningBoxType ParamsOfAppSigningBoxType = "GetPublicKey"
-	// Sign data.
-	SignParamsOfAppSigningBoxType ParamsOfAppSigningBoxType = "Sign"
-)
-
-type ParamsOfAppSigningBox struct {
-	Type ParamsOfAppSigningBoxType `json:"type"`
+// Sign data.
+type SignParamsOfAppSigningBox struct {
 	// Data to sign encoded as base64.
-	// presented in types:
-	// "Sign".
 	Unsigned string `json:"unsigned"`
 }
 
-type ResultOfAppSigningBoxType string
+type ParamsOfAppSigningBox struct {
+	// Should be any of
+	// GetPublicKeyParamsOfAppSigningBox
+	// SignParamsOfAppSigningBox
+	EnumTypeValue interface{}
+}
 
-const (
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ParamsOfAppSigningBox) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case GetPublicKeyParamsOfAppSigningBox:
+		return json.Marshal(struct {
+			GetPublicKeyParamsOfAppSigningBox
+			Type string `json:"type"`
+		}{
+			value,
+			"GetPublicKey",
+		})
 
-	// Result of getting public key.
-	GetPublicKeyResultOfAppSigningBoxType ResultOfAppSigningBoxType = "GetPublicKey"
-	// Result of signing data.
-	SignResultOfAppSigningBoxType ResultOfAppSigningBoxType = "Sign"
-)
+	case SignParamsOfAppSigningBox:
+		return json.Marshal(struct {
+			SignParamsOfAppSigningBox
+			Type string `json:"type"`
+		}{
+			value,
+			"Sign",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for ParamsOfAppSigningBox %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ParamsOfAppSigningBox) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "GetPublicKey":
+		var enumTypeValue GetPublicKeyParamsOfAppSigningBox
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Sign":
+		var enumTypeValue SignParamsOfAppSigningBox
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for ParamsOfAppSigningBox %v", typeDescriptor.Type)
+	}
+
+	return nil
+}
+
+// Returning values from signing box callbacks.
+
+// Result of getting public key.
+type GetPublicKeyResultOfAppSigningBox struct {
+	// Signing box public key.
+	PublicKey string `json:"public_key"`
+}
+
+// Result of signing data.
+type SignResultOfAppSigningBox struct {
+	// Data signature encoded as hex.
+	Signature string `json:"signature"`
+}
 
 type ResultOfAppSigningBox struct {
-	Type ResultOfAppSigningBoxType `json:"type"`
-	// Signing box public key.
-	// presented in types:
-	// "GetPublicKey".
-	PublicKey string `json:"public_key"`
-	// Data signature encoded as hex.
-	// presented in types:
-	// "Sign".
-	Signature string `json:"signature"`
+	// Should be any of
+	// GetPublicKeyResultOfAppSigningBox
+	// SignResultOfAppSigningBox
+	EnumTypeValue interface{}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ResultOfAppSigningBox) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case GetPublicKeyResultOfAppSigningBox:
+		return json.Marshal(struct {
+			GetPublicKeyResultOfAppSigningBox
+			Type string `json:"type"`
+		}{
+			value,
+			"GetPublicKey",
+		})
+
+	case SignResultOfAppSigningBox:
+		return json.Marshal(struct {
+			SignResultOfAppSigningBox
+			Type string `json:"type"`
+		}{
+			value,
+			"Sign",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for ResultOfAppSigningBox %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ResultOfAppSigningBox) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "GetPublicKey":
+		var enumTypeValue GetPublicKeyResultOfAppSigningBox
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Sign":
+		var enumTypeValue SignResultOfAppSigningBox
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for ResultOfAppSigningBox %v", typeDescriptor.Type)
+	}
+
+	return nil
 }
 
 type ResultOfSigningBoxGetPublicKey struct {
@@ -676,7 +788,7 @@ func (c *Client) CryptoNaclBoxKeypairFromSecretKey(p *ParamsOfNaclBoxKeyPairFrom
 }
 
 // Public key authenticated encryption.
-// Encrypt and authenticate a message using the senders secret key, the recievers public
+// Encrypt and authenticate a message using the senders secret key, the receivers public
 // key, and a nonce.
 func (c *Client) CryptoNaclBox(p *ParamsOfNaclBox) (*ResultOfNaclBox, error) {
 	result := new(ResultOfNaclBox)
@@ -686,7 +798,7 @@ func (c *Client) CryptoNaclBox(p *ParamsOfNaclBox) (*ResultOfNaclBox, error) {
 	return result, err
 }
 
-// Decrypt and verify the cipher text using the recievers secret key, the senders public key, and the nonce.
+// Decrypt and verify the cipher text using the receivers secret key, the senders public key, and the nonce.
 func (c *Client) CryptoNaclBoxOpen(p *ParamsOfNaclBoxOpen) (*ResultOfNaclBoxOpen, error) {
 	result := new(ResultOfNaclBoxOpen)
 
@@ -813,7 +925,8 @@ func (c *Client) CryptoChacha20(p *ParamsOfChaCha20) (*ResultOfChaCha20, error) 
 }
 
 // Register an application implemented signing box.
-func (c *Client) CryptoRegisterSigningBox(app AppSigningBox) (*RegisteredSigningBox, error) {
+
+func (c *Client) CryptoRegisterSigningBox(app AppSigningBox) (*RegisteredSigningBox, error) { // nolint dupl
 	result := new(RegisteredSigningBox)
 	responses, err := c.dllClient.resultsChannel("crypto.register_signing_box", nil)
 	if err != nil {
@@ -834,16 +947,13 @@ func (c *Client) CryptoRegisterSigningBox(app AppSigningBox) (*RegisteredSigning
 			if r.Code == ResponseCodeAppRequest {
 				c.dispatchRequestCryptoRegisterSigningBox(r.Data, app)
 			}
-			if r.Code == ResponseCodeAppNotify {
-				c.dispatchNotifyCryptoRegisterSigningBox(r.Data, app)
-			}
 		}
 	}()
 
 	return result, nil
 }
 
-func (c *Client) dispatchRequestCryptoRegisterSigningBox(payload []byte, app AppSigningBox) {
+func (c *Client) dispatchRequestCryptoRegisterSigningBox(payload []byte, app AppSigningBox) { // nolint dupl
 	var appRequest ParamsOfAppRequest
 	var appParams ParamsOfAppSigningBox
 	err := json.Unmarshal(payload, &appRequest)
@@ -854,14 +964,26 @@ func (c *Client) dispatchRequestCryptoRegisterSigningBox(payload []byte, app App
 	if err != nil {
 		panic(err)
 	}
-	appResponse, err := app.Request(appParams)
+	var appResponse interface{}
+	// appResponse, err := app.Request(appParams)
+
+	switch value := (appParams.EnumTypeValue).(type) {
+	case GetPublicKeyParamsOfAppSigningBox:
+		appResponse, err = app.GetPublicKeyRequest(value)
+
+	case SignParamsOfAppSigningBox:
+		appResponse, err = app.SignRequest(value)
+
+	default:
+		err = fmt.Errorf("unsupported type for request %v", appParams.EnumTypeValue)
+	}
+
 	appRequestResult := AppRequestResult{}
 	if err != nil {
-		appRequestResult.Type = ErrorAppRequestResultType
-		appRequestResult.Text = err.Error()
+		appRequestResult.EnumTypeValue = ErrorAppRequestResult{Text: err.Error()}
 	} else {
-		appRequestResult.Type = OkAppRequestResultType
-		appRequestResult.Result, _ = json.Marshal(appResponse)
+		marshalled, _ := json.Marshal(&ResultOfAppSigningBox{EnumTypeValue: appResponse})
+		appRequestResult.EnumTypeValue = OkAppRequestResult{Result: marshalled}
 	}
 	err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
 		AppRequestID: appRequest.AppRequestID,
@@ -870,15 +992,6 @@ func (c *Client) dispatchRequestCryptoRegisterSigningBox(payload []byte, app App
 	if err != nil {
 		panic(err)
 	}
-}
-
-func (c *Client) dispatchNotifyCryptoRegisterSigningBox(payload []byte, app AppSigningBox) {
-	var appParams ParamsOfAppSigningBox
-	err := json.Unmarshal(payload, &appParams)
-	if err != nil {
-		panic(err)
-	}
-	app.Notify(appParams)
 }
 
 // Creates a default signing box implementation.

@@ -57,7 +57,7 @@ func TestClient_NetSubscribeForTransactionWithAddressees(t *testing.T) {
 		DeploySet: &client.DeploySet{
 			Tvc: tvc,
 		},
-		Signer: client.Signer{Type: client.KeysSignerType, Keys: *keys},
+		Signer: client.Signer{EnumTypeValue: client.KeysSigner{Keys: *keys}},
 
 		CallSet: &client.CallSet{FunctionName: "constructor"},
 	}

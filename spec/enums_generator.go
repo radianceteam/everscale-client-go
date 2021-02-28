@@ -24,7 +24,7 @@ func genEnumOfConsts(t Type) string {
 		t.Name = "" // constants without type for error-codes
 	}
 	var tpl bytes.Buffer
-	if err := enumTmpl.Execute(&tpl, t); err != nil {
+	if err := enumOfConstsTpl.Execute(&tpl, t); err != nil {
 		panic(err)
 	}
 
@@ -33,39 +33,24 @@ func genEnumOfConsts(t Type) string {
 
 // genEnumOfTypes - generates enum of types with special enumOfConsts helper type.
 func genEnumOfTypes(m Module, t Type) string {
-	enumHelperType := Type{Type: EnumOfConsts, GoType: "string", Description: Description{Name: t.Name + "Type"}}
-	fields := make(map[string]int)
-	structFields := make([]Type, 1)
-	structFields[0] = Type{Type: Ref, RefName: enumHelperType.Name, Description: Description{Name: "type"}}
-	fields["type"] = 0
-	for _, et := range t.EnumTypes {
-		enumHelperType.EnumConsts = append(enumHelperType.EnumConsts, Type{
-			Description: Description{
-				Name:        et.Name,
-				Summary:     et.Summary,
-				Description: et.Description.Description,
-				ConstName:   et.Name,
-			},
-			Value: strconv.Quote(et.Name),
-		})
-		if et.Type != Struct {
+	var tpl bytes.Buffer
+	for i, et := range t.EnumTypes {
+		if et.Type != Struct && et.Type != Ref {
 			panic("EnumOfTypes only supports structs " + et.Name)
 		}
-		for _, sf := range et.StructFields {
-			index, ok := fields[sf.Name]
-			if ok && structFields[index].Type != sf.Type {
-				panic("type mismatch for enum " + et.Name + ":" + sf.Name)
-			}
-
-			if !ok {
-				index = len(structFields)
-				fields[sf.Name] = index
-				structFields = append(structFields, sf)
-				structFields[index].Description.Description += " presented in types:"
-			}
-			structFields[index].Description.Description += "\n\"" + et.Name + "\""
+		if et.Type == Struct {
+			typeName := toGoName(strcase.ToSnake(et.Name + t.Name))
+			t.EnumTypes[i].GoType = typeName
+			et.Name = typeName
+			tpl.WriteString("\n" + genStruct(m, et))
+		} else {
+			t.EnumTypes[i].GoType = toTypeName(et.RefName)
 		}
 	}
-	t.StructFields = structFields
-	return genEnumOfConsts(enumHelperType) + "\n" + genStruct(m, t)
+
+	if err := enumOfTypesTpl.Execute(&tpl, t); err != nil {
+		panic(err)
+	}
+
+	return t.ToComment() + tpl.String()
 }

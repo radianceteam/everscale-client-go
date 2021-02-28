@@ -39,4 +39,4 @@ jobs:
           CGO_LDFLAGS: '-L/tmp/ -lton_client'
         with:
           # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
-          version: v1.33
+          version: v1.37

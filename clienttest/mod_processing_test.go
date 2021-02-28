@@ -22,7 +22,7 @@ func TestClient_ProcessingWaitMessage(t *testing.T) {
 		DeploySet: &client.DeploySet{
 			Tvc: tvc,
 		},
-		Signer: client.Signer{Type: client.KeysSignerType, Keys: *keys},
+		Signer: client.Signer{EnumTypeValue: client.KeysSigner{Keys: *keys}},
 
 		CallSet: &client.CallSet{FunctionName: "constructor"},
 	}
@@ -49,18 +49,18 @@ func TestClient_ProcessingWaitMessage(t *testing.T) {
 	a.NoError(err, "processing.wait_for_transaction")
 	a.Len(waitForTransactionResult.OutMessages, 0, "empty wait_for_transaction messages")
 
-	order := []client.ProcessingEventType{
-		client.WillFetchFirstBlockProcessingEventType,
-		client.WillSendProcessingEventType,
-		client.DidSendProcessingEventType,
+	order := []client.ProcessingEvent{
+		{EnumTypeValue: client.WillFetchFirstBlockProcessingEvent{}},
+		{EnumTypeValue: client.WillSendProcessingEvent{}},
+		{EnumTypeValue: client.DidSendProcessingEvent{}},
 	}
 	for i, et := range order {
 		e, ok := <-events
 		a.True(ok, "event %d", i)
-		a.Equal(et, e.Type, "type event %d", i)
+		a.IsType(et.EnumTypeValue, e.EnumTypeValue, "type event %d", i)
 	}
 	for e := range events {
-		if e.Type != client.WillFetchNextBlockProcessingEventType {
+		if _, ok := e.EnumTypeValue.(client.WillFetchNextBlockProcessingEvent); !ok {
 			break
 		}
 	}

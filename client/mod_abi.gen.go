@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Feb 21 15:01 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 18:04 UTC
 //
 // Mod abi
 //
@@ -8,6 +8,7 @@ package client
 
 import (
 	"encoding/json"
+	"fmt"
 	"math/big"
 
 	"github.com/volatiletech/null"
@@ -25,6 +26,7 @@ const (
 	RequiredPublicKeyMissingForFunctionHeaderAbiErrorCode = 309
 	InvalidSignerAbiErrorCode                             = 310
 	InvalidAbiAbiErrorCode                                = 311
+	InvalidFunctionIDAbiErrorCode                         = 312
 )
 
 func init() { // nolint gochecknoinits
@@ -39,24 +41,30 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[RequiredPublicKeyMissingForFunctionHeaderAbiErrorCode] = "RequiredPublicKeyMissingForFunctionHeaderAbiErrorCode"
 	errorCodesToErrorTypes[InvalidSignerAbiErrorCode] = "InvalidSignerAbiErrorCode"
 	errorCodesToErrorTypes[InvalidAbiAbiErrorCode] = "InvalidAbiAbiErrorCode"
+	errorCodesToErrorTypes[InvalidFunctionIDAbiErrorCode] = "InvalidFunctionIDAbiErrorCode"
 }
 
-type (
-	AbiHandle      uint32
-	FunctionHeader struct {
-		// Message expiration time in seconds. If not specified - calculated automatically from message_expiration_timeout(), try_index and message_expiration_timeout_grow_factor() (if ABI includes `expire` header).
-		Expire null.Uint32 `json:"expire"` // optional
-		// Message creation time in milliseconds.
-		// If not specified, `now` is used (if ABI includes `time` header).
-		Time *big.Int `json:"time"` // optional
-		// Public key is used by the contract to check the signature.
-		// Encoded in `hex`. If not specified, method fails with exception (if ABI includes `pubkey` header)..
-		Pubkey null.String `json:"pubkey"` // optional
-	}
-)
+type AbiHandle uint32
+
+// The ABI function header.
+// Includes several hidden function parameters that contract
+// uses for security, message delivery monitoring and replay protection reasons.
+//
+// The actual set of header fields depends on the contract's ABI.
+// If a contract's ABI does not include some headers, then they are not filled.
+type FunctionHeader struct {
+	// Message expiration time in seconds. If not specified - calculated automatically from message_expiration_timeout(), try_index and message_expiration_timeout_grow_factor() (if ABI includes `expire` header).
+	Expire null.Uint32 `json:"expire"` // optional
+	// Message creation time in milliseconds.
+	// If not specified, `now` is used (if ABI includes `time` header).
+	Time *big.Int `json:"time"` // optional
+	// Public key is used by the contract to check the signature.
+	// Encoded in `hex`. If not specified, method fails with exception (if ABI includes `pubkey` header)..
+	Pubkey null.String `json:"pubkey"` // optional
+}
 
 type CallSet struct {
-	// Function name that is being called.
+	// Function name that is being called. Or function id encoded as string in hex (starting with 0x).
 	FunctionName string `json:"function_name"`
 	// Function header.
 	// If an application omits some header parameters required by the
@@ -83,32 +91,120 @@ type DeploySet struct {
 	InitialPubkey null.String `json:"initial_pubkey"` // optional
 }
 
-type SignerType string
+// No keys are provided.
+// Creates an unsigned message.
+type NoneSigner struct{}
 
-const (
+// Only public key is provided in unprefixed hex string format to generate unsigned message and `data_to_sign` which can be signed later.
+type ExternalSigner struct {
+	PublicKey string `json:"public_key"`
+}
 
-	// No keys are provided.
-	// Creates an unsigned message.
-	NoneSignerType SignerType = "None"
-	// Only public key is provided in unprefixed hex string format to generate unsigned message and `data_to_sign` which can be signed later.
-	ExternalSignerType SignerType = "External"
-	// Key pair is provided for signing.
-	KeysSignerType SignerType = "Keys"
-	// Signing Box interface is provided for signing, allows Dapps to sign messages using external APIs, such as HSM, cold wallet, etc.
-	SigningBoxSignerType SignerType = "SigningBox"
-)
+// Key pair is provided for signing.
+type KeysSigner struct {
+	Keys KeyPair `json:"keys"`
+}
+
+// Signing Box interface is provided for signing, allows Dapps to sign messages using external APIs, such as HSM, cold wallet, etc.
+type SigningBoxSigner struct {
+	Handle SigningBoxHandle `json:"handle"`
+}
 
 type Signer struct {
-	Type SignerType `json:"type"`
-	// presented in types:
-	// "External".
-	PublicKey string `json:"public_key"`
-	// presented in types:
-	// "Keys".
-	Keys KeyPair `json:"keys"`
-	// presented in types:
-	// "SigningBox".
-	Handle SigningBoxHandle `json:"handle"`
+	// Should be any of
+	// NoneSigner
+	// ExternalSigner
+	// KeysSigner
+	// SigningBoxSigner
+	EnumTypeValue interface{}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *Signer) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case NoneSigner:
+		return json.Marshal(struct {
+			NoneSigner
+			Type string `json:"type"`
+		}{
+			value,
+			"None",
+		})
+
+	case ExternalSigner:
+		return json.Marshal(struct {
+			ExternalSigner
+			Type string `json:"type"`
+		}{
+			value,
+			"External",
+		})
+
+	case KeysSigner:
+		return json.Marshal(struct {
+			KeysSigner
+			Type string `json:"type"`
+		}{
+			value,
+			"Keys",
+		})
+
+	case SigningBoxSigner:
+		return json.Marshal(struct {
+			SigningBoxSigner
+			Type string `json:"type"`
+		}{
+			value,
+			"SigningBox",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for Signer %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *Signer) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "None":
+		var enumTypeValue NoneSigner
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "External":
+		var enumTypeValue ExternalSigner
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Keys":
+		var enumTypeValue KeysSigner
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "SigningBox":
+		var enumTypeValue SigningBoxSigner
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for Signer %v", typeDescriptor.Type)
+	}
+
+	return nil
 }
 
 type MessageBodyType string
@@ -127,50 +223,183 @@ const (
 	EventMessageBodyType MessageBodyType = "Event"
 )
 
-type StateInitSourceType string
-
-const (
-
-	// Deploy message.
-	MessageStateInitSourceType StateInitSourceType = "Message"
-	// State init data.
-	StateInitStateInitSourceType StateInitSourceType = "StateInit"
-	// Content of the TVC file.
-	// Encoded in `base64`.
-	TvcStateInitSourceType StateInitSourceType = "Tvc"
-)
-
-type StateInitSource struct {
-	Type StateInitSourceType `json:"type"`
-	// presented in types:
-	// "Message".
+// Deploy message.
+type MessageStateInitSource struct {
 	Source MessageSource `json:"source"`
+}
+
+// State init data.
+type StateInitStateInitSource struct {
 	// Code BOC.
-	// Encoded in `base64`. presented in types:
-	// "StateInit".
+	// Encoded in `base64`.
 	Code string `json:"code"`
 	// Data BOC.
-	// Encoded in `base64`. presented in types:
-	// "StateInit".
+	// Encoded in `base64`.
 	Data string `json:"data"`
 	// Library BOC.
-	// Encoded in `base64`. presented in types:
-	// "StateInit".
+	// Encoded in `base64`.
 	Library null.String `json:"library"` // optional
-	// presented in types:
-	// "Tvc".
-	Tvc string `json:"tvc"`
-	// presented in types:
-	// "Tvc".
-	PublicKey null.String `json:"public_key"` // optional
-	// presented in types:
-	// "Tvc".
+}
+
+// Content of the TVC file.
+// Encoded in `base64`.
+type TvcStateInitSource struct {
+	Tvc        string           `json:"tvc"`
+	PublicKey  null.String      `json:"public_key"`  // optional
 	InitParams *StateInitParams `json:"init_params"` // optional
+}
+
+type StateInitSource struct {
+	// Should be any of
+	// MessageStateInitSource
+	// StateInitStateInitSource
+	// TvcStateInitSource
+	EnumTypeValue interface{}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *StateInitSource) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case MessageStateInitSource:
+		return json.Marshal(struct {
+			MessageStateInitSource
+			Type string `json:"type"`
+		}{
+			value,
+			"Message",
+		})
+
+	case StateInitStateInitSource:
+		return json.Marshal(struct {
+			StateInitStateInitSource
+			Type string `json:"type"`
+		}{
+			value,
+			"StateInit",
+		})
+
+	case TvcStateInitSource:
+		return json.Marshal(struct {
+			TvcStateInitSource
+			Type string `json:"type"`
+		}{
+			value,
+			"Tvc",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for StateInitSource %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *StateInitSource) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "Message":
+		var enumTypeValue MessageStateInitSource
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "StateInit":
+		var enumTypeValue StateInitStateInitSource
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Tvc":
+		var enumTypeValue TvcStateInitSource
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for StateInitSource %v", typeDescriptor.Type)
+	}
+
+	return nil
 }
 
 type StateInitParams struct {
 	Abi   Abi             `json:"abi"`
 	Value json.RawMessage `json:"value"`
+}
+
+type EncodedMessageSource struct {
+	Message string `json:"message"`
+	Abi     *Abi   `json:"abi"` // optional
+}
+
+type MessageSource struct {
+	// Should be any of
+	// EncodedMessageSource
+	// ParamsOfEncodeMessage
+	EnumTypeValue interface{}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *MessageSource) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case EncodedMessageSource:
+		return json.Marshal(struct {
+			EncodedMessageSource
+			Type string `json:"type"`
+		}{
+			value,
+			"Encoded",
+		})
+
+	case ParamsOfEncodeMessage:
+		return json.Marshal(struct {
+			ParamsOfEncodeMessage
+			Type string `json:"type"`
+		}{
+			value,
+			"EncodingParams",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for MessageSource %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *MessageSource) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "Encoded":
+		var enumTypeValue EncodedMessageSource
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "EncodingParams":
+		var enumTypeValue ParamsOfEncodeMessage
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for MessageSource %v", typeDescriptor.Type)
+	}
+
+	return nil
 }
 
 type AbiParam struct {
@@ -396,7 +625,7 @@ type ParamsOfEncodeAccount struct {
 	// Initial value for the `last_paid`.
 	LastPaid null.Uint32 `json:"last_paid"` // optional
 	// Cache type to put the result.
-	// The BOC intself returned if no cache type provided.
+	// The BOC itself returned if no cache type provided.
 	BocCache *BocCacheType `json:"boc_cache"` // optional
 }
 

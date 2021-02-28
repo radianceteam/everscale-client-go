@@ -29,20 +29,20 @@ type appSigningBoxMock struct {
 	Private string
 }
 
-func (app *appSigningBoxMock) Request(p client.ParamsOfAppSigningBox) (client.ResultOfAppSigningBox, error) {
-	t := client.ResultOfAppSigningBoxType(p.Type)
-	if t == client.GetPublicKeyResultOfAppSigningBoxType {
-		return client.ResultOfAppSigningBox{Type: t, PublicKey: app.Public}, nil
-	}
+func (app *appSigningBoxMock) GetPublicKeyRequest(_ client.GetPublicKeyParamsOfAppSigningBox) (client.GetPublicKeyResultOfAppSigningBox, error) {
+	return client.GetPublicKeyResultOfAppSigningBox{PublicKey: app.Public}, nil
+}
+
+func (app *appSigningBoxMock) SignRequest(p client.SignParamsOfAppSigningBox) (client.SignResultOfAppSigningBox, error) {
 	seedBytes, err := hex.DecodeString(app.Private)
 	if err != nil {
-		return client.ResultOfAppSigningBox{}, err
+		return client.SignResultOfAppSigningBox{}, err
 	}
 	privateKey := ed25519.NewKeyFromSeed(seedBytes)
 	data, err := base64.StdEncoding.DecodeString(p.Unsigned)
 	signature := hex.EncodeToString(ed25519.Sign(privateKey, data))
 
-	return client.ResultOfAppSigningBox{Type: t, Signature: signature}, err
+	return client.SignResultOfAppSigningBox{Signature: signature}, err
 }
 
 func (app *appSigningBoxMock) Notify(client.ParamsOfAppSigningBox) {

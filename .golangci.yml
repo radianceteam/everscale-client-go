@@ -7,14 +7,14 @@ linters:
     - gomnd
     - testpackage
     - nolintlint
-    - godox
-    - misspell
     - maligned
     - goerr113
     - nlreturn
     - exhaustivestruct
     - wrapcheck
     - paralleltest
+    - forbidigo
+    - cyclop
   enable-all: true
 linters-settings:
   goimports:

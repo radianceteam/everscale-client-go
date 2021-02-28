@@ -21,10 +21,9 @@ func prepareMultiline(data string) string {
 
 // ExceptionForCamelCase - camel case names exception.
 var ExceptionForCamelCase = map[string]string{
-	"id":                        "ID",
-	"xprv":                      "XPrv",
-	"url":                       "URL",
-	"account_id_address_string": "AccountIDAddressString",
+	"id":   "ID",
+	"xprv": "XPrv",
+	"url":  "URL",
 }
 
 func withTypeAlias(name string) string {
@@ -107,14 +106,7 @@ func genFunc(m Module, f Function) string {
 	if appObject == nil {
 		err = funcTemplate.Execute(&b, content)
 	} else {
-		paramsAppObjectType := toTypeName(appObject.GenericArgs[0].RefName)
-		resultAppObjectType := toTypeName(appObject.GenericArgs[1].RefName)
-		err = funcTemplateWithAppObject.Execute(&b, funcWithAppObjectContent{
-			funcContent:     content,
-			AppType:         strings.TrimPrefix(paramsAppObjectType, "ParamsOf"),
-			AppObjectFirst:  paramsAppObjectType,
-			AppObjectSecond: resultAppObjectType,
-		})
+		b.WriteString(genAppFunc(m, appObject, content))
 	}
 
 	if err != nil {
@@ -122,6 +114,50 @@ func genFunc(m Module, f Function) string {
 	}
 
 	return "\n" + f.ToComment() + b.String()
+}
+
+func genAppFunc(m Module, appObject *Type, content funcContent) string {
+	paramsAppObjectType := toTypeName(appObject.GenericArgs[0].RefName)
+	resultAppObjectType := toTypeName(appObject.GenericArgs[1].RefName)
+	var paramsAppObjectTypeDescriptor, resultAppObjectTypeDescriptor Type
+	for _, typeDescriptor := range m.Types {
+		if typeDescriptor.Name == paramsAppObjectType {
+			paramsAppObjectTypeDescriptor = typeDescriptor
+		}
+		if typeDescriptor.Name == resultAppObjectType {
+			resultAppObjectTypeDescriptor = typeDescriptor
+		}
+	}
+	var requests, notifications []string
+	for _, p := range paramsAppObjectTypeDescriptor.EnumTypes {
+		hasResultWithThatName := false
+		for _, r := range resultAppObjectTypeDescriptor.EnumTypes {
+			if r.Name == p.Name {
+				hasResultWithThatName = true
+				break
+			}
+		}
+		if hasResultWithThatName {
+			requests = append(requests, p.Name)
+		} else {
+			notifications = append(notifications, p.Name)
+		}
+	}
+
+	var b bytes.Buffer
+	err := funcTemplateWithAppObject.Execute(&b, funcWithAppObjectContent{
+		funcContent:     content,
+		AppType:         strings.TrimPrefix(paramsAppObjectType, "ParamsOf"),
+		AppObjectParams: paramsAppObjectType,
+		AppObjectResult: resultAppObjectType,
+		Requests:        requests,
+		Notifications:   notifications,
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	return b.String()
 }
 
 func GenModule(dir string, m Module) error {
@@ -157,7 +193,10 @@ func GenModule(dir string, m Module) error {
 
 // genStruct - generates struct with each field specified.
 func genStruct(m Module, t Type) string {
-	r := "type " + withTypeAlias(toTypeName(t.Name)) + " struct {\n"
+	r := "type " + withTypeAlias(toTypeName(t.Name)) + " struct {"
+	if len(t.StructFields) != 0 {
+		r += "\n"
+	}
 	for _, f := range t.StructFields {
 		if f.Name == "" {
 			fmt.Println("WARNING: add struct field with empty name", t.Type, t.Name, f)
@@ -172,7 +211,7 @@ func genStruct(m Module, t Type) string {
 	}
 	r += "}\n\n"
 
-	return r
+	return t.ToComment() + r
 }
 
 // GenerateOptionalType - pointer or null simple type.

@@ -14,23 +14,3 @@ type Abi struct {
 	Type  AbiType     `json:"type"`
 	Value interface{} `json:"value"`
 }
-
-type MessageSourceType string
-
-const (
-	EncodedMessageSourceType        MessageSourceType = "Encoded"
-	EncodingParamsMessageSourceType MessageSourceType = "EncodingParams"
-)
-
-type MessageSource struct {
-	Type MessageSourceType `json:"type"`
-	// presented in types:
-	// "Encoded".
-	Message string `json:"message"`
-	// presented in types:
-	// "Encoded".
-	Abi *Abi `json:"abi,omitempty"` // optional
-	// presented in types:
-	// "EncodingParams", but abi field also for "Encoded"
-	ParamsOfEncodeMessage
-}
