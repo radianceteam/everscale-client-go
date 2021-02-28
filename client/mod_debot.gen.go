@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 15:56 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:34 UTC
 //
 // Mod debot
 //
@@ -387,7 +387,8 @@ type ParamsOfSend struct {
 //
 // # Remarks
 // `start` is equivalent to `fetch` + switch to context 0.
-func (c *Client) DebotStart(p *ParamsOfStart, app AppDebotBrowser) (*RegisteredDebot, error) {
+
+func (c *Client) DebotStart(p *ParamsOfStart, app AppDebotBrowser) (*RegisteredDebot, error) { // nolint dupl
 	result := new(RegisteredDebot)
 	responses, err := c.dllClient.resultsChannel("debot.start", p)
 	if err != nil {
@@ -408,6 +409,7 @@ func (c *Client) DebotStart(p *ParamsOfStart, app AppDebotBrowser) (*RegisteredD
 			if r.Code == ResponseCodeAppRequest {
 				c.dispatchRequestDebotStart(r.Data, app)
 			}
+
 			if r.Code == ResponseCodeAppNotify {
 				c.dispatchNotifyDebotStart(r.Data, app)
 			}
@@ -417,7 +419,7 @@ func (c *Client) DebotStart(p *ParamsOfStart, app AppDebotBrowser) (*RegisteredD
 	return result, nil
 }
 
-func (c *Client) dispatchRequestDebotStart(payload []byte, app AppDebotBrowser) {
+func (c *Client) dispatchRequestDebotStart(payload []byte, app AppDebotBrowser) { // nolint dupl
 	var appRequest ParamsOfAppRequest
 	var appParams ParamsOfAppDebotBrowser
 	err := json.Unmarshal(payload, &appRequest)
@@ -428,12 +430,28 @@ func (c *Client) dispatchRequestDebotStart(payload []byte, app AppDebotBrowser) 
 	if err != nil {
 		panic(err)
 	}
-	appResponse, err := app.Request(appParams)
+	var appResponse interface{}
+	// appResponse, err := app.Request(appParams)
+
+	switch value := (appParams.EnumTypeValue).(type) {
+	case InputParamsOfAppDebotBrowser:
+		appResponse, err = app.InputRequest(value)
+
+	case GetSigningBoxParamsOfAppDebotBrowser:
+		appResponse, err = app.GetSigningBoxRequest(value)
+
+	case InvokeDebotParamsOfAppDebotBrowser:
+		appResponse, err = app.InvokeDebotRequest(value)
+
+	default:
+		err = fmt.Errorf("unsupported type for request %v", appParams.EnumTypeValue)
+	}
+
 	appRequestResult := AppRequestResult{}
 	if err != nil {
 		appRequestResult.EnumTypeValue = ErrorAppRequestResult{Text: err.Error()}
 	} else {
-		marshalled, _ := json.Marshal(&appResponse)
+		marshalled, _ := json.Marshal(&ResultOfAppDebotBrowser{EnumTypeValue: appResponse})
 		appRequestResult.EnumTypeValue = OkAppRequestResult{Result: marshalled}
 	}
 	err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
@@ -445,13 +463,32 @@ func (c *Client) dispatchRequestDebotStart(payload []byte, app AppDebotBrowser) 
 	}
 }
 
-func (c *Client) dispatchNotifyDebotStart(payload []byte, app AppDebotBrowser) {
+func (c *Client) dispatchNotifyDebotStart(payload []byte, app AppDebotBrowser) { // nolint dupl
 	var appParams ParamsOfAppDebotBrowser
 	err := json.Unmarshal(payload, &appParams)
 	if err != nil {
 		panic(err)
 	}
-	app.Notify(appParams)
+
+	switch value := (appParams.EnumTypeValue).(type) {
+	case LogParamsOfAppDebotBrowser:
+		app.LogNotify(value)
+
+	case SwitchParamsOfAppDebotBrowser:
+		app.SwitchNotify(value)
+
+	case SwitchCompletedParamsOfAppDebotBrowser:
+		app.SwitchCompletedNotify(value)
+
+	case ShowActionParamsOfAppDebotBrowser:
+		app.ShowActionNotify(value)
+
+	case SendParamsOfAppDebotBrowser:
+		app.SendNotify(value)
+
+	default:
+		panic(fmt.Errorf("unsupported type for request %v", appParams.EnumTypeValue))
+	}
 }
 
 // [UNSTABLE](UNSTABLE.md) Fetches debot from blockchain.
@@ -460,7 +497,8 @@ func (c *Client) dispatchNotifyDebotStart(payload []byte, app AppDebotBrowser) {
 //
 // # Remarks
 // It does not switch debot to context 0. Browser Callbacks are not called.
-func (c *Client) DebotFetch(p *ParamsOfFetch, app AppDebotBrowser) (*RegisteredDebot, error) {
+
+func (c *Client) DebotFetch(p *ParamsOfFetch, app AppDebotBrowser) (*RegisteredDebot, error) { // nolint dupl
 	result := new(RegisteredDebot)
 	responses, err := c.dllClient.resultsChannel("debot.fetch", p)
 	if err != nil {
@@ -481,6 +519,7 @@ func (c *Client) DebotFetch(p *ParamsOfFetch, app AppDebotBrowser) (*RegisteredD
 			if r.Code == ResponseCodeAppRequest {
 				c.dispatchRequestDebotFetch(r.Data, app)
 			}
+
 			if r.Code == ResponseCodeAppNotify {
 				c.dispatchNotifyDebotFetch(r.Data, app)
 			}
@@ -490,7 +529,7 @@ func (c *Client) DebotFetch(p *ParamsOfFetch, app AppDebotBrowser) (*RegisteredD
 	return result, nil
 }
 
-func (c *Client) dispatchRequestDebotFetch(payload []byte, app AppDebotBrowser) {
+func (c *Client) dispatchRequestDebotFetch(payload []byte, app AppDebotBrowser) { // nolint dupl
 	var appRequest ParamsOfAppRequest
 	var appParams ParamsOfAppDebotBrowser
 	err := json.Unmarshal(payload, &appRequest)
@@ -501,12 +540,28 @@ func (c *Client) dispatchRequestDebotFetch(payload []byte, app AppDebotBrowser) 
 	if err != nil {
 		panic(err)
 	}
-	appResponse, err := app.Request(appParams)
+	var appResponse interface{}
+	// appResponse, err := app.Request(appParams)
+
+	switch value := (appParams.EnumTypeValue).(type) {
+	case InputParamsOfAppDebotBrowser:
+		appResponse, err = app.InputRequest(value)
+
+	case GetSigningBoxParamsOfAppDebotBrowser:
+		appResponse, err = app.GetSigningBoxRequest(value)
+
+	case InvokeDebotParamsOfAppDebotBrowser:
+		appResponse, err = app.InvokeDebotRequest(value)
+
+	default:
+		err = fmt.Errorf("unsupported type for request %v", appParams.EnumTypeValue)
+	}
+
 	appRequestResult := AppRequestResult{}
 	if err != nil {
 		appRequestResult.EnumTypeValue = ErrorAppRequestResult{Text: err.Error()}
 	} else {
-		marshalled, _ := json.Marshal(&appResponse)
+		marshalled, _ := json.Marshal(&ResultOfAppDebotBrowser{EnumTypeValue: appResponse})
 		appRequestResult.EnumTypeValue = OkAppRequestResult{Result: marshalled}
 	}
 	err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
@@ -518,13 +573,32 @@ func (c *Client) dispatchRequestDebotFetch(payload []byte, app AppDebotBrowser) 
 	}
 }
 
-func (c *Client) dispatchNotifyDebotFetch(payload []byte, app AppDebotBrowser) {
+func (c *Client) dispatchNotifyDebotFetch(payload []byte, app AppDebotBrowser) { // nolint dupl
 	var appParams ParamsOfAppDebotBrowser
 	err := json.Unmarshal(payload, &appParams)
 	if err != nil {
 		panic(err)
 	}
-	app.Notify(appParams)
+
+	switch value := (appParams.EnumTypeValue).(type) {
+	case LogParamsOfAppDebotBrowser:
+		app.LogNotify(value)
+
+	case SwitchParamsOfAppDebotBrowser:
+		app.SwitchNotify(value)
+
+	case SwitchCompletedParamsOfAppDebotBrowser:
+		app.SwitchCompletedNotify(value)
+
+	case ShowActionParamsOfAppDebotBrowser:
+		app.ShowActionNotify(value)
+
+	case SendParamsOfAppDebotBrowser:
+		app.SendNotify(value)
+
+	default:
+		panic(fmt.Errorf("unsupported type for request %v", appParams.EnumTypeValue))
+	}
 }
 
 // [UNSTABLE](UNSTABLE.md) Executes debot action.

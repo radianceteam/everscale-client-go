@@ -110,8 +110,10 @@ type funcContent struct {
 type funcWithAppObjectContent struct {
 	funcContent
 	AppType         string
-	AppObjectFirst  string
-	AppObjectSecond string
+	AppObjectParams string
+	AppObjectResult string
+	Requests        []string
+	Notifications   []string
 }
 
 var funcTemplate = template.Must(template.New("funcTemplate").Parse(
@@ -127,8 +129,9 @@ var funcTemplate = template.Must(template.New("funcTemplate").Parse(
 }
 `))
 
-var funcTemplateWithAppObject = template.Must(template.New("funcTemplate").Parse(
-	`func (c *Client) {{.Name}}( {{if ne .ParamType ""}} p *{{.ParamType}}, {{end}} app {{.AppType}}) (*{{.ResultType}}, error)  {
+var funcTemplateWithAppObject = template.Must(template.New("funcTemplateWithAppObject").Parse(
+	`
+func (c *Client) {{.Name}}( {{if ne .ParamType ""}} p *{{.ParamType}}, {{end}} app {{.AppType}}) (*{{.ResultType}}, error)  { // nolint dupl
 	result := new({{.ResultType}}) 
 	responses, err := c.dllClient.resultsChannel("{{.MethodName}}", {{if ne .ParamType ""}} p {{else}} nil {{end}})
 	if err != nil {
@@ -149,18 +152,20 @@ var funcTemplateWithAppObject = template.Must(template.New("funcTemplate").Parse
 			if r.Code == ResponseCodeAppRequest {
 				c.dispatchRequest{{.Name}}(r.Data, app)
 			}
+{{if .Notifications}} 
 			if r.Code == ResponseCodeAppNotify {
 				c.dispatchNotify{{.Name}}(r.Data, app)
 			}
+{{end}}
 		}
 	}()
 
 	return result, nil
 }
 
-func (c *Client) dispatchRequest{{.Name}}(payload []byte, app {{.AppType}}) {
+func (c *Client) dispatchRequest{{.Name}}(payload []byte, app {{.AppType}}) { // nolint dupl
 	var appRequest ParamsOfAppRequest
-	var appParams {{.AppObjectFirst}}
+	var appParams {{.AppObjectParams}}
 	err := json.Unmarshal(payload, &appRequest)
 	if err != nil {
 		panic(err)
@@ -169,12 +174,24 @@ func (c *Client) dispatchRequest{{.Name}}(payload []byte, app {{.AppType}}) {
 	if err != nil {
 		panic(err)
 	}
-	appResponse, err := app.Request(appParams)
+	var appResponse interface{}
+	// appResponse, err := app.Request(appParams)
+
+		switch value := (appParams.EnumTypeValue).(type) {
+	{{range $r := .Requests}} 
+	case {{$r}}{{$.AppObjectParams}}:
+		appResponse, err = app.{{$r}}Request(value)
+	{{end}}
+
+	default:
+		err = fmt.Errorf("unsupported type for request %v", appParams.EnumTypeValue)
+	}
+
 	appRequestResult := AppRequestResult{}
 	if err != nil {
 		appRequestResult.EnumTypeValue = ErrorAppRequestResult{Text:err.Error()}
 	} else {
-		marshalled, _:= json.Marshal(&appResponse)
+		marshalled, _:= json.Marshal(&{{.AppObjectResult}}{EnumTypeValue: appResponse})
 		appRequestResult.EnumTypeValue = OkAppRequestResult{Result:marshalled}
 	}
 	err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
@@ -186,12 +203,22 @@ func (c *Client) dispatchRequest{{.Name}}(payload []byte, app {{.AppType}}) {
 	}
 }
 
-func (c *Client) dispatchNotify{{.Name}}(payload []byte, app {{.AppType}}) {
-	var appParams {{.AppObjectFirst}}
+{{if .Notifications}} 
+func (c *Client) dispatchNotify{{.Name}}(payload []byte, app {{.AppType}}) { // nolint dupl
+	var appParams {{.AppObjectParams}}
 	err := json.Unmarshal(payload, &appParams)
 	if err != nil {
 		panic(err)
 	}
-	app.Notify(appParams)
+
+	switch value := (appParams.EnumTypeValue).(type) {
+	{{range $r := .Notifications}} 
+	case {{$r}}{{$.AppObjectParams}}:
+		app.{{$r}}Notify(value)
+	{{end}}
+	default:
+		panic(fmt.Errorf("unsupported type for request %v", appParams.EnumTypeValue))
+	}
 }
+{{end}}
 `))

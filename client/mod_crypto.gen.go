@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 15:56 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 17:34 UTC
 //
 // Mod crypto
 //
@@ -912,7 +912,8 @@ func (c *Client) CryptoChacha20(p *ParamsOfChaCha20) (*ResultOfChaCha20, error) 
 }
 
 // Register an application implemented signing box.
-func (c *Client) CryptoRegisterSigningBox(app AppSigningBox) (*RegisteredSigningBox, error) {
+
+func (c *Client) CryptoRegisterSigningBox(app AppSigningBox) (*RegisteredSigningBox, error) { // nolint dupl
 	result := new(RegisteredSigningBox)
 	responses, err := c.dllClient.resultsChannel("crypto.register_signing_box", nil)
 	if err != nil {
@@ -933,16 +934,13 @@ func (c *Client) CryptoRegisterSigningBox(app AppSigningBox) (*RegisteredSigning
 			if r.Code == ResponseCodeAppRequest {
 				c.dispatchRequestCryptoRegisterSigningBox(r.Data, app)
 			}
-			if r.Code == ResponseCodeAppNotify {
-				c.dispatchNotifyCryptoRegisterSigningBox(r.Data, app)
-			}
 		}
 	}()
 
 	return result, nil
 }
 
-func (c *Client) dispatchRequestCryptoRegisterSigningBox(payload []byte, app AppSigningBox) {
+func (c *Client) dispatchRequestCryptoRegisterSigningBox(payload []byte, app AppSigningBox) { // nolint dupl
 	var appRequest ParamsOfAppRequest
 	var appParams ParamsOfAppSigningBox
 	err := json.Unmarshal(payload, &appRequest)
@@ -953,12 +951,25 @@ func (c *Client) dispatchRequestCryptoRegisterSigningBox(payload []byte, app App
 	if err != nil {
 		panic(err)
 	}
-	appResponse, err := app.Request(appParams)
+	var appResponse interface{}
+	// appResponse, err := app.Request(appParams)
+
+	switch value := (appParams.EnumTypeValue).(type) {
+	case GetPublicKeyParamsOfAppSigningBox:
+		appResponse, err = app.GetPublicKeyRequest(value)
+
+	case SignParamsOfAppSigningBox:
+		appResponse, err = app.SignRequest(value)
+
+	default:
+		err = fmt.Errorf("unsupported type for request %v", appParams.EnumTypeValue)
+	}
+
 	appRequestResult := AppRequestResult{}
 	if err != nil {
 		appRequestResult.EnumTypeValue = ErrorAppRequestResult{Text: err.Error()}
 	} else {
-		marshalled, _ := json.Marshal(&appResponse)
+		marshalled, _ := json.Marshal(&ResultOfAppSigningBox{EnumTypeValue: appResponse})
 		appRequestResult.EnumTypeValue = OkAppRequestResult{Result: marshalled}
 	}
 	err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
@@ -968,15 +979,6 @@ func (c *Client) dispatchRequestCryptoRegisterSigningBox(payload []byte, app App
 	if err != nil {
 		panic(err)
 	}
-}
-
-func (c *Client) dispatchNotifyCryptoRegisterSigningBox(payload []byte, app AppSigningBox) {
-	var appParams ParamsOfAppSigningBox
-	err := json.Unmarshal(payload, &appParams)
-	if err != nil {
-		panic(err)
-	}
-	app.Notify(appParams)
 }
 
 // Creates a default signing box implementation.
