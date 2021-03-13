@@ -1,6 +1,6 @@
 # TON SDK client Golang
 
-[![TON-SDK Version](https://img.shields.io/badge/SDK_version-1.9.0-green.svg)](https://github.com/tonlabs/TON-SDK/tree/1.9.0)
+[![TON-SDK](https://img.shields.io/badge/TON_SDK1.10.0-green.svg)](https://github.com/tonlabs/TON-SDK/tree/1.10.0)
 [![TON local-node docker image](https://img.shields.io/badge/TON_version-0.24.11-green.svg)](https://hub.docker.com/layers/tonlabs/local-node/0.24.8/images/sha256-62239cb2b215cbca7e8792812e27fa293727cfd8b17d3e58523c8a15a3673504?context=explore)
 [![Chat Telegram](https://img.shields.io/badge/chat-Telegram-9cf.svg)](https://t.me/RADIANCE_TON_SDK)
 [![Documentation](https://godoc.org/github.com/radianceteam/ton-client-go/client?status.svg)](https://godoc.org/github.com/radianceteam/ton-client-go/client)
@@ -10,19 +10,19 @@
 
 One needs to install
 - [Golang](https://golang.org/doc/install)
-- [TON-SDK](https://github.com/tonlabs/TON-SDK#download-precompiled-binaries) - download precompiled binaries and extract them 
+- [TON-SDK](https://github.com/tonlabs/TON-SDK#download-precompiled-binaries) - download precompiled binaries and extract them
 
 ### TON-SDK installation - Mac OS
 ```bash
 export TON_SDK_INSTALLATION_PATH=`pwd`/tmp # example - should be specified as absolute path
 # clean previous installation in case of reinstalling
-rm -f $TON_SDK_INSTALLATION_PATH/libton_client.dylib.gz $TON_SDK_INSTALLATION_PATH/libton_client.dylib 
+rm -f $TON_SDK_INSTALLATION_PATH/libton_client.dylib.gz $TON_SDK_INSTALLATION_PATH/libton_client.dylib
 # download binaries
-wget https://binaries.tonlabs.io/tonclient_1_darwin.gz -O $TON_SDK_INSTALLATION_PATH/libton_client.dylib.gz 
+wget https://binaries.tonlabs.io/tonclient_1_darwin.gz -O $TON_SDK_INSTALLATION_PATH/libton_client.dylib.gz
 # extract binaries
-gzip -d $TON_SDK_INSTALLATION_PATH/libton_client.dylib.gz 
+gzip -d $TON_SDK_INSTALLATION_PATH/libton_client.dylib.gz
 # make extracted file executable
-chmod +x $TON_SDK_INSTALLATION_PATH/libton_client.dylib 
+chmod +x $TON_SDK_INSTALLATION_PATH/libton_client.dylib
 # set loading by absolute path
 install_name_tool -id $TON_SDK_INSTALLATION_PATH/libton_client.dylib $TON_SDK_INSTALLATION_PATH/libton_client.dylib
 
