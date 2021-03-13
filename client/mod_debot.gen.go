@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 18:04 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 10 Mar 21 13:54 UTC
 //
 // Mod debot
 //
@@ -69,6 +69,8 @@ type ParamsOfStart struct {
 type RegisteredDebot struct {
 	// Debot handle which references an instance of debot engine.
 	DebotHandle DebotHandle `json:"debot_handle"`
+	// Debot abi as json string.
+	DebotAbi string `json:"debot_abi"`
 }
 
 // [UNSTABLE](UNSTABLE.md) Debot Browser callbacks.
@@ -401,12 +403,8 @@ type ParamsOfExecute struct {
 type ParamsOfSend struct {
 	// Debot handle which references an instance of debot engine.
 	DebotHandle DebotHandle `json:"debot_handle"`
-	// Std address of interface or debot.
-	Source string `json:"source"`
-	// Function Id to call.
-	FuncID uint32 `json:"func_id"`
-	// Json string with parameters.
-	Params string `json:"params"`
+	// BOC of internal message to debot encoded in base64 format.
+	Message string `json:"message"`
 }
 
 // [UNSTABLE](UNSTABLE.md) Starts an instance of debot.

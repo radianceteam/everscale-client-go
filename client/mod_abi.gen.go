@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 18:04 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 10 Mar 21 13:54 UTC
 //
 // Mod abi
 //
@@ -538,10 +538,13 @@ type ResultOfEncodeMessage struct {
 
 type ParamsOfEncodeInternalMessage struct {
 	// Contract ABI.
-	Abi Abi `json:"abi"`
+	// Can be None if both deploy_set and call_set are None.
+	Abi *Abi `json:"abi"` // optional
 	// Target address the message will be sent to.
 	// Must be specified in case of non-deploy message.
 	Address null.String `json:"address"` // optional
+	// Source address of the message.
+	SrcAddress null.String `json:"src_address"` // optional
 	// Deploy parameters.
 	// Must be specified in case of deploy message.
 	DeploySet *DeploySet `json:"deploy_set"` // optional
@@ -551,7 +554,7 @@ type ParamsOfEncodeInternalMessage struct {
 	// In case of deploy message it is optional and contains parameters
 	// of the functions that will to be called upon deploy transaction.
 	CallSet *CallSet `json:"call_set"` // optional
-	// Value in nanograms to be sent with message.
+	// Value in nanotokens to be sent with message.
 	Value string `json:"value"`
 	// Flag of bounceable message.
 	// Default is true.

@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Feb 21 18:04 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 10 Mar 21 13:54 UTC
 //
 // Mod boc
 //
@@ -125,7 +125,7 @@ type ParamsOfParseShardstate struct {
 }
 
 type ParamsOfGetBlockchainConfig struct {
-	// Key block BOC encoded as base64.
+	// Key block BOC or zerostate BOC encoded as base64.
 	BlockBoc string `json:"block_boc"`
 }
 
@@ -184,6 +184,158 @@ type ParamsOfBocCacheUnpin struct {
 	BocRef null.String `json:"boc_ref"` // optional
 }
 
+// Cell builder operation.
+
+// Append integer to cell data.
+type IntegerBuilderOp struct {
+	// Bit size of the value.
+	Size uint8 `json:"size"`
+	// Value: - `Number` containing integer number.
+	// e.g. `123`, `-123`. - Decimal string. e.g. `"123"`, `"-123"`.
+	// - `0x` prefixed hexadecimal string.
+	// e.g `0x123`, `0X123`, `-0x123`.
+	Value json.RawMessage `json:"value"`
+}
+
+// Append bit string to cell data.
+type BitStringBuilderOp struct {
+	// Bit string content using bitstring notation. See `TON VM specification` 1.0.
+	// Contains hexadecimal string representation:
+	// - Can end with `_` tag.
+	// - Can be prefixed with `x` or `X`.
+	// - Can be prefixed with `x{` or `X{` and ended with `}`.
+	//
+	// Contains binary string represented as a sequence
+	// of `0` and `1` prefixed with `n` or `N`.
+	//
+	// Examples:
+	// `1AB`, `x1ab`, `X1AB`, `x{1abc}`, `X{1ABC}`
+	// `2D9_`, `x2D9_`, `X2D9_`, `x{2D9_}`, `X{2D9_}`
+	// `n00101101100`, `N00101101100`.
+	Value string `json:"value"`
+}
+
+// Append ref to nested cells.
+type CellBuilderOp struct {
+	// Nested cell builder.
+	Builder []BuilderOp `json:"builder"`
+}
+
+// Append ref to nested cell.
+type CellBocBuilderOp struct {
+	// Nested cell BOC encoded with `base64` or BOC cache key.
+	Boc string `json:"boc"`
+}
+
+type BuilderOp struct {
+	// Should be any of
+	// IntegerBuilderOp
+	// BitStringBuilderOp
+	// CellBuilderOp
+	// CellBocBuilderOp
+	EnumTypeValue interface{}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *BuilderOp) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case IntegerBuilderOp:
+		return json.Marshal(struct {
+			IntegerBuilderOp
+			Type string `json:"type"`
+		}{
+			value,
+			"Integer",
+		})
+
+	case BitStringBuilderOp:
+		return json.Marshal(struct {
+			BitStringBuilderOp
+			Type string `json:"type"`
+		}{
+			value,
+			"BitString",
+		})
+
+	case CellBuilderOp:
+		return json.Marshal(struct {
+			CellBuilderOp
+			Type string `json:"type"`
+		}{
+			value,
+			"Cell",
+		})
+
+	case CellBocBuilderOp:
+		return json.Marshal(struct {
+			CellBocBuilderOp
+			Type string `json:"type"`
+		}{
+			value,
+			"CellBoc",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for BuilderOp %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *BuilderOp) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "Integer":
+		var enumTypeValue IntegerBuilderOp
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "BitString":
+		var enumTypeValue BitStringBuilderOp
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Cell":
+		var enumTypeValue CellBuilderOp
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "CellBoc":
+		var enumTypeValue CellBocBuilderOp
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for BuilderOp %v", typeDescriptor.Type)
+	}
+
+	return nil
+}
+
+type ParamsOfEncodeBoc struct {
+	// Cell builder operations.
+	Builder []BuilderOp `json:"builder"`
+	// Cache type to put the result. The BOC itself returned if no cache type provided.
+	BocCache *BocCacheType `json:"boc_cache"` // optional
+}
+
+type ResultOfEncodeBoc struct {
+	// Encoded cell BOC or BOC cache key.
+	Boc string `json:"boc"`
+}
+
 // Parses message boc into a JSON.
 // JSON structure is compatible with GraphQL API message object.
 func (c *Client) BocParseMessage(p *ParamsOfParse) (*ResultOfParse, error) {
@@ -234,6 +386,7 @@ func (c *Client) BocParseShardstate(p *ParamsOfParseShardstate) (*ResultOfParse,
 	return result, err
 }
 
+// Extract blockchain configuration from key block and also from zerostate.
 func (c *Client) BocGetBlockchainConfig(p *ParamsOfGetBlockchainConfig) (*ResultOfGetBlockchainConfig, error) {
 	result := new(ResultOfGetBlockchainConfig)
 
@@ -284,4 +437,13 @@ func (c *Client) BocCacheUnpin(p *ParamsOfBocCacheUnpin) error {
 	_, err := c.dllClient.waitErrorOrResult("boc.cache_unpin", p)
 
 	return err
+}
+
+// Encodes BOC from builder operations.
+func (c *Client) BocEncodeBoc(p *ParamsOfEncodeBoc) (*ResultOfEncodeBoc, error) {
+	result := new(ResultOfEncodeBoc)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.encode_boc", p, result)
+
+	return result, err
 }
