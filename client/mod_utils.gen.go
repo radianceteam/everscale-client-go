@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 10 Mar 21 13:54 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 24 Mar 21 17:28 UTC
 //
 // Mod utils
 //
@@ -113,11 +113,29 @@ type ResultOfConvertAddress struct {
 	Address string `json:"address"`
 }
 
+type ParamsOfCalcStorageFee struct {
+	Account string `json:"account"`
+	Period  uint32 `json:"period"`
+}
+
+type ResultOfCalcStorageFee struct {
+	Fee string `json:"fee"`
+}
+
 // Converts address from any TON format to any TON format.
 func (c *Client) UtilsConvertAddress(p *ParamsOfConvertAddress) (*ResultOfConvertAddress, error) {
 	result := new(ResultOfConvertAddress)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("utils.convert_address", p, result)
+
+	return result, err
+}
+
+// Calculates storage fee for an account over a specified time period.
+func (c *Client) UtilsCalcStorageFee(p *ParamsOfCalcStorageFee) (*ResultOfCalcStorageFee, error) {
+	result := new(ResultOfCalcStorageFee)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("utils.calc_storage_fee", p, result)
 
 	return result, err
 }
