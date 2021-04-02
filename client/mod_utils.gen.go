@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 24 Mar 21 17:28 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 02 Apr 21 20:53 UTC
 //
 // Mod utils
 //
@@ -9,6 +9,8 @@ package client
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/volatiletech/null"
 )
 
 type AccountIDAddressStringFormat struct{}
@@ -122,6 +124,32 @@ type ResultOfCalcStorageFee struct {
 	Fee string `json:"fee"`
 }
 
+type ParamsOfCompressZstd struct {
+	// Uncompressed data.
+	// Must be encoded as base64.
+	Uncompressed string `json:"uncompressed"`
+	// Compression level, from 1 to 21. Where: 1 - lowest compression level (fastest compression); 21 - highest compression level (slowest compression). If level is omitted, the default compression level is used (currently `3`).
+	Level null.Int32 `json:"level"` // optional
+}
+
+type ResultOfCompressZstd struct {
+	// Compressed data.
+	// Must be encoded as base64.
+	Compressed string `json:"compressed"`
+}
+
+type ParamsOfDecompressZstd struct {
+	// Compressed data.
+	// Must be encoded as base64.
+	Compressed string `json:"compressed"`
+}
+
+type ResultOfDecompressZstd struct {
+	// Decompressed data.
+	// Must be encoded as base64.
+	Decompressed string `json:"decompressed"`
+}
+
 // Converts address from any TON format to any TON format.
 func (c *Client) UtilsConvertAddress(p *ParamsOfConvertAddress) (*ResultOfConvertAddress, error) {
 	result := new(ResultOfConvertAddress)
@@ -136,6 +164,24 @@ func (c *Client) UtilsCalcStorageFee(p *ParamsOfCalcStorageFee) (*ResultOfCalcSt
 	result := new(ResultOfCalcStorageFee)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("utils.calc_storage_fee", p, result)
+
+	return result, err
+}
+
+// Compresses data using Zstandard algorithm.
+func (c *Client) UtilsCompressZstd(p *ParamsOfCompressZstd) (*ResultOfCompressZstd, error) {
+	result := new(ResultOfCompressZstd)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("utils.compress_zstd", p, result)
+
+	return result, err
+}
+
+// Decompresses data using Zstandard algorithm.
+func (c *Client) UtilsDecompressZstd(p *ParamsOfDecompressZstd) (*ResultOfDecompressZstd, error) {
+	result := new(ResultOfDecompressZstd)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("utils.decompress_zstd", p, result)
 
 	return result, err
 }

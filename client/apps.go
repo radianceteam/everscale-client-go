@@ -1,6 +1,7 @@
 package client
 
 type AppDebotBrowser interface {
+	ApproveRequest(ApproveParamsOfAppDebotBrowser) (ApproveResultOfAppDebotBrowser, error)
 	InputRequest(InputParamsOfAppDebotBrowser) (InputResultOfAppDebotBrowser, error)
 	GetSigningBoxRequest(GetSigningBoxParamsOfAppDebotBrowser) (GetSigningBoxResultOfAppDebotBrowser, error)
 	InvokeDebotRequest(InvokeDebotParamsOfAppDebotBrowser) (InvokeDebotResultOfAppDebotBrowser, error)
