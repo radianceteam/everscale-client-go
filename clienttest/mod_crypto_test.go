@@ -82,6 +82,7 @@ func TestModCryptoRegisterSigningBox(t *testing.T) {
 	a.NoError(err, "hex.DecodeString(signResult.Signature)")
 
 	a.True(ed25519.Verify(pubKeyBytes, messageToSign, signatureBytes))
+	a.NoError(c.CryptoRemoveSigningBox(&client.RegisteredSigningBox{Handle: handle.Handle}))
 }
 
 func TestModCryptoMnemonicFromRandom(t *testing.T) {
