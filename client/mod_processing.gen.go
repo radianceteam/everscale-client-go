@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 02 Apr 21 20:53 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 23 Apr 21 11:54 UTC
 //
 // Mod processing
 //
@@ -322,6 +322,10 @@ type ResultOfSendMessage struct {
 	// This block id must be used as a parameter of the
 	// `wait_for_transaction`.
 	ShardBlockID string `json:"shard_block_id"`
+	// The list of endpoints to which the message was sent.
+	// This list id must be used as a parameter of the
+	// `wait_for_transaction`.
+	SendingEndpoints []string `json:"sending_endpoints"`
 }
 
 type ParamsOfWaitForTransaction struct {
@@ -339,6 +343,9 @@ type ParamsOfWaitForTransaction struct {
 	ShardBlockID string `json:"shard_block_id"`
 	// Flag that enables/disables intermediate events.
 	SendEvents bool `json:"send_events"`
+	// The list of endpoints to which the message was sent.
+	// You must provide the same value as the `send_message` has returned.
+	SendingEndpoints []string `json:"sending_endpoints"` // optional
 }
 
 type ParamsOfProcessMessage struct {
