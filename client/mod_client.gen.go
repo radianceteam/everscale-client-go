@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 02 Apr 21 20:53 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 23 Apr 21 11:54 UTC
 //
 // Mod client
 //
@@ -123,6 +123,8 @@ type NetworkConfig struct {
 	// `message_processing_timeout/2`.
 	// The default value is 15 sec.
 	OutOfSyncThreshold null.Uint32 `json:"out_of_sync_threshold"` // optional
+	// Maximum number of randomly chosen endpoints the library uses to send message. The default value is 2 endpoints.
+	SendingEndpointCount null.Uint8 `json:"sending_endpoint_count"` // optional
 	// Access key to GraphQL API.
 	// At the moment is not used in production.
 	AccessKey null.String `json:"access_key"` // optional

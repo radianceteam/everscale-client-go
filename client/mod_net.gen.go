@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 02 Apr 21 20:53 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 23 Apr 21 11:54 UTC
 //
 // Mod net
 //
@@ -64,6 +64,7 @@ type ParamsOfQueryOperation struct {
 	// ParamsOfQueryCollection
 	// ParamsOfWaitForCollection
 	// ParamsOfAggregateCollection
+	// ParamsOfQueryCounterparties
 	EnumTypeValue interface{}
 }
 
@@ -98,6 +99,15 @@ func (p *ParamsOfQueryOperation) MarshalJSON() ([]byte, error) { // nolint funle
 			"AggregateCollection",
 		})
 
+	case ParamsOfQueryCounterparties:
+		return json.Marshal(struct {
+			ParamsOfQueryCounterparties
+			Type string `json:"type"`
+		}{
+			value,
+			"QueryCounterparties",
+		})
+
 	default:
 		return nil, fmt.Errorf("unsupported type for ParamsOfQueryOperation %v", p.EnumTypeValue)
 	}
@@ -127,6 +137,13 @@ func (p *ParamsOfQueryOperation) UnmarshalJSON(b []byte) error { // nolint funle
 
 	case "AggregateCollection":
 		var enumTypeValue ParamsOfAggregateCollection
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "QueryCounterparties":
+		var enumTypeValue ParamsOfQueryCounterparties
 		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
 			return err
 		}
@@ -266,6 +283,17 @@ type EndpointsSet struct {
 	Endpoints []string `json:"endpoints"`
 }
 
+type ParamsOfQueryCounterparties struct {
+	// Account address.
+	Account string `json:"account"`
+	// Projection (result) string.
+	Result string `json:"result"`
+	// Number of counterparties to return.
+	First null.Uint32 `json:"first"` // optional
+	// `cursor` field of the last received result.
+	After null.String `json:"after"` // optional
+}
+
 // Performs DAppServer GraphQL query.
 func (c *Client) NetQuery(p *ParamsOfQuery) (*ResultOfQuery, error) {
 	result := new(ResultOfQuery)
@@ -366,4 +394,16 @@ func (c *Client) NetSetEndpoints(p *EndpointsSet) error {
 	_, err := c.dllClient.waitErrorOrResult("net.set_endpoints", p)
 
 	return err
+}
+
+// Allows to query and paginate through the list of accounts that the specified account has interacted with, sorted by the time of the last internal message between accounts.
+// *Attention* this query retrieves data from 'Counterparties' service which is not supported in
+// the opensource version of DApp Server (and will not be supported) as well as in TON OS SE (will be supported in SE in future),
+// but is always accessible via [TON OS Devnet/Mainnet Clouds](https://docs.ton.dev/86757ecb2/p/85c869-networks).
+func (c *Client) NetQueryCounterparties(p *ParamsOfQueryCounterparties) (*ResultOfQueryCollection, error) {
+	result := new(ResultOfQueryCollection)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("net.query_counterparties", p, result)
+
+	return result, err
 }

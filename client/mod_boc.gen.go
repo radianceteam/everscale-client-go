@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 02 Apr 21 20:53 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 23 Apr 21 11:54 UTC
 //
 // Mod boc
 //
@@ -189,7 +189,7 @@ type ParamsOfBocCacheUnpin struct {
 // Append integer to cell data.
 type IntegerBuilderOp struct {
 	// Bit size of the value.
-	Size uint8 `json:"size"`
+	Size uint32 `json:"size"`
 	// Value: - `Number` containing integer number.
 	// e.g. `123`, `-123`. - Decimal string. e.g. `"123"`, `"-123"`.
 	// - `0x` prefixed hexadecimal string.
