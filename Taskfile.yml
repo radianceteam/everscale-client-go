@@ -28,7 +28,7 @@ tasks:
       - goimports -w ./client/*.gen.go
       - golangci-lint run --fix ./client/
   download_sdk:
-    desk: "Downloads SDK"
+    desc: "Downloads SDK"
     cmds:
       - rm -rf ./tmp/libton_client.*
       - wget https://binaries.tonlabs.io/tonclient_1_{{OS}}.gz -O ./tmp/libton_client.{{if eq OS "darwin"}}dylib{{else}}so{{end}}.gz
