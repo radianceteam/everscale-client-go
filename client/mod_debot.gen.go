@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 23 Apr 21 11:54 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 15 May 21 07:58 UTC
 //
 // Mod debot
 //
@@ -75,7 +75,7 @@ type DebotInfo struct {
 	// The name of DeBot deployer.
 	Publisher null.String `json:"publisher"` // optional
 	// Short info about DeBot.
-	Key null.String `json:"key"` // optional
+	Caption null.String `json:"caption"` // optional
 	// The name of DeBot developer.
 	Author null.String `json:"author"` // optional
 	// TON address of author for questions and donations.
