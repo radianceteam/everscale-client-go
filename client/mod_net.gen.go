@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 15 May 21 07:58 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 21 May 21 06:08 UTC
 //
 // Mod net
 //
@@ -283,6 +283,13 @@ type EndpointsSet struct {
 	Endpoints []string `json:"endpoints"`
 }
 
+type ResultOfGetEndpoints struct {
+	// Current query endpoint.
+	Query string `json:"query"`
+	// List of all endpoints used by client.
+	Endpoints []string `json:"endpoints"`
+}
+
 type ParamsOfQueryCounterparties struct {
 	// Account address.
 	Account string `json:"account"`
@@ -394,6 +401,15 @@ func (c *Client) NetSetEndpoints(p *EndpointsSet) error {
 	_, err := c.dllClient.waitErrorOrResult("net.set_endpoints", p)
 
 	return err
+}
+
+// Requests the list of alternative endpoints from server.
+func (c *Client) NetGetEndpoints() (*ResultOfGetEndpoints, error) {
+	result := new(ResultOfGetEndpoints)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("net.get_endpoints", nil, result)
+
+	return result, err
 }
 
 // Allows to query and paginate through the list of accounts that the specified account has interacted with, sorted by the time of the last internal message between accounts.
