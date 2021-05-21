@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 15 May 21 07:58 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 21 May 21 06:08 UTC
 //
 // Mod client
 //
@@ -107,24 +107,39 @@ type NetworkConfig struct {
 	// Deprecated.
 	// You must use `network.max_reconnect_timeout` that allows to specify maximum network resolving timeout.
 	NetworkRetriesCount null.Int8 `json:"network_retries_count"` // optional
-	// Maximum time for sequential reconnections in ms.
-	// Default value is 120000 (2 min).
+	// Maximum time for sequential reconnections.
+	// Must be specified in milliseconds. Default is 120000 (2 min).
 	MaxReconnectTimeout null.Uint32 `json:"max_reconnect_timeout"` // optional
 	// Deprecated.
 	ReconnectTimeout null.Uint32 `json:"reconnect_timeout"` // optional
-	// The number of automatic message processing retries that SDK performs in case of `Message Expired (507)` error - but only for those messages which local emulation was successful or failed with replay protection error. The default value is 5.
+	// The number of automatic message processing retries that SDK performs in case of `Message Expired (507)` error - but only for those messages which local emulation was successful or failed with replay protection error.
+	// Default is 5.
 	MessageRetriesCount null.Int8 `json:"message_retries_count"` // optional
 	// Timeout that is used to process message delivery for the contracts which ABI does not include "expire" header. If the message is not delivered within the specified timeout the appropriate error occurs.
+	// Must be specified in milliseconds. Default is 40000 (40 sec).
 	MessageProcessingTimeout null.Uint32 `json:"message_processing_timeout"` // optional
-	// Maximum timeout that is used for query response. The default value is 40 sec.
+	// Maximum timeout that is used for query response.
+	// Must be specified in milliseconds. Default is 40000 (40 sec).
 	WaitForTimeout null.Uint32 `json:"wait_for_timeout"` // optional
 	// Maximum time difference between server and client.
 	// If client's device time is out of sync and difference is more than the threshold then error will occur. Also an error will occur if the specified threshold is more than
 	// `message_processing_timeout/2`.
-	// The default value is 15 sec.
+	//
+	// Must be specified in milliseconds. Default is 15000 (15 sec).
 	OutOfSyncThreshold null.Uint32 `json:"out_of_sync_threshold"` // optional
-	// Maximum number of randomly chosen endpoints the library uses to send message. The default value is 2 endpoints.
+	// Maximum number of randomly chosen endpoints the library uses to broadcast a message.
+	// Default is 2.
 	SendingEndpointCount null.Uint8 `json:"sending_endpoint_count"` // optional
+	// Frequency of sync latency detection.
+	// Library periodically checks the current endpoint for blockchain data synchronization latency.
+	// If the latency (time-lag) is less then `NetworkConfig.max_latency`
+	// then library selects another endpoint.
+	//
+	// Must be specified in milliseconds. Default is 60000 (1 min).
+	LatencyDetectionInterval null.Uint32 `json:"latency_detection_interval"` // optional
+	// Maximum value for the endpoint's blockchain data synchronization latency (time-lag). Library periodically checks the current endpoint for blockchain data synchronization latency. If the latency (time-lag) is less then `NetworkConfig.max_latency` then library selects another endpoint.
+	// Must be specified in milliseconds. Default is 60000 (1 min).
+	MaxLatency null.Uint32 `json:"max_latency"` // optional
 	// Access key to GraphQL API.
 	// At the moment is not used in production.
 	AccessKey null.String `json:"access_key"` // optional

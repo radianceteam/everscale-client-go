@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 15 May 21 07:58 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 21 May 21 06:08 UTC
 //
 // Mod debot
 //
@@ -108,6 +108,8 @@ type TransactionDebotActivity struct {
 	Setcode bool `json:"setcode"`
 	// Public key from keypair that was used to sign external message.
 	Signkey string `json:"signkey"`
+	// Signing box handle used to sign external message.
+	SigningBoxHandle uint32 `json:"signing_box_handle"`
 }
 
 type DebotActivity struct {
