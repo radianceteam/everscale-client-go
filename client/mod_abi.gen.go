@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 21 May 21 06:08 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 May 21 07:49 UTC
 //
 // Mod abi
 //
@@ -415,7 +415,7 @@ type AbiEvent struct {
 }
 
 type AbiData struct {
-	Key        big.Int    `json:"key"`
+	Key        uint32     `json:"key"`
 	Name       string     `json:"name"`
 	Type       string     `json:"type"`
 	Components []AbiParam `json:"components"` // optional

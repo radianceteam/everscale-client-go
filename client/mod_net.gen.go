@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 21 May 21 06:08 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 May 21 07:49 UTC
 //
 // Mod net
 //
@@ -179,6 +179,46 @@ const (
 	AverageAggregationFn AggregationFn = "AVERAGE"
 )
 
+type TransactionNode struct {
+	// Transaction id.
+	ID string `json:"id"`
+	// In message id.
+	InMsg string `json:"in_msg"`
+	// Out message ids.
+	OutMsgs []string `json:"out_msgs"`
+	// Account address.
+	AccountAddr string `json:"account_addr"`
+	// Transactions total fees.
+	TotalFees string `json:"total_fees"`
+	// Aborted flag.
+	Aborted bool `json:"aborted"`
+	// Compute phase exit code.
+	ExitCode null.Uint32 `json:"exit_code"` // optional
+}
+
+type MessageNode struct {
+	// Message id.
+	ID string `json:"id"`
+	// Source transaction id.
+	// This field is missing for an external inbound messages.
+	SrcTransactionID null.String `json:"src_transaction_id"` // optional
+	// Destination transaction id.
+	// This field is missing for an external outbound messages.
+	DstTransactionID null.String `json:"dst_transaction_id"` // optional
+	// Source address.
+	Src null.String `json:"src"` // optional
+	// Destination address.
+	Dst null.String `json:"dst"` // optional
+	// Transferred tokens value.
+	Value null.String `json:"value"` // optional
+	// Bounce flag.
+	Bounce bool `json:"bounce"`
+	// Decoded body.
+	// Library tries to decode message body using provided `params.abi_registry`.
+	// This field will be missing if none of the provided abi can be used to decode.
+	DecodedBody *DecodedMessageBody `json:"decoded_body"` // optional
+}
+
 type ParamsOfQuery struct {
 	// GraphQL query text.
 	Query string `json:"query"`
@@ -301,6 +341,20 @@ type ParamsOfQueryCounterparties struct {
 	After null.String `json:"after"` // optional
 }
 
+type ParamsOfQueryTransactionTree struct {
+	// Input message id.
+	InMsg string `json:"in_msg"`
+	// List of contract ABIs that will be used to decode message bodies. Library will try to decode each returned message body using any ABI from the registry.
+	AbiRegistry []Abi `json:"abi_registry"` // optional
+}
+
+type ResultOfQueryTransactionTree struct {
+	// Messages.
+	Messages []MessageNode `json:"messages"`
+	// Transactions.
+	Transactions []TransactionNode `json:"transactions"`
+}
+
 // Performs DAppServer GraphQL query.
 func (c *Client) NetQuery(p *ParamsOfQuery) (*ResultOfQuery, error) {
 	result := new(ResultOfQuery)
@@ -420,6 +474,29 @@ func (c *Client) NetQueryCounterparties(p *ParamsOfQueryCounterparties) (*Result
 	result := new(ResultOfQueryCollection)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("net.query_counterparties", p, result)
+
+	return result, err
+}
+
+// Returns transactions tree for specific message.
+// Performs recursive retrieval of the transactions tree produced by the specific message:
+// in_msg -> dst_transaction -> out_messages -> dst_transaction -> ...
+//
+// All retrieved messages and transactions will be included
+// into `result.messages` and `result.transactions` respectively.
+//
+// The retrieval process will stop when the retrieved transaction count is more than 50.
+//
+// It is guaranteed that each message in `result.messages` has the corresponding transaction
+// in the `result.transactions`.
+//
+// But there are no guaranties that all messages from transactions `out_msgs` are
+// presented in `result.messages`.
+// So the application have to continue retrieval for missing messages if it requires.
+func (c *Client) NetQueryTransactionTree(p *ParamsOfQueryTransactionTree) (*ResultOfQueryTransactionTree, error) {
+	result := new(ResultOfQueryTransactionTree)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("net.query_transaction_tree", p, result)
 
 	return result, err
 }
