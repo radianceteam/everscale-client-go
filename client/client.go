@@ -17,12 +17,24 @@ func (c *Client) Close() {
 	c.dllClient.close()
 }
 
-func NewClient(config Config) (*Client, error) {
+type WrapperConfig struct {
+	// Prevents from spawning unlimited system threads
+	// when TON-SDK external code is called via CGO
+	// for more details please see `func cgocall(fn, arg unsafe.Pointer) int32`
+	// implementation and comments in `runtime` package.
+	MaxCGOConcurrentThreads uint
+}
+
+func NewClient(config Config, wrapperConfig WrapperConfig) (*Client, error) {
 	rawConfig, err := json.Marshal(config)
 	if err != nil {
 		return nil, err
 	}
-	dllClient, err := newDLLClient(rawConfig)
+	MaxCGOConcurrentThreads := wrapperConfig.MaxCGOConcurrentThreads
+	if MaxCGOConcurrentThreads == 0 {
+		MaxCGOConcurrentThreads = 1 // to prevent dead-lock before CGO call.
+	}
+	dllClient, err := newDLLClient(rawConfig, MaxCGOConcurrentThreads)
 	if err != nil {
 		return nil, err
 	}
