@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 May 21 07:49 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 21 Jun 21 14:33 UTC
 //
 // Mod processing
 //
@@ -344,7 +344,9 @@ type ParamsOfWaitForTransaction struct {
 	// Flag that enables/disables intermediate events.
 	SendEvents bool `json:"send_events"`
 	// The list of endpoints to which the message was sent.
-	// You must provide the same value as the `send_message` has returned.
+	// Use this field to get more informative errors.
+	// Provide the same value as the `send_message` has returned.
+	// If the message was not delivered (expired), SDK will log the endpoint URLs, used for its sending.
 	SendingEndpoints []string `json:"sending_endpoints"` // optional
 }
 
