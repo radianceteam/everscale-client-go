@@ -14,7 +14,7 @@ func TestModClient(t *testing.T) {
 	a := assert.New(t)
 	c, err := client.NewClient(client.Config{
 		Network: &client.NetworkConfig{ServerAddress: null.NewString("net.ton.dev", true)},
-	})
+	}, client.WrapperConfig{MaxCGOConcurrentThreads: 10})
 	if err == nil {
 		defer c.Close()
 	}

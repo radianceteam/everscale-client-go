@@ -125,17 +125,23 @@ type dllClient interface {
 	close()
 }
 
-func newDLLClient(rawConfig []byte) (dllClient, error) {
+func newDLLClient(rawConfig []byte, maxCGOConcurrentThreads uint) (dllClient, error) {
 	c := &dllClientCtx{
-		closeSignal: make(chan struct{}),
+		closeSignal:             make(chan struct{}),
+		maxCGOConcurrentThreads: make(chan struct{}, maxCGOConcurrentThreads),
+	}
+
+	for i := uint(0); i < maxCGOConcurrentThreads; i++ {
+		c.maxCGOConcurrentThreads <- struct{}{}
 	}
 
 	return c, c.createContext(rawConfig)
 }
 
 type dllClientCtx struct {
-	closeSignal chan struct{}
-	ctx         C.uint32_t
+	closeSignal             chan struct{}
+	maxCGOConcurrentThreads chan struct{}
+	ctx                     C.uint32_t
 }
 
 type contextCreateResponse struct {
@@ -171,7 +177,7 @@ func (c *dllClientCtx) waitErrorOrResultUnmarshal(method string, body interface{
 	if err != nil {
 		return err
 	}
-	// fmt.Println(string(rawData))
+
 	return json.Unmarshal(rawData, dst)
 }
 
@@ -191,7 +197,10 @@ func (c *dllClientCtx) resultsChannel(method string, body interface{}) (<-chan *
 		zap.Uint32("request_id", requestID),
 		zap.String("method", method),
 		zap.ByteString("body", rawBody))
-	// maybe add global worker pool later for CGO calls
+	turn := <-c.maxCGOConcurrentThreads
+	defer func() {
+		c.maxCGOConcurrentThreads <- turn
+	}()
 	C.call_tc_request(c.ctx, newTcStr([]byte(method)), newTcStr(rawBody), C.uint32_t(requestID))
 
 	return responses, nil

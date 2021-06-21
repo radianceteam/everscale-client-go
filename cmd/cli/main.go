@@ -15,7 +15,7 @@ import (
 func newClient() (*client.Client, error) {
 	return client.NewClient(client.Config{
 		Network: &client.NetworkConfig{ServerAddress: null.NewString("net.ton.dev", true)},
-	})
+	}, client.WrapperConfig{MaxCGOConcurrentThreads: 10})
 }
 
 func printResult(data interface{}) error {
