@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 May 21 07:49 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 21 Jun 21 14:33 UTC
 //
 // Mod net
 //
@@ -346,6 +346,12 @@ type ParamsOfQueryTransactionTree struct {
 	InMsg string `json:"in_msg"`
 	// List of contract ABIs that will be used to decode message bodies. Library will try to decode each returned message body using any ABI from the registry.
 	AbiRegistry []Abi `json:"abi_registry"` // optional
+	// Timeout used to limit waiting time for the missing messages and transaction.
+	// If some of the following messages and transactions are missing yet
+	// The maximum waiting time is regulated by this option.
+	//
+	// Default value is 60000 (1 min).
+	Timeout null.Uint32 `json:"timeout"` // optional
 }
 
 type ResultOfQueryTransactionTree struct {

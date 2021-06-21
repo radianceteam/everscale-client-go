@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 May 21 07:49 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 21 Jun 21 14:33 UTC
 //
 // Mod crypto
 //
@@ -607,7 +607,10 @@ type ResultOfSigningBoxSign struct {
 	Signature string `json:"signature"`
 }
 
-// Performs prime factorization – decomposition of a composite number into a product of smaller prime integers (factors). See [https://en.wikipedia.org/wiki/Integer_factorization].
+// Integer factorization.
+// Performs prime factorization – decomposition of a composite number
+// into a product of smaller prime integers (factors).
+// See [https://en.wikipedia.org/wiki/Integer_factorization].
 func (c *Client) CryptoFactorize(p *ParamsOfFactorize) (*ResultOfFactorize, error) {
 	result := new(ResultOfFactorize)
 
@@ -616,7 +619,9 @@ func (c *Client) CryptoFactorize(p *ParamsOfFactorize) (*ResultOfFactorize, erro
 	return result, err
 }
 
-// Performs modular exponentiation for big integers (`base`^`exponent` mod `modulus`). See [https://en.wikipedia.org/wiki/Modular_exponentiation].
+// Modular exponentiation.
+// Performs modular exponentiation for big integers (`base`^`exponent` mod `modulus`).
+// See [https://en.wikipedia.org/wiki/Modular_exponentiation].
 func (c *Client) CryptoModularPower(p *ParamsOfModularPower) (*ResultOfModularPower, error) {
 	result := new(ResultOfModularPower)
 
@@ -697,7 +702,10 @@ func (c *Client) CryptoSha512(p *ParamsOfHash) (*ResultOfHash, error) {
 	return result, err
 }
 
-// Derives key from `password` and `key` using `scrypt` algorithm. See [https://en.wikipedia.org/wiki/Scrypt].
+// Perform `scrypt` encryption.
+// Derives key from `password` and `key` using `scrypt` algorithm.
+// See [https://en.wikipedia.org/wiki/Scrypt].
+//
 // # Arguments
 // - `log_n` - The log2 of the Scrypt parameter `N`
 // - `r` - The Scrypt parameter `r`
@@ -852,7 +860,9 @@ func (c *Client) CryptoMnemonicFromEntropy(p *ParamsOfMnemonicFromEntropy) (*Res
 	return result, err
 }
 
-// The phrase supplied will be checked for word length and validated according to the checksum specified in BIP0039.
+// Validates a mnemonic phrase.
+// The phrase supplied will be checked for word length and validated according to the checksum
+// specified in BIP0039.
 func (c *Client) CryptoMnemonicVerify(p *ParamsOfMnemonicVerify) (*ResultOfMnemonicVerify, error) {
 	result := new(ResultOfMnemonicVerify)
 
@@ -861,7 +871,9 @@ func (c *Client) CryptoMnemonicVerify(p *ParamsOfMnemonicVerify) (*ResultOfMnemo
 	return result, err
 }
 
-// Validates the seed phrase, generates master key and then derives the key pair from the master key and the specified path.
+// Derives a key pair for signing from the seed phrase.
+// Validates the seed phrase, generates master key and then derives
+// the key pair from the master key and the specified path.
 func (c *Client) CryptoMnemonicDeriveSignKeys(p *ParamsOfMnemonicDeriveSignKeys) (*KeyPair, error) {
 	result := new(KeyPair)
 
