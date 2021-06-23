@@ -17,3 +17,9 @@ type AppSigningBox interface {
 	GetPublicKeyRequest(GetPublicKeyParamsOfAppSigningBox) (GetPublicKeyResultOfAppSigningBox, error)
 	SignRequest(SignParamsOfAppSigningBox) (SignResultOfAppSigningBox, error)
 }
+
+type AppEncryptionBox interface {
+	GetInfoRequest(GetInfoParamsOfAppEncryptionBox) (GetInfoResultOfAppEncryptionBox, error)
+	EncryptRequest(EncryptParamsOfAppEncryptionBox) (EncryptResultOfAppEncryptionBox, error)
+	DecryptRequest(DecryptParamsOfAppEncryptionBox) (DecryptResultOfAppEncryptionBox, error)
+}
