@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 21 Jun 21 14:33 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 23 Jun 21 21:13 UTC
 //
 // Mod crypto
 //
@@ -14,26 +14,27 @@ import (
 )
 
 const (
-	InvalidPublicKeyCryptoErrorCode          = 100
-	InvalidSecretKeyCryptoErrorCode          = 101
-	InvalidKeyCryptoErrorCode                = 102
-	InvalidFactorizeChallengeCryptoErrorCode = 106
-	InvalidBigIntCryptoErrorCode             = 107
-	ScryptFailedCryptoErrorCode              = 108
-	InvalidKeySizeCryptoErrorCode            = 109
-	NaclSecretBoxFailedCryptoErrorCode       = 110
-	NaclBoxFailedCryptoErrorCode             = 111
-	NaclSignFailedCryptoErrorCode            = 112
-	Bip39InvalidEntropyCryptoErrorCode       = 113
-	Bip39InvalidPhraseCryptoErrorCode        = 114
-	Bip32InvalidKeyCryptoErrorCode           = 115
-	Bip32InvalidDerivePathCryptoErrorCode    = 116
-	Bip39InvalidDictionaryCryptoErrorCode    = 117
-	Bip39InvalidWordCountCryptoErrorCode     = 118
-	MnemonicGenerationFailedCryptoErrorCode  = 119
-	MnemonicFromEntropyFailedCryptoErrorCode = 120
-	SigningBoxNotRegisteredCryptoErrorCode   = 121
-	InvalidSignatureCryptoErrorCode          = 122
+	InvalidPublicKeyCryptoErrorCode           = 100
+	InvalidSecretKeyCryptoErrorCode           = 101
+	InvalidKeyCryptoErrorCode                 = 102
+	InvalidFactorizeChallengeCryptoErrorCode  = 106
+	InvalidBigIntCryptoErrorCode              = 107
+	ScryptFailedCryptoErrorCode               = 108
+	InvalidKeySizeCryptoErrorCode             = 109
+	NaclSecretBoxFailedCryptoErrorCode        = 110
+	NaclBoxFailedCryptoErrorCode              = 111
+	NaclSignFailedCryptoErrorCode             = 112
+	Bip39InvalidEntropyCryptoErrorCode        = 113
+	Bip39InvalidPhraseCryptoErrorCode         = 114
+	Bip32InvalidKeyCryptoErrorCode            = 115
+	Bip32InvalidDerivePathCryptoErrorCode     = 116
+	Bip39InvalidDictionaryCryptoErrorCode     = 117
+	Bip39InvalidWordCountCryptoErrorCode      = 118
+	MnemonicGenerationFailedCryptoErrorCode   = 119
+	MnemonicFromEntropyFailedCryptoErrorCode  = 120
+	SigningBoxNotRegisteredCryptoErrorCode    = 121
+	InvalidSignatureCryptoErrorCode           = 122
+	EncryptionBoxNotRegisteredCryptoErrorCode = 123
 )
 
 func init() { // nolint gochecknoinits
@@ -57,15 +58,30 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[MnemonicFromEntropyFailedCryptoErrorCode] = "MnemonicFromEntropyFailedCryptoErrorCode"
 	errorCodesToErrorTypes[SigningBoxNotRegisteredCryptoErrorCode] = "SigningBoxNotRegisteredCryptoErrorCode"
 	errorCodesToErrorTypes[InvalidSignatureCryptoErrorCode] = "InvalidSignatureCryptoErrorCode"
+	errorCodesToErrorTypes[EncryptionBoxNotRegisteredCryptoErrorCode] = "EncryptionBoxNotRegisteredCryptoErrorCode"
 }
 
 type (
-	SigningBoxHandle  uint32
-	ParamsOfFactorize struct {
-		// Hexadecimal representation of u64 composite number.
-		Composite string `json:"composite"`
-	}
+	SigningBoxHandle    uint32
+	EncryptionBoxHandle uint32
 )
+
+// Encryption box information.
+type EncryptionBoxInfo struct {
+	// Derivation path, for instance "m/44'/396'/0'/0/0".
+	Hdpath null.String `json:"hdpath"` // optional
+	// Cryptographic algorithm, used by this encryption box.
+	Algorithm null.String `json:"algorithm"` // optional
+	// Options, depends on algorithm and specific encryption box implementation.
+	Options json.RawMessage `json:"options"` // optional
+	// Public information, depends on algorithm.
+	Public json.RawMessage `json:"public"` // optional
+}
+
+type ParamsOfFactorize struct {
+	// Hexadecimal representation of u64 composite number.
+	Composite string `json:"composite"`
+}
 
 type ResultOfFactorize struct {
 	// Two factors of composite or empty if composite can't be factorized.
@@ -607,6 +623,241 @@ type ResultOfSigningBoxSign struct {
 	Signature string `json:"signature"`
 }
 
+type RegisteredEncryptionBox struct {
+	// Handle of the encryption box.
+	Handle EncryptionBoxHandle `json:"handle"`
+}
+
+// Encryption box callbacks.
+
+// Get encryption box info.
+type GetInfoParamsOfAppEncryptionBox struct{}
+
+// Encrypt data.
+type EncryptParamsOfAppEncryptionBox struct {
+	// Data, encoded in Base64.
+	Data string `json:"data"`
+}
+
+// Decrypt data.
+type DecryptParamsOfAppEncryptionBox struct {
+	// Data, encoded in Base64.
+	Data string `json:"data"`
+}
+
+type ParamsOfAppEncryptionBox struct {
+	// Should be any of
+	// GetInfoParamsOfAppEncryptionBox
+	// EncryptParamsOfAppEncryptionBox
+	// DecryptParamsOfAppEncryptionBox
+	EnumTypeValue interface{}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ParamsOfAppEncryptionBox) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case GetInfoParamsOfAppEncryptionBox:
+		return json.Marshal(struct {
+			GetInfoParamsOfAppEncryptionBox
+			Type string `json:"type"`
+		}{
+			value,
+			"GetInfo",
+		})
+
+	case EncryptParamsOfAppEncryptionBox:
+		return json.Marshal(struct {
+			EncryptParamsOfAppEncryptionBox
+			Type string `json:"type"`
+		}{
+			value,
+			"Encrypt",
+		})
+
+	case DecryptParamsOfAppEncryptionBox:
+		return json.Marshal(struct {
+			DecryptParamsOfAppEncryptionBox
+			Type string `json:"type"`
+		}{
+			value,
+			"Decrypt",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for ParamsOfAppEncryptionBox %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ParamsOfAppEncryptionBox) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "GetInfo":
+		var enumTypeValue GetInfoParamsOfAppEncryptionBox
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Encrypt":
+		var enumTypeValue EncryptParamsOfAppEncryptionBox
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Decrypt":
+		var enumTypeValue DecryptParamsOfAppEncryptionBox
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for ParamsOfAppEncryptionBox %v", typeDescriptor.Type)
+	}
+
+	return nil
+}
+
+// Returning values from signing box callbacks.
+
+// Result of getting encryption box info.
+type GetInfoResultOfAppEncryptionBox struct {
+	Info EncryptionBoxInfo `json:"info"`
+}
+
+// Result of encrypting data.
+type EncryptResultOfAppEncryptionBox struct {
+	// Encrypted data, encoded in Base64.
+	Data string `json:"data"`
+}
+
+// Result of decrypting data.
+type DecryptResultOfAppEncryptionBox struct {
+	// Decrypted data, encoded in Base64.
+	Data string `json:"data"`
+}
+
+type ResultOfAppEncryptionBox struct {
+	// Should be any of
+	// GetInfoResultOfAppEncryptionBox
+	// EncryptResultOfAppEncryptionBox
+	// DecryptResultOfAppEncryptionBox
+	EnumTypeValue interface{}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ResultOfAppEncryptionBox) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case GetInfoResultOfAppEncryptionBox:
+		return json.Marshal(struct {
+			GetInfoResultOfAppEncryptionBox
+			Type string `json:"type"`
+		}{
+			value,
+			"GetInfo",
+		})
+
+	case EncryptResultOfAppEncryptionBox:
+		return json.Marshal(struct {
+			EncryptResultOfAppEncryptionBox
+			Type string `json:"type"`
+		}{
+			value,
+			"Encrypt",
+		})
+
+	case DecryptResultOfAppEncryptionBox:
+		return json.Marshal(struct {
+			DecryptResultOfAppEncryptionBox
+			Type string `json:"type"`
+		}{
+			value,
+			"Decrypt",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for ResultOfAppEncryptionBox %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ResultOfAppEncryptionBox) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "GetInfo":
+		var enumTypeValue GetInfoResultOfAppEncryptionBox
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Encrypt":
+		var enumTypeValue EncryptResultOfAppEncryptionBox
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Decrypt":
+		var enumTypeValue DecryptResultOfAppEncryptionBox
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for ResultOfAppEncryptionBox %v", typeDescriptor.Type)
+	}
+
+	return nil
+}
+
+type ParamsOfEncryptionBoxGetInfo struct {
+	// Encryption box handle.
+	EncryptionBox EncryptionBoxHandle `json:"encryption_box"`
+}
+
+type ResultOfEncryptionBoxGetInfo struct {
+	// Encryption box information.
+	Info EncryptionBoxInfo `json:"info"`
+}
+
+type ParamsOfEncryptionBoxEncrypt struct {
+	// Encryption box handle.
+	EncryptionBox EncryptionBoxHandle `json:"encryption_box"`
+	// Data to be encrypted, encoded in Base64.
+	Data string `json:"data"`
+}
+
+type ResultOfEncryptionBoxEncrypt struct {
+	// Encrypted data, encoded in Base64.
+	Data string `json:"data"`
+}
+
+type ParamsOfEncryptionBoxDecrypt struct {
+	// Encryption box handle.
+	EncryptionBox EncryptionBoxHandle `json:"encryption_box"`
+	// Data to be decrypted, encoded in Base64.
+	Data string `json:"data"`
+}
+
+type ResultOfEncryptionBoxDecrypt struct {
+	// Decrypted data, encoded in Base64.
+	Data string `json:"data"`
+}
+
 // Integer factorization.
 // Performs prime factorization – decomposition of a composite number
 // into a product of smaller prime integers (factors).
@@ -1038,4 +1289,111 @@ func (c *Client) CryptoRemoveSigningBox(p *RegisteredSigningBox) error {
 	_, err := c.dllClient.waitErrorOrResult("crypto.remove_signing_box", p)
 
 	return err
+}
+
+// Register an application implemented encryption box.
+
+func (c *Client) CryptoRegisterEncryptionBox(app AppEncryptionBox) (*RegisteredEncryptionBox, error) { // nolint dupl
+	result := new(RegisteredEncryptionBox)
+	responses, err := c.dllClient.resultsChannel("crypto.register_encryption_box", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	response := <-responses
+	if response.Code == ResponseCodeError {
+		return nil, response.Error
+	}
+
+	if err := json.Unmarshal(response.Data, result); err != nil {
+		return nil, err
+	}
+
+	go func() {
+		for r := range responses {
+			if r.Code == ResponseCodeAppRequest {
+				c.dispatchRequestCryptoRegisterEncryptionBox(r.Data, app)
+			}
+		}
+	}()
+
+	return result, nil
+}
+
+func (c *Client) dispatchRequestCryptoRegisterEncryptionBox(payload []byte, app AppEncryptionBox) { // nolint dupl
+	var appRequest ParamsOfAppRequest
+	var appParams ParamsOfAppEncryptionBox
+	err := json.Unmarshal(payload, &appRequest)
+	if err != nil {
+		panic(err)
+	}
+	err = json.Unmarshal(appRequest.RequestData, &appParams)
+	if err != nil {
+		panic(err)
+	}
+	var appResponse interface{}
+	// appResponse, err := app.Request(appParams)
+
+	switch value := (appParams.EnumTypeValue).(type) {
+	case GetInfoParamsOfAppEncryptionBox:
+		appResponse, err = app.GetInfoRequest(value)
+
+	case EncryptParamsOfAppEncryptionBox:
+		appResponse, err = app.EncryptRequest(value)
+
+	case DecryptParamsOfAppEncryptionBox:
+		appResponse, err = app.DecryptRequest(value)
+
+	default:
+		err = fmt.Errorf("unsupported type for request %v", appParams.EnumTypeValue)
+	}
+
+	appRequestResult := AppRequestResult{}
+	if err != nil {
+		appRequestResult.EnumTypeValue = ErrorAppRequestResult{Text: err.Error()}
+	} else {
+		marshalled, _ := json.Marshal(&ResultOfAppEncryptionBox{EnumTypeValue: appResponse})
+		appRequestResult.EnumTypeValue = OkAppRequestResult{Result: marshalled}
+	}
+	err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
+		AppRequestID: appRequest.AppRequestID,
+		Result:       appRequestResult,
+	})
+	if err != nil {
+		panic(err)
+	}
+}
+
+// Removes encryption box from SDK.
+func (c *Client) CryptoRemoveEncryptionBox(p *RegisteredEncryptionBox) error {
+	_, err := c.dllClient.waitErrorOrResult("crypto.remove_encryption_box", p)
+
+	return err
+}
+
+// Queries info from the given encryption box.
+func (c *Client) CryptoEncryptionBoxGetInfo(p *ParamsOfEncryptionBoxGetInfo) (*ResultOfEncryptionBoxGetInfo, error) {
+	result := new(ResultOfEncryptionBoxGetInfo)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.encryption_box_get_info", p, result)
+
+	return result, err
+}
+
+// Encrypts data using given encryption box.
+func (c *Client) CryptoEncryptionBoxEncrypt(p *ParamsOfEncryptionBoxEncrypt) (*ResultOfEncryptionBoxEncrypt, error) {
+	result := new(ResultOfEncryptionBoxEncrypt)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.encryption_box_encrypt", p, result)
+
+	return result, err
+}
+
+// Decrypts data using given encryption box.
+func (c *Client) CryptoEncryptionBoxDecrypt(p *ParamsOfEncryptionBoxDecrypt) (*ResultOfEncryptionBoxDecrypt, error) {
+	result := new(ResultOfEncryptionBoxDecrypt)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.encryption_box_decrypt", p, result)
+
+	return result, err
 }
