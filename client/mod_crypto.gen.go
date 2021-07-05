@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 05 Jul 21 05:51 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 05 Jul 21 06:21 UTC
 //
 // Mod crypto
 //
@@ -8,6 +8,7 @@ package client
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/volatiletech/null"
@@ -1252,9 +1253,10 @@ func (c *Client) dispatchRequestCryptoRegisterSigningBox(payload []byte, app App
 		AppRequestID: appRequest.AppRequestID,
 		Result:       appRequestResult,
 	})
-	if err != nil {
-		panic(err)
+	if err == nil || errors.Is(err, ErrContextIsClosed) {
+		return
 	}
+	panic(err)
 }
 
 // Creates a default signing box implementation.
@@ -1359,9 +1361,10 @@ func (c *Client) dispatchRequestCryptoRegisterEncryptionBox(payload []byte, app 
 		AppRequestID: appRequest.AppRequestID,
 		Result:       appRequestResult,
 	})
-	if err != nil {
-		panic(err)
+	if err == nil || errors.Is(err, ErrContextIsClosed) {
+		return
 	}
+	panic(err)
 }
 
 // Removes encryption box from SDK.

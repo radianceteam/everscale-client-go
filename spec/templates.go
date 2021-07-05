@@ -200,9 +200,10 @@ func (c *Client) dispatchRequest{{.Name}}(payload []byte, app {{.AppType}}) { //
 		AppRequestID: appRequest.AppRequestID,
 		Result: appRequestResult,
 	})
-	if err != nil {
-		panic(err)
+	if err == nil || errors.Is(err, ErrContextIsClosed) {
+		return
 	}
+	panic(err)
 }
 
 {{if .Notifications}} 
