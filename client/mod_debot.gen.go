@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 05 Jul 21 05:51 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 05 Jul 21 06:21 UTC
 //
 // Mod debot
 //
@@ -8,6 +8,7 @@ package client
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"math/big"
 
@@ -660,9 +661,10 @@ func (c *Client) dispatchRequestDebotInit(payload []byte, app AppDebotBrowser) {
 		AppRequestID: appRequest.AppRequestID,
 		Result:       appRequestResult,
 	})
-	if err != nil {
-		panic(err)
+	if err == nil || errors.Is(err, ErrContextIsClosed) {
+		return
 	}
+	panic(err)
 }
 
 func (c *Client) dispatchNotifyDebotInit(payload []byte, app AppDebotBrowser) { // nolint dupl
