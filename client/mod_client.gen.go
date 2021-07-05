@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 23 Jun 21 21:13 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 05 Jul 21 05:51 UTC
 //
 // Mod client
 //
@@ -47,6 +47,7 @@ const (
 	UnexpectedCallbackResponseErrorCode          = 31
 	CanNotParseNumberErrorCode                   = 32
 	InternalErrorErrorCode                       = 33
+	InvalidHandleErrorCode                       = 34
 )
 
 func init() { // nolint gochecknoinits
@@ -83,6 +84,7 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[UnexpectedCallbackResponseErrorCode] = "UnexpectedCallbackResponseErrorCode"
 	errorCodesToErrorTypes[CanNotParseNumberErrorCode] = "CanNotParseNumberErrorCode"
 	errorCodesToErrorTypes[InternalErrorErrorCode] = "InternalErrorErrorCode"
+	errorCodesToErrorTypes[InvalidHandleErrorCode] = "InvalidHandleErrorCode"
 }
 
 type Error struct {
