@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 05 Jul 21 06:21 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 09 Jul 21 11:03 UTC
 //
 // Mod abi
 //
@@ -27,6 +27,7 @@ const (
 	InvalidSignerAbiErrorCode                             = 310
 	InvalidAbiAbiErrorCode                                = 311
 	InvalidFunctionIDAbiErrorCode                         = 312
+	InvalidDataAbiErrorCode                               = 313
 )
 
 func init() { // nolint gochecknoinits
@@ -42,6 +43,7 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[InvalidSignerAbiErrorCode] = "InvalidSignerAbiErrorCode"
 	errorCodesToErrorTypes[InvalidAbiAbiErrorCode] = "InvalidAbiAbiErrorCode"
 	errorCodesToErrorTypes[InvalidFunctionIDAbiErrorCode] = "InvalidFunctionIDAbiErrorCode"
+	errorCodesToErrorTypes[InvalidDataAbiErrorCode] = "InvalidDataAbiErrorCode"
 }
 
 type AbiHandle uint32
@@ -435,6 +437,7 @@ type AbiContract struct {
 	Functions  []AbiFunction `json:"functions"`   // optional
 	Events     []AbiEvent    `json:"events"`      // optional
 	Data       []AbiData     `json:"data"`        // optional
+	Fields     []AbiParam    `json:"fields"`      // optional
 }
 
 type ParamsOfEncodeMessageBody struct {
@@ -639,6 +642,19 @@ type ResultOfEncodeAccount struct {
 	ID string `json:"id"`
 }
 
+type ParamsOfDecodeAccountData struct {
+	// Contract ABI.
+	Abi Abi `json:"abi"`
+	// Data BOC.
+	// Must be encoded with base64.
+	Data string `json:"data"`
+}
+
+type ResultOfDecodeData struct {
+	// Decoded data as a JSON structure.
+	Data json.RawMessage `json:"data"`
+}
+
 // Encodes message body according to ABI function call.
 func (c *Client) AbiEncodeMessageBody(p *ParamsOfEncodeMessageBody) (*ResultOfEncodeMessageBody, error) {
 	result := new(ResultOfEncodeMessageBody)
@@ -753,6 +769,16 @@ func (c *Client) AbiEncodeAccount(p *ParamsOfEncodeAccount) (*ResultOfEncodeAcco
 	result := new(ResultOfEncodeAccount)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_account", p, result)
+
+	return result, err
+}
+
+// Decodes account data using provided data BOC and ABI.
+// Note: this feature requires ABI 2.1 or higher.
+func (c *Client) AbiDecodeAccountData(p *ParamsOfDecodeAccountData) (*ResultOfDecodeData, error) {
+	result := new(ResultOfDecodeData)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.decode_account_data", p, result)
 
 	return result, err
 }
