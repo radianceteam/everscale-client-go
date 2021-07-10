@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 05 Jul 21 06:21 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 09 Jul 21 11:03 UTC
 //
 // Mod utils
 //
@@ -103,6 +103,14 @@ func (p *AddressStringFormat) UnmarshalJSON(b []byte) error { // nolint funlen
 	return nil
 }
 
+type AccountAddressType string
+
+const (
+	AccountIDAccountAddressType AccountAddressType = "AccountId"
+	HexAccountAddressType       AccountAddressType = "Hex"
+	Base64AccountAddressType    AccountAddressType = "Base64"
+)
+
 type ParamsOfConvertAddress struct {
 	// Account address in any TON format.
 	Address string `json:"address"`
@@ -113,6 +121,16 @@ type ParamsOfConvertAddress struct {
 type ResultOfConvertAddress struct {
 	// Address in the specified format.
 	Address string `json:"address"`
+}
+
+type ParamsOfGetAddressType struct {
+	// Account address in any TON format.
+	Address string `json:"address"`
+}
+
+type ResultOfGetAddressType struct {
+	// Account address type.
+	AddressType AccountAddressType `json:"address_type"`
 }
 
 type ParamsOfCalcStorageFee struct {
@@ -155,6 +173,23 @@ func (c *Client) UtilsConvertAddress(p *ParamsOfConvertAddress) (*ResultOfConver
 	result := new(ResultOfConvertAddress)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("utils.convert_address", p, result)
+
+	return result, err
+}
+
+// Validates and returns the type of any TON address.
+// Address types are the following
+//
+// `0:919db8e740d50bf349df2eea03fa30c385d846b991ff5542e67098ee833fc7f7` - standart TON address most
+// commonly used in all cases. Also called as hex address
+// `919db8e740d50bf349df2eea03fa30c385d846b991ff5542e67098ee833fc7f7` - account ID. A part of full
+// address. Identifies account inside particular workchain
+// `EQCRnbjnQNUL80nfLuoD+jDDhdhGuZH/VULmcJjugz/H9wam` - base64 address. Also called "user-friendly".
+// Was used at the beginning of TON. Now it is supported for compatibility.
+func (c *Client) UtilsGetAddressType(p *ParamsOfGetAddressType) (*ResultOfGetAddressType, error) {
+	result := new(ResultOfGetAddressType)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("utils.get_address_type", p, result)
 
 	return result, err
 }
