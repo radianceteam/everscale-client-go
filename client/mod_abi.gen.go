@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 09 Jul 21 11:03 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 22 Jul 21 08:39 UTC
 //
 // Mod abi
 //
@@ -433,6 +433,7 @@ type AbiFunction struct {
 type AbiContract struct {
 	ABIVersion null.Uint32   `json:"ABI version"` // optional
 	AbiVersion null.Uint32   `json:"abi_version"` // optional
+	Version    *null.String  `json:"version"`     // optional
 	Header     []string      `json:"header"`      // optional
 	Functions  []AbiFunction `json:"functions"`   // optional
 	Events     []AbiEvent    `json:"events"`      // optional
@@ -645,8 +646,7 @@ type ResultOfEncodeAccount struct {
 type ParamsOfDecodeAccountData struct {
 	// Contract ABI.
 	Abi Abi `json:"abi"`
-	// Data BOC.
-	// Must be encoded with base64.
+	// Data BOC or BOC handle.
 	Data string `json:"data"`
 }
 
