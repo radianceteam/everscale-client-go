@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 09 Jul 21 11:03 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 22 Jul 21 08:39 UTC
 //
 // Mod client
 //
@@ -142,6 +142,12 @@ type NetworkConfig struct {
 	// Maximum value for the endpoint's blockchain data synchronization latency (time-lag). Library periodically checks the current endpoint for blockchain data synchronization latency. If the latency (time-lag) is less then `NetworkConfig.max_latency` then library selects another endpoint.
 	// Must be specified in milliseconds. Default is 60000 (1 min).
 	MaxLatency null.Uint32 `json:"max_latency"` // optional
+	// Default timeout for http requests.
+	// Is is used when no timeout specified for the request to limit the answer waiting time. If no answer received during the timeout requests ends with
+	// error.
+	//
+	// Must be specified in milliseconds. Default is 60000 (1 min).
+	QueryTimeout null.Uint32 `json:"query_timeout"` // optional
 	// Access key to GraphQL API.
 	// At the moment is not used in production.
 	AccessKey null.String `json:"access_key"` // optional
