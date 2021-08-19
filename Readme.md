@@ -1,6 +1,6 @@
 # TON SDK client Golang
 
-[![TON-SDK](https://img.shields.io/badge/TON_SDK-1.20.0-green.svg)](https://github.com/tonlabs/TON-SDK/tree/1.20.0)
+[![TON-SDK](https://img.shields.io/badge/TON_SDK-1.20.1-green.svg)](https://github.com/tonlabs/TON-SDK/tree/1.20.1)
 [![TON local-node docker image](https://img.shields.io/badge/TON_local_node-0.28.3-green.svg)](https://hub.docker.com/layers/tonlabs/local-node/0.28.3/images/sha256-d4c9b11b9a811602423c44f3529d81cb91fa13bf45617d81a6ca8e057fce1506)
 [![Chat Telegram](https://img.shields.io/badge/chat-Telegram-9cf.svg)](https://t.me/RADIANCE_TON_SDK)
 [![Documentation](https://godoc.org/github.com/radianceteam/ton-client-go/client?status.svg)](https://godoc.org/github.com/radianceteam/ton-client-go/client)
