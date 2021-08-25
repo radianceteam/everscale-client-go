@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 19 Aug 21 17:41 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 25 Aug 21 06:46 UTC
 //
 // Mod tvm
 //
@@ -282,7 +282,7 @@ type ResultOfRunGet struct {
 //
 // If you need this emulation to be as precise as possible (for instance - emulate transaction
 // with particular lt in particular block or use particular blockchain config,
-// in case you want to download it from a particular key block - then specify `ParamsOfRunExecutor` parameter.
+// downloaded from a particular key block - then specify `execution_options` parameter.
 //
 // If you need to see the aborted transaction as a result, not as an error, set `skip_transaction_check` to `true`.
 func (c *Client) TvmRunExecutor(p *ParamsOfRunExecutor) (*ResultOfRunExecutor, error) {
