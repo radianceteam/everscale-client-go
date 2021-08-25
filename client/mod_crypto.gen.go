@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 19 Aug 21 17:41 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 25 Aug 21 06:46 UTC
 //
 // Mod crypto
 //
@@ -36,6 +36,12 @@ const (
 	SigningBoxNotRegisteredCryptoErrorCode    = 121
 	InvalidSignatureCryptoErrorCode           = 122
 	EncryptionBoxNotRegisteredCryptoErrorCode = 123
+	InvalidIvSizeCryptoErrorCode              = 124
+	UnsupportedCipherModeCryptoErrorCode      = 125
+	CannotCreateCipherCryptoErrorCode         = 126
+	EncryptDataErrorCryptoErrorCode           = 127
+	DecryptDataErrorCryptoErrorCode           = 128
+	IvRequiredCryptoErrorCode                 = 129
 )
 
 func init() { // nolint gochecknoinits
@@ -60,6 +66,12 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[SigningBoxNotRegisteredCryptoErrorCode] = "SigningBoxNotRegisteredCryptoErrorCode"
 	errorCodesToErrorTypes[InvalidSignatureCryptoErrorCode] = "InvalidSignatureCryptoErrorCode"
 	errorCodesToErrorTypes[EncryptionBoxNotRegisteredCryptoErrorCode] = "EncryptionBoxNotRegisteredCryptoErrorCode"
+	errorCodesToErrorTypes[InvalidIvSizeCryptoErrorCode] = "InvalidIvSizeCryptoErrorCode"
+	errorCodesToErrorTypes[UnsupportedCipherModeCryptoErrorCode] = "UnsupportedCipherModeCryptoErrorCode"
+	errorCodesToErrorTypes[CannotCreateCipherCryptoErrorCode] = "CannotCreateCipherCryptoErrorCode"
+	errorCodesToErrorTypes[EncryptDataErrorCryptoErrorCode] = "EncryptDataErrorCryptoErrorCode"
+	errorCodesToErrorTypes[DecryptDataErrorCryptoErrorCode] = "DecryptDataErrorCryptoErrorCode"
+	errorCodesToErrorTypes[IvRequiredCryptoErrorCode] = "IvRequiredCryptoErrorCode"
 }
 
 type (
@@ -77,6 +89,73 @@ type EncryptionBoxInfo struct {
 	Options json.RawMessage `json:"options"` // optional
 	// Public information, depends on algorithm.
 	Public json.RawMessage `json:"public"` // optional
+}
+
+type EncryptionAlgorithm struct {
+	// Should be any of
+	// AesParams
+	EnumTypeValue interface{}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *EncryptionAlgorithm) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case AesParams:
+		return json.Marshal(struct {
+			AesParams
+			Type string `json:"type"`
+		}{
+			value,
+			"AES",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for EncryptionAlgorithm %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *EncryptionAlgorithm) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "AES":
+		var enumTypeValue AesParams
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for EncryptionAlgorithm %v", typeDescriptor.Type)
+	}
+
+	return nil
+}
+
+type CipherMode string
+
+const (
+	CbcCipherMode CipherMode = "CBC"
+	CfbCipherMode CipherMode = "CFB"
+	CtrCipherMode CipherMode = "CTR"
+	EcbCipherMode CipherMode = "ECB"
+	OfbCipherMode CipherMode = "OFB"
+)
+
+type AesParams struct {
+	Mode CipherMode  `json:"mode"`
+	Key  string      `json:"key"`
+	Iv   null.String `json:"iv"` // optional
+}
+
+type AesInfo struct {
+	Mode CipherMode  `json:"mode"`
+	Iv   null.String `json:"iv"` // optional
 }
 
 type ParamsOfFactorize struct {
@@ -844,6 +923,7 @@ type ParamsOfEncryptionBoxEncrypt struct {
 
 type ResultOfEncryptionBoxEncrypt struct {
 	// Encrypted data, encoded in Base64.
+	// Padded to cipher block size.
 	Data string `json:"data"`
 }
 
@@ -857,6 +937,11 @@ type ParamsOfEncryptionBoxDecrypt struct {
 type ResultOfEncryptionBoxDecrypt struct {
 	// Decrypted data, encoded in Base64.
 	Data string `json:"data"`
+}
+
+type ParamsOfCreateEncryptionBox struct {
+	// Encryption algorithm specifier including cipher parameters (key, IV, etc).
+	Algorithm EncryptionAlgorithm `json:"algorithm"`
 }
 
 // Integer factorization.
@@ -1386,7 +1471,9 @@ func (c *Client) CryptoEncryptionBoxGetInfo(p *ParamsOfEncryptionBoxGetInfo) (*R
 	return result, err
 }
 
-// Encrypts data using given encryption box.
+// Encrypts data using given encryption box Note.
+// Block cipher algorithms pad data to cipher block size so encrypted data can be longer then original data. Client should store the original data size after encryption and use it after
+// decryption to retrieve the original data from decrypted data.
 func (c *Client) CryptoEncryptionBoxEncrypt(p *ParamsOfEncryptionBoxEncrypt) (*ResultOfEncryptionBoxEncrypt, error) {
 	result := new(ResultOfEncryptionBoxEncrypt)
 
@@ -1395,11 +1482,22 @@ func (c *Client) CryptoEncryptionBoxEncrypt(p *ParamsOfEncryptionBoxEncrypt) (*R
 	return result, err
 }
 
-// Decrypts data using given encryption box.
+// Decrypts data using given encryption box Note.
+// Block cipher algorithms pad data to cipher block size so encrypted data can be longer then original data. Client should store the original data size after encryption and use it after
+// decryption to retrieve the original data from decrypted data.
 func (c *Client) CryptoEncryptionBoxDecrypt(p *ParamsOfEncryptionBoxDecrypt) (*ResultOfEncryptionBoxDecrypt, error) {
 	result := new(ResultOfEncryptionBoxDecrypt)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.encryption_box_decrypt", p, result)
+
+	return result, err
+}
+
+// Creates encryption box with specified algorithm.
+func (c *Client) CryptoCreateEncryptionBox(p *ParamsOfCreateEncryptionBox) (*RegisteredEncryptionBox, error) {
+	result := new(RegisteredEncryptionBox)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.create_encryption_box", p, result)
 
 	return result, err
 }
