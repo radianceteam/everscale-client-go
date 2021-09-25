@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 21 Sep 21 09:58 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 25 Sep 21 14:47 UTC
 //
 // Mod boc
 //
@@ -439,7 +439,7 @@ func (c *Client) BocCacheUnpin(p *ParamsOfBocCacheUnpin) error {
 	return err
 }
 
-// Encodes BOC from builder operations.
+// Encodes bag of cells (BOC) with builder operations. This method provides the same functionality as Solidity TvmBuilder. Resulting BOC of this method can be passed into Solidity and C++ contracts as TvmCell type.
 func (c *Client) BocEncodeBoc(p *ParamsOfEncodeBoc) (*ResultOfEncodeBoc, error) {
 	result := new(ResultOfEncodeBoc)
 
