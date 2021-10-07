@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 25 Sep 21 14:47 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 07 Oct 21 04:56 UTC
 //
 // Mod boc
 //
@@ -145,7 +145,7 @@ type ResultOfGetBocHash struct {
 }
 
 type ParamsOfGetCodeFromTvc struct {
-	// Contract TVC image encoded as base64.
+	// Contract TVC image or image BOC handle.
 	Tvc string `json:"tvc"`
 }
 
@@ -336,6 +336,93 @@ type ResultOfEncodeBoc struct {
 	Boc string `json:"boc"`
 }
 
+type ParamsOfGetCodeSalt struct {
+	// Contract code BOC encoded as base64 or code BOC handle.
+	Code string `json:"code"`
+	// Cache type to put the result. The BOC itself returned if no cache type provided.
+	BocCache *BocCacheType `json:"boc_cache"` // optional
+}
+
+type ResultOfGetCodeSalt struct {
+	// Contract code salt if present.
+	// BOC encoded as base64 or BOC handle.
+	Salt null.String `json:"salt"` // optional
+}
+
+type ParamsOfSetCodeSalt struct {
+	// Contract code BOC encoded as base64 or code BOC handle.
+	Code string `json:"code"`
+	// Code salt to set.
+	// BOC encoded as base64 or BOC handle.
+	Salt string `json:"salt"`
+	// Cache type to put the result. The BOC itself returned if no cache type provided.
+	BocCache *BocCacheType `json:"boc_cache"` // optional
+}
+
+type ResultOfSetCodeSalt struct {
+	// Contract code with salt set.
+	// BOC encoded as base64 or BOC handle.
+	Code string `json:"code"`
+}
+
+type ParamsOfDecodeTvc struct {
+	// Contract TVC image BOC encoded as base64 or BOC handle.
+	Tvc string `json:"tvc"`
+	// Cache type to put the result. The BOC itself returned if no cache type provided.
+	BocCache *BocCacheType `json:"boc_cache"` // optional
+}
+
+type ResultOfDecodeTvc struct {
+	// Contract code BOC encoded as base64 or BOC handle.
+	Code null.String `json:"code"` // optional
+	// Contract data BOC encoded as base64 or BOC handle.
+	Data null.String `json:"data"` // optional
+	// Contract library BOC encoded as base64 or BOC handle.
+	Library null.String `json:"library"` // optional
+	// `special.tick` field.
+	// Specifies the contract ability to handle tick transactions.
+	Tick null.Bool `json:"tick"` // optional
+	// `special.tock` field.
+	// Specifies the contract ability to handle tock transactions.
+	Tock null.Bool `json:"tock"` // optional
+	// Is present and non-zero only in instances of large smart contracts.
+	SplitDepth null.Uint32 `json:"split_depth"` // optional
+}
+
+type ParamsOfEncodeTvc struct {
+	// Contract code BOC encoded as base64 or BOC handle.
+	Code null.String `json:"code"` // optional
+	// Contract data BOC encoded as base64 or BOC handle.
+	Data null.String `json:"data"` // optional
+	// Contract library BOC encoded as base64 or BOC handle.
+	Library null.String `json:"library"` // optional
+	// `special.tick` field.
+	// Specifies the contract ability to handle tick transactions.
+	Tick null.Bool `json:"tick"` // optional
+	// `special.tock` field.
+	// Specifies the contract ability to handle tock transactions.
+	Tock null.Bool `json:"tock"` // optional
+	// Is present and non-zero only in instances of large smart contracts.
+	SplitDepth null.Uint32 `json:"split_depth"` // optional
+	// Cache type to put the result. The BOC itself returned if no cache type provided.
+	BocCache *BocCacheType `json:"boc_cache"` // optional
+}
+
+type ResultOfEncodeTvc struct {
+	// Contract TVC image BOC encoded as base64 or BOC handle of boc_cache parameter was specified.
+	Tvc string `json:"tvc"`
+}
+
+type ParamsOfGetCompilerVersion struct {
+	// Contract code BOC encoded as base64 or code BOC handle.
+	Code string `json:"code"`
+}
+
+type ResultOfGetCompilerVersion struct {
+	// Compiler version, for example 'sol 0.49.0'.
+	Version null.String `json:"version"` // optional
+}
+
 // Parses message boc into a JSON.
 // JSON structure is compatible with GraphQL API message object.
 func (c *Client) BocParseMessage(p *ParamsOfParse) (*ResultOfParse, error) {
@@ -444,6 +531,52 @@ func (c *Client) BocEncodeBoc(p *ParamsOfEncodeBoc) (*ResultOfEncodeBoc, error) 
 	result := new(ResultOfEncodeBoc)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("boc.encode_boc", p, result)
+
+	return result, err
+}
+
+// Returns the contract code's salt if it is present.
+func (c *Client) BocGetCodeSalt(p *ParamsOfGetCodeSalt) (*ResultOfGetCodeSalt, error) {
+	result := new(ResultOfGetCodeSalt)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.get_code_salt", p, result)
+
+	return result, err
+}
+
+// Sets new salt to contract code.
+// Returns the new contract code with salt.
+func (c *Client) BocSetCodeSalt(p *ParamsOfSetCodeSalt) (*ResultOfSetCodeSalt, error) {
+	result := new(ResultOfSetCodeSalt)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.set_code_salt", p, result)
+
+	return result, err
+}
+
+// Decodes tvc into code, data, libraries and special options.
+func (c *Client) BocDecodeTvc(p *ParamsOfDecodeTvc) (*ResultOfDecodeTvc, error) {
+	result := new(ResultOfDecodeTvc)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.decode_tvc", p, result)
+
+	return result, err
+}
+
+// Encodes tvc from code, data, libraries ans special options (see input params).
+func (c *Client) BocEncodeTvc(p *ParamsOfEncodeTvc) (*ResultOfEncodeTvc, error) {
+	result := new(ResultOfEncodeTvc)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.encode_tvc", p, result)
+
+	return result, err
+}
+
+// Returns the compiler version used to compile the code.
+func (c *Client) BocGetCompilerVersion(p *ParamsOfGetCompilerVersion) (*ResultOfGetCompilerVersion, error) {
+	result := new(ResultOfGetCompilerVersion)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.get_compiler_version", p, result)
 
 	return result, err
 }

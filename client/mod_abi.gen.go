@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 25 Sep 21 14:47 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 07 Oct 21 04:56 UTC
 //
 // Mod abi
 //
@@ -28,6 +28,7 @@ const (
 	InvalidAbiAbiErrorCode                                = 311
 	InvalidFunctionIDAbiErrorCode                         = 312
 	InvalidDataAbiErrorCode                               = 313
+	EncodeInitialDataFailedAbiErrorCode                   = 314
 )
 
 func init() { // nolint gochecknoinits
@@ -44,6 +45,7 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[InvalidAbiAbiErrorCode] = "InvalidAbiAbiErrorCode"
 	errorCodesToErrorTypes[InvalidFunctionIDAbiErrorCode] = "InvalidFunctionIDAbiErrorCode"
 	errorCodesToErrorTypes[InvalidDataAbiErrorCode] = "InvalidDataAbiErrorCode"
+	errorCodesToErrorTypes[EncodeInitialDataFailedAbiErrorCode] = "EncodeInitialDataFailedAbiErrorCode"
 }
 
 type AbiHandle uint32
@@ -655,6 +657,41 @@ type ResultOfDecodeData struct {
 	Data json.RawMessage `json:"data"`
 }
 
+type ParamsOfUpdateInitialData struct {
+	// Contract ABI.
+	Abi *Abi `json:"abi"` // optional
+	// Data BOC or BOC handle.
+	Data string `json:"data"`
+	// List of initial values for contract's static variables.
+	// `abi` parameter should be provided to set initial data.
+	InitialData json.RawMessage `json:"initial_data"` // optional
+	// Initial account owner's public key to set into account data.
+	InitialPubkey null.String `json:"initial_pubkey"` // optional
+	// Cache type to put the result. The BOC itself returned if no cache type provided.
+	BocCache *BocCacheType `json:"boc_cache"` // optional
+}
+
+type ResultOfUpdateInitialData struct {
+	// Updated data BOC or BOC handle.
+	Data string `json:"data"`
+}
+
+type ParamsOfDecodeInitialData struct {
+	// Contract ABI.
+	// Initial data is decoded if this parameter is provided.
+	Abi *Abi `json:"abi"` // optional
+	// Data BOC or BOC handle.
+	Data string `json:"data"`
+}
+
+type ResultOfDecodeInitialData struct {
+	// List of initial values of contract's public variables.
+	// Initial data is decoded if `abi` input parameter is provided.
+	InitialData json.RawMessage `json:"initial_data"` // optional
+	// Initial account owner's public key.
+	InitialPubkey string `json:"initial_pubkey"`
+}
+
 // Encodes message body according to ABI function call.
 func (c *Client) AbiEncodeMessageBody(p *ParamsOfEncodeMessageBody) (*ResultOfEncodeMessageBody, error) {
 	result := new(ResultOfEncodeMessageBody)
@@ -779,6 +816,24 @@ func (c *Client) AbiDecodeAccountData(p *ParamsOfDecodeAccountData) (*ResultOfDe
 	result := new(ResultOfDecodeData)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("abi.decode_account_data", p, result)
+
+	return result, err
+}
+
+// Updates initial account data with initial values for the contract's static variables and owner's public key. This operation is applicable only for initial account data (before deploy). If the contract is already deployed, its data doesn't contain this data section any more.
+func (c *Client) AbiUpdateInitialData(p *ParamsOfUpdateInitialData) (*ResultOfUpdateInitialData, error) {
+	result := new(ResultOfUpdateInitialData)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.update_initial_data", p, result)
+
+	return result, err
+}
+
+// Decodes initial values of a contract's static variables and owner's public key from account initial data This operation is applicable only for initial account data (before deploy). If the contract is already deployed, its data doesn't contain this data section any more.
+func (c *Client) AbiDecodeInitialData(p *ParamsOfDecodeInitialData) (*ResultOfDecodeInitialData, error) {
+	result := new(ResultOfDecodeInitialData)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.decode_initial_data", p, result)
 
 	return result, err
 }
