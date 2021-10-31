@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 07 Oct 21 04:56 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 31 Oct 21 08:32 UTC
 //
 // Mod boc
 //
@@ -135,13 +135,23 @@ type ResultOfGetBlockchainConfig struct {
 }
 
 type ParamsOfGetBocHash struct {
-	// BOC encoded as base64.
+	// BOC encoded as base64 or BOC handle.
 	Boc string `json:"boc"`
 }
 
 type ResultOfGetBocHash struct {
 	// BOC root hash encoded with hex.
 	Hash string `json:"hash"`
+}
+
+type ParamsOfGetBocDepth struct {
+	// BOC encoded as base64 or BOC handle.
+	Boc string `json:"boc"`
+}
+
+type ResultOfGetBocDepth struct {
+	// BOC root cell depth.
+	Depth uint32 `json:"depth"`
 }
 
 type ParamsOfGetCodeFromTvc struct {
@@ -375,8 +385,16 @@ type ParamsOfDecodeTvc struct {
 type ResultOfDecodeTvc struct {
 	// Contract code BOC encoded as base64 or BOC handle.
 	Code null.String `json:"code"` // optional
+	// Contract code hash.
+	CodeHash null.String `json:"code_hash"` // optional
+	// Contract code depth.
+	CodeDepth null.Uint32 `json:"code_depth"` // optional
 	// Contract data BOC encoded as base64 or BOC handle.
 	Data null.String `json:"data"` // optional
+	// Contract data hash.
+	DataHash null.String `json:"data_hash"` // optional
+	// Contract data depth.
+	DataDepth null.Uint32 `json:"data_depth"` // optional
 	// Contract library BOC encoded as base64 or BOC handle.
 	Library null.String `json:"library"` // optional
 	// `special.tick` field.
@@ -387,6 +405,8 @@ type ResultOfDecodeTvc struct {
 	Tock null.Bool `json:"tock"` // optional
 	// Is present and non-zero only in instances of large smart contracts.
 	SplitDepth null.Uint32 `json:"split_depth"` // optional
+	// Compiler version, for example 'sol 0.49.0'.
+	CompilerVersion null.String `json:"compiler_version"` // optional
 }
 
 type ParamsOfEncodeTvc struct {
@@ -487,6 +507,15 @@ func (c *Client) BocGetBocHash(p *ParamsOfGetBocHash) (*ResultOfGetBocHash, erro
 	result := new(ResultOfGetBocHash)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("boc.get_boc_hash", p, result)
+
+	return result, err
+}
+
+// Calculates BOC depth.
+func (c *Client) BocGetBocDepth(p *ParamsOfGetBocDepth) (*ResultOfGetBocDepth, error) {
+	result := new(ResultOfGetBocDepth)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.get_boc_depth", p, result)
 
 	return result, err
 }
