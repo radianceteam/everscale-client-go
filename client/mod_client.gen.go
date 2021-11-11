@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 31 Oct 21 08:32 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 11 Nov 21 10:10 UTC
 //
 // Mod client
 //
@@ -48,6 +48,7 @@ const (
 	CanNotParseNumberErrorCode                   = 32
 	InternalErrorErrorCode                       = 33
 	InvalidHandleErrorCode                       = 34
+	LocalStorageErrorErrorCode                   = 35
 )
 
 func init() { // nolint gochecknoinits
@@ -85,6 +86,7 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[CanNotParseNumberErrorCode] = "CanNotParseNumberErrorCode"
 	errorCodesToErrorTypes[InternalErrorErrorCode] = "InternalErrorErrorCode"
 	errorCodesToErrorTypes[InvalidHandleErrorCode] = "InvalidHandleErrorCode"
+	errorCodesToErrorTypes[LocalStorageErrorErrorCode] = "LocalStorageErrorErrorCode"
 }
 
 type Error struct {
@@ -98,6 +100,9 @@ type Config struct {
 	Crypto  *CryptoConfig  `json:"crypto"`  // optional
 	Abi     *AbiConfig     `json:"abi"`     // optional
 	Boc     *BocConfig     `json:"boc"`     // optional
+	Proofs  *ProofsConfig  `json:"proofs"`  // optional
+	// For file based storage is a folder name where SDK will store its data. For browser based is a browser async storage key prefix. Default (recommended) value is "~/.tonclient" for native environments and ".tonclient" for web-browser.
+	LocalStoragePath null.String `json:"local_storage_path"` // optional
 }
 
 type NetworkConfig struct {
@@ -176,6 +181,15 @@ type BocConfig struct {
 	// Maximum BOC cache size in kilobytes.
 	// Default is 10 MB.
 	CacheMaxSize null.Uint32 `json:"cache_max_size"` // optional
+}
+
+type ProofsConfig struct {
+	// Cache proofs in the local storage.
+	// Default is `true`. If this value is set to `true`, downloaded proofs and master-chain BOCs are saved into the
+	// persistent local storage (e.g. file system for native environments or browser's IndexedDB
+	// for the web); otherwise all the data is cached only in memory in current client's context
+	// and will be lost after destruction of the client.
+	CacheInLocalStorage null.Bool `json:"cache_in_local_storage"` // optional
 }
 
 type BuildInfoDependency struct {

@@ -3,7 +3,7 @@ package client
 import "sync"
 
 // globalMultiplexer - is thread-safe multiplexer to be called in exported C function.
-var globalMultiplexer = NewMultiplexer()
+var globalMultiplexer = newMultiplexer()
 
 type channelPair struct {
 	responses chan<- *RawResponse
@@ -52,7 +52,7 @@ type Multiplexer interface {
 	GetChannels(requestID uint32, deleteAfterGet bool) (chan<- *RawResponse, <-chan struct{}, bool)
 }
 
-func NewMultiplexer() Multiplexer {
+func newMultiplexer() *multiplexer {
 	return &multiplexer{
 		Locker:    &sync.Mutex{},
 		callbacks: make(map[uint32]channelPair),
