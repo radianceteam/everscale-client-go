@@ -125,7 +125,7 @@ type dllClient interface {
 	close()
 }
 
-func newDLLClient(rawConfig []byte, maxCGOConcurrentThreads uint) (dllClient, error) {
+func newDLLClient(rawConfig []byte, maxCGOConcurrentThreads uint) (*dllClientCtx, error) {
 	c := &dllClientCtx{
 		closeSignal:             make(chan struct{}),
 		maxCGOConcurrentThreads: make(chan struct{}, maxCGOConcurrentThreads),

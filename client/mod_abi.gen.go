@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 31 Oct 21 08:32 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 11 Nov 21 10:10 UTC
 //
 // Mod abi
 //
@@ -652,7 +652,7 @@ type ParamsOfDecodeAccountData struct {
 	Data string `json:"data"`
 }
 
-type ResultOfDecodeData struct {
+type ResultOfDecodeAccountData struct {
 	// Decoded data as a JSON structure.
 	Data json.RawMessage `json:"data"`
 }
@@ -690,6 +690,19 @@ type ResultOfDecodeInitialData struct {
 	InitialData json.RawMessage `json:"initial_data"` // optional
 	// Initial account owner's public key.
 	InitialPubkey string `json:"initial_pubkey"`
+}
+
+type ParamsOfDecodeBoc struct {
+	// Parameters to decode from BOC.
+	Params []AbiParam `json:"params"`
+	// Data BOC or BOC handle.
+	Boc          string `json:"boc"`
+	AllowPartial bool   `json:"allow_partial"`
+}
+
+type ResultOfDecodeBoc struct {
+	// Decoded data as a JSON structure.
+	Data json.RawMessage `json:"data"`
 }
 
 // Encodes message body according to ABI function call.
@@ -812,8 +825,8 @@ func (c *Client) AbiEncodeAccount(p *ParamsOfEncodeAccount) (*ResultOfEncodeAcco
 
 // Decodes account data using provided data BOC and ABI.
 // Note: this feature requires ABI 2.1 or higher.
-func (c *Client) AbiDecodeAccountData(p *ParamsOfDecodeAccountData) (*ResultOfDecodeData, error) {
-	result := new(ResultOfDecodeData)
+func (c *Client) AbiDecodeAccountData(p *ParamsOfDecodeAccountData) (*ResultOfDecodeAccountData, error) {
+	result := new(ResultOfDecodeAccountData)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("abi.decode_account_data", p, result)
 
@@ -834,6 +847,30 @@ func (c *Client) AbiDecodeInitialData(p *ParamsOfDecodeInitialData) (*ResultOfDe
 	result := new(ResultOfDecodeInitialData)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("abi.decode_initial_data", p, result)
+
+	return result, err
+}
+
+// Decodes BOC into JSON as a set of provided parameters.
+// Solidity functions use ABI types for [builder encoding](https://github.com/tonlabs/TON-Solidity-Compiler/blob/master/API.md#tvmbuilderstore).
+// The simplest way to decode such a BOC is to use ABI decoding.
+// ABI has it own rules for fields layout in cells so manually encoded
+// BOC can not be described in terms of ABI rules.
+//
+// To solve this problem we introduce a new ABI type `Ref(<ParamType>)`
+// which allows to store `ParamType` ABI parameter in cell reference and, thus,
+// decode manually encoded BOCs. This type is available only in `decode_boc` function
+// and will not be available in ABI messages encoding until it is included into some ABI revision.
+//
+// Such BOC descriptions covers most users needs. If someone wants to decode some BOC which
+// can not be described by these rules (i.e. BOC with TLB containing constructors of flags
+// defining some parsing conditions) then they can decode the fields up to fork condition,
+// check the parsed data manually, expand the parsing schema and then decode the whole BOC
+// with the full schema.
+func (c *Client) AbiDecodeBoc(p *ParamsOfDecodeBoc) (*ResultOfDecodeBoc, error) {
+	result := new(ResultOfDecodeBoc)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.decode_boc", p, result)
 
 	return result, err
 }

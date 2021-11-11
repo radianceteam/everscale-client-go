@@ -19,6 +19,7 @@ linters:
     - golint
     - scopelint
     - interfacer
+    - varnamelen
   enable-all: true
 linters-settings:
   goimports:
