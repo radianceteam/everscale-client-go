@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 11 Nov 21 10:10 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 Nov 21 13:47 UTC
 //
 // Mod proofs
 //
@@ -32,6 +32,11 @@ type ParamsOfProofBlockData struct {
 type ParamsOfProofTransactionData struct {
 	// Single transaction's data as queried from DApp server, without modifications. The required fields are `id` and/or top-level `boc`, others are optional. In order to reduce network requests count, it is recommended to provide `block_id` and `boc` of transaction.
 	Transaction json.RawMessage `json:"transaction"`
+}
+
+type ParamsOfProofMessageData struct {
+	// Single message's data as queried from DApp server, without modifications. The required fields are `id` and/or top-level `boc`, others are optional. In order to reduce network requests count, it is recommended to provide at least `boc` of message and non-null `src_transaction.id` or `dst_transaction.id`.
+	Message json.RawMessage `json:"message"`
 }
 
 // Proves that a given block's data, which is queried from TONOS API, can be trusted.
@@ -97,28 +102,45 @@ func (c *Client) ProofsProofBlockData(p *ParamsOfProofBlockData) error {
 }
 
 // Proves that a given transaction's data, which is queried from TONOS API, can be trusted.
-// This function requests the corresponding block, checks block proofs, ensures that given transaction
-// exists in the proven block and compares given data with the proven.
+// This function requests the corresponding block, checks block proofs, ensures that given
+// transaction exists in the proven block and compares given data with the proven.
 // If the given data differs from the proven, the exception will be thrown.
 // The input parameter is a single transaction's JSON object (see params description),
 // which was queried from TONOS API using functions such as `net.query`, `net.query_collection`
 // or `net.wait_for_collection`.
 //
 // If transaction's BOC and/or `block_id` are not provided in the JSON, they will be queried from
-// TONOS API (in this case it is required to provide at least `id` of transaction).
+// TONOS API.
 //
 // Please note, that joins (like `account`, `in_message`, `out_messages`, etc. in `Transaction`
 // entity) are separated entities and not supported, so function will throw an exception in a case
 // if JSON being checked has such entities in it.
 //
-// If `cache_in_local_storage` in config is set to `true` (default), downloaded proofs and
-// master-chain BOCs are saved into the persistent local storage (e.g. file system for native
-// environments or browser's IndexedDB for the web); otherwise all the data is cached only in
-// memory in current client's context and will be lost after destruction of the client.
-//
 // For more information about proofs checking, see description of `proof_block_data` function.
 func (c *Client) ProofsProofTransactionData(p *ParamsOfProofTransactionData) error {
 	_, err := c.dllClient.waitErrorOrResult("proofs.proof_transaction_data", p)
+
+	return err
+}
+
+// Proves that a given message's data, which is queried from TONOS API, can be trusted.
+// This function first proves the corresponding transaction, ensures that the proven transaction
+// refers to the given message and compares given data with the proven.
+// If the given data differs from the proven, the exception will be thrown.
+// The input parameter is a single message's JSON object (see params description),
+// which was queried from TONOS API using functions such as `net.query`, `net.query_collection`
+// or `net.wait_for_collection`.
+//
+// If message's BOC and/or non-null `src_transaction.id` or `dst_transaction.id` are not provided
+// in the JSON, they will be queried from TONOS API.
+//
+// Please note, that joins (like `block`, `dst_account`, `dst_transaction`, `src_account`,
+// `src_transaction`, etc. in `Message` entity) are separated entities and not supported,
+// so function will throw an exception in a case if JSON being checked has such entities in it.
+//
+// For more information about proofs checking, see description of `proof_block_data` function.
+func (c *Client) ProofsProofMessageData(p *ParamsOfProofMessageData) error {
+	_, err := c.dllClient.waitErrorOrResult("proofs.proof_message_data", p)
 
 	return err
 }
