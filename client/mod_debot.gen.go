@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 11 Nov 21 10:10 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 Nov 21 13:47 UTC
 //
 // Mod debot
 //
@@ -28,6 +28,7 @@ const (
 	DebotExternalCallFailedDebotErrorCode    = 810
 	DebotBrowserCallbackFailedDebotErrorCode = 811
 	DebotOperationRejectedDebotErrorCode     = 812
+	DebotNoCodeDebotErrorCode                = 813
 )
 
 func init() { // nolint gochecknoinits
@@ -43,6 +44,7 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[DebotExternalCallFailedDebotErrorCode] = "DebotExternalCallFailedDebotErrorCode"
 	errorCodesToErrorTypes[DebotBrowserCallbackFailedDebotErrorCode] = "DebotBrowserCallbackFailedDebotErrorCode"
 	errorCodesToErrorTypes[DebotOperationRejectedDebotErrorCode] = "DebotOperationRejectedDebotErrorCode"
+	errorCodesToErrorTypes[DebotNoCodeDebotErrorCode] = "DebotNoCodeDebotErrorCode"
 }
 
 type DebotHandle uint32
@@ -91,6 +93,8 @@ type DebotInfo struct {
 	Icon null.String `json:"icon"` // optional
 	// Vector with IDs of DInterfaces used by DeBot.
 	Interfaces []string `json:"interfaces"`
+	// ABI version ("x.y") supported by DeBot.
+	DabiVersion string `json:"dabiVersion"`
 }
 
 // [UNSTABLE](UNSTABLE.md) Describes the operation that the DeBot wants to perform.
