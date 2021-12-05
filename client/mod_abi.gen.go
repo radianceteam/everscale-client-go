@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 Nov 21 13:47 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 05 Dec 21 04:40 UTC
 //
 // Mod abi
 //
