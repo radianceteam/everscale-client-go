@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 05 Dec 21 04:40 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 10 Dec 21 06:20 UTC
 //
 // Mod abi
 //
@@ -676,6 +676,23 @@ type ResultOfUpdateInitialData struct {
 	Data string `json:"data"`
 }
 
+type ParamsOfEncodeInitialData struct {
+	// Contract ABI.
+	Abi *Abi `json:"abi"` // optional
+	// List of initial values for contract's static variables.
+	// `abi` parameter should be provided to set initial data.
+	InitialData json.RawMessage `json:"initial_data"` // optional
+	// Initial account owner's public key to set into account data.
+	InitialPubkey null.String `json:"initial_pubkey"` // optional
+	// Cache type to put the result. The BOC itself returned if no cache type provided.
+	BocCache *BocCacheType `json:"boc_cache"` // optional
+}
+
+type ResultOfEncodeInitialData struct {
+	// Updated data BOC or BOC handle.
+	Data string `json:"data"`
+}
+
 type ParamsOfDecodeInitialData struct {
 	// Contract ABI.
 	// Initial data is decoded if this parameter is provided.
@@ -838,6 +855,16 @@ func (c *Client) AbiUpdateInitialData(p *ParamsOfUpdateInitialData) (*ResultOfUp
 	result := new(ResultOfUpdateInitialData)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("abi.update_initial_data", p, result)
+
+	return result, err
+}
+
+// Encodes initial account data with initial values for the contract's static variables and owner's public key into a data BOC that can be passed to `encode_tvc` function afterwards.
+// This function is analogue of `tvm.buildDataInit` function in Solidity.
+func (c *Client) AbiEncodeInitialData(p *ParamsOfEncodeInitialData) (*ResultOfEncodeInitialData, error) {
+	result := new(ResultOfEncodeInitialData)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_initial_data", p, result)
 
 	return result, err
 }
