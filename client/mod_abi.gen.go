@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 Dec 21 10:09 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 16 May 22 19:21 UTC
 //
 // Mod abi
 //
@@ -602,6 +602,8 @@ type ParamsOfDecodeMessage struct {
 	Abi Abi `json:"abi"`
 	// Message BOC.
 	Message string `json:"message"`
+	// Flag allowing partial BOC decoding when ABI doesn't describe the full body BOC. Controls decoder behaviour when after decoding all described in ABI params there are some data left in BOC: `true` - return decoded values `false` - return error of incomplete BOC deserialization (default).
+	AllowPartial null.Bool `json:"allow_partial"` // optional
 }
 
 type DecodedMessageBody struct {
@@ -622,6 +624,8 @@ type ParamsOfDecodeMessageBody struct {
 	Body string `json:"body"`
 	// True if the body belongs to the internal message.
 	IsInternal bool `json:"is_internal"`
+	// Flag allowing partial BOC decoding when ABI doesn't describe the full body BOC. Controls decoder behaviour when after decoding all described in ABI params there are some data left in BOC: `true` - return decoded values `false` - return error of incomplete BOC deserialization (default).
+	AllowPartial null.Bool `json:"allow_partial"` // optional
 }
 
 type ParamsOfEncodeAccount struct {
@@ -650,6 +654,8 @@ type ParamsOfDecodeAccountData struct {
 	Abi Abi `json:"abi"`
 	// Data BOC or BOC handle.
 	Data string `json:"data"`
+	// Flag allowing partial BOC decoding when ABI doesn't describe the full body BOC. Controls decoder behaviour when after decoding all described in ABI params there are some data left in BOC: `true` - return decoded values `false` - return error of incomplete BOC deserialization (default).
+	AllowPartial null.Bool `json:"allow_partial"` // optional
 }
 
 type ResultOfDecodeAccountData struct {
@@ -699,6 +705,8 @@ type ParamsOfDecodeInitialData struct {
 	Abi *Abi `json:"abi"` // optional
 	// Data BOC or BOC handle.
 	Data string `json:"data"`
+	// Flag allowing partial BOC decoding when ABI doesn't describe the full body BOC. Controls decoder behaviour when after decoding all described in ABI params there are some data left in BOC: `true` - return decoded values `false` - return error of incomplete BOC deserialization (default).
+	AllowPartial null.Bool `json:"allow_partial"` // optional
 }
 
 type ResultOfDecodeInitialData struct {
@@ -720,6 +728,21 @@ type ParamsOfDecodeBoc struct {
 type ResultOfDecodeBoc struct {
 	// Decoded data as a JSON structure.
 	Data json.RawMessage `json:"data"`
+}
+
+type ParamsOfAbiEncodeBoc struct {
+	// Parameters to encode into BOC.
+	Params []AbiParam `json:"params"`
+	// Parameters and values as a JSON structure.
+	Data json.RawMessage `json:"data"`
+	// Cache type to put the result.
+	// The BOC itself returned if no cache type provided.
+	BocCache *BocCacheType `json:"boc_cache"` // optional
+}
+
+type ResultOfAbiEncodeBoc struct {
+	// BOC encoded as base64.
+	Boc string `json:"boc"`
 }
 
 // Encodes message body according to ABI function call.
@@ -898,6 +921,15 @@ func (c *Client) AbiDecodeBoc(p *ParamsOfDecodeBoc) (*ResultOfDecodeBoc, error) 
 	result := new(ResultOfDecodeBoc)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("abi.decode_boc", p, result)
+
+	return result, err
+}
+
+// Encodes given parameters in JSON into a BOC using param types from ABI.
+func (c *Client) AbiEncodeBoc(p *ParamsOfAbiEncodeBoc) (*ResultOfAbiEncodeBoc, error) {
+	result := new(ResultOfAbiEncodeBoc)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_boc", p, result)
 
 	return result, err
 }

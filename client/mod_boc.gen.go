@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 Dec 21 10:09 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 16 May 22 19:21 UTC
 //
 // Mod boc
 //
@@ -237,12 +237,19 @@ type CellBocBuilderOp struct {
 	Boc string `json:"boc"`
 }
 
+// Address.
+type AddressBuilderOp struct {
+	// Address in a common `workchain:account` or base64 format.
+	Address string `json:"address"`
+}
+
 type BuilderOp struct {
 	// Should be any of
 	// IntegerBuilderOp
 	// BitStringBuilderOp
 	// CellBuilderOp
 	// CellBocBuilderOp
+	// AddressBuilderOp
 	EnumTypeValue interface{}
 }
 
@@ -286,6 +293,15 @@ func (p *BuilderOp) MarshalJSON() ([]byte, error) { // nolint funlen
 			"CellBoc",
 		})
 
+	case AddressBuilderOp:
+		return json.Marshal(struct {
+			AddressBuilderOp
+			Type string `json:"type"`
+		}{
+			value,
+			"Address",
+		})
+
 	default:
 		return nil, fmt.Errorf("unsupported type for BuilderOp %v", p.EnumTypeValue)
 	}
@@ -322,6 +338,13 @@ func (p *BuilderOp) UnmarshalJSON(b []byte) error { // nolint funlen
 
 	case "CellBoc":
 		var enumTypeValue CellBocBuilderOp
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "Address":
+		var enumTypeValue AddressBuilderOp
 		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
 			return err
 		}
@@ -431,6 +454,27 @@ type ParamsOfEncodeTvc struct {
 type ResultOfEncodeTvc struct {
 	// Contract TVC image BOC encoded as base64 or BOC handle of boc_cache parameter was specified.
 	Tvc string `json:"tvc"`
+}
+
+type ParamsOfEncodeExternalInMessage struct {
+	// Source address.
+	Src null.String `json:"src"` // optional
+	// Destination address.
+	Dst string `json:"dst"`
+	// Bag of cells with state init (used in deploy messages).
+	Init null.String `json:"init"` // optional
+	// Bag of cells with the message body encoded as base64.
+	Body null.String `json:"body"` // optional
+	// Cache type to put the result.
+	// The BOC itself returned if no cache type provided.
+	BocCache *BocCacheType `json:"boc_cache"` // optional
+}
+
+type ResultOfEncodeExternalInMessage struct {
+	// Message BOC encoded with `base64`.
+	Message string `json:"message"`
+	// Message id.
+	MessageID string `json:"message_id"`
 }
 
 type ParamsOfGetCompilerVersion struct {
@@ -597,6 +641,16 @@ func (c *Client) BocEncodeTvc(p *ParamsOfEncodeTvc) (*ResultOfEncodeTvc, error) 
 	result := new(ResultOfEncodeTvc)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("boc.encode_tvc", p, result)
+
+	return result, err
+}
+
+// Encodes a message.
+// Allows to encode any external inbound message.
+func (c *Client) BocEncodeExternalInMessage(p *ParamsOfEncodeExternalInMessage) (*ResultOfEncodeExternalInMessage, error) {
+	result := new(ResultOfEncodeExternalInMessage)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.encode_external_in_message", p, result)
 
 	return result, err
 }

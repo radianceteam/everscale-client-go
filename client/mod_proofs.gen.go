@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 Dec 21 10:09 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 16 May 22 19:21 UTC
 //
 // Mod proofs
 //
@@ -78,13 +78,16 @@ type ParamsOfProofMessageData struct {
 // a trusted validator set. So we need to check all key-blocks' proofs, started from the zero-state
 // and until the block, which we want to prove. But it can take a lot of time and traffic to
 // download and prove all key-blocks on a client. For solving this, special trusted blocks are used
-// in TON-SDK.
+// in Ever-SDK.
 //
 // The trusted block is the authority root, as well, as the zero-state. Each trusted block is the
 // `id` (e.g. `root_hash`) of the already proven key-block. There can be plenty of trusted
 // blocks, so there can be a lot of authority roots. The hashes of trusted blocks for MainNet
-// and DevNet are hardcoded in SDK in a separated binary file (trusted_key_blocks.bin) and can
-// be updated for each release.
+// and DevNet are hardcoded in SDK in a separated binary file (trusted_key_blocks.bin) and is
+// being updated for each release by using `update_trusted_blocks` utility.
+//
+// See [update_trusted_blocks](../../../tools/update_trusted_blocks) directory for more info.
+//
 // In future SDK releases, one will also be able to provide their hashes of trusted blocks for
 // other networks, besides for MainNet and DevNet.
 // By using trusted key-blocks, in order to prove any block, we can prove chain of key-blocks to

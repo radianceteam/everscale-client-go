@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 Dec 21 10:09 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 16 May 22 19:21 UTC
 //
 // Mod crypto
 //
@@ -15,33 +15,38 @@ import (
 )
 
 const (
-	InvalidPublicKeyCryptoErrorCode           = 100
-	InvalidSecretKeyCryptoErrorCode           = 101
-	InvalidKeyCryptoErrorCode                 = 102
-	InvalidFactorizeChallengeCryptoErrorCode  = 106
-	InvalidBigIntCryptoErrorCode              = 107
-	ScryptFailedCryptoErrorCode               = 108
-	InvalidKeySizeCryptoErrorCode             = 109
-	NaclSecretBoxFailedCryptoErrorCode        = 110
-	NaclBoxFailedCryptoErrorCode              = 111
-	NaclSignFailedCryptoErrorCode             = 112
-	Bip39InvalidEntropyCryptoErrorCode        = 113
-	Bip39InvalidPhraseCryptoErrorCode         = 114
-	Bip32InvalidKeyCryptoErrorCode            = 115
-	Bip32InvalidDerivePathCryptoErrorCode     = 116
-	Bip39InvalidDictionaryCryptoErrorCode     = 117
-	Bip39InvalidWordCountCryptoErrorCode      = 118
-	MnemonicGenerationFailedCryptoErrorCode   = 119
-	MnemonicFromEntropyFailedCryptoErrorCode  = 120
-	SigningBoxNotRegisteredCryptoErrorCode    = 121
-	InvalidSignatureCryptoErrorCode           = 122
-	EncryptionBoxNotRegisteredCryptoErrorCode = 123
-	InvalidIvSizeCryptoErrorCode              = 124
-	UnsupportedCipherModeCryptoErrorCode      = 125
-	CannotCreateCipherCryptoErrorCode         = 126
-	EncryptDataErrorCryptoErrorCode           = 127
-	DecryptDataErrorCryptoErrorCode           = 128
-	IvRequiredCryptoErrorCode                 = 129
+	InvalidPublicKeyCryptoErrorCode                    = 100
+	InvalidSecretKeyCryptoErrorCode                    = 101
+	InvalidKeyCryptoErrorCode                          = 102
+	InvalidFactorizeChallengeCryptoErrorCode           = 106
+	InvalidBigIntCryptoErrorCode                       = 107
+	ScryptFailedCryptoErrorCode                        = 108
+	InvalidKeySizeCryptoErrorCode                      = 109
+	NaclSecretBoxFailedCryptoErrorCode                 = 110
+	NaclBoxFailedCryptoErrorCode                       = 111
+	NaclSignFailedCryptoErrorCode                      = 112
+	Bip39InvalidEntropyCryptoErrorCode                 = 113
+	Bip39InvalidPhraseCryptoErrorCode                  = 114
+	Bip32InvalidKeyCryptoErrorCode                     = 115
+	Bip32InvalidDerivePathCryptoErrorCode              = 116
+	Bip39InvalidDictionaryCryptoErrorCode              = 117
+	Bip39InvalidWordCountCryptoErrorCode               = 118
+	MnemonicGenerationFailedCryptoErrorCode            = 119
+	MnemonicFromEntropyFailedCryptoErrorCode           = 120
+	SigningBoxNotRegisteredCryptoErrorCode             = 121
+	InvalidSignatureCryptoErrorCode                    = 122
+	EncryptionBoxNotRegisteredCryptoErrorCode          = 123
+	InvalidIvSizeCryptoErrorCode                       = 124
+	UnsupportedCipherModeCryptoErrorCode               = 125
+	CannotCreateCipherCryptoErrorCode                  = 126
+	EncryptDataErrorCryptoErrorCode                    = 127
+	DecryptDataErrorCryptoErrorCode                    = 128
+	IvRequiredCryptoErrorCode                          = 129
+	CryptoBoxNotRegisteredCryptoErrorCode              = 130
+	InvalidCryptoBoxTypeCryptoErrorCode                = 131
+	CryptoBoxSecretSerializationErrorCryptoErrorCode   = 132
+	CryptoBoxSecretDeserializationErrorCryptoErrorCode = 133
+	InvalidNonceSizeCryptoErrorCode                    = 134
 )
 
 func init() { // nolint gochecknoinits
@@ -72,6 +77,11 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[EncryptDataErrorCryptoErrorCode] = "EncryptDataErrorCryptoErrorCode"
 	errorCodesToErrorTypes[DecryptDataErrorCryptoErrorCode] = "DecryptDataErrorCryptoErrorCode"
 	errorCodesToErrorTypes[IvRequiredCryptoErrorCode] = "IvRequiredCryptoErrorCode"
+	errorCodesToErrorTypes[CryptoBoxNotRegisteredCryptoErrorCode] = "CryptoBoxNotRegisteredCryptoErrorCode"
+	errorCodesToErrorTypes[InvalidCryptoBoxTypeCryptoErrorCode] = "InvalidCryptoBoxTypeCryptoErrorCode"
+	errorCodesToErrorTypes[CryptoBoxSecretSerializationErrorCryptoErrorCode] = "CryptoBoxSecretSerializationErrorCryptoErrorCode"
+	errorCodesToErrorTypes[CryptoBoxSecretDeserializationErrorCryptoErrorCode] = "CryptoBoxSecretDeserializationErrorCryptoErrorCode"
+	errorCodesToErrorTypes[InvalidNonceSizeCryptoErrorCode] = "InvalidNonceSizeCryptoErrorCode"
 }
 
 type (
@@ -93,7 +103,10 @@ type EncryptionBoxInfo struct {
 
 type EncryptionAlgorithm struct {
 	// Should be any of
-	// AesParams
+	// AesParamsEB
+	// ChaCha20ParamsEB
+	// NaclBoxParamsEB
+	// NaclSecretBoxParamsEB
 	EnumTypeValue interface{}
 }
 
@@ -101,13 +114,40 @@ type EncryptionAlgorithm struct {
 // directive #[serde(tag="type")] for enum of types.
 func (p *EncryptionAlgorithm) MarshalJSON() ([]byte, error) { // nolint funlen
 	switch value := (p.EnumTypeValue).(type) {
-	case AesParams:
+	case AesParamsEB:
 		return json.Marshal(struct {
-			AesParams
+			AesParamsEB
 			Type string `json:"type"`
 		}{
 			value,
 			"AES",
+		})
+
+	case ChaCha20ParamsEB:
+		return json.Marshal(struct {
+			ChaCha20ParamsEB
+			Type string `json:"type"`
+		}{
+			value,
+			"ChaCha20",
+		})
+
+	case NaclBoxParamsEB:
+		return json.Marshal(struct {
+			NaclBoxParamsEB
+			Type string `json:"type"`
+		}{
+			value,
+			"NaclBox",
+		})
+
+	case NaclSecretBoxParamsEB:
+		return json.Marshal(struct {
+			NaclSecretBoxParamsEB
+			Type string `json:"type"`
+		}{
+			value,
+			"NaclSecretBox",
 		})
 
 	default:
@@ -124,7 +164,28 @@ func (p *EncryptionAlgorithm) UnmarshalJSON(b []byte) error { // nolint funlen
 	}
 	switch typeDescriptor.Type {
 	case "AES":
-		var enumTypeValue AesParams
+		var enumTypeValue AesParamsEB
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "ChaCha20":
+		var enumTypeValue ChaCha20ParamsEB
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "NaclBox":
+		var enumTypeValue NaclBoxParamsEB
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "NaclSecretBox":
+		var enumTypeValue NaclSecretBoxParamsEB
 		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
 			return err
 		}
@@ -147,7 +208,7 @@ const (
 	OfbCipherMode CipherMode = "OFB"
 )
 
-type AesParams struct {
+type AesParamsEB struct {
 	Mode CipherMode  `json:"mode"`
 	Key  string      `json:"key"`
 	Iv   null.String `json:"iv"` // optional
@@ -156,6 +217,251 @@ type AesParams struct {
 type AesInfo struct {
 	Mode CipherMode  `json:"mode"`
 	Iv   null.String `json:"iv"` // optional
+}
+
+type ChaCha20ParamsEB struct {
+	// 256-bit key.
+	// Must be encoded with `hex`.
+	Key string `json:"key"`
+	// 96-bit nonce.
+	// Must be encoded with `hex`.
+	Nonce string `json:"nonce"`
+}
+
+type NaclBoxParamsEB struct {
+	// 256-bit key.
+	// Must be encoded with `hex`.
+	TheirPublic string `json:"their_public"`
+	// 256-bit key.
+	// Must be encoded with `hex`.
+	Secret string `json:"secret"`
+	// 96-bit nonce.
+	// Must be encoded with `hex`.
+	Nonce string `json:"nonce"`
+}
+
+type NaclSecretBoxParamsEB struct {
+	// Secret key - unprefixed 0-padded to 64 symbols hex string.
+	Key string `json:"key"`
+	// Nonce in `hex`.
+	Nonce string `json:"nonce"`
+}
+
+// Crypto Box Secret.
+
+// Creates Crypto Box from a random seed phrase. This option can be used if a developer doesn't want the seed phrase to leave the core library's memory, where it is stored encrypted.
+// This type should be used upon the first wallet initialization, all further initializations
+// should use `EncryptedSecret` type instead.
+//
+// Get `encrypted_secret` with `get_crypto_box_info` function and store it on your side.
+type RandomSeedPhraseCryptoBoxSecret struct {
+	Dictionary uint8 `json:"dictionary"`
+	Wordcount  uint8 `json:"wordcount"`
+}
+
+// Restores crypto box instance from an existing seed phrase. This type should be used when Crypto Box is initialized from a seed phrase, entered by a user.
+// This type should be used only upon the first wallet initialization, all further
+// initializations should use `EncryptedSecret` type instead.
+//
+// Get `encrypted_secret` with `get_crypto_box_info` function and store it on your side.
+type PredefinedSeedPhraseCryptoBoxSecret struct {
+	Phrase     string `json:"phrase"`
+	Dictionary uint8  `json:"dictionary"`
+	Wordcount  uint8  `json:"wordcount"`
+}
+
+// Use this type for wallet reinitializations, when you already have `encrypted_secret` on hands. To get `encrypted_secret`, use `get_crypto_box_info` function after you initialized your crypto box for the first time.
+// It is an object, containing seed phrase or private key, encrypted with
+// `secret_encryption_salt` and password from `password_provider`.
+//
+// Note that if you want to change salt or password provider, then you need to reinitialize
+// the wallet with `PredefinedSeedPhrase`, then get `EncryptedSecret` via `get_crypto_box_info`,
+// store it somewhere, and only after that initialize the wallet with `EncryptedSecret` type.
+type EncryptedSecretCryptoBoxSecret struct {
+	// It is an object, containing encrypted seed phrase or private key (now we support only seed phrase).
+	EncryptedSecret string `json:"encrypted_secret"`
+}
+
+type CryptoBoxSecret struct {
+	// Should be any of
+	// RandomSeedPhraseCryptoBoxSecret
+	// PredefinedSeedPhraseCryptoBoxSecret
+	// EncryptedSecretCryptoBoxSecret
+	EnumTypeValue interface{}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *CryptoBoxSecret) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case RandomSeedPhraseCryptoBoxSecret:
+		return json.Marshal(struct {
+			RandomSeedPhraseCryptoBoxSecret
+			Type string `json:"type"`
+		}{
+			value,
+			"RandomSeedPhrase",
+		})
+
+	case PredefinedSeedPhraseCryptoBoxSecret:
+		return json.Marshal(struct {
+			PredefinedSeedPhraseCryptoBoxSecret
+			Type string `json:"type"`
+		}{
+			value,
+			"PredefinedSeedPhrase",
+		})
+
+	case EncryptedSecretCryptoBoxSecret:
+		return json.Marshal(struct {
+			EncryptedSecretCryptoBoxSecret
+			Type string `json:"type"`
+		}{
+			value,
+			"EncryptedSecret",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for CryptoBoxSecret %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *CryptoBoxSecret) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "RandomSeedPhrase":
+		var enumTypeValue RandomSeedPhraseCryptoBoxSecret
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "PredefinedSeedPhrase":
+		var enumTypeValue PredefinedSeedPhraseCryptoBoxSecret
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "EncryptedSecret":
+		var enumTypeValue EncryptedSecretCryptoBoxSecret
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for CryptoBoxSecret %v", typeDescriptor.Type)
+	}
+
+	return nil
+}
+
+type CryptoBoxHandle uint32
+
+type BoxEncryptionAlgorithm struct {
+	// Should be any of
+	// ChaCha20ParamsCB
+	// NaclBoxParamsCB
+	// NaclSecretBoxParamsCB
+	EnumTypeValue interface{}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *BoxEncryptionAlgorithm) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case ChaCha20ParamsCB:
+		return json.Marshal(struct {
+			ChaCha20ParamsCB
+			Type string `json:"type"`
+		}{
+			value,
+			"ChaCha20",
+		})
+
+	case NaclBoxParamsCB:
+		return json.Marshal(struct {
+			NaclBoxParamsCB
+			Type string `json:"type"`
+		}{
+			value,
+			"NaclBox",
+		})
+
+	case NaclSecretBoxParamsCB:
+		return json.Marshal(struct {
+			NaclSecretBoxParamsCB
+			Type string `json:"type"`
+		}{
+			value,
+			"NaclSecretBox",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for BoxEncryptionAlgorithm %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *BoxEncryptionAlgorithm) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "ChaCha20":
+		var enumTypeValue ChaCha20ParamsCB
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "NaclBox":
+		var enumTypeValue NaclBoxParamsCB
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "NaclSecretBox":
+		var enumTypeValue NaclSecretBoxParamsCB
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for BoxEncryptionAlgorithm %v", typeDescriptor.Type)
+	}
+
+	return nil
+}
+
+type ChaCha20ParamsCB struct {
+	// 96-bit nonce.
+	// Must be encoded with `hex`.
+	Nonce string `json:"nonce"`
+}
+
+type NaclBoxParamsCB struct {
+	// 256-bit key.
+	// Must be encoded with `hex`.
+	TheirPublic string `json:"their_public"`
+	// 96-bit nonce.
+	// Must be encoded with `hex`.
+	Nonce string `json:"nonce"`
+}
+
+type NaclSecretBoxParamsCB struct {
+	// Nonce in `hex`.
+	Nonce string `json:"nonce"`
 }
 
 type ParamsOfFactorize struct {
@@ -355,7 +661,8 @@ type ParamsOfNaclBoxOpen struct {
 	// Data that must be decrypted.
 	// Encoded with `base64`.
 	Encrypted string `json:"encrypted"`
-	Nonce     string `json:"nonce"`
+	// Nonce.
+	Nonce string `json:"nonce"`
 	// Sender's public key - unprefixed 0-padded to 64 symbols hex string.
 	TheirPublic string `json:"their_public"`
 	// Receiver's private key - unprefixed 0-padded to 64 symbols hex string.
@@ -383,7 +690,7 @@ type ParamsOfNaclSecretBoxOpen struct {
 	Encrypted string `json:"encrypted"`
 	// Nonce in `hex`.
 	Nonce string `json:"nonce"`
-	// Public key - unprefixed 0-padded to 64 symbols hex string.
+	// Secret key - unprefixed 0-padded to 64 symbols hex string.
 	Key string `json:"key"`
 }
 
@@ -527,9 +834,173 @@ type ResultOfChaCha20 struct {
 	Data string `json:"data"`
 }
 
+type ParamsOfCreateCryptoBox struct {
+	// Salt used for secret encryption. For example, a mobile device can use device ID as salt.
+	SecretEncryptionSalt string `json:"secret_encryption_salt"`
+	// Cryptobox secret.
+	Secret CryptoBoxSecret `json:"secret"`
+}
+
+type RegisteredCryptoBox struct {
+	Handle CryptoBoxHandle `json:"handle"`
+}
+
+// Interface that provides a callback that returns an encrypted password, used for cryptobox secret encryption.
+// To secure the password while passing it from application to the library,
+// the library generates a temporary key pair, passes the pubkey
+// to the passwordProvider, decrypts the received password with private key,
+// and deletes the key pair right away.
+//
+// Application should generate a temporary nacl_box_keypair
+// and encrypt the password with naclbox function using nacl_box_keypair.secret
+// and encryption_public_key keys + nonce = 24-byte prefix of encryption_public_key.
+
+type GetPasswordParamsOfAppPasswordProvider struct {
+	// Temporary library pubkey, that is used on application side for password encryption, along with application temporary private key and nonce. Used for password decryption on library side.
+	EncryptionPublicKey string `json:"encryption_public_key"`
+}
+
+type ParamsOfAppPasswordProvider struct {
+	// Should be any of
+	// GetPasswordParamsOfAppPasswordProvider
+	EnumTypeValue interface{}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ParamsOfAppPasswordProvider) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case GetPasswordParamsOfAppPasswordProvider:
+		return json.Marshal(struct {
+			GetPasswordParamsOfAppPasswordProvider
+			Type string `json:"type"`
+		}{
+			value,
+			"GetPassword",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for ParamsOfAppPasswordProvider %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ParamsOfAppPasswordProvider) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "GetPassword":
+		var enumTypeValue GetPasswordParamsOfAppPasswordProvider
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for ParamsOfAppPasswordProvider %v", typeDescriptor.Type)
+	}
+
+	return nil
+}
+
+type GetPasswordResultOfAppPasswordProvider struct {
+	// Password, encrypted and encoded to base64. Crypto box uses this password to decrypt its secret (seed phrase).
+	EncryptedPassword string `json:"encrypted_password"`
+	// Hex encoded public key of a temporary key pair, used for password encryption on application side.
+	// Used together with `encryption_public_key` to decode `encrypted_password`.
+	AppEncryptionPubkey string `json:"app_encryption_pubkey"`
+}
+
+type ResultOfAppPasswordProvider struct {
+	// Should be any of
+	// GetPasswordResultOfAppPasswordProvider
+	EnumTypeValue interface{}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ResultOfAppPasswordProvider) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case GetPasswordResultOfAppPasswordProvider:
+		return json.Marshal(struct {
+			GetPasswordResultOfAppPasswordProvider
+			Type string `json:"type"`
+		}{
+			value,
+			"GetPassword",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for ResultOfAppPasswordProvider %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *ResultOfAppPasswordProvider) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "GetPassword":
+		var enumTypeValue GetPasswordResultOfAppPasswordProvider
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for ResultOfAppPasswordProvider %v", typeDescriptor.Type)
+	}
+
+	return nil
+}
+
+type ResultOfGetCryptoBoxInfo struct {
+	// Secret (seed phrase) encrypted with salt and password.
+	EncryptedSecret string `json:"encrypted_secret"`
+}
+
+type ResultOfGetCryptoBoxSeedPhrase struct {
+	Phrase     string `json:"phrase"`
+	Dictionary uint8  `json:"dictionary"`
+	Wordcount  uint8  `json:"wordcount"`
+}
+
+type ParamsOfGetSigningBoxFromCryptoBox struct {
+	// Crypto Box Handle.
+	Handle uint32 `json:"handle"`
+	// HD key derivation path.
+	// By default, Everscale HD path is used.
+	Hdpath null.String `json:"hdpath"` // optional
+	// Store derived secret for this lifetime (in ms). The timer starts after each signing box operation. Secrets will be deleted immediately after each signing box operation, if this value is not set.
+	SecretLifetime null.Uint32 `json:"secret_lifetime"` // optional
+}
+
 type RegisteredSigningBox struct {
 	// Handle of the signing box.
 	Handle SigningBoxHandle `json:"handle"`
+}
+
+type ParamsOfGetEncryptionBoxFromCryptoBox struct {
+	// Crypto Box Handle.
+	Handle uint32 `json:"handle"`
+	// HD key derivation path.
+	// By default, Everscale HD path is used.
+	Hdpath null.String `json:"hdpath"` // optional
+	// Encryption algorithm.
+	Algorithm BoxEncryptionAlgorithm `json:"algorithm"`
+	// Store derived secret for encryption algorithm for this lifetime (in ms). The timer starts after each encryption box operation. Secrets will be deleted (overwritten with zeroes) after each encryption operation, if this value is not set.
+	SecretLifetime null.Uint32 `json:"secret_lifetime"` // optional
+}
+
+type RegisteredEncryptionBox struct {
+	// Handle of the encryption box.
+	Handle EncryptionBoxHandle `json:"handle"`
 }
 
 // Signing box callbacks.
@@ -703,12 +1174,7 @@ type ResultOfSigningBoxSign struct {
 	Signature string `json:"signature"`
 }
 
-type RegisteredEncryptionBox struct {
-	// Handle of the encryption box.
-	Handle EncryptionBoxHandle `json:"handle"`
-}
-
-// Encryption box callbacks.
+// Interface for data encryption/decryption.
 
 // Get encryption box info.
 type GetInfoParamsOfAppEncryptionBox struct{}
@@ -1274,6 +1740,139 @@ func (c *Client) CryptoChacha20(p *ParamsOfChaCha20) (*ResultOfChaCha20, error) 
 	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.chacha20", p, result)
 
 	return result, err
+}
+
+// Creates a Crypto Box instance.
+// Crypto Box is a root crypto object, that encapsulates some secret (seed phrase usually)
+// in encrypted form and acts as a factory for all crypto primitives used in SDK:
+// keys for signing and encryption, derived from this secret.
+//
+// Crypto Box encrypts original Seed Phrase with salt and password that is retrieved
+// from `password_provider` callback, implemented on Application side.
+//
+// When used, decrypted secret shows up in core library's memory for a very short period
+// of time and then is immediately overwritten with zeroes.
+
+func (c *Client) CryptoCreateCryptoBox(p *ParamsOfCreateCryptoBox, app AppPasswordProvider) (*RegisteredCryptoBox, error) { // nolint dupl
+	result := new(RegisteredCryptoBox)
+	responses, err := c.dllClient.resultsChannel("crypto.create_crypto_box", p)
+	if err != nil {
+		return nil, err
+	}
+
+	response := <-responses
+	if response.Code == ResponseCodeError {
+		return nil, response.Error
+	}
+
+	if err := json.Unmarshal(response.Data, result); err != nil {
+		return nil, err
+	}
+
+	go func() {
+		for r := range responses {
+			if r.Code == ResponseCodeAppRequest {
+				c.dispatchRequestCryptoCreateCryptoBox(r.Data, app)
+			}
+		}
+	}()
+
+	return result, nil
+}
+
+func (c *Client) dispatchRequestCryptoCreateCryptoBox(payload []byte, app AppPasswordProvider) { // nolint dupl
+	var appRequest ParamsOfAppRequest
+	var appParams ParamsOfAppPasswordProvider
+	err := json.Unmarshal(payload, &appRequest)
+	if err != nil {
+		panic(err)
+	}
+	err = json.Unmarshal(appRequest.RequestData, &appParams)
+	if err != nil {
+		panic(err)
+	}
+	var appResponse interface{}
+	// appResponse, err := app.Request(appParams)
+
+	switch value := (appParams.EnumTypeValue).(type) {
+	case GetPasswordParamsOfAppPasswordProvider:
+		appResponse, err = app.GetPasswordRequest(value)
+
+	default:
+		err = fmt.Errorf("unsupported type for request %v", appParams.EnumTypeValue)
+	}
+
+	appRequestResult := AppRequestResult{}
+	if err != nil {
+		appRequestResult.EnumTypeValue = ErrorAppRequestResult{Text: err.Error()}
+	} else {
+		marshalled, _ := json.Marshal(&ResultOfAppPasswordProvider{EnumTypeValue: appResponse})
+		appRequestResult.EnumTypeValue = OkAppRequestResult{Result: marshalled}
+	}
+	err = c.ClientResolveAppRequest(&ParamsOfResolveAppRequest{
+		AppRequestID: appRequest.AppRequestID,
+		Result:       appRequestResult,
+	})
+	if err == nil || errors.Is(err, ErrContextIsClosed) {
+		return
+	}
+	panic(err)
+}
+
+// Removes Crypto Box. Clears all secret data.
+func (c *Client) CryptoRemoveCryptoBox(p *RegisteredCryptoBox) error {
+	_, err := c.dllClient.waitErrorOrResult("crypto.remove_crypto_box", p)
+
+	return err
+}
+
+// Get Crypto Box Info. Used to get `encrypted_secret` that should be used for all the cryptobox initializations except the first one.
+func (c *Client) CryptoGetCryptoBoxInfo(p *RegisteredCryptoBox) (*ResultOfGetCryptoBoxInfo, error) {
+	result := new(ResultOfGetCryptoBoxInfo)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.get_crypto_box_info", p, result)
+
+	return result, err
+}
+
+// Get Crypto Box Seed Phrase.
+// Attention! Store this data in your application for a very short period of time and overwrite it with zeroes ASAP.
+func (c *Client) CryptoGetCryptoBoxSeedPhrase(p *RegisteredCryptoBox) (*ResultOfGetCryptoBoxSeedPhrase, error) {
+	result := new(ResultOfGetCryptoBoxSeedPhrase)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.get_crypto_box_seed_phrase", p, result)
+
+	return result, err
+}
+
+// Get handle of Signing Box derived from Crypto Box.
+func (c *Client) CryptoGetSigningBoxFromCryptoBox(p *ParamsOfGetSigningBoxFromCryptoBox) (*RegisteredSigningBox, error) {
+	result := new(RegisteredSigningBox)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.get_signing_box_from_crypto_box", p, result)
+
+	return result, err
+}
+
+// Gets Encryption Box from Crypto Box.
+// Derives encryption keypair from cryptobox secret and hdpath and
+// stores it in cache for `secret_lifetime`
+// or until explicitly cleared by `clear_crypto_box_secret_cache` method.
+// If `secret_lifetime` is not specified - overwrites encryption secret with zeroes immediately after
+// encryption operation.
+func (c *Client) CryptoGetEncryptionBoxFromCryptoBox(p *ParamsOfGetEncryptionBoxFromCryptoBox) (*RegisteredEncryptionBox, error) {
+	result := new(RegisteredEncryptionBox)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("crypto.get_encryption_box_from_crypto_box", p, result)
+
+	return result, err
+}
+
+// Removes cached secrets (overwrites with zeroes) from all signing and encryption boxes, derived from crypto box.
+func (c *Client) CryptoClearCryptoBoxSecretCache(p *RegisteredCryptoBox) error {
+	_, err := c.dllClient.waitErrorOrResult("crypto.clear_crypto_box_secret_cache", p)
+
+	return err
 }
 
 // Register an application implemented signing box.
