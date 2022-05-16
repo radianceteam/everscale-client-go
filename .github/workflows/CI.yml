@@ -14,7 +14,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.16.x
+          go-version: 1.17.x
       - name: Checkout code
         uses: actions/checkout@v2
       - name: download-dylibs
@@ -38,4 +38,4 @@ jobs:
         env:
           CGO_LDFLAGS: '-L/tmp/ -lton_client'
         with:
-          version: v1.43
+          version: v1.45
