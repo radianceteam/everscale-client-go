@@ -20,6 +20,9 @@ linters:
     - scopelint
     - interfacer
     - varnamelen
+    - errchkjson
+    - gci
+    - forcetypeassert
   enable-all: true
 linters-settings:
   goimports:
