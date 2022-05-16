@@ -25,9 +25,10 @@ var ignoredTypesByName = map[string]bool{
 }
 
 var ignoredFunctionsByName = map[string]bool{
-	"get_api_reference":    true,
-	"send_message":         true,
-	"wait_for_transaction": true,
-	"process_message":      true,
-	"subscribe_collection": true,
+	"client.get_api_reference":        true,
+	"processing.send_message":         true,
+	"processing.wait_for_transaction": true,
+	"processing.process_message":      true,
+	"net.subscribe_collection":        true,
+	"net.subscribe":                   true,
 }

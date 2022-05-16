@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 Dec 21 10:09 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 16 May 22 19:21 UTC
 //
 // Mod net
 //
@@ -306,6 +306,14 @@ type ParamsOfSubscribeCollection struct {
 	Filter json.RawMessage `json:"filter"` // optional
 	// Projection (result) string.
 	Result string `json:"result"`
+}
+
+type ParamsOfSubscribe struct {
+	// GraphQL subscription text.
+	Subscription string `json:"subscription"`
+	// Variables used in subscription.
+	// Must be a map with named values that can be used in query.
+	Variables json.RawMessage `json:"variables"` // optional
 }
 
 type ParamsOfFindLastShardBlock struct {
@@ -616,8 +624,8 @@ func (c *Client) NetGetEndpoints() (*ResultOfGetEndpoints, error) {
 
 // Allows to query and paginate through the list of accounts that the specified account has interacted with, sorted by the time of the last internal message between accounts.
 // *Attention* this query retrieves data from 'Counterparties' service which is not supported in
-// the opensource version of DApp Server (and will not be supported) as well as in TON OS SE (will be supported in SE in future),
-// but is always accessible via [TON OS Devnet/Mainnet Clouds](https://docs.ton.dev/86757ecb2/p/85c869-networks).
+// the opensource version of DApp Server (and will not be supported) as well as in Evernode SE (will be supported in SE in future),
+// but is always accessible via [EVER OS Clouds](../ton-os-api/networks.md).
 func (c *Client) NetQueryCounterparties(p *ParamsOfQueryCounterparties) (*ResultOfQueryCollection, error) {
 	result := new(ResultOfQueryCollection)
 

@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 Dec 21 10:09 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 16 May 22 19:21 UTC
 //
 // Mod client
 //
@@ -106,10 +106,11 @@ type Config struct {
 }
 
 type NetworkConfig struct {
-	// DApp Server public address. For instance, for `net.ton.dev/graphql` GraphQL endpoint the server address will be net.ton.dev.
+	// **This field is deprecated, but left for backward-compatibility.** DApp Server public address.
 	ServerAddress null.String `json:"server_address"` // optional
 	// List of DApp Server addresses.
-	// Any correct URL format can be specified, including IP addresses This parameter is prevailing over `server_address`.
+	// Any correct URL format can be specified, including IP addresses. This parameter is prevailing over `server_address`.
+	// Check the full list of [supported network endpoints](../ton-os-api/networks.md).
 	Endpoints []string `json:"endpoints"` // optional
 	// Deprecated.
 	// You must use `network.max_reconnect_timeout` that allows to specify maximum network resolving timeout.
@@ -135,7 +136,7 @@ type NetworkConfig struct {
 	// Must be specified in milliseconds. Default is 15000 (15 sec).
 	OutOfSyncThreshold null.Uint32 `json:"out_of_sync_threshold"` // optional
 	// Maximum number of randomly chosen endpoints the library uses to broadcast a message.
-	// Default is 2.
+	// Default is 1.
 	SendingEndpointCount null.Uint8 `json:"sending_endpoint_count"` // optional
 	// Frequency of sync latency detection.
 	// Library periodically checks the current endpoint for blockchain data synchronization latency.
@@ -153,10 +154,34 @@ type NetworkConfig struct {
 	//
 	// Must be specified in milliseconds. Default is 60000 (1 min).
 	QueryTimeout null.Uint32 `json:"query_timeout"` // optional
+	// Queries protocol.
+	// `HTTP` or `WS`.
+	// Default is `HTTP`.
+	QueriesProtocol *NetworkQueriesProtocol `json:"queries_protocol"` // optional
+	// UNSTABLE.
+	// First REMP status awaiting timeout. If no status received during the timeout than fallback transaction scenario is activated.
+	//
+	// Must be specified in milliseconds. Default is 1000 (1 sec).
+	FirstRempStatusTimeout null.Uint32 `json:"first_remp_status_timeout"` // optional
+	// UNSTABLE.
+	// Subsequent REMP status awaiting timeout. If no status received during the timeout than fallback transaction scenario is activated.
+	//
+	// Must be specified in milliseconds. Default is 5000 (5 sec).
+	NextRempStatusTimeout null.Uint32 `json:"next_remp_status_timeout"` // optional
 	// Access key to GraphQL API.
 	// At the moment is not used in production.
 	AccessKey null.String `json:"access_key"` // optional
 }
+
+type NetworkQueriesProtocol string
+
+const (
+
+	// Each GraphQL query uses separate HTTP request.
+	HTTPNetworkQueriesProtocol NetworkQueriesProtocol = "HTTP"
+	// All GraphQL queries will be served using single web socket connection.
+	WsNetworkQueriesProtocol NetworkQueriesProtocol = "WS"
+)
 
 // Crypto config.
 type CryptoConfig struct {

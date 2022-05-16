@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 Dec 21 10:09 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 16 May 22 19:21 UTC
 //
 // Mod processing
 //
@@ -11,6 +11,7 @@ package client
 import (
 	"encoding/json"
 	"fmt"
+	"math/big"
 )
 
 const (
@@ -27,6 +28,9 @@ const (
 	BlockNotFoundProcessingErrorCode                   = 511
 	InvalidDataProcessingErrorCode                     = 512
 	ExternalSignerMustNotBeUsedProcessingErrorCode     = 513
+	MessageRejectedProcessingErrorCode                 = 514
+	InvalidRempStatusProcessingErrorCode               = 515
+	NextRempStatusTimeoutProcessingErrorCode           = 516
 )
 
 func init() { // nolint gochecknoinits
@@ -43,6 +47,9 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[BlockNotFoundProcessingErrorCode] = "BlockNotFoundProcessingErrorCode"
 	errorCodesToErrorTypes[InvalidDataProcessingErrorCode] = "InvalidDataProcessingErrorCode"
 	errorCodesToErrorTypes[ExternalSignerMustNotBeUsedProcessingErrorCode] = "ExternalSignerMustNotBeUsedProcessingErrorCode"
+	errorCodesToErrorTypes[MessageRejectedProcessingErrorCode] = "MessageRejectedProcessingErrorCode"
+	errorCodesToErrorTypes[InvalidRempStatusProcessingErrorCode] = "InvalidRempStatusProcessingErrorCode"
+	errorCodesToErrorTypes[NextRempStatusTimeoutProcessingErrorCode] = "NextRempStatusTimeoutProcessingErrorCode"
 }
 
 // Notifies the application that the account's current shard block will be fetched from the network. This step is performed before the message sending so that sdk knows starting from which block it will search for the transaction.
@@ -127,6 +134,39 @@ type MessageExpiredProcessingEvent struct {
 	Error     Error  `json:"error"`
 }
 
+// Notifies the app that the message has been delivered to the thread's validators.
+type RempSentToValidatorsProcessingEvent struct {
+	MessageID string          `json:"message_id"`
+	Timestamp big.Int         `json:"timestamp"`
+	JSON      json.RawMessage `json:"json"`
+}
+
+// Notifies the app that the message has been successfully included into a block candidate by the thread's collator.
+type RempIncludedIntoBlockProcessingEvent struct {
+	MessageID string          `json:"message_id"`
+	Timestamp big.Int         `json:"timestamp"`
+	JSON      json.RawMessage `json:"json"`
+}
+
+// Notifies the app that the block candicate with the message has been accepted by the thread's validators.
+type RempIncludedIntoAcceptedBlockProcessingEvent struct {
+	MessageID string          `json:"message_id"`
+	Timestamp big.Int         `json:"timestamp"`
+	JSON      json.RawMessage `json:"json"`
+}
+
+// Notifies the app about some other minor REMP statuses occurring during message processing.
+type RempOtherProcessingEvent struct {
+	MessageID string          `json:"message_id"`
+	Timestamp big.Int         `json:"timestamp"`
+	JSON      json.RawMessage `json:"json"`
+}
+
+// Notifies the app about any problem that has occurred in REMP processing - in this case library switches to the fallback transaction awaiting scenario (sequential block reading).
+type RempErrorProcessingEvent struct {
+	Error Error `json:"error"`
+}
+
 type ProcessingEvent struct {
 	// Should be any of
 	// WillFetchFirstBlockProcessingEvent
@@ -137,6 +177,11 @@ type ProcessingEvent struct {
 	// WillFetchNextBlockProcessingEvent
 	// FetchNextBlockFailedProcessingEvent
 	// MessageExpiredProcessingEvent
+	// RempSentToValidatorsProcessingEvent
+	// RempIncludedIntoBlockProcessingEvent
+	// RempIncludedIntoAcceptedBlockProcessingEvent
+	// RempOtherProcessingEvent
+	// RempErrorProcessingEvent
 	EnumTypeValue interface{}
 }
 
@@ -216,6 +261,51 @@ func (p *ProcessingEvent) MarshalJSON() ([]byte, error) { // nolint funlen
 			"MessageExpired",
 		})
 
+	case RempSentToValidatorsProcessingEvent:
+		return json.Marshal(struct {
+			RempSentToValidatorsProcessingEvent
+			Type string `json:"type"`
+		}{
+			value,
+			"RempSentToValidators",
+		})
+
+	case RempIncludedIntoBlockProcessingEvent:
+		return json.Marshal(struct {
+			RempIncludedIntoBlockProcessingEvent
+			Type string `json:"type"`
+		}{
+			value,
+			"RempIncludedIntoBlock",
+		})
+
+	case RempIncludedIntoAcceptedBlockProcessingEvent:
+		return json.Marshal(struct {
+			RempIncludedIntoAcceptedBlockProcessingEvent
+			Type string `json:"type"`
+		}{
+			value,
+			"RempIncludedIntoAcceptedBlock",
+		})
+
+	case RempOtherProcessingEvent:
+		return json.Marshal(struct {
+			RempOtherProcessingEvent
+			Type string `json:"type"`
+		}{
+			value,
+			"RempOther",
+		})
+
+	case RempErrorProcessingEvent:
+		return json.Marshal(struct {
+			RempErrorProcessingEvent
+			Type string `json:"type"`
+		}{
+			value,
+			"RempError",
+		})
+
 	default:
 		return nil, fmt.Errorf("unsupported type for ProcessingEvent %v", p.EnumTypeValue)
 	}
@@ -280,6 +370,41 @@ func (p *ProcessingEvent) UnmarshalJSON(b []byte) error { // nolint funlen
 
 	case "MessageExpired":
 		var enumTypeValue MessageExpiredProcessingEvent
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "RempSentToValidators":
+		var enumTypeValue RempSentToValidatorsProcessingEvent
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "RempIncludedIntoBlock":
+		var enumTypeValue RempIncludedIntoBlockProcessingEvent
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "RempIncludedIntoAcceptedBlock":
+		var enumTypeValue RempIncludedIntoAcceptedBlockProcessingEvent
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "RempOther":
+		var enumTypeValue RempOtherProcessingEvent
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "RempError":
+		var enumTypeValue RempErrorProcessingEvent
 		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
 			return err
 		}

@@ -179,7 +179,7 @@ func GenModule(dir string, m Module) error {
 		}
 	}
 	for _, f := range m.Functions {
-		if ignoredFunctionsByName[f.Name] {
+		if ignoredFunctionsByName[m.Name+"."+f.Name] {
 			continue
 		}
 		_, err = file.WriteString(genFunc(m, f))

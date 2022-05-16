@@ -23,3 +23,7 @@ type AppEncryptionBox interface {
 	EncryptRequest(EncryptParamsOfAppEncryptionBox) (EncryptResultOfAppEncryptionBox, error)
 	DecryptRequest(DecryptParamsOfAppEncryptionBox) (DecryptResultOfAppEncryptionBox, error)
 }
+
+type AppPasswordProvider interface {
+	GetPasswordRequest(GetPasswordParamsOfAppPasswordProvider) (GetPasswordResultOfAppPasswordProvider, error)
+}
