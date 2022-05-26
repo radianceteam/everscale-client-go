@@ -1,7 +1,7 @@
 # TON SDK client Golang
 
-[![TON-SDK](https://img.shields.io/badge/TON_SDK-1.33.1-green.svg)](https://github.com/tonlabs/TON-SDK/tree/1.33.1)
-[![TON local-node docker image](https://img.shields.io/badge/TON_local_node-0.28.11-green.svg)](https://hub.docker.com/layers/tonlabs/local-node/0.28.11/images/sha256-1fab553d08da65d84c8694c9ed6537c6e825220f179cd760414f2d8ca29443f6)
+[![TON-SDK](https://img.shields.io/badge/TON_SDK-1.34.0-green.svg)](https://github.com/tonlabs/TON-SDK/tree/1.34.0)
+[![TON local-node docker image](https://img.shields.io/badge/TON_local_node-0.30.1-green.svg)](https://hub.docker.com/layers/local-node/tonlabs/local-node/0.30.1/images/sha256-e51f289a3e9f31f1c9f7fdb825060b11026a331ee7fd1a7cd243cf925ce9b5dd)
 [![Chat Telegram](https://img.shields.io/badge/chat-Telegram-9cf.svg)](https://t.me/RADIANCE_TON_SDK)
 [![Documentation](https://godoc.org/github.com/radianceteam/ton-client-go/client?status.svg)](https://godoc.org/github.com/radianceteam/ton-client-go/client)
 ![CI tests and linters](https://github.com/radianceteam/ton-client-go/workflows/CI/badge.svg)
@@ -73,7 +73,7 @@ All non-generated code has test coverage at least of 70% - one can see it via `t
 
 ```shell script
 export CGO_LDFLAGS="-L$TON_SDK_INSTALLATION_PATH -lton_client"
-docker run -d --name local-node -p80:80 tonlabs/local-node:0.28.3
+docker run -d --name local-node -p80:80 tonlabs/local-node:0.30.1
 task test # tests without node
 task full_test # tests including with node
 task coverage # full_test with coverage

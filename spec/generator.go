@@ -95,11 +95,11 @@ func genFunc(m Module, f Function) string {
 	content := funcContent{
 		Name:       strcase.ToCamel(m.Name + "_" + f.Name),
 		MethodName: m.Name + "." + f.Name,
-		ResultType: toTypeName(f.Result.GenericArgs[0].RefName),
+		ResultType: withTypeAlias(toTypeName(f.Result.GenericArgs[0].RefName)),
 	}
 
 	if len(params) == 1 || len(params) == 2 && appObject != nil {
-		content.ParamType = toTypeName(params[0].RefName)
+		content.ParamType = withTypeAlias(toTypeName(params[0].RefName))
 	}
 
 	var err error
