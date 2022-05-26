@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 16 May 22 19:21 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 May 22 10:34 UTC
 //
 // Mod client
 //
@@ -332,6 +332,15 @@ func (c *Client) ClientVersion() (*ResultOfVersion, error) {
 	result := new(ResultOfVersion)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("client.version", nil, result)
+
+	return result, err
+}
+
+// Returns Core Library API reference.
+func (c *Client) ClientConfig() (*Config, error) {
+	result := new(Config)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("client.config", nil, result)
 
 	return result, err
 }

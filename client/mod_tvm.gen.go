@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 16 May 22 19:21 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 May 22 10:34 UTC
 //
 // Mod tvm
 //
@@ -155,12 +155,32 @@ func (p *AccountForExecutor) UnmarshalJSON(b []byte) error { // nolint funlen
 }
 
 type TransactionFees struct {
-	InMsgFwdFee      big.Int `json:"in_msg_fwd_fee"`
-	StorageFee       big.Int `json:"storage_fee"`
-	GasFee           big.Int `json:"gas_fee"`
-	OutMsgsFwdFee    big.Int `json:"out_msgs_fwd_fee"`
+	// Deprecated.
+	// Left for backward compatibility. Does not participate in account transaction fees calculation.
+	InMsgFwdFee big.Int `json:"in_msg_fwd_fee"`
+	// Fee for account storage.
+	StorageFee big.Int `json:"storage_fee"`
+	// Fee for processing.
+	GasFee big.Int `json:"gas_fee"`
+	// Deprecated.
+	// Contains the same data as total_fwd_fees field. Deprecated because of its confusing name, that is not the same with GraphQL API Transaction type's field.
+	OutMsgsFwdFee big.Int `json:"out_msgs_fwd_fee"`
+	// Deprecated.
+	// This is the field that is named as `total_fees` in GraphQL API Transaction type. `total_account_fees` name is misleading, because it does not mean account fees, instead it means
+	// validators total fees received for the transaction execution. It does not include some forward fees that account
+	// actually pays now, but validators will receive later during value delivery to another account (not even in the receiving
+	// transaction).
+	// Because of all of this, this field is not interesting for those who wants to understand
+	// the real account fees, this is why it is deprecated and left for backward compatibility.
 	TotalAccountFees big.Int `json:"total_account_fees"`
-	TotalOutput      big.Int `json:"total_output"`
+	// Deprecated because it means total value sent in the transaction, which does not relate to any fees.
+	TotalOutput big.Int `json:"total_output"`
+	// Fee for inbound external message import.
+	ExtInMsgFee big.Int `json:"ext_in_msg_fee"`
+	// Total fees the account pays for message forwarding.
+	TotalFwdFees big.Int `json:"total_fwd_fees"`
+	// Total account fees for the transaction execution. Compounds of storage_fee + gas_fee + ext_in_msg_fee + total_fwd_fees.
+	AccountFees big.Int `json:"account_fees"`
 }
 
 type ParamsOfRunExecutor struct {
