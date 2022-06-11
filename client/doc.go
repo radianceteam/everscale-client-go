@@ -3,7 +3,7 @@
 // For methods available see Client interface.
 //
 // Example usage
-//  import "github.com/radianceteam/ton-Client-go/Client"
+//  import "github.com/radianceteam/everscale-client-go/Client"
 //      ...
 //		c, err := client.NewClient(client.Config{
 //			Network: Client.ConfigNetwork{ServerAddress: "net.ton.dev"},

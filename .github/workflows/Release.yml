@@ -18,4 +18,4 @@ jobs:
           token: ${{ secrets.TGBOT_RADIANCEDEPLOY_TOKEN }}
           message: |
             Go SDK Wrapper ${{ steps.get_version.outputs.VERSION }} has been released.
-            https://github.com/radianceteam/ton-client-go/releases/tag/${{ steps.get_version.outputs.VERSION }}
+            https://github.com/radianceteam/everscale-client-go/releases/tag/${{ steps.get_version.outputs.VERSION }}

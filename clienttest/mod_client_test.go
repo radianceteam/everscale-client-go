@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/volatiletech/null"
 
-	"github.com/radianceteam/ton-client-go/client"
+	"github.com/radianceteam/everscale-client-go/client"
 )
 
 func TestModClient(t *testing.T) {

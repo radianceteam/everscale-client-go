@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/volatiletech/null"
 
-	"github.com/radianceteam/ton-client-go/client"
+	"github.com/radianceteam/everscale-client-go/client"
 )
 
 func newClient() (*client.Client, error) {

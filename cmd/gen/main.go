@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/radianceteam/ton-client-go/spec"
+	"github.com/radianceteam/everscale-client-go/spec"
 )
 
 func main() {
