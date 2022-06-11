@@ -1,4 +1,4 @@
-module github.com/radianceteam/ton-client-go
+module github.com/radianceteam/everscale-client-go
 
 go 1.17
 

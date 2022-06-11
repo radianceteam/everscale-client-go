@@ -10,7 +10,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/radianceteam/ton-client-go/client"
+	"github.com/radianceteam/everscale-client-go/client"
 )
 
 func init() { // nolint gochecknoinits

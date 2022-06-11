@@ -8,7 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/radianceteam/ton-client-go/client"
+	"github.com/radianceteam/everscale-client-go/client"
 )
 
 func TestClient_ProcessingWaitMessage(t *testing.T) {

@@ -23,8 +23,9 @@ linters:
     - errchkjson
     - gci
     - forcetypeassert
+    - exhaustruct
   enable-all: true
 linters-settings:
   goimports:
-    local-prefixes: github.com/radianceteam/ton-client-go
+    local-prefixes: github.com/radianceteam/everscale-client-go
 

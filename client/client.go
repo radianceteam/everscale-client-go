@@ -3,7 +3,7 @@ package client
 import (
 	"encoding/json"
 
-	"github.com/radianceteam/ton-client-go/spec"
+	"github.com/radianceteam/everscale-client-go/spec"
 )
 
 type Client struct {

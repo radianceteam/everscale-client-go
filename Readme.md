@@ -3,8 +3,8 @@
 [![TON-SDK](https://img.shields.io/badge/TON_SDK-1.34.0-green.svg)](https://github.com/tonlabs/TON-SDK/tree/1.34.0)
 [![TON local-node docker image](https://img.shields.io/badge/TON_local_node-0.30.1-green.svg)](https://hub.docker.com/layers/local-node/tonlabs/local-node/0.30.1/images/sha256-e51f289a3e9f31f1c9f7fdb825060b11026a331ee7fd1a7cd243cf925ce9b5dd)
 [![Chat Telegram](https://img.shields.io/badge/chat-Telegram-9cf.svg)](https://t.me/RADIANCE_TON_SDK)
-[![Documentation](https://godoc.org/github.com/radianceteam/ton-client-go/client?status.svg)](https://godoc.org/github.com/radianceteam/ton-client-go/client)
-![CI tests and linters](https://github.com/radianceteam/ton-client-go/workflows/CI/badge.svg)
+[![Documentation](https://godoc.org/github.com/radianceteam/everscale-client-go/client?status.svg)](https://godoc.org/github.com/radianceteam/everscale-client-go/client)
+![CI tests and linters](https://github.com/radianceteam/everscale-client-go/workflows/CI/badge.svg)
 
 ## Preparations
 
