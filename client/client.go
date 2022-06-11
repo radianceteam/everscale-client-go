@@ -19,7 +19,7 @@ func (c *Client) Close() {
 
 type WrapperConfig struct {
 	// Prevents from spawning unlimited system threads
-	// when TON-SDK external code is called via CGO
+	// when EVER-SDK external code is called via CGO
 	// for more details please see `func cgocall(fn, arg unsafe.Pointer) int32`
 	// implementation and comments in `runtime` package.
 	MaxCGOConcurrentThreads uint
