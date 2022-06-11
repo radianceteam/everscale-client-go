@@ -1,4 +1,4 @@
-// Package provides wrapper to TON-SDK dll that must be compiled separately.
+// Package provides wrapper to EVER-SDK dll that must be compiled separately.
 //
 // For methods available see Client interface.
 //
