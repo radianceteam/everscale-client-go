@@ -7,10 +7,12 @@ import (
 	"log"
 	"os"
 
+	"github.com/iancoleman/strcase"
 	"github.com/radianceteam/everscale-client-go/spec"
 )
 
 func main() {
+	strcase.ConfigureAcronym("ID", "id")
 	file, err := os.Open("./api-spec.json")
 	if err != nil {
 		log.Fatal(err)

@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 11 Jun 22 07:51 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 09 Jul 22 15:07 UTC
 //
 // Mod abi
 //
@@ -29,6 +29,7 @@ const (
 	InvalidFunctionIDAbiErrorCode                         = 312
 	InvalidDataAbiErrorCode                               = 313
 	EncodeInitialDataFailedAbiErrorCode                   = 314
+	InvalidFunctionNameAbiErrorCode                       = 315
 )
 
 func init() { // nolint gochecknoinits
@@ -46,6 +47,7 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[InvalidFunctionIDAbiErrorCode] = "InvalidFunctionIDAbiErrorCode"
 	errorCodesToErrorTypes[InvalidDataAbiErrorCode] = "InvalidDataAbiErrorCode"
 	errorCodesToErrorTypes[EncodeInitialDataFailedAbiErrorCode] = "EncodeInitialDataFailedAbiErrorCode"
+	errorCodesToErrorTypes[InvalidFunctionNameAbiErrorCode] = "InvalidFunctionNameAbiErrorCode"
 }
 
 type AbiHandle uint32
@@ -745,6 +747,20 @@ type ResultOfAbiEncodeBoc struct {
 	Boc string `json:"boc"`
 }
 
+type ParamsOfCalcFunctionId struct {
+	// Contract ABI.
+	Abi Abi `json:"abi"`
+	// Contract function name.
+	FunctionName string `json:"function_name"`
+	// If set to `true` output function ID will be returned which is used in contract response. Default is `false`.
+	Output null.Bool `json:"output"` // optional
+}
+
+type ResultOfCalcFunctionId struct {
+	// Contract function ID.
+	FunctionID uint32 `json:"function_id"`
+}
+
 // Encodes message body according to ABI function call.
 func (c *Client) AbiEncodeMessageBody(p *ParamsOfEncodeMessageBody) (*ResultOfEncodeMessageBody, error) {
 	result := new(ResultOfEncodeMessageBody)
@@ -930,6 +946,15 @@ func (c *Client) AbiEncodeBoc(p *ParamsOfAbiEncodeBoc) (*ResultOfAbiEncodeBoc, e
 	result := new(ResultOfAbiEncodeBoc)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("abi.encode_boc", p, result)
+
+	return result, err
+}
+
+// Calculates contract function ID by contract ABI.
+func (c *Client) AbiCalcFunctionId(p *ParamsOfCalcFunctionId) (*ResultOfCalcFunctionId, error) {
+	result := new(ResultOfCalcFunctionId)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.calc_function_id", p, result)
 
 	return result, err
 }
