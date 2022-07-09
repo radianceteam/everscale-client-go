@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
-	github.com/iancoleman/strcase v0.1.2
+	github.com/iancoleman/strcase v0.2.0
 	github.com/spf13/cobra v1.1.3
 	github.com/stretchr/testify v1.7.0
 	github.com/volatiletech/null v8.0.0+incompatible

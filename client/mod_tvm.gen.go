@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 11 Jun 22 07:51 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 09 Jul 22 15:07 UTC
 //
 // Mod tvm
 //
@@ -56,6 +56,8 @@ type ExecutionOptions struct {
 	BlockLt *big.Int `json:"block_lt"` // optional
 	// transaction logical time.
 	TransactionLt *big.Int `json:"transaction_lt"` // optional
+	// Overrides standard TVM behaviour. If set to `true` then CHKSIG always will return `true`.
+	ChksigAlwaysSucceed null.Bool `json:"chksig_always_succeed"` // optional
 }
 
 // Non-existing account to run a creation internal message. Should be used with `skip_transaction_check = true` if the message has no deploy data since transactions on the uninitialized account are always aborted.

@@ -24,6 +24,8 @@ linters:
     - gci
     - forcetypeassert
     - exhaustruct
+    - revive
+    - stylecheck
   enable-all: true
 linters-settings:
   goimports:
