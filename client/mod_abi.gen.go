@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 09 Jul 22 15:07 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 23 Jul 22 13:52 UTC
 //
 // Mod abi
 //
@@ -467,6 +467,11 @@ type ParamsOfEncodeMessageBody struct {
 	//
 	// Default value is 0.
 	ProcessingTryIndex null.Uint8 `json:"processing_try_index"` // optional
+	// Destination address of the message.
+	// Since ABI version 2.3 destination address of external inbound message is used in message
+	// body signature calculation. Should be provided when signed external inbound message body is
+	// created. Otherwise can be omitted.
+	Address null.String `json:"address"` // optional
 }
 
 type ResultOfEncodeMessageBody struct {

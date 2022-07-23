@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 09 Jul 22 15:07 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 23 Jul 22 13:52 UTC
 //
 // Mod debot
 //
