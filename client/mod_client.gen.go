@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 23 Jul 22 13:52 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 07 Aug 22 14:36 UTC
 //
 // Mod client
 //
@@ -169,7 +169,7 @@ type NetworkConfig struct {
 	// Must be specified in milliseconds. Default is 5000 (5 sec).
 	NextRempStatusTimeout null.Uint32 `json:"next_remp_status_timeout"` // optional
 	// Access key to GraphQL API.
-	// At the moment is not used in production.
+	// You can specify here Evercloud project secret ot serialized JWT.
 	AccessKey null.String `json:"access_key"` // optional
 }
 
