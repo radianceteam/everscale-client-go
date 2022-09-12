@@ -3,7 +3,7 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 
@@ -23,7 +23,7 @@ func main() {
 		}
 	}()
 
-	ref, err := ioutil.ReadAll(file)
+	ref, err := io.ReadAll(file)
 	var api spec.APIReference
 	// fmt.Println("ref", ref)
 	err = json.Unmarshal(ref, &api)
