@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 07 Aug 22 14:36 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 12 Sep 22 17:27 UTC
 //
 // Mod boc
 //
@@ -14,12 +14,15 @@ import (
 )
 
 // Pin the BOC with `pin` name.
-// Such BOC will not be removed from cache until it is unpinned.
+// Such BOC will not be removed from cache until it is unpinned BOCs can have several pins and each of the pins has reference counter indicating how many
+// times the BOC was pinned with the pin. BOC is removed from cache after all references for all
+// pins are unpinned with `cache_unpin` function calls.
 type PinnedBocCacheType struct {
 	Pin string `json:"pin"`
 }
 
-// .
+// BOC is placed into a common BOC pool with limited size regulated by LRU (least recently used) cache lifecycle.
+// BOC resides there until it is replaced with other BOCs if it is not used.
 type UnpinnedBocCacheType struct{}
 
 type BocCacheType struct {
@@ -582,7 +585,7 @@ func (c *Client) BocCacheGet(p *ParamsOfBocCacheGet) (*ResultOfBocCacheGet, erro
 	return result, err
 }
 
-// Save BOC into cache.
+// Save BOC into cache or increase pin counter for existing pinned BOC.
 func (c *Client) BocCacheSet(p *ParamsOfBocCacheSet) (*ResultOfBocCacheSet, error) {
 	result := new(ResultOfBocCacheSet)
 
@@ -591,8 +594,7 @@ func (c *Client) BocCacheSet(p *ParamsOfBocCacheSet) (*ResultOfBocCacheSet, erro
 	return result, err
 }
 
-// Unpin BOCs with specified pin.
-// BOCs which don't have another pins will be removed from cache.
+// Unpin BOCs with specified pin defined in the `cache_set`. Decrease pin reference counter for BOCs with specified pin defined in the `cache_set`. BOCs which have only 1 pin and its reference counter become 0 will be removed from cache.
 func (c *Client) BocCacheUnpin(p *ParamsOfBocCacheUnpin) error {
 	_, err := c.dllClient.waitErrorOrResult("boc.cache_unpin", p)
 
