@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"os"
 
 	"github.com/volatiletech/null"
 	"go.uber.org/zap"
@@ -46,7 +46,7 @@ func LoadTest(name string, v AbiVersion) (client.Abi, string) {
 }
 
 func LoadAbi(name string, v AbiVersion) client.Abi {
-	content, err := ioutil.ReadFile("./contracts/" + string(v) + "/" + name + ".abi.json")
+	content, err := os.ReadFile("./contracts/" + string(v) + "/" + name + ".abi.json")
 	if err != nil {
 		panic(err)
 	}
@@ -59,7 +59,7 @@ func LoadAbi(name string, v AbiVersion) client.Abi {
 }
 
 func LoadTvc(name string, v AbiVersion) string {
-	content, err := ioutil.ReadFile("./contracts/" + string(v) + "/" + name + ".tvc")
+	content, err := os.ReadFile("./contracts/" + string(v) + "/" + name + ".tvc")
 	if err != nil {
 		panic(err)
 	}
