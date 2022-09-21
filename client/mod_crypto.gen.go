@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 12 Sep 22 17:27 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 21 Sep 22 18:29 UTC
 //
 // Mod crypto
 //
@@ -101,12 +101,28 @@ type EncryptionBoxInfo struct {
 	Public json.RawMessage `json:"public"` // optional
 }
 
+type AesEncryptionAlgorithm struct {
+	Value AesParamsEB `json:"value"`
+}
+
+type ChaCha20EncryptionAlgorithm struct {
+	Value ChaCha20ParamsEB `json:"value"`
+}
+
+type NaclBoxEncryptionAlgorithm struct {
+	Value NaclBoxParamsEB `json:"value"`
+}
+
+type NaclSecretBoxEncryptionAlgorithm struct {
+	Value NaclSecretBoxParamsEB `json:"value"`
+}
+
 type EncryptionAlgorithm struct {
 	// Should be any of
-	// AesParamsEB
-	// ChaCha20ParamsEB
-	// NaclBoxParamsEB
-	// NaclSecretBoxParamsEB
+	// AesEncryptionAlgorithm
+	// ChaCha20EncryptionAlgorithm
+	// NaclBoxEncryptionAlgorithm
+	// NaclSecretBoxEncryptionAlgorithm
 	EnumTypeValue interface{}
 }
 
@@ -114,36 +130,36 @@ type EncryptionAlgorithm struct {
 // directive #[serde(tag="type")] for enum of types.
 func (p *EncryptionAlgorithm) MarshalJSON() ([]byte, error) { // nolint funlen
 	switch value := (p.EnumTypeValue).(type) {
-	case AesParamsEB:
+	case AesEncryptionAlgorithm:
 		return json.Marshal(struct {
-			AesParamsEB
+			AesEncryptionAlgorithm
 			Type string `json:"type"`
 		}{
 			value,
 			"AES",
 		})
 
-	case ChaCha20ParamsEB:
+	case ChaCha20EncryptionAlgorithm:
 		return json.Marshal(struct {
-			ChaCha20ParamsEB
+			ChaCha20EncryptionAlgorithm
 			Type string `json:"type"`
 		}{
 			value,
 			"ChaCha20",
 		})
 
-	case NaclBoxParamsEB:
+	case NaclBoxEncryptionAlgorithm:
 		return json.Marshal(struct {
-			NaclBoxParamsEB
+			NaclBoxEncryptionAlgorithm
 			Type string `json:"type"`
 		}{
 			value,
 			"NaclBox",
 		})
 
-	case NaclSecretBoxParamsEB:
+	case NaclSecretBoxEncryptionAlgorithm:
 		return json.Marshal(struct {
-			NaclSecretBoxParamsEB
+			NaclSecretBoxEncryptionAlgorithm
 			Type string `json:"type"`
 		}{
 			value,
@@ -164,28 +180,28 @@ func (p *EncryptionAlgorithm) UnmarshalJSON(b []byte) error { // nolint funlen
 	}
 	switch typeDescriptor.Type {
 	case "AES":
-		var enumTypeValue AesParamsEB
+		var enumTypeValue AesEncryptionAlgorithm
 		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
 			return err
 		}
 		p.EnumTypeValue = enumTypeValue
 
 	case "ChaCha20":
-		var enumTypeValue ChaCha20ParamsEB
+		var enumTypeValue ChaCha20EncryptionAlgorithm
 		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
 			return err
 		}
 		p.EnumTypeValue = enumTypeValue
 
 	case "NaclBox":
-		var enumTypeValue NaclBoxParamsEB
+		var enumTypeValue NaclBoxEncryptionAlgorithm
 		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
 			return err
 		}
 		p.EnumTypeValue = enumTypeValue
 
 	case "NaclSecretBox":
-		var enumTypeValue NaclSecretBoxParamsEB
+		var enumTypeValue NaclSecretBoxEncryptionAlgorithm
 		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
 			return err
 		}
@@ -364,11 +380,23 @@ func (p *CryptoBoxSecret) UnmarshalJSON(b []byte) error { // nolint funlen
 
 type CryptoBoxHandle uint32
 
+type ChaCha20BoxEncryptionAlgorithm struct {
+	Value ChaCha20ParamsCB `json:"value"`
+}
+
+type NaclBoxBoxEncryptionAlgorithm struct {
+	Value NaclBoxParamsCB `json:"value"`
+}
+
+type NaclSecretBoxBoxEncryptionAlgorithm struct {
+	Value NaclSecretBoxParamsCB `json:"value"`
+}
+
 type BoxEncryptionAlgorithm struct {
 	// Should be any of
-	// ChaCha20ParamsCB
-	// NaclBoxParamsCB
-	// NaclSecretBoxParamsCB
+	// ChaCha20BoxEncryptionAlgorithm
+	// NaclBoxBoxEncryptionAlgorithm
+	// NaclSecretBoxBoxEncryptionAlgorithm
 	EnumTypeValue interface{}
 }
 
@@ -376,27 +404,27 @@ type BoxEncryptionAlgorithm struct {
 // directive #[serde(tag="type")] for enum of types.
 func (p *BoxEncryptionAlgorithm) MarshalJSON() ([]byte, error) { // nolint funlen
 	switch value := (p.EnumTypeValue).(type) {
-	case ChaCha20ParamsCB:
+	case ChaCha20BoxEncryptionAlgorithm:
 		return json.Marshal(struct {
-			ChaCha20ParamsCB
+			ChaCha20BoxEncryptionAlgorithm
 			Type string `json:"type"`
 		}{
 			value,
 			"ChaCha20",
 		})
 
-	case NaclBoxParamsCB:
+	case NaclBoxBoxEncryptionAlgorithm:
 		return json.Marshal(struct {
-			NaclBoxParamsCB
+			NaclBoxBoxEncryptionAlgorithm
 			Type string `json:"type"`
 		}{
 			value,
 			"NaclBox",
 		})
 
-	case NaclSecretBoxParamsCB:
+	case NaclSecretBoxBoxEncryptionAlgorithm:
 		return json.Marshal(struct {
-			NaclSecretBoxParamsCB
+			NaclSecretBoxBoxEncryptionAlgorithm
 			Type string `json:"type"`
 		}{
 			value,
@@ -417,21 +445,21 @@ func (p *BoxEncryptionAlgorithm) UnmarshalJSON(b []byte) error { // nolint funle
 	}
 	switch typeDescriptor.Type {
 	case "ChaCha20":
-		var enumTypeValue ChaCha20ParamsCB
+		var enumTypeValue ChaCha20BoxEncryptionAlgorithm
 		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
 			return err
 		}
 		p.EnumTypeValue = enumTypeValue
 
 	case "NaclBox":
-		var enumTypeValue NaclBoxParamsCB
+		var enumTypeValue NaclBoxBoxEncryptionAlgorithm
 		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
 			return err
 		}
 		p.EnumTypeValue = enumTypeValue
 
 	case "NaclSecretBox":
-		var enumTypeValue NaclSecretBoxParamsCB
+		var enumTypeValue NaclSecretBoxBoxEncryptionAlgorithm
 		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
 			return err
 		}
