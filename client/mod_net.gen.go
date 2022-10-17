@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 21 Sep 22 18:29 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 17 Oct 22 06:48 UTC
 //
 // Mod net
 //
@@ -28,6 +28,7 @@ const (
 	NoEndpointsProvidedNetErrorCode         = 612
 	GraphqlWebsocketInitErrorNetErrorCode   = 613
 	NetworkModuleResumedNetErrorCode        = 614
+	UnauthorizedNetErrorCode                = 615
 )
 
 func init() { // nolint gochecknoinits
@@ -45,6 +46,7 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[NoEndpointsProvidedNetErrorCode] = "NoEndpointsProvidedNetErrorCode"
 	errorCodesToErrorTypes[GraphqlWebsocketInitErrorNetErrorCode] = "GraphqlWebsocketInitErrorNetErrorCode"
 	errorCodesToErrorTypes[NetworkModuleResumedNetErrorCode] = "NetworkModuleResumedNetErrorCode"
+	errorCodesToErrorTypes[UnauthorizedNetErrorCode] = "UnauthorizedNetErrorCode"
 }
 
 type OrderBy struct {
