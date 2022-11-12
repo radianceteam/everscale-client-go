@@ -72,16 +72,16 @@ func (c *Client) ProcessingSendMessage(p *ParamsOfSendMessage, callback EventCal
 //
 // When the ABI header `expire` is present, the processing uses
 // `message expiration` strategy:
-// - The maximum block gen time is set to
-//   `message_expiration_time + transaction_wait_timeout`.
-// - When maximum block gen time is reached the processing will
-//   be finished with `MessageExpired` error.
+//   - The maximum block gen time is set to
+//     `message_expiration_time + transaction_wait_timeout`.
+//   - When maximum block gen time is reached the processing will
+//     be finished with `MessageExpired` error.
 //
 // When the ABI header `expire` isn't present or `abi` parameter
 // isn't specified, the processing uses `transaction waiting`
 // strategy:
-// - The maximum block gen time is set to
-//   `now() + transaction_wait_timeout`.
+//   - The maximum block gen time is set to
+//     `now() + transaction_wait_timeout`.
 //
 // - If maximum block gen time is reached and no result transaction is found
 // the processing will exit with an error.

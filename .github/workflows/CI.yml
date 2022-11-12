@@ -40,4 +40,4 @@ jobs:
         env:
           CGO_LDFLAGS: '-L/tmp/ -lton_client'
         with:
-          version: v1.46
+          version: v1.50
