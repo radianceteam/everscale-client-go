@@ -26,6 +26,7 @@ linters:
     - exhaustruct
     - revive
     - stylecheck
+    - nosnakecase
   enable-all: true
 linters-settings:
   goimports:

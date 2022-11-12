@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 17 Oct 22 06:48 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 12 Nov 22 09:13 UTC
 //
 // Mod net
 //
@@ -29,6 +29,7 @@ const (
 	GraphqlWebsocketInitErrorNetErrorCode   = 613
 	NetworkModuleResumedNetErrorCode        = 614
 	UnauthorizedNetErrorCode                = 615
+	QueryTransactionTreeTimeoutNetErrorCode = 616
 )
 
 func init() { // nolint gochecknoinits
@@ -47,6 +48,7 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[GraphqlWebsocketInitErrorNetErrorCode] = "GraphqlWebsocketInitErrorNetErrorCode"
 	errorCodesToErrorTypes[NetworkModuleResumedNetErrorCode] = "NetworkModuleResumedNetErrorCode"
 	errorCodesToErrorTypes[UnauthorizedNetErrorCode] = "UnauthorizedNetErrorCode"
+	errorCodesToErrorTypes[QueryTransactionTreeTimeoutNetErrorCode] = "QueryTransactionTreeTimeoutNetErrorCode"
 }
 
 type OrderBy struct {

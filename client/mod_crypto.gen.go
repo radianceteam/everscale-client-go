@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 17 Oct 22 06:48 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 12 Nov 22 09:13 UTC
 //
 // Mod crypto
 //
