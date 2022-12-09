@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 12 Nov 22 09:13 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 09 Dec 22 11:48 UTC
 //
 // Mod tvm
 //

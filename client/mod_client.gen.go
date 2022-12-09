@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 12 Nov 22 09:13 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 09 Dec 22 11:48 UTC
 //
 // Mod client
 //
@@ -178,7 +178,7 @@ const (
 
 	// Each GraphQL query uses separate HTTP request.
 	HTTPNetworkQueriesProtocol NetworkQueriesProtocol = "HTTP"
-	// All GraphQL queries will be served using single web socket connection.
+	// All GraphQL queries will be served using single web socket connection. SDK is tested to reliably handle 5000 parallel network requests (sending and processing messages, quering and awaiting blockchain data).
 	WsNetworkQueriesProtocol NetworkQueriesProtocol = "WS"
 )
 
