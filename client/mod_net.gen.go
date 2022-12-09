@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 12 Nov 22 09:13 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 09 Dec 22 11:48 UTC
 //
 // Mod net
 //
@@ -30,6 +30,7 @@ const (
 	NetworkModuleResumedNetErrorCode        = 614
 	UnauthorizedNetErrorCode                = 615
 	QueryTransactionTreeTimeoutNetErrorCode = 616
+	GraphqlConnectionErrorNetErrorCode      = 617
 )
 
 func init() { // nolint gochecknoinits
@@ -49,6 +50,7 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[NetworkModuleResumedNetErrorCode] = "NetworkModuleResumedNetErrorCode"
 	errorCodesToErrorTypes[UnauthorizedNetErrorCode] = "UnauthorizedNetErrorCode"
 	errorCodesToErrorTypes[QueryTransactionTreeTimeoutNetErrorCode] = "QueryTransactionTreeTimeoutNetErrorCode"
+	errorCodesToErrorTypes[GraphqlConnectionErrorNetErrorCode] = "GraphqlConnectionErrorNetErrorCode"
 }
 
 type OrderBy struct {
@@ -362,8 +364,15 @@ type ParamsOfQueryTransactionTree struct {
 	// If some of the following messages and transactions are missing yet
 	// The maximum waiting time is regulated by this option.
 	//
-	// Default value is 60000 (1 min).
+	// Default value is 60000 (1 min). If `timeout` is set to 0 then function will wait infinitely
+	// until the whole transaction tree is executed.
 	Timeout null.Uint32 `json:"timeout"` // optional
+	// Maximum transaction count to wait.
+	// If transaction tree contains more transaction then this parameter then only first `transaction_max_count` transaction are awaited and returned.
+	//
+	// Default value is 50. If `transaction_max_count` is set to 0 then no limitation on
+	// transaction count is used and all transaction are returned.
+	TransactionMaxCount null.Uint32 `json:"transaction_max_count"` // optional
 }
 
 type ResultOfQueryTransactionTree struct {
@@ -650,7 +659,7 @@ func (c *Client) NetQueryCounterparties(p *ParamsOfQueryCounterparties) (*Result
 //
 // Function reads transactions layer by layer, by pages of 20 transactions.
 //
-// The retrieval prosess goes like this:
+// The retrieval process goes like this:
 // Let's assume we have an infinite chain of transactions and each transaction generates 5 messages.
 // 1. Retrieve 1st message (input parameter) and corresponding transaction - put it into result.
 // It is the first level of the tree of transactions - its root.
@@ -722,7 +731,7 @@ func (c *Client) NetCreateBlockIterator(p *ParamsOfCreateBlockIterator) (*Regist
 }
 
 // Resumes block iterator.
-// The iterator stays exactly at the same position where the `resume_state` was catched.
+// The iterator stays exactly at the same position where the `resume_state` was caught.
 //
 // Application should call the `remove_iterator` when iterator is no longer required.
 func (c *Client) NetResumeBlockIterator(p *ParamsOfResumeBlockIterator) (*RegisteredIterator, error) {

@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 12 Nov 22 09:13 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 09 Dec 22 11:48 UTC
 //
 // Mod abi
 //
@@ -445,6 +445,16 @@ type AbiContract struct {
 	Fields     []AbiParam    `json:"fields"`      // optional
 }
 
+type DataLayout string
+
+const (
+
+	// Decode message body as function input parameters.
+	InputDataLayout DataLayout = "Input"
+	// Decode message body as function output.
+	OutputDataLayout DataLayout = "Output"
+)
+
 type ParamsOfEncodeMessageBody struct {
 	// Contract ABI.
 	Abi Abi `json:"abi"`
@@ -611,6 +621,9 @@ type ParamsOfDecodeMessage struct {
 	Message string `json:"message"`
 	// Flag allowing partial BOC decoding when ABI doesn't describe the full body BOC. Controls decoder behaviour when after decoding all described in ABI params there are some data left in BOC: `true` - return decoded values `false` - return error of incomplete BOC deserialization (default).
 	AllowPartial null.Bool `json:"allow_partial"` // optional
+	// Function name or function id if is known in advance.
+	FunctionName null.String `json:"function_name"` // optional
+	DataLayout   *DataLayout `json:"data_layout"`   // optional
 }
 
 type DecodedMessageBody struct {
@@ -633,6 +646,9 @@ type ParamsOfDecodeMessageBody struct {
 	IsInternal bool `json:"is_internal"`
 	// Flag allowing partial BOC decoding when ABI doesn't describe the full body BOC. Controls decoder behaviour when after decoding all described in ABI params there are some data left in BOC: `true` - return decoded values `false` - return error of incomplete BOC deserialization (default).
 	AllowPartial null.Bool `json:"allow_partial"` // optional
+	// Function name or function id if is known in advance.
+	FunctionName null.String `json:"function_name"` // optional
+	DataLayout   *DataLayout `json:"data_layout"`   // optional
 }
 
 type ParamsOfEncodeAccount struct {

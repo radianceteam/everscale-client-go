@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 12 Nov 22 09:13 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 09 Dec 22 11:48 UTC
 //
 // Mod boc
 //
@@ -121,7 +121,7 @@ type ResultOfParse struct {
 type ParamsOfParseShardstate struct {
 	// BOC encoded as base64.
 	Boc string `json:"boc"`
-	// Shardstate identificator.
+	// Shardstate identifier.
 	ID string `json:"id"`
 	// Workchain shardstate belongs to.
 	WorkchainID int32 `json:"workchain_id"`

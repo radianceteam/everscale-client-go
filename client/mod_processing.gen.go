@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 12 Nov 22 09:13 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 09 Dec 22 11:48 UTC
 //
 // Mod processing
 //
@@ -148,7 +148,7 @@ type RempIncludedIntoBlockProcessingEvent struct {
 	JSON      json.RawMessage `json:"json"`
 }
 
-// Notifies the app that the block candicate with the message has been accepted by the thread's validators.
+// Notifies the app that the block candidate with the message has been accepted by the thread's validators.
 type RempIncludedIntoAcceptedBlockProcessingEvent struct {
 	MessageID string          `json:"message_id"`
 	Timestamp big.Int         `json:"timestamp"`
