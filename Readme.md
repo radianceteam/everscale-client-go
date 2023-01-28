@@ -1,6 +1,6 @@
 # TON SDK client Golang
 
-[![EVER-SDK](https://img.shields.io/badge/EVER_SDK-1.39.0-green.svg)](https://github.com/tonlabs/EVER-SDK/tree/1.39.0)
+[![EVER-SDK](https://img.shields.io/badge/EVER_SDK-1.40.0-green.svg)](https://github.com/tonlabs/EVER-SDK/tree/1.40.0)
 [![TON local-node docker image](https://img.shields.io/badge/TON_local_node-0.33.0-green.svg)](https://hub.docker.com/layers/local-node/tonlabs/local-node/0.33.0/images/sha256-40a544432089f2d730f3dd0542fcb59bef6c5192b5d374fdae3a7ea6417070c4)
 [![Chat Telegram](https://img.shields.io/badge/chat-Telegram-9cf.svg)](https://t.me/RADIANCE_EVER_SDK)
 [![Documentation](https://godoc.org/github.com/radianceteam/everscale-client-go/client?status.svg)](https://godoc.org/github.com/radianceteam/everscale-client-go/client)

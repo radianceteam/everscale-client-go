@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 09 Dec 22 11:48 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Jan 23 13:55 UTC
 //
 // Mod abi
 //
@@ -782,6 +782,20 @@ type ResultOfCalcFunctionId struct {
 	FunctionID uint32 `json:"function_id"`
 }
 
+type ParamsOfGetSignatureData struct {
+	// Contract ABI used to decode.
+	Abi Abi `json:"abi"`
+	// Message BOC encoded in `base64`.
+	Message string `json:"message"`
+}
+
+type ResultOfGetSignatureData struct {
+	// Signature from the message in `hex`.
+	Signature string `json:"signature"`
+	// Hash to verify the signature in `base64`.
+	Hash string `json:"hash"`
+}
+
 // Encodes message body according to ABI function call.
 func (c *Client) AbiEncodeMessageBody(p *ParamsOfEncodeMessageBody) (*ResultOfEncodeMessageBody, error) {
 	result := new(ResultOfEncodeMessageBody)
@@ -976,6 +990,15 @@ func (c *Client) AbiCalcFunctionId(p *ParamsOfCalcFunctionId) (*ResultOfCalcFunc
 	result := new(ResultOfCalcFunctionId)
 
 	err := c.dllClient.waitErrorOrResultUnmarshal("abi.calc_function_id", p, result)
+
+	return result, err
+}
+
+// Extracts signature from message body and calculates hash to verify the signature.
+func (c *Client) AbiGetSignatureData(p *ParamsOfGetSignatureData) (*ResultOfGetSignatureData, error) {
+	result := new(ResultOfGetSignatureData)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("abi.get_signature_data", p, result)
 
 	return result, err
 }
