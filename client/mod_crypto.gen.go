@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Jan 23 13:55 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 15 Feb 23 10:28 UTC
 //
 // Mod crypto
 //
@@ -271,8 +271,8 @@ type NaclSecretBoxParamsEB struct {
 //
 // Get `encrypted_secret` with `get_crypto_box_info` function and store it on your side.
 type RandomSeedPhraseCryptoBoxSecret struct {
-	Dictionary uint8 `json:"dictionary"`
-	Wordcount  uint8 `json:"wordcount"`
+	Dictionary MnemonicDictionary `json:"dictionary"`
+	Wordcount  uint8              `json:"wordcount"`
 }
 
 // Restores crypto box instance from an existing seed phrase. This type should be used when Crypto Box is initialized from a seed phrase, entered by a user.
@@ -281,9 +281,9 @@ type RandomSeedPhraseCryptoBoxSecret struct {
 //
 // Get `encrypted_secret` with `get_crypto_box_info` function and store it on your side.
 type PredefinedSeedPhraseCryptoBoxSecret struct {
-	Phrase     string `json:"phrase"`
-	Dictionary uint8  `json:"dictionary"`
-	Wordcount  uint8  `json:"wordcount"`
+	Phrase     string             `json:"phrase"`
+	Dictionary MnemonicDictionary `json:"dictionary"`
+	Wordcount  uint8              `json:"wordcount"`
 }
 
 // Use this type for wallet reinitializations, when you already have `encrypted_secret` on hands. To get `encrypted_secret`, use `get_crypto_box_info` function after you initialized your crypto box for the first time.
@@ -491,6 +491,30 @@ type NaclSecretBoxParamsCB struct {
 	// Nonce in `hex`.
 	Nonce string `json:"nonce"`
 }
+
+type MnemonicDictionary int
+
+const (
+
+	// TON compatible dictionary.
+	TonMnemonicDictionary MnemonicDictionary = 0
+	// English BIP-39 dictionary.
+	EnglishMnemonicDictionary MnemonicDictionary = 1
+	// Chinese simplified BIP-39 dictionary.
+	ChineseSimplifiedMnemonicDictionary MnemonicDictionary = 2
+	// Chinese traditional BIP-39 dictionary.
+	ChineseTraditionalMnemonicDictionary MnemonicDictionary = 3
+	// French BIP-39 dictionary.
+	FrenchMnemonicDictionary MnemonicDictionary = 4
+	// Italian BIP-39 dictionary.
+	ItalianMnemonicDictionary MnemonicDictionary = 5
+	// Japanese BIP-39 dictionary.
+	JapaneseMnemonicDictionary MnemonicDictionary = 6
+	// Korean BIP-39 dictionary.
+	KoreanMnemonicDictionary MnemonicDictionary = 7
+	// Spanish BIP-39 dictionary.
+	SpanishMnemonicDictionary MnemonicDictionary = 8
+)
 
 type ParamsOfFactorize struct {
 	// Hexadecimal representation of u64 composite number.
@@ -724,7 +748,7 @@ type ParamsOfNaclSecretBoxOpen struct {
 
 type ParamsOfMnemonicWords struct {
 	// Dictionary identifier.
-	Dictionary null.Uint8 `json:"dictionary"` // optional
+	Dictionary *MnemonicDictionary `json:"dictionary"` // optional
 }
 
 type ResultOfMnemonicWords struct {
@@ -734,7 +758,7 @@ type ResultOfMnemonicWords struct {
 
 type ParamsOfMnemonicFromRandom struct {
 	// Dictionary identifier.
-	Dictionary null.Uint8 `json:"dictionary"` // optional
+	Dictionary *MnemonicDictionary `json:"dictionary"` // optional
 	// Mnemonic word count.
 	WordCount null.Uint8 `json:"word_count"` // optional
 }
@@ -749,7 +773,7 @@ type ParamsOfMnemonicFromEntropy struct {
 	// Hex encoded.
 	Entropy string `json:"entropy"`
 	// Dictionary identifier.
-	Dictionary null.Uint8 `json:"dictionary"` // optional
+	Dictionary *MnemonicDictionary `json:"dictionary"` // optional
 	// Mnemonic word count.
 	WordCount null.Uint8 `json:"word_count"` // optional
 }
@@ -763,7 +787,7 @@ type ParamsOfMnemonicVerify struct {
 	// Phrase.
 	Phrase string `json:"phrase"`
 	// Dictionary identifier.
-	Dictionary null.Uint8 `json:"dictionary"` // optional
+	Dictionary *MnemonicDictionary `json:"dictionary"` // optional
 	// Word count.
 	WordCount null.Uint8 `json:"word_count"` // optional
 }
@@ -779,7 +803,7 @@ type ParamsOfMnemonicDeriveSignKeys struct {
 	// Derivation path, for instance "m/44'/396'/0'/0/0".
 	Path null.String `json:"path"` // optional
 	// Dictionary identifier.
-	Dictionary null.Uint8 `json:"dictionary"` // optional
+	Dictionary *MnemonicDictionary `json:"dictionary"` // optional
 	// Word count.
 	WordCount null.Uint8 `json:"word_count"` // optional
 }
@@ -788,7 +812,7 @@ type ParamsOfHDKeyXPrvFromMnemonic struct {
 	// String with seed phrase.
 	Phrase string `json:"phrase"`
 	// Dictionary identifier.
-	Dictionary null.Uint8 `json:"dictionary"` // optional
+	Dictionary *MnemonicDictionary `json:"dictionary"` // optional
 	// Mnemonic word count.
 	WordCount null.Uint8 `json:"word_count"` // optional
 }
@@ -994,9 +1018,9 @@ type ResultOfGetCryptoBoxInfo struct {
 }
 
 type ResultOfGetCryptoBoxSeedPhrase struct {
-	Phrase     string `json:"phrase"`
-	Dictionary uint8  `json:"dictionary"`
-	Wordcount  uint8  `json:"wordcount"`
+	Phrase     string             `json:"phrase"`
+	Dictionary MnemonicDictionary `json:"dictionary"`
+	Wordcount  uint8              `json:"wordcount"`
 }
 
 type ParamsOfGetSigningBoxFromCryptoBox struct {

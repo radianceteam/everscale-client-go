@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Jan 23 13:55 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 15 Feb 23 10:28 UTC
 //
 // Mod tvm
 //
@@ -58,6 +58,8 @@ type ExecutionOptions struct {
 	TransactionLt *big.Int `json:"transaction_lt"` // optional
 	// Overrides standard TVM behaviour. If set to `true` then CHKSIG always will return `true`.
 	ChksigAlwaysSucceed null.Bool `json:"chksig_always_succeed"` // optional
+	// Signature ID to be used in signature verifying instructions when CapSignatureWithId capability is enabled.
+	SignatureID null.Int32 `json:"signature_id"` // optional
 }
 
 // Non-existing account to run a creation internal message. Should be used with `skip_transaction_check = true` if the message has no deploy data since transactions on the uninitialized account are always aborted.

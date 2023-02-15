@@ -107,7 +107,8 @@ func TestModCryptoMnemonicWords(t *testing.T) {
 	r, err := c.CryptoMnemonicWords(&client.ParamsOfMnemonicWords{})
 	a.NoError(err, "call crypto.mnemonic_words")
 	a.Len(strings.Split(r.Words, " "), 2048, "default dictionary size")
-	r, err = c.CryptoMnemonicWords(&client.ParamsOfMnemonicWords{Dictionary: null.Uint8From(1)})
+	dict := client.EnglishMnemonicDictionary
+	r, err = c.CryptoMnemonicWords(&client.ParamsOfMnemonicWords{Dictionary: &dict})
 	a.NoError(err, "call crypto.mnemonic_words")
 	a.Len(strings.Split(r.Words, " "), 2048, "default dictionary size")
 }

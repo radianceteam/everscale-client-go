@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Jan 23 13:55 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 15 Feb 23 10:28 UTC
 //
 // Mod abi
 //
@@ -482,6 +482,8 @@ type ParamsOfEncodeMessageBody struct {
 	// body signature calculation. Should be provided when signed external inbound message body is
 	// created. Otherwise can be omitted.
 	Address null.String `json:"address"` // optional
+	// Signature ID to be used in data to sign preparing when CapSignatureWithId capability is enabled.
+	SignatureID null.Int32 `json:"signature_id"` // optional
 }
 
 type ResultOfEncodeMessageBody struct {
@@ -543,6 +545,8 @@ type ParamsOfEncodeMessage struct {
 	//
 	// Default value is 0.
 	ProcessingTryIndex null.Uint8 `json:"processing_try_index"` // optional
+	// Signature ID to be used in data to sign preparing when CapSignatureWithId capability is enabled.
+	SignatureID null.Int32 `json:"signature_id"` // optional
 }
 
 type ResultOfEncodeMessage struct {
@@ -787,13 +791,15 @@ type ParamsOfGetSignatureData struct {
 	Abi Abi `json:"abi"`
 	// Message BOC encoded in `base64`.
 	Message string `json:"message"`
+	// Signature ID to be used in unsigned data preparing when CapSignatureWithId capability is enabled.
+	SignatureID null.Int32 `json:"signature_id"` // optional
 }
 
 type ResultOfGetSignatureData struct {
 	// Signature from the message in `hex`.
 	Signature string `json:"signature"`
-	// Hash to verify the signature in `base64`.
-	Hash string `json:"hash"`
+	// Data to verify the signature in `base64`.
+	Unsigned string `json:"unsigned"`
 }
 
 // Encodes message body according to ABI function call.

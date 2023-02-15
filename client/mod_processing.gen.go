@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Jan 23 13:55 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 15 Feb 23 10:28 UTC
 //
 // Mod processing
 //
@@ -54,20 +54,26 @@ func init() { // nolint gochecknoinits
 
 // Notifies the application that the account's current shard block will be fetched from the network. This step is performed before the message sending so that sdk knows starting from which block it will search for the transaction.
 // Fetched block will be used later in waiting phase.
-type WillFetchFirstBlockProcessingEvent struct{}
+type WillFetchFirstBlockProcessingEvent struct {
+	MessageID  string `json:"message_id"`
+	MessageDst string `json:"message_dst"`
+}
 
 // Notifies the app that the client has failed to fetch the account's current shard block.
 // This may happen due to the network issues. Receiving this event means that message processing will not proceed -
 // message was not sent, and Developer can try to run `process_message` again,
 // in the hope that the connection is restored.
 type FetchFirstBlockFailedProcessingEvent struct {
-	Error Error `json:"error"`
+	Error      Error  `json:"error"`
+	MessageID  string `json:"message_id"`
+	MessageDst string `json:"message_dst"`
 }
 
 // Notifies the app that the message will be sent to the network. This event means that the account's current shard block was successfully fetched and the message was successfully created (`abi.encode_message` function was executed successfully).
 type WillSendProcessingEvent struct {
 	ShardBlockID string `json:"shard_block_id"`
 	MessageID    string `json:"message_id"`
+	MessageDst   string `json:"message_dst"`
 	Message      string `json:"message"`
 }
 
@@ -76,6 +82,7 @@ type WillSendProcessingEvent struct {
 type DidSendProcessingEvent struct {
 	ShardBlockID string `json:"shard_block_id"`
 	MessageID    string `json:"message_id"`
+	MessageDst   string `json:"message_dst"`
 	Message      string `json:"message"`
 }
 
@@ -90,6 +97,7 @@ type DidSendProcessingEvent struct {
 type SendFailedProcessingEvent struct {
 	ShardBlockID string `json:"shard_block_id"`
 	MessageID    string `json:"message_id"`
+	MessageDst   string `json:"message_dst"`
 	Message      string `json:"message"`
 	Error        Error  `json:"error"`
 }
@@ -104,6 +112,7 @@ type SendFailedProcessingEvent struct {
 type WillFetchNextBlockProcessingEvent struct {
 	ShardBlockID string `json:"shard_block_id"`
 	MessageID    string `json:"message_id"`
+	MessageDst   string `json:"message_dst"`
 	Message      string `json:"message"`
 }
 
@@ -117,6 +126,7 @@ type WillFetchNextBlockProcessingEvent struct {
 type FetchNextBlockFailedProcessingEvent struct {
 	ShardBlockID string `json:"shard_block_id"`
 	MessageID    string `json:"message_id"`
+	MessageDst   string `json:"message_dst"`
 	Message      string `json:"message"`
 	Error        Error  `json:"error"`
 }
@@ -129,42 +139,49 @@ type FetchNextBlockFailedProcessingEvent struct {
 // the maximum retries count or receives a successful result.  All the processing
 // events will be repeated.
 type MessageExpiredProcessingEvent struct {
-	MessageID string `json:"message_id"`
-	Message   string `json:"message"`
-	Error     Error  `json:"error"`
+	MessageID  string `json:"message_id"`
+	MessageDst string `json:"message_dst"`
+	Message    string `json:"message"`
+	Error      Error  `json:"error"`
 }
 
 // Notifies the app that the message has been delivered to the thread's validators.
 type RempSentToValidatorsProcessingEvent struct {
-	MessageID string          `json:"message_id"`
-	Timestamp big.Int         `json:"timestamp"`
-	JSON      json.RawMessage `json:"json"`
+	MessageID  string          `json:"message_id"`
+	MessageDst string          `json:"message_dst"`
+	Timestamp  big.Int         `json:"timestamp"`
+	JSON       json.RawMessage `json:"json"`
 }
 
 // Notifies the app that the message has been successfully included into a block candidate by the thread's collator.
 type RempIncludedIntoBlockProcessingEvent struct {
-	MessageID string          `json:"message_id"`
-	Timestamp big.Int         `json:"timestamp"`
-	JSON      json.RawMessage `json:"json"`
+	MessageID  string          `json:"message_id"`
+	MessageDst string          `json:"message_dst"`
+	Timestamp  big.Int         `json:"timestamp"`
+	JSON       json.RawMessage `json:"json"`
 }
 
 // Notifies the app that the block candidate with the message has been accepted by the thread's validators.
 type RempIncludedIntoAcceptedBlockProcessingEvent struct {
-	MessageID string          `json:"message_id"`
-	Timestamp big.Int         `json:"timestamp"`
-	JSON      json.RawMessage `json:"json"`
+	MessageID  string          `json:"message_id"`
+	MessageDst string          `json:"message_dst"`
+	Timestamp  big.Int         `json:"timestamp"`
+	JSON       json.RawMessage `json:"json"`
 }
 
 // Notifies the app about some other minor REMP statuses occurring during message processing.
 type RempOtherProcessingEvent struct {
-	MessageID string          `json:"message_id"`
-	Timestamp big.Int         `json:"timestamp"`
-	JSON      json.RawMessage `json:"json"`
+	MessageID  string          `json:"message_id"`
+	MessageDst string          `json:"message_dst"`
+	Timestamp  big.Int         `json:"timestamp"`
+	JSON       json.RawMessage `json:"json"`
 }
 
 // Notifies the app about any problem that has occurred in REMP processing - in this case library switches to the fallback transaction awaiting scenario (sequential block reading).
 type RempErrorProcessingEvent struct {
-	Error Error `json:"error"`
+	MessageID  string `json:"message_id"`
+	MessageDst string `json:"message_dst"`
+	Error      Error  `json:"error"`
 }
 
 type ProcessingEvent struct {
