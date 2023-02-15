@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Jan 23 13:55 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 15 Feb 23 10:28 UTC
 //
 // Mod net
 //
@@ -524,6 +524,11 @@ type ResultOfIteratorNext struct {
 	ResumeState json.RawMessage `json:"resume_state"` // optional
 }
 
+type ResultOfGetSignatureId struct {
+	// Signature ID for configured network if it should be used in messages signature.
+	SignatureID null.Int32 `json:"signature_id"` // optional
+}
+
 // Performs DAppServer GraphQL query.
 func (c *Client) NetQuery(p *ParamsOfQuery) (*ResultOfQuery, error) {
 	result := new(ResultOfQuery)
@@ -853,4 +858,13 @@ func (c *Client) NetRemoveIterator(p *RegisteredIterator) error {
 	_, err := c.dllClient.waitErrorOrResult("net.remove_iterator", p)
 
 	return err
+}
+
+// Returns signature ID for configured network if it should be used in messages signature.
+func (c *Client) NetGetSignatureId() (*ResultOfGetSignatureId, error) {
+	result := new(ResultOfGetSignatureId)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("net.get_signature_id", nil, result)
+
+	return result, err
 }

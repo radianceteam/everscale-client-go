@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 28 Jan 23 13:55 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 15 Feb 23 10:28 UTC
 //
 // Mod client
 //
@@ -98,6 +98,7 @@ type Error struct {
 }
 
 type Config struct {
+	Binding *BindingConfig `json:"binding"` // optional
 	Network *NetworkConfig `json:"network"` // optional
 	Crypto  *CryptoConfig  `json:"crypto"`  // optional
 	Abi     *AbiConfig     `json:"abi"`     // optional
@@ -170,8 +171,19 @@ type NetworkConfig struct {
 	//
 	// Must be specified in milliseconds. Default is 5000 (5 sec).
 	NextRempStatusTimeout null.Uint32 `json:"next_remp_status_timeout"` // optional
+	// Network signature ID which is used by VM in signature verifying instructions if capability `CapSignatureWithId` is enabled in blockchain configuration parameters.
+	// This parameter should be set to `global_id` field from any blockchain block if network can
+	// not be reachable at the moment of message encoding and the message is aimed to be sent into
+	// network with `CapSignatureWithId` enabled. Otherwise signature ID is detected automatically
+	// inside message encoding functions.
+	SignatureID null.Int32 `json:"signature_id"` // optional
 	// Access key to GraphQL API (Project secret).
 	AccessKey null.String `json:"access_key"` // optional
+}
+
+type BindingConfig struct {
+	Library null.String `json:"library"` // optional
+	Version null.String `json:"version"` // optional
 }
 
 type NetworkQueriesProtocol string
@@ -186,8 +198,8 @@ const (
 
 // Crypto config.
 type CryptoConfig struct {
-	// Mnemonic dictionary that will be used by default in crypto functions. If not specified, 1 dictionary will be used.
-	MnemonicDictionary null.Uint8 `json:"mnemonic_dictionary"` // optional
+	// Mnemonic dictionary that will be used by default in crypto functions. If not specified, `English` dictionary will be used.
+	MnemonicDictionary *MnemonicDictionary `json:"mnemonic_dictionary"` // optional
 	// Mnemonic word count that will be used by default in crypto functions. If not specified the default value will be 12.
 	MnemonicWordCount null.Uint8 `json:"mnemonic_word_count"` // optional
 	// Derivation path that will be used by default in crypto functions. If not specified `m/44'/396'/0'/0/0` will be used.
