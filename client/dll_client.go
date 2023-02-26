@@ -10,6 +10,7 @@ import (
 )
 
 // #cgo CFLAGS: -I${SRCDIR}
+// #include <stdlib.h>
 // #include "tonclient.h"
 //
 // void callbackProxy(
@@ -24,7 +25,9 @@ import (
 //		tc_string_data_t params_json,
 //		uint32_t request_id
 // ) {
-// 		tc_request(context, name, params_json, request_id, callbackProxy);
+//		tc_request(context, name, params_json, request_id, callbackProxy);
+//		free((void*)name.content);
+//		free((void*)params_json.content);
 // }
 //
 import "C"
@@ -150,7 +153,9 @@ type contextCreateResponse struct {
 }
 
 func (c *dllClientCtx) createContext(data []byte) error {
-	rawHandler := C.tc_create_context(newTcStr(data))
+	cStringData := newTcStr(data)
+	rawHandler := C.tc_create_context(cStringData)
+	C.free(unsafe.Pointer(cStringData.content))
 
 	defer C.tc_destroy_string(rawHandler)
 	rawResponse := newBytesFromTcStr(C.tc_read_string(rawHandler))
