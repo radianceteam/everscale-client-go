@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 15 Feb 23 10:28 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Apr 23 06:18 UTC
 //
 // Mod client
 //
@@ -164,7 +164,8 @@ type NetworkConfig struct {
 	// UNSTABLE.
 	// First REMP status awaiting timeout. If no status received during the timeout than fallback transaction scenario is activated.
 	//
-	// Must be specified in milliseconds. Default is 1000 (1 sec).
+	// Must be specified in milliseconds. Default is 1 (1 ms) in order to start fallback scenario
+	// together with REMP statuses processing while REMP is not properly tuned yet.
 	FirstRempStatusTimeout null.Uint32 `json:"first_remp_status_timeout"` // optional
 	// UNSTABLE.
 	// Subsequent REMP status awaiting timeout. If no status received during the timeout than fallback transaction scenario is activated.

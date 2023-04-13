@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 15 Feb 23 10:28 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Apr 23 06:18 UTC
 //
 // Mod processing
 //
@@ -12,6 +12,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/big"
+
+	"github.com/volatiletech/null"
 )
 
 const (
@@ -458,6 +460,201 @@ type DecodedOutput struct {
 	Output json.RawMessage `json:"output"` // optional
 }
 
+type MessageMonitoringTransactionCompute struct {
+	// Compute phase exit code.
+	ExitCode int32 `json:"exit_code"`
+}
+
+type MessageMonitoringTransaction struct {
+	// Hash of the transaction. Present if transaction was included into the blocks. When then transaction was emulated this field will be missing.
+	Hash null.String `json:"hash"` // optional
+	// Aborted field of the transaction.
+	Aborted bool `json:"aborted"`
+	// Optional information about the compute phase of the transaction.
+	Compute *MessageMonitoringTransactionCompute `json:"compute"` // optional
+}
+
+type MessageMonitoringParams struct {
+	// Monitored message identification. Can be provided as a message's BOC or (hash, address) pair. BOC is a preferable way because it helps to determine possible error reason (using TVM execution of the message).
+	Message MonitoredMessage `json:"message"`
+	// Block time Must be specified as a UNIX timestamp in seconds.
+	WaitUntil uint32 `json:"wait_until"`
+	// User defined data associated with this message. Helps to identify this message when user received `MessageMonitoringResult`.
+	UserData json.RawMessage `json:"user_data"` // optional
+}
+
+type MessageMonitoringResult struct {
+	// Hash of the message.
+	Hash string `json:"hash"`
+	// Processing status.
+	Status MessageMonitoringStatus `json:"status"`
+	// In case of `Finalized` the transaction is extracted from the block. In case of `Timeout` the transaction is emulated using the last known account state.
+	Transaction *MessageMonitoringTransaction `json:"transaction"` // optional
+	// In case of `Timeout` contains possible error reason.
+	Error null.String `json:"error"` // optional
+	// User defined data related to this message. This is the same value as passed before with `MessageMonitoringParams` or `SendMessageParams`.
+	UserData json.RawMessage `json:"user_data"` // optional
+}
+
+type MonitorFetchWaitMode string
+
+const (
+
+	// If there are no resolved results yet, then monitor awaits for the next resolved result.
+	AtLeastOneMonitorFetchWaitMode MonitorFetchWaitMode = "AtLeastOne"
+	// Monitor waits until all unresolved messages will be resolved. If there are no unresolved messages then monitor will wait.
+	AllMonitorFetchWaitMode    MonitorFetchWaitMode = "All"
+	NoWaitMonitorFetchWaitMode MonitorFetchWaitMode = "NoWait"
+)
+
+// BOC of the message.
+type BocMonitoredMessage struct {
+	Boc string `json:"boc"`
+}
+
+// Message's hash and destination address.
+type HashAddressMonitoredMessage struct {
+	// Hash of the message.
+	Hash string `json:"hash"`
+	// Destination address of the message.
+	Address string `json:"address"`
+}
+
+type MonitoredMessage struct {
+	// Should be any of
+	// BocMonitoredMessage
+	// HashAddressMonitoredMessage
+	EnumTypeValue interface{}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *MonitoredMessage) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case BocMonitoredMessage:
+		return json.Marshal(struct {
+			BocMonitoredMessage
+			Type string `json:"type"`
+		}{
+			value,
+			"Boc",
+		})
+
+	case HashAddressMonitoredMessage:
+		return json.Marshal(struct {
+			HashAddressMonitoredMessage
+			Type string `json:"type"`
+		}{
+			value,
+			"HashAddress",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for MonitoredMessage %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *MonitoredMessage) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "Boc":
+		var enumTypeValue BocMonitoredMessage
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	case "HashAddress":
+		var enumTypeValue HashAddressMonitoredMessage
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for MonitoredMessage %v", typeDescriptor.Type)
+	}
+
+	return nil
+}
+
+type MessageMonitoringStatus string
+
+const (
+
+	// Returned when the messages was processed and included into finalized block before `wait_until` block time.
+	FinalizedMessageMonitoringStatus MessageMonitoringStatus = "Finalized"
+	// Returned when the message was not processed until `wait_until` block time.
+	TimeoutMessageMonitoringStatus MessageMonitoringStatus = "Timeout"
+	// Reserved for future statuses.
+	// Is never returned. Application should wait for one of the `Finalized` or `Timeout` statuses.
+	// All other statuses are intermediate.
+	ReservedMessageMonitoringStatus MessageMonitoringStatus = "Reserved"
+)
+
+type MessageSendingParams struct {
+	// BOC of the message, that must be sent to the blockchain.
+	Boc string `json:"boc"`
+	// Expiration time of the message. Must be specified as a UNIX timestamp in seconds.
+	WaitUntil uint32 `json:"wait_until"`
+	// User defined data associated with this message. Helps to identify this message when user received `MessageMonitoringResult`.
+	UserData json.RawMessage `json:"user_data"` // optional
+}
+
+type ParamsOfMonitorMessages struct {
+	// Name of the monitoring queue.
+	Queue string `json:"queue"`
+	// Messages to start monitoring for.
+	Messages []MessageMonitoringParams `json:"messages"`
+}
+
+type ParamsOfGetMonitorInfo struct {
+	// Name of the monitoring queue.
+	Queue string `json:"queue"`
+}
+
+type MonitoringQueueInfo struct {
+	// Count of the unresolved messages.
+	Unresolved uint32 `json:"unresolved"`
+	// Count of resolved results.
+	Resolved uint32 `json:"resolved"`
+}
+
+type ParamsOfFetchNextMonitorResults struct {
+	// Name of the monitoring queue.
+	Queue string `json:"queue"`
+	// Wait mode.
+	// Default is `NO_WAIT`.
+	WaitMode *MonitorFetchWaitMode `json:"wait_mode"` // optional
+}
+
+type ResultOfFetchNextMonitorResults struct {
+	// List of the resolved results.
+	Results []MessageMonitoringResult `json:"results"`
+}
+
+type ParamsOfCancelMonitor struct {
+	// Name of the monitoring queue.
+	Queue string `json:"queue"`
+}
+
+type ParamsOfSendMessages struct {
+	// Messages that must be sent to the blockchain.
+	Messages []MessageSendingParams `json:"messages"`
+	// Optional message monitor queue that starts monitoring for the processing results for sent messages.
+	MonitorQueue null.String `json:"monitor_queue"` // optional
+}
+
+type ResultOfSendMessages struct {
+	// Messages that was sent to the blockchain for execution.
+	Messages []MessageMonitoringParams `json:"messages"`
+}
+
 type ParamsOfSendMessage struct {
 	// Message BOC.
 	Message string `json:"message"`
@@ -515,4 +712,75 @@ type ParamsOfProcessMessage struct {
 	MessageEncodeParams ParamsOfEncodeMessage `json:"message_encode_params"`
 	// Flag for requesting events sending.
 	SendEvents bool `json:"send_events"`
+}
+
+// Starts monitoring for the processing results of the specified messages.
+// Message monitor performs background monitoring for a message processing results
+// for the specified set of messages.
+//
+// Message monitor can serve several isolated monitoring queues.
+// Each monitor queue has a unique application defined identifier (or name) used
+// to separate several queue's.
+//
+// There are two important lists inside of the monitoring queue:
+//
+// - unresolved messages: contains messages requested by the application for monitoring
+// and not yet resolved;
+//
+// - resolved results: contains resolved processing results for monitored messages.
+//
+// Each monitoring queue tracks own unresolved and resolved lists.
+// Application can add more messages to the monitoring queue at any time.
+//
+// Message monitor accumulates resolved results.
+// Application should fetch this results with `fetchNextMonitorResults` function.
+//
+// When both unresolved and resolved lists becomes empty, monitor stops any background activity
+// and frees all allocated internal memory.
+//
+// If monitoring queue with specified name already exists then messages will be added
+// to the unresolved list.
+//
+// If monitoring queue with specified name does not exist then monitoring queue will be created
+// with specified unresolved messages.
+func (c *Client) ProcessingMonitorMessages(p *ParamsOfMonitorMessages) error {
+	_, err := c.dllClient.waitErrorOrResult("processing.monitor_messages", p)
+
+	return err
+}
+
+// Returns summary information about current state of the specified monitoring queue.
+func (c *Client) ProcessingGetMonitorInfo(p *ParamsOfGetMonitorInfo) (*MonitoringQueueInfo, error) {
+	result := new(MonitoringQueueInfo)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("processing.get_monitor_info", p, result)
+
+	return result, err
+}
+
+// Fetches next resolved results from the specified monitoring queue.
+// Results and waiting options are depends on the `wait` parameter.
+// All returned results will be removed from the queue's resolved list.
+func (c *Client) ProcessingFetchNextMonitorResults(p *ParamsOfFetchNextMonitorResults) (*ResultOfFetchNextMonitorResults, error) {
+	result := new(ResultOfFetchNextMonitorResults)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("processing.fetch_next_monitor_results", p, result)
+
+	return result, err
+}
+
+// Cancels all background activity and releases all allocated system resources for the specified monitoring queue.
+func (c *Client) ProcessingCancelMonitor(p *ParamsOfCancelMonitor) error {
+	_, err := c.dllClient.waitErrorOrResult("processing.cancel_monitor", p)
+
+	return err
+}
+
+// Sends specified messages to the blockchain.
+func (c *Client) ProcessingSendMessages(p *ParamsOfSendMessages) (*ResultOfSendMessages, error) {
+	result := new(ResultOfSendMessages)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("processing.send_messages", p, result)
+
+	return result, err
 }

@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 15 Feb 23 10:28 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Apr 23 06:18 UTC
 //
 // Mod net
 //
@@ -14,23 +14,24 @@ import (
 )
 
 const (
-	QueryFailedNetErrorCode                 = 601
-	SubscribeFailedNetErrorCode             = 602
-	WaitForFailedNetErrorCode               = 603
-	GetSubscriptionResultFailedNetErrorCode = 604
-	InvalidServerResponseNetErrorCode       = 605
-	ClockOutOfSyncNetErrorCode              = 606
-	WaitForTimeoutNetErrorCode              = 607
-	GraphqlErrorNetErrorCode                = 608
-	NetworkModuleSuspendedNetErrorCode      = 609
-	WebsocketDisconnectedNetErrorCode       = 610
-	NotSupportedNetErrorCode                = 611
-	NoEndpointsProvidedNetErrorCode         = 612
-	GraphqlWebsocketInitErrorNetErrorCode   = 613
-	NetworkModuleResumedNetErrorCode        = 614
-	UnauthorizedNetErrorCode                = 615
-	QueryTransactionTreeTimeoutNetErrorCode = 616
-	GraphqlConnectionErrorNetErrorCode      = 617
+	QueryFailedNetErrorCode                    = 601
+	SubscribeFailedNetErrorCode                = 602
+	WaitForFailedNetErrorCode                  = 603
+	GetSubscriptionResultFailedNetErrorCode    = 604
+	InvalidServerResponseNetErrorCode          = 605
+	ClockOutOfSyncNetErrorCode                 = 606
+	WaitForTimeoutNetErrorCode                 = 607
+	GraphqlErrorNetErrorCode                   = 608
+	NetworkModuleSuspendedNetErrorCode         = 609
+	WebsocketDisconnectedNetErrorCode          = 610
+	NotSupportedNetErrorCode                   = 611
+	NoEndpointsProvidedNetErrorCode            = 612
+	GraphqlWebsocketInitErrorNetErrorCode      = 613
+	NetworkModuleResumedNetErrorCode           = 614
+	UnauthorizedNetErrorCode                   = 615
+	QueryTransactionTreeTimeoutNetErrorCode    = 616
+	GraphqlConnectionErrorNetErrorCode         = 617
+	WrongWebscoketProtocolSequenceNetErrorCode = 618
 )
 
 func init() { // nolint gochecknoinits
@@ -51,6 +52,7 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[UnauthorizedNetErrorCode] = "UnauthorizedNetErrorCode"
 	errorCodesToErrorTypes[QueryTransactionTreeTimeoutNetErrorCode] = "QueryTransactionTreeTimeoutNetErrorCode"
 	errorCodesToErrorTypes[GraphqlConnectionErrorNetErrorCode] = "GraphqlConnectionErrorNetErrorCode"
+	errorCodesToErrorTypes[WrongWebscoketProtocolSequenceNetErrorCode] = "WrongWebscoketProtocolSequenceNetErrorCode"
 }
 
 type OrderBy struct {
