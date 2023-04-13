@@ -27,6 +27,8 @@ linters:
     - revive
     - stylecheck
     - nosnakecase
+    - typecheck
+    - musttag
   enable-all: true
 linters-settings:
   goimports:
