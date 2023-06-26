@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/volatiletech/null"
 
 	"github.com/radianceteam/everscale-client-go/client"
 )
@@ -21,7 +22,7 @@ func TestClient_ProcessingWaitMessage(t *testing.T) {
 	deployParams := &client.ParamsOfEncodeMessage{
 		Abi: abi,
 		DeploySet: &client.DeploySet{
-			Tvc: tvc,
+			Tvc: null.NewString(tvc, true),
 		},
 		Signer: client.Signer{EnumTypeValue: client.KeysSigner{Keys: *keys}},
 
