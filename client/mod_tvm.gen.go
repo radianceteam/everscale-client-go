@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Apr 23 06:18 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 Jun 23 09:46 UTC
 //
 // Mod tvm
 //
@@ -28,6 +28,7 @@ const (
 	InvalidAccountBocTvmErrorCode          = 412
 	InvalidMessageTypeTvmErrorCode         = 413
 	ContractExecutionErrorTvmErrorCode     = 414
+	AccountIsSuspendedTvmErrorCode         = 415
 )
 
 func init() { // nolint gochecknoinits
@@ -45,6 +46,7 @@ func init() { // nolint gochecknoinits
 	errorCodesToErrorTypes[InvalidAccountBocTvmErrorCode] = "InvalidAccountBocTvmErrorCode"
 	errorCodesToErrorTypes[InvalidMessageTypeTvmErrorCode] = "InvalidMessageTypeTvmErrorCode"
 	errorCodesToErrorTypes[ContractExecutionErrorTvmErrorCode] = "ContractExecutionErrorTvmErrorCode"
+	errorCodesToErrorTypes[AccountIsSuspendedTvmErrorCode] = "AccountIsSuspendedTvmErrorCode"
 }
 
 type ExecutionOptions struct {

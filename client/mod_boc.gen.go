@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Apr 23 06:18 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 Jun 23 09:46 UTC
 //
 // Mod boc
 //
@@ -86,115 +86,6 @@ func (p *BocCacheType) UnmarshalJSON(b []byte) error { // nolint funlen
 	}
 
 	return nil
-}
-
-const (
-	InvalidBocBocErrorCode            = 201
-	SerializationErrorBocErrorCode    = 202
-	InappropriateBlockBocErrorCode    = 203
-	MissingSourceBocBocErrorCode      = 204
-	InsufficientCacheSizeBocErrorCode = 205
-	BocRefNotFoundBocErrorCode        = 206
-	InvalidBocRefBocErrorCode         = 207
-)
-
-func init() { // nolint gochecknoinits
-	errorCodesToErrorTypes[InvalidBocBocErrorCode] = "InvalidBocBocErrorCode"
-	errorCodesToErrorTypes[SerializationErrorBocErrorCode] = "SerializationErrorBocErrorCode"
-	errorCodesToErrorTypes[InappropriateBlockBocErrorCode] = "InappropriateBlockBocErrorCode"
-	errorCodesToErrorTypes[MissingSourceBocBocErrorCode] = "MissingSourceBocBocErrorCode"
-	errorCodesToErrorTypes[InsufficientCacheSizeBocErrorCode] = "InsufficientCacheSizeBocErrorCode"
-	errorCodesToErrorTypes[BocRefNotFoundBocErrorCode] = "BocRefNotFoundBocErrorCode"
-	errorCodesToErrorTypes[InvalidBocRefBocErrorCode] = "InvalidBocRefBocErrorCode"
-}
-
-type ParamsOfParse struct {
-	// BOC encoded as base64.
-	Boc string `json:"boc"`
-}
-
-type ResultOfParse struct {
-	// JSON containing parsed BOC.
-	Parsed json.RawMessage `json:"parsed"`
-}
-
-type ParamsOfParseShardstate struct {
-	// BOC encoded as base64.
-	Boc string `json:"boc"`
-	// Shardstate identifier.
-	ID string `json:"id"`
-	// Workchain shardstate belongs to.
-	WorkchainID int32 `json:"workchain_id"`
-}
-
-type ParamsOfGetBlockchainConfig struct {
-	// Key block BOC or zerostate BOC encoded as base64.
-	BlockBoc string `json:"block_boc"`
-}
-
-type ResultOfGetBlockchainConfig struct {
-	// Blockchain config BOC encoded as base64.
-	ConfigBoc string `json:"config_boc"`
-}
-
-type ParamsOfGetBocHash struct {
-	// BOC encoded as base64 or BOC handle.
-	Boc string `json:"boc"`
-}
-
-type ResultOfGetBocHash struct {
-	// BOC root hash encoded with hex.
-	Hash string `json:"hash"`
-}
-
-type ParamsOfGetBocDepth struct {
-	// BOC encoded as base64 or BOC handle.
-	Boc string `json:"boc"`
-}
-
-type ResultOfGetBocDepth struct {
-	// BOC root cell depth.
-	Depth uint32 `json:"depth"`
-}
-
-type ParamsOfGetCodeFromTvc struct {
-	// Contract TVC image or image BOC handle.
-	Tvc string `json:"tvc"`
-}
-
-type ResultOfGetCodeFromTvc struct {
-	// Contract code encoded as base64.
-	Code string `json:"code"`
-}
-
-type ParamsOfBocCacheGet struct {
-	// Reference to the cached BOC.
-	BocRef string `json:"boc_ref"`
-}
-
-type ResultOfBocCacheGet struct {
-	// BOC encoded as base64.
-	Boc null.String `json:"boc"` // optional
-}
-
-type ParamsOfBocCacheSet struct {
-	// BOC encoded as base64 or BOC reference.
-	Boc string `json:"boc"`
-	// Cache type.
-	CacheType BocCacheType `json:"cache_type"`
-}
-
-type ResultOfBocCacheSet struct {
-	// Reference to the cached BOC.
-	BocRef string `json:"boc_ref"`
-}
-
-type ParamsOfBocCacheUnpin struct {
-	// Pinned name.
-	Pin string `json:"pin"`
-	// Reference to the cached BOC.
-	// If it is provided then only referenced BOC is unpinned.
-	BocRef null.String `json:"boc_ref"` // optional
 }
 
 // Cell builder operation.
@@ -360,6 +251,180 @@ func (p *BuilderOp) UnmarshalJSON(b []byte) error { // nolint funlen
 	return nil
 }
 
+type V1Tvc struct {
+	Value TvcV1 `json:"value"`
+}
+
+type Tvc struct {
+	// Should be any of
+	// V1Tvc
+	EnumTypeValue interface{}
+}
+
+// MarshalJSON implements custom marshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *Tvc) MarshalJSON() ([]byte, error) { // nolint funlen
+	switch value := (p.EnumTypeValue).(type) {
+	case V1Tvc:
+		return json.Marshal(struct {
+			V1Tvc
+			Type string `json:"type"`
+		}{
+			value,
+			"V1",
+		})
+
+	default:
+		return nil, fmt.Errorf("unsupported type for Tvc %v", p.EnumTypeValue)
+	}
+}
+
+// UnmarshalJSON implements custom unmarshalling for rust
+// directive #[serde(tag="type")] for enum of types.
+func (p *Tvc) UnmarshalJSON(b []byte) error { // nolint funlen
+	var typeDescriptor EnumOfTypesDescriptor
+	if err := json.Unmarshal(b, &typeDescriptor); err != nil {
+		return err
+	}
+	switch typeDescriptor.Type {
+	case "V1":
+		var enumTypeValue V1Tvc
+		if err := json.Unmarshal(b, &enumTypeValue); err != nil {
+			return err
+		}
+		p.EnumTypeValue = enumTypeValue
+
+	default:
+		return fmt.Errorf("unsupported type for Tvc %v", typeDescriptor.Type)
+	}
+
+	return nil
+}
+
+type TvcV1 struct {
+	Code        null.String `json:"code"`        // optional
+	Description null.String `json:"description"` // optional
+}
+
+const (
+	InvalidBocBocErrorCode            = 201
+	SerializationErrorBocErrorCode    = 202
+	InappropriateBlockBocErrorCode    = 203
+	MissingSourceBocBocErrorCode      = 204
+	InsufficientCacheSizeBocErrorCode = 205
+	BocRefNotFoundBocErrorCode        = 206
+	InvalidBocRefBocErrorCode         = 207
+)
+
+func init() { // nolint gochecknoinits
+	errorCodesToErrorTypes[InvalidBocBocErrorCode] = "InvalidBocBocErrorCode"
+	errorCodesToErrorTypes[SerializationErrorBocErrorCode] = "SerializationErrorBocErrorCode"
+	errorCodesToErrorTypes[InappropriateBlockBocErrorCode] = "InappropriateBlockBocErrorCode"
+	errorCodesToErrorTypes[MissingSourceBocBocErrorCode] = "MissingSourceBocBocErrorCode"
+	errorCodesToErrorTypes[InsufficientCacheSizeBocErrorCode] = "InsufficientCacheSizeBocErrorCode"
+	errorCodesToErrorTypes[BocRefNotFoundBocErrorCode] = "BocRefNotFoundBocErrorCode"
+	errorCodesToErrorTypes[InvalidBocRefBocErrorCode] = "InvalidBocRefBocErrorCode"
+}
+
+type ParamsOfDecodeTvc struct {
+	// Contract TVC BOC encoded as base64 or BOC handle.
+	Tvc string `json:"tvc"`
+}
+
+type ResultOfDecodeTvc struct {
+	// Decoded TVC.
+	Tvc Tvc `json:"tvc"`
+}
+
+type ParamsOfParse struct {
+	// BOC encoded as base64.
+	Boc string `json:"boc"`
+}
+
+type ResultOfParse struct {
+	// JSON containing parsed BOC.
+	Parsed json.RawMessage `json:"parsed"`
+}
+
+type ParamsOfParseShardstate struct {
+	// BOC encoded as base64.
+	Boc string `json:"boc"`
+	// Shardstate identifier.
+	ID string `json:"id"`
+	// Workchain shardstate belongs to.
+	WorkchainID int32 `json:"workchain_id"`
+}
+
+type ParamsOfGetBlockchainConfig struct {
+	// Key block BOC or zerostate BOC encoded as base64.
+	BlockBoc string `json:"block_boc"`
+}
+
+type ResultOfGetBlockchainConfig struct {
+	// Blockchain config BOC encoded as base64.
+	ConfigBoc string `json:"config_boc"`
+}
+
+type ParamsOfGetBocHash struct {
+	// BOC encoded as base64 or BOC handle.
+	Boc string `json:"boc"`
+}
+
+type ResultOfGetBocHash struct {
+	// BOC root hash encoded with hex.
+	Hash string `json:"hash"`
+}
+
+type ParamsOfGetBocDepth struct {
+	// BOC encoded as base64 or BOC handle.
+	Boc string `json:"boc"`
+}
+
+type ResultOfGetBocDepth struct {
+	// BOC root cell depth.
+	Depth uint32 `json:"depth"`
+}
+
+type ParamsOfGetCodeFromTvc struct {
+	// Contract TVC image or image BOC handle.
+	Tvc string `json:"tvc"`
+}
+
+type ResultOfGetCodeFromTvc struct {
+	// Contract code encoded as base64.
+	Code string `json:"code"`
+}
+
+type ParamsOfBocCacheGet struct {
+	// Reference to the cached BOC.
+	BocRef string `json:"boc_ref"`
+}
+
+type ResultOfBocCacheGet struct {
+	// BOC encoded as base64.
+	Boc null.String `json:"boc"` // optional
+}
+
+type ParamsOfBocCacheSet struct {
+	// BOC encoded as base64 or BOC reference.
+	Boc string `json:"boc"`
+	// Cache type.
+	CacheType BocCacheType `json:"cache_type"`
+}
+
+type ResultOfBocCacheSet struct {
+	// Reference to the cached BOC.
+	BocRef string `json:"boc_ref"`
+}
+
+type ParamsOfBocCacheUnpin struct {
+	// Pinned name.
+	Pin string `json:"pin"`
+	// Reference to the cached BOC.
+	// If it is provided then only referenced BOC is unpinned.
+	BocRef null.String `json:"boc_ref"` // optional
+}
+
 type ParamsOfEncodeBoc struct {
 	// Cell builder operations.
 	Builder []BuilderOp `json:"builder"`
@@ -401,14 +466,14 @@ type ResultOfSetCodeSalt struct {
 	Code string `json:"code"`
 }
 
-type ParamsOfDecodeTvc struct {
-	// Contract TVC image BOC encoded as base64 or BOC handle.
-	Tvc string `json:"tvc"`
+type ParamsOfDecodeStateInit struct {
+	// Contract StateInit image BOC encoded as base64 or BOC handle.
+	StateInit string `json:"state_init"`
 	// Cache type to put the result. The BOC itself returned if no cache type provided.
 	BocCache *BocCacheType `json:"boc_cache"` // optional
 }
 
-type ResultOfDecodeTvc struct {
+type ResultOfDecodeStateInit struct {
 	// Contract code BOC encoded as base64 or BOC handle.
 	Code null.String `json:"code"` // optional
 	// Contract code hash.
@@ -435,7 +500,7 @@ type ResultOfDecodeTvc struct {
 	CompilerVersion null.String `json:"compiler_version"` // optional
 }
 
-type ParamsOfEncodeTvc struct {
+type ParamsOfEncodeStateInit struct {
 	// Contract code BOC encoded as base64 or BOC handle.
 	Code null.String `json:"code"` // optional
 	// Contract data BOC encoded as base64 or BOC handle.
@@ -454,9 +519,9 @@ type ParamsOfEncodeTvc struct {
 	BocCache *BocCacheType `json:"boc_cache"` // optional
 }
 
-type ResultOfEncodeTvc struct {
-	// Contract TVC image BOC encoded as base64 or BOC handle of boc_cache parameter was specified.
-	Tvc string `json:"tvc"`
+type ResultOfEncodeStateInit struct {
+	// Contract StateInit image BOC encoded as base64 or BOC handle of boc_cache parameter was specified.
+	StateInit string `json:"state_init"`
 }
 
 type ParamsOfEncodeExternalInMessage struct {
@@ -488,6 +553,15 @@ type ParamsOfGetCompilerVersion struct {
 type ResultOfGetCompilerVersion struct {
 	// Compiler version, for example 'sol 0.49.0'.
 	Version null.String `json:"version"` // optional
+}
+
+// Decodes tvc according to the tvc spec. Read more about tvc structure here https://github.com/tonlabs/ever-struct/blob/main/src/scheme/mod.rs#L30.
+func (c *Client) BocDecodeTvc(p *ParamsOfDecodeTvc) (*ResultOfDecodeTvc, error) {
+	result := new(ResultOfDecodeTvc)
+
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.decode_tvc", p, result)
+
+	return result, err
 }
 
 // Parses message boc into a JSON.
@@ -629,20 +703,20 @@ func (c *Client) BocSetCodeSalt(p *ParamsOfSetCodeSalt) (*ResultOfSetCodeSalt, e
 	return result, err
 }
 
-// Decodes tvc into code, data, libraries and special options.
-func (c *Client) BocDecodeTvc(p *ParamsOfDecodeTvc) (*ResultOfDecodeTvc, error) {
-	result := new(ResultOfDecodeTvc)
+// Decodes contract's initial state into code, data, libraries and special options.
+func (c *Client) BocDecodeStateInit(p *ParamsOfDecodeStateInit) (*ResultOfDecodeStateInit, error) {
+	result := new(ResultOfDecodeStateInit)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("boc.decode_tvc", p, result)
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.decode_state_init", p, result)
 
 	return result, err
 }
 
-// Encodes tvc from code, data, libraries ans special options (see input params).
-func (c *Client) BocEncodeTvc(p *ParamsOfEncodeTvc) (*ResultOfEncodeTvc, error) {
-	result := new(ResultOfEncodeTvc)
+// Encodes initial contract state from code, data, libraries ans special options (see input params).
+func (c *Client) BocEncodeStateInit(p *ParamsOfEncodeStateInit) (*ResultOfEncodeStateInit, error) {
+	result := new(ResultOfEncodeStateInit)
 
-	err := c.dllClient.waitErrorOrResultUnmarshal("boc.encode_tvc", p, result)
+	err := c.dllClient.waitErrorOrResultUnmarshal("boc.encode_state_init", p, result)
 
 	return result, err
 }

@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Apr 23 06:18 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 Jun 23 09:46 UTC
 //
 // Mod abi
 //
@@ -59,7 +59,9 @@ type AbiHandle uint32
 // The actual set of header fields depends on the contract's ABI.
 // If a contract's ABI does not include some headers, then they are not filled.
 type FunctionHeader struct {
-	// Message expiration time in seconds. If not specified - calculated automatically from message_expiration_timeout(), try_index and message_expiration_timeout_grow_factor() (if ABI includes `expire` header).
+	// Message expiration timestamp (UNIX time) in seconds.
+	// If not specified - calculated automatically from message_expiration_timeout(),
+	// try_index and message_expiration_timeout_grow_factor() (if ABI includes `expire` header).
 	Expire null.Uint32 `json:"expire"` // optional
 	// Message creation time in milliseconds.
 	// If not specified, `now` is used (if ABI includes `time` header).
@@ -82,8 +84,12 @@ type CallSet struct {
 }
 
 type DeploySet struct {
-	// Content of TVC file encoded in `base64`.
-	Tvc string `json:"tvc"`
+	// Content of TVC file encoded in `base64`. For compatibility reason this field can contain an encoded  `StateInit`.
+	Tvc null.String `json:"tvc"` // optional
+	// Contract code BOC encoded with base64.
+	Code null.String `json:"code"` // optional
+	// State init BOC encoded with base64.
+	StateInit null.String `json:"state_init"` // optional
 	// Target workchain for destination address.
 	// Default is `0`.
 	WorkchainID null.Int32 `json:"workchain_id"` // optional

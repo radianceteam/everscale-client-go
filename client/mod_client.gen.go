@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 13 Apr 23 06:18 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 Jun 23 09:46 UTC
 //
 // Mod client
 //
@@ -113,7 +113,7 @@ type NetworkConfig struct {
 	ServerAddress null.String `json:"server_address"` // optional
 	// List of Evernode endpoints.
 	// Any correct URL format can be specified, including IP addresses. This parameter is prevailing over `server_address`.
-	// Check the full list of [supported network endpoints](https://docs.everos.dev/ever-sdk/reference/ever-os-api/networks).
+	// Check the full list of [supported network endpoints](https://docs.evercloud.dev/products/evercloud/networks-endpoints).
 	Endpoints []string `json:"endpoints"` // optional
 	// Deprecated.
 	// You must use `network.max_reconnect_timeout` that allows to specify maximum network resolving timeout.
@@ -132,11 +132,7 @@ type NetworkConfig struct {
 	// Maximum timeout that is used for query response.
 	// Must be specified in milliseconds. Default is 40000 (40 sec).
 	WaitForTimeout null.Uint32 `json:"wait_for_timeout"` // optional
-	// Maximum time difference between server and client.
-	// If client's device time is out of sync and difference is more than the threshold then error will occur. Also an error will occur if the specified threshold is more than
-	// `message_processing_timeout/2`.
-	//
-	// Must be specified in milliseconds. Default is 15000 (15 sec).
+	// **DEPRECATED**: This parameter was deprecated.
 	OutOfSyncThreshold null.Uint32 `json:"out_of_sync_threshold"` // optional
 	// Maximum number of randomly chosen endpoints the library uses to broadcast a message.
 	// Default is 1.
@@ -210,9 +206,11 @@ type CryptoConfig struct {
 type AbiConfig struct {
 	// Workchain id that is used by default in DeploySet.
 	Workchain null.Int32 `json:"workchain"` // optional
-	// Message lifetime for contracts which ABI includes "expire" header. The default value is 40 sec.
+	// Message lifetime for contracts which ABI includes "expire" header.
+	// Must be specified in milliseconds. Default is 40000 (40 sec).
 	MessageExpirationTimeout null.Uint32 `json:"message_expiration_timeout"` // optional
-	// Factor that increases the expiration timeout for each retry The default value is 1.5.
+	// Factor that increases the expiration timeout for each retry.
+	// Default is 1.5.
 	MessageExpirationTimeoutGrowFactor null.Float32 `json:"message_expiration_timeout_grow_factor"` // optional
 }
 
