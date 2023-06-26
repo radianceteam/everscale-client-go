@@ -26,8 +26,10 @@ func TestClient_AbiEncodeMessage(t *testing.T) {
 		expire := null.Uint32From(1599458404)
 
 		return &client.ParamsOfEncodeMessage{
-			Abi:       abi,
-			DeploySet: &client.DeploySet{Tvc: tvc},
+			Abi: abi,
+			DeploySet: &client.DeploySet{
+				Tvc: null.NewString(tvc, true),
+			},
 			CallSet: &client.CallSet{
 				FunctionName: "constructor",
 				Header: &client.FunctionHeader{
