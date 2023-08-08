@@ -35,7 +35,7 @@ func TestClient_ProcessingWaitMessage(t *testing.T) {
 	events := make(chan *client.ProcessingEvent, 20)
 	sendResult, err := c.ProcessingSendMessage(&client.ParamsOfSendMessage{
 		Message:    msg.Message,
-		SendEvents: true,
+		SendEvents: null.BoolFrom(true),
 		Abi:        &abi,
 	}, func(e *client.ProcessingEvent) { events <- e })
 	a.NoError(err, "processing.send_message")
@@ -44,7 +44,7 @@ func TestClient_ProcessingWaitMessage(t *testing.T) {
 	waitForTransactionResult, err := c.ProcessingWaitForTransaction(&client.ParamsOfWaitForTransaction{
 		Message:      msg.Message,
 		ShardBlockID: sendResult.ShardBlockID,
-		SendEvents:   true,
+		SendEvents:   null.BoolFrom(true),
 		Abi:          &abi,
 	}, func(e *client.ProcessingEvent) { events <- e })
 	close(events)

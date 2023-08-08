@@ -43,14 +43,14 @@ func handleEvents(responses <-chan *RawResponse, callback EventCallback, result 
 // Sends message to the network and returns the last generated shard block of the destination account
 // before the message was sent. It will be required later for message processing.
 func (c *Client) ProcessingSendMessage(p *ParamsOfSendMessage, callback EventCallback) (*ResultOfSendMessage, error) {
-	if p.SendEvents && callback == nil {
+	if p.SendEvents.Bool && callback == nil {
 		return nil, ErrNoCallbackSpecified
 	}
 	responses, err := c.dllClient.resultsChannel("processing.send_message", p)
 	if err != nil {
 		return nil, err
 	}
-	if p.SendEvents {
+	if p.SendEvents.Bool {
 		responses = NewDynamicallyBufferedResponses(responses)
 	}
 	result := &ResultOfSendMessage{}
@@ -86,14 +86,14 @@ func (c *Client) ProcessingSendMessage(p *ParamsOfSendMessage, callback EventCal
 // - If maximum block gen time is reached and no result transaction is found
 // the processing will exit with an error.
 func (c *Client) ProcessingWaitForTransaction(p *ParamsOfWaitForTransaction, callback EventCallback) (*ResultOfProcessMessage, error) {
-	if p.SendEvents && callback == nil {
+	if p.SendEvents.Bool && callback == nil {
 		return nil, ErrNoCallbackSpecified
 	}
 	responses, err := c.dllClient.resultsChannel("processing.wait_for_transaction", p)
 	if err != nil {
 		return nil, err
 	}
-	if p.SendEvents {
+	if p.SendEvents.Bool {
 		responses = NewDynamicallyBufferedResponses(responses)
 	}
 
@@ -124,14 +124,14 @@ func (c *Client) ProcessingWaitForTransaction(p *ParamsOfWaitForTransaction, cal
 // If contract's ABI does not include "expire" header
 // then if no transaction is found within the network timeout (see config parameter ), exits with error.
 func (c *Client) ProcessingProcessMessage(p *ParamsOfProcessMessage, callback EventCallback) (*ResultOfProcessMessage, error) {
-	if p.SendEvents && callback == nil {
+	if p.SendEvents.Bool && callback == nil {
 		return nil, ErrNoCallbackSpecified
 	}
 	responses, err := c.dllClient.resultsChannel("processing.process_message", p)
 	if err != nil {
 		return nil, err
 	}
-	if p.SendEvents {
+	if p.SendEvents.Bool {
 		responses = NewDynamicallyBufferedResponses(responses)
 	}
 

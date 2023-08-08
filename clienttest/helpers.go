@@ -105,7 +105,7 @@ func GetGramsFromGiver(c *client.Client, msgParams *client.ParamsOfEncodeMessage
 
 	res, err := c.ProcessingProcessMessage(&client.ParamsOfProcessMessage{
 		MessageEncodeParams: params,
-		SendEvents:          false,
+		SendEvents:          null.BoolFrom(false),
 	}, nil)
 	if err != nil {
 		return err
@@ -120,7 +120,7 @@ func GetGramsFromGiver(c *client.Client, msgParams *client.ParamsOfEncodeMessage
 	}
 	_, err = c.ProcessingProcessMessage(&client.ParamsOfProcessMessage{
 		MessageEncodeParams: params,
-		SendEvents:          false,
+		SendEvents:          null.BoolFrom(false),
 	}, nil)
 
 	return err
