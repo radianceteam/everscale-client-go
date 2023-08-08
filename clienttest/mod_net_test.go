@@ -38,7 +38,7 @@ func TestClient_NetSubscribeCollectionEmpty(t *testing.T) {
 	go func() {
 		defer wg.Done()
 		for r := range responses {
-			a.NotNil(r, "no data when unsubscribe")
+			a.Nil(r, "no data when unsubscribe")
 		}
 	}()
 	err = c.NetUnsubscribe(&client.ResultOfSubscribeCollection{Handle: handle.Handle})

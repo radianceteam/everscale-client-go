@@ -1,10 +1,10 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 Jun 23 09:46 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 08 Aug 23 16:44 UTC
 //
 // Mod debot
 //
-// [UNSTABLE](UNSTABLE.md) Module for working with debot.
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md) Module for working with debot.
 
 import (
 	"encoding/json"
@@ -49,7 +49,7 @@ func init() { // nolint gochecknoinits
 
 type DebotHandle uint32
 
-// [UNSTABLE](UNSTABLE.md) Describes a debot action in a Debot Context.
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md) Describes a debot action in a Debot Context.
 type DebotAction struct {
 	// A short action description.
 	// Should be used by Debot Browser as name of menu item.
@@ -69,7 +69,7 @@ type DebotAction struct {
 	Misc string `json:"misc"`
 }
 
-// [UNSTABLE](UNSTABLE.md) Describes DeBot metadata.
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md) Describes DeBot metadata.
 type DebotInfo struct {
 	// DeBot short name.
 	Name null.String `json:"name"` // optional
@@ -97,7 +97,7 @@ type DebotInfo struct {
 	DabiVersion string `json:"dabiVersion"`
 }
 
-// [UNSTABLE](UNSTABLE.md) Describes the operation that the DeBot wants to perform.
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md) Describes the operation that the DeBot wants to perform.
 
 // DeBot wants to create new transaction in blockchain.
 type TransactionDebotActivity struct {
@@ -163,7 +163,7 @@ func (p *DebotActivity) UnmarshalJSON(b []byte) error { // nolint funlen
 	return nil
 }
 
-// [UNSTABLE](UNSTABLE.md) Describes how much funds will be debited from the target  contract balance as a result of the transaction.
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md) Describes how much funds will be debited from the target  contract balance as a result of the transaction.
 type Spending struct {
 	// Amount of nanotokens that will be sent to `dst` address.
 	Amount big.Int `json:"amount"`
@@ -171,13 +171,13 @@ type Spending struct {
 	Dst string `json:"dst"`
 }
 
-// [UNSTABLE](UNSTABLE.md) Parameters to init DeBot.
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md) Parameters to init DeBot.
 type ParamsOfInit struct {
 	// Debot smart contract address.
 	Address string `json:"address"`
 }
 
-// [UNSTABLE](UNSTABLE.md) Structure for storing debot handle returned from `init` function.
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md) Structure for storing debot handle returned from `init` function.
 type RegisteredDebot struct {
 	// Debot handle which references an instance of debot engine.
 	DebotHandle DebotHandle `json:"debot_handle"`
@@ -187,7 +187,7 @@ type RegisteredDebot struct {
 	Info DebotInfo `json:"info"`
 }
 
-// [UNSTABLE](UNSTABLE.md) Debot Browser callbacks.
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md) Debot Browser callbacks.
 // Called by debot engine to communicate with debot browser.
 
 // Print message to user.
@@ -424,7 +424,7 @@ func (p *ParamsOfAppDebotBrowser) UnmarshalJSON(b []byte) error { // nolint funl
 	return nil
 }
 
-// [UNSTABLE](UNSTABLE.md) Returning values from Debot Browser callbacks.
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md) Returning values from Debot Browser callbacks.
 
 // Result of user input.
 type InputResultOfAppDebotBrowser struct {
@@ -545,25 +545,25 @@ func (p *ResultOfAppDebotBrowser) UnmarshalJSON(b []byte) error { // nolint funl
 	return nil
 }
 
-// [UNSTABLE](UNSTABLE.md) Parameters to start DeBot. DeBot must be already initialized with init() function.
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md) Parameters to start DeBot. DeBot must be already initialized with init() function.
 type ParamsOfStart struct {
 	// Debot handle which references an instance of debot engine.
 	DebotHandle DebotHandle `json:"debot_handle"`
 }
 
-// [UNSTABLE](UNSTABLE.md) Parameters to fetch DeBot metadata.
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md) Parameters to fetch DeBot metadata.
 type ParamsOfFetch struct {
 	// Debot smart contract address.
 	Address string `json:"address"`
 }
 
-// [UNSTABLE](UNSTABLE.md).
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md).
 type ResultOfFetch struct {
 	// Debot metadata.
 	Info DebotInfo `json:"info"`
 }
 
-// [UNSTABLE](UNSTABLE.md) Parameters for executing debot action.
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md) Parameters for executing debot action.
 type ParamsOfExecute struct {
 	// Debot handle which references an instance of debot engine.
 	DebotHandle DebotHandle `json:"debot_handle"`
@@ -571,7 +571,7 @@ type ParamsOfExecute struct {
 	Action DebotAction `json:"action"`
 }
 
-// [UNSTABLE](UNSTABLE.md) Parameters of `send` function.
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md) Parameters of `send` function.
 type ParamsOfSend struct {
 	// Debot handle which references an instance of debot engine.
 	DebotHandle DebotHandle `json:"debot_handle"`
@@ -579,13 +579,13 @@ type ParamsOfSend struct {
 	Message string `json:"message"`
 }
 
-// [UNSTABLE](UNSTABLE.md).
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md).
 type ParamsOfRemove struct {
 	// Debot handle which references an instance of debot engine.
 	DebotHandle DebotHandle `json:"debot_handle"`
 }
 
-// [UNSTABLE](UNSTABLE.md) Creates and instance of DeBot.
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md) Creates and instance of DeBot.
 // Downloads debot smart contract (code and data) from blockchain and creates
 // an instance of Debot Engine for it.
 //
@@ -699,7 +699,7 @@ func (c *Client) dispatchNotifyDebotInit(payload []byte, app AppDebotBrowser) { 
 	}
 }
 
-// [UNSTABLE](UNSTABLE.md) Starts the DeBot.
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md) Starts the DeBot.
 // Downloads debot smart contract from blockchain and switches it to
 // context zero.
 //
@@ -716,7 +716,7 @@ func (c *Client) DebotStart(p *ParamsOfStart) error {
 	return err
 }
 
-// [UNSTABLE](UNSTABLE.md) Fetches DeBot metadata from blockchain.
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md) Fetches DeBot metadata from blockchain.
 // Downloads DeBot from blockchain and creates and fetches its metadata.
 func (c *Client) DebotFetch(p *ParamsOfFetch) (*ResultOfFetch, error) {
 	result := new(ResultOfFetch)
@@ -726,7 +726,7 @@ func (c *Client) DebotFetch(p *ParamsOfFetch) (*ResultOfFetch, error) {
 	return result, err
 }
 
-// [UNSTABLE](UNSTABLE.md) Executes debot action.
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md) Executes debot action.
 // Calls debot engine referenced by debot handle to execute input action.
 // Calls Debot Browser Callbacks if needed.
 //
@@ -738,7 +738,7 @@ func (c *Client) DebotExecute(p *ParamsOfExecute) error {
 	return err
 }
 
-// [UNSTABLE](UNSTABLE.md) Sends message to Debot.
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md) Sends message to Debot.
 // Used by Debot Browser to send response on Dinterface call or from other Debots.
 func (c *Client) DebotSend(p *ParamsOfSend) error {
 	_, err := c.dllClient.waitErrorOrResult("debot.send", p)
@@ -746,7 +746,7 @@ func (c *Client) DebotSend(p *ParamsOfSend) error {
 	return err
 }
 
-// [UNSTABLE](UNSTABLE.md) Destroys debot handle.
+// [UNSTABLE](UNSTABLE.md) [DEPRECATED](DEPRECATED.md) Destroys debot handle.
 // Removes handle from Client Context and drops debot engine referenced by that handle.
 func (c *Client) DebotRemove(p *ParamsOfRemove) error {
 	_, err := c.dllClient.waitErrorOrResult("debot.remove", p)

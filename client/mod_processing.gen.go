@@ -1,6 +1,6 @@
 package client
 
-// DON'T EDIT THIS FILE! It is generated via 'task generate' at 26 Jun 23 09:46 UTC
+// DON'T EDIT THIS FILE! It is generated via 'task generate' at 08 Aug 23 16:44 UTC
 //
 // Mod processing
 //
@@ -670,8 +670,8 @@ type ParamsOfSendMessage struct {
 	// strongly recommended, so that proper processing strategy can be
 	// chosen.
 	Abi *Abi `json:"abi"` // optional
-	// Flag for requesting events sending.
-	SendEvents bool `json:"send_events"`
+	// Flag for requesting events sending. Default is `false`.
+	SendEvents null.Bool `json:"send_events"` // optional
 }
 
 type ResultOfSendMessage struct {
@@ -698,8 +698,8 @@ type ParamsOfWaitForTransaction struct {
 	// The last generated block id of the destination account shard before the message was sent.
 	// You must provide the same value as the `send_message` has returned.
 	ShardBlockID string `json:"shard_block_id"`
-	// Flag that enables/disables intermediate events.
-	SendEvents bool `json:"send_events"`
+	// Flag that enables/disables intermediate events. Default is `false`.
+	SendEvents null.Bool `json:"send_events"` // optional
 	// The list of endpoints to which the message was sent.
 	// Use this field to get more informative errors.
 	// Provide the same value as the `send_message` has returned.
@@ -710,8 +710,8 @@ type ParamsOfWaitForTransaction struct {
 type ParamsOfProcessMessage struct {
 	// Message encode parameters.
 	MessageEncodeParams ParamsOfEncodeMessage `json:"message_encode_params"`
-	// Flag for requesting events sending.
-	SendEvents bool `json:"send_events"`
+	// Flag for requesting events sending. Default is `false`.
+	SendEvents null.Bool `json:"send_events"` // optional
 }
 
 // Starts monitoring for the processing results of the specified messages.
