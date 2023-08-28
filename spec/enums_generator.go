@@ -15,6 +15,9 @@ func genEnumOfConsts(t Type) string {
 			t.GoType = "string"
 			t.EnumConsts[i].Value = strconv.Quote(withTypeAlias(t.EnumConsts[i].Name))
 		}
+		if t.EnumConsts[i].Type == Number {
+			t.GoType = "int"
+		}
 
 		t.EnumConsts[i].Name = withTypeAlias(t.EnumConsts[i].Name)
 		t.EnumConsts[i].GoComment = t.EnumConsts[i].ToComment()
