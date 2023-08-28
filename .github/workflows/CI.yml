@@ -21,7 +21,7 @@ jobs:
         run: ./tools/download-sdk-ci.sh
         shell: sh
       - name: Run TON node
-        run: docker run -d --name local-node -p80:80 tonlabs/local-node:0.33.0
+        run: docker run -d --name local-node -p80:80 tonlabs/local-node:0.39.0
       - name: Test
         env:
           CGO_LDFLAGS: '-L/tmp/ -lton_client'
